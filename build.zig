@@ -27,13 +27,13 @@ pub fn build(b: *std.Build) void {
     // Expose the vendored WinRT metadata file to the winmd module so tests
     // (and any comptime consumer) can @embedFile it by a stable name.
     winmd_mod.addAnonymousImport("Windows.winmd", .{
-        .root_source_file = b.path("../crates/libs/bindgen/default/Windows.winmd"),
+        .root_source_file = b.path("vendor/winmd/Windows.winmd"),
     });
     winmd_mod.addAnonymousImport("Windows.Win32.winmd", .{
-        .root_source_file = b.path("../crates/libs/bindgen/default/Windows.Win32.winmd"),
+        .root_source_file = b.path("vendor/winmd/Windows.Win32.winmd"),
     });
     winmd_mod.addAnonymousImport("Windows.Wdk.winmd", .{
-        .root_source_file = b.path("../crates/libs/bindgen/default/Windows.Wdk.winmd"),
+        .root_source_file = b.path("vendor/winmd/Windows.Wdk.winmd"),
     });
 
     const win_core_mod = b.addModule("win-core", .{
@@ -60,13 +60,13 @@ pub fn build(b: *std.Build) void {
     // Same vendored metadata as `winmd` — exposed here so winbindgen's own
     // tests (which drive the code generator end-to-end) can `@embedFile` them.
     winbindgen_mod.addAnonymousImport("Windows.winmd", .{
-        .root_source_file = b.path("../crates/libs/bindgen/default/Windows.winmd"),
+        .root_source_file = b.path("vendor/winmd/Windows.winmd"),
     });
     winbindgen_mod.addAnonymousImport("Windows.Win32.winmd", .{
-        .root_source_file = b.path("../crates/libs/bindgen/default/Windows.Win32.winmd"),
+        .root_source_file = b.path("vendor/winmd/Windows.Win32.winmd"),
     });
     winbindgen_mod.addAnonymousImport("Windows.Wdk.winmd", .{
-        .root_source_file = b.path("../crates/libs/bindgen/default/Windows.Wdk.winmd"),
+        .root_source_file = b.path("vendor/winmd/Windows.Wdk.winmd"),
     });
 
     const win_sys_mod = b.addModule("win-sys", .{
@@ -155,13 +155,13 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
     winmd_host_mod.addAnonymousImport("Windows.winmd", .{
-        .root_source_file = b.path("../crates/libs/bindgen/default/Windows.winmd"),
+        .root_source_file = b.path("vendor/winmd/Windows.winmd"),
     });
     winmd_host_mod.addAnonymousImport("Windows.Win32.winmd", .{
-        .root_source_file = b.path("../crates/libs/bindgen/default/Windows.Win32.winmd"),
+        .root_source_file = b.path("vendor/winmd/Windows.Win32.winmd"),
     });
     winmd_host_mod.addAnonymousImport("Windows.Wdk.winmd", .{
-        .root_source_file = b.path("../crates/libs/bindgen/default/Windows.Wdk.winmd"),
+        .root_source_file = b.path("vendor/winmd/Windows.Wdk.winmd"),
     });
 
     const winbindgen_host_mod = b.createModule(.{
@@ -171,13 +171,13 @@ pub fn build(b: *std.Build) void {
     });
     winbindgen_host_mod.addImport("winmd", winmd_host_mod);
     winbindgen_host_mod.addAnonymousImport("Windows.winmd", .{
-        .root_source_file = b.path("../crates/libs/bindgen/default/Windows.winmd"),
+        .root_source_file = b.path("vendor/winmd/Windows.winmd"),
     });
     winbindgen_host_mod.addAnonymousImport("Windows.Win32.winmd", .{
-        .root_source_file = b.path("../crates/libs/bindgen/default/Windows.Win32.winmd"),
+        .root_source_file = b.path("vendor/winmd/Windows.Win32.winmd"),
     });
     winbindgen_host_mod.addAnonymousImport("Windows.Wdk.winmd", .{
-        .root_source_file = b.path("../crates/libs/bindgen/default/Windows.Wdk.winmd"),
+        .root_source_file = b.path("vendor/winmd/Windows.Wdk.winmd"),
     });
 
     const winbindgen_main_mod = b.createModule(.{
@@ -188,13 +188,13 @@ pub fn build(b: *std.Build) void {
     winbindgen_main_mod.addImport("winbindgen", winbindgen_host_mod);
     winbindgen_main_mod.addImport("winmd", winmd_host_mod);
     winbindgen_main_mod.addAnonymousImport("Windows.winmd", .{
-        .root_source_file = b.path("../crates/libs/bindgen/default/Windows.winmd"),
+        .root_source_file = b.path("vendor/winmd/Windows.winmd"),
     });
     winbindgen_main_mod.addAnonymousImport("Windows.Win32.winmd", .{
-        .root_source_file = b.path("../crates/libs/bindgen/default/Windows.Win32.winmd"),
+        .root_source_file = b.path("vendor/winmd/Windows.Win32.winmd"),
     });
     winbindgen_main_mod.addAnonymousImport("Windows.Wdk.winmd", .{
-        .root_source_file = b.path("../crates/libs/bindgen/default/Windows.Wdk.winmd"),
+        .root_source_file = b.path("vendor/winmd/Windows.Wdk.winmd"),
     });
 
     const winbindgen_exe = b.addExecutable(.{
@@ -628,13 +628,13 @@ pub fn build(b: *std.Build) void {
     windef_main_mod.addImport("winbindgen", winbindgen_host_mod);
     windef_main_mod.addImport("winmd", winmd_host_mod);
     windef_main_mod.addAnonymousImport("Windows.winmd", .{
-        .root_source_file = b.path("../crates/libs/bindgen/default/Windows.winmd"),
+        .root_source_file = b.path("vendor/winmd/Windows.winmd"),
     });
     windef_main_mod.addAnonymousImport("Windows.Win32.winmd", .{
-        .root_source_file = b.path("../crates/libs/bindgen/default/Windows.Win32.winmd"),
+        .root_source_file = b.path("vendor/winmd/Windows.Win32.winmd"),
     });
     windef_main_mod.addAnonymousImport("Windows.Wdk.winmd", .{
-        .root_source_file = b.path("../crates/libs/bindgen/default/Windows.Wdk.winmd"),
+        .root_source_file = b.path("vendor/winmd/Windows.Wdk.winmd"),
     });
 
     const windef_exe = b.addExecutable(.{

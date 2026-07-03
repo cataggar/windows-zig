@@ -1,0 +1,152 @@
+name: ci
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  fmt:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Install Zig
+        uses: mlugg/setup-zig@v2
+        with:
+          version: 0.16.0
+      - name: Check formatting
+        run: zig fmt --check .
+
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2025, ubuntu-22.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Install Zig
+        uses: mlugg/setup-zig@v2
+        with:
+          version: 0.16.0
+      - name: Build and test
+        run: zig build test --summary all
+
+  gen:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2025, ubuntu-22.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Install Zig
+        uses: mlugg/setup-zig@v2
+        with:
+          version: 0.16.0
+      - name: Regenerate canary bindings
+        run: |
+          zig build bindings
+          zig fmt packages/win-sys/src/generated/
+      - name: Check diff
+        shell: bash
+        run: |
+          git diff --exit-code -- packages/win-sys/src/generated/ \
+            || { echo '::error::`zig build bindings` produced changes. Run it locally and commit the updated files under packages/win-sys/src/generated/.'; exit 1; }
+
+  samples:
+    runs-on: windows-2025
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Install Zig
+        uses: mlugg/setup-zig@v2
+        with:
+          version: 0.16.0
+      - name: Build all samples
+        run: zig build samples
+      - name: Run every sample
+        shell: pwsh
+        run: |
+          $samples = @('last-error', 'load-library', 'threading', 'event-roundtrip', 'desktop-window', 'file-write', 'heap-alloc', 'system-info', 'virtual-alloc', 'well-known-sid', 'debug-output', 'token-elevation', 'file-attributes', 'temp-path', 'find-files', 'native-system-info', 'create-window')
+          foreach ($s in $samples) {
+            Write-Host "::group::run-$s"
+            zig build "run-$s"
+            if ($LASTEXITCODE -ne 0) {
+              Write-Host "::error::sample $s exited with code $LASTEXITCODE"
+              exit $LASTEXITCODE
+            }
+            Write-Host "::endgroup::"
+          }
+
+  lib:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: x86_64-windows
+            expected: "0x8664"  # IMAGE_FILE_MACHINE_AMD64
+          - target: x86-windows
+            expected: "0x014c"  # IMAGE_FILE_MACHINE_I386
+          - target: aarch64-windows
+            expected: "0xaa64"  # IMAGE_FILE_MACHINE_ARM64
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Install Zig
+        uses: mlugg/setup-zig@v2
+        with:
+          version: 0.16.0
+      - name: Build and verify import libs for ${{ matrix.target }}
+        shell: bash
+        run: |
+          # Cover one "ordinary" DLL (kernel32) plus representative gap
+          # DLLs that Zig's bundled MinGW defs do *not* ship, to prove
+          # `win-targets` closes the gap across DLL categories:
+          #   - kernel32        : baseline (ordinary)
+          #   - amsi            : security subsystem
+          #   - sechost         : service-control forwarder
+          #   - windows.ui.xaml : WinRT UWP
+          #   - advapi32        : registry / security APIs
+          #   - user32          : USER GUI
+          #   - gdi32           : GDI graphics
+          #   - ole32           : COM core
+          #   - oleaut32        : COM automation
+          #   - shlwapi         : shell utility
+          #   - winhttp         : HTTP client
+          #   - ws2_32          : Winsock
+          #   - dxgi            : DirectX infra
+          #   - d3d12           : Direct3D 12
+          for dll in kernel32 amsi sechost windows.ui.xaml advapi32 user32 gdi32 ole32 oleaut32 shlwapi winhttp ws2_32 dxgi d3d12; do
+            echo "::group::$dll for ${{ matrix.target }}"
+            zig build lib -Ddll="$dll" -Dtarget=${{ matrix.target }}
+            lib="zig-out/lib/$dll.lib"
+            test -s "$lib" || { echo "::error::$lib missing or empty"; exit 1; }
+            # Short-import header is `00 00 FF FF 00 00 <machine:u16 LE>`;
+            # scan the first short-import object and compare machine bytes.
+            machine_hex=$(python3 -c "
+          import sys
+          data = open('$lib','rb').read()
+          i = data.find(b'\x00\x00\xff\xff\x00\x00')
+          if i < 0:
+              sys.exit('no short import found in $lib')
+          m = data[i+6] | (data[i+7] << 8)
+          print(f'0x{m:04x}')
+          ")
+            echo "$dll machine = $machine_hex (expected ${{ matrix.expected }})"
+            [ "$machine_hex" = "${{ matrix.expected }}" ] \
+              || { echo "::error::machine type mismatch for $dll on ${{ matrix.target }}"; exit 1; }
+            echo "::endgroup::"
+          done

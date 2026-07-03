@@ -2330,7 +2330,7 @@ test "mmapAndParse: load Windows.Win32.winmd from disk" {
     // The test binary's cwd is the build cache dir, so anchor via __FILE__
     // is unreliable; the path is stable within this repo layout.
     const repo_root = std.Io.Dir.cwd();
-    const path = "../crates/libs/bindgen/default/Windows.Win32.winmd";
+    const path = "vendor/winmd/Windows.Win32.winmd";
 
     var mf = mmapAndParse(io, repo_root, path) catch |err| switch (err) {
         error.FileNotFound => return error.SkipZigTest,
