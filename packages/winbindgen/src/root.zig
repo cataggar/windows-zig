@@ -3379,7 +3379,9 @@ fn writeMethodWrapper(
 
     // Combined sugar: if the method has HSTRING input AND returns HSTRING
     // via split out-param, emit `<Method>OwnedFromUtf16` that accepts
-    // `[]const u16` inputs and returns `!win_core.Hstring`.
+    // `[]const u16` inputs and returns `!win_core.Hstring`. Unlike the
+    // HRESULT-returning `FromUtf16` companion, preserve any
+    // `win_core.Hstring.create` error directly in the wrapper's error set.
     if (has_hstring_in and split_return and sig.return_type == .string and !has_array_param) {
         try writer.print("    pub fn {s}OwnedFromUtf16(self: *const {s}", .{ method_name, this_name });
         for (sig.params, 0..) |p, i| {
@@ -3394,7 +3396,7 @@ fn writeMethodWrapper(
         for (sig.params, 0..) |p, i| {
             if (p == .string) {
                 try writer.print(
-                    "        var h{d} = win_core.Hstring.create(p{d}) catch return error.OutOfMemory;\n",
+                    "        var h{d} = try win_core.Hstring.create(p{d});\n",
                     .{ i, i },
                 );
                 try writer.print("        defer h{d}.deinit();\n", .{i});
@@ -4822,11 +4824,25 @@ test "emitInterfaceHandles writes IStringable handle with method wrappers" {
         out,
         "pub fn UnescapeComponentOwnedFromUtf16(self: *const IUriEscapeStatics, p0: []const u16) !win_core.Hstring {",
     ) != null);
-    // Input HSTRING is created from the slice and deferred.
+    // The same method should also keep the standalone `FromUtf16` and
+    // `Owned` companions, so callers can opt into either half of the
+    // sugar independently when they do not want the combined helper.
     try std.testing.expect(std.mem.find(
         u8,
         out,
-        "var h0 = win_core.Hstring.create(p0) catch return error.OutOfMemory;",
+        "pub fn UnescapeComponentFromUtf16(self: *const IUriEscapeStatics, p0: []const u16, result: *HSTRING) HRESULT {",
+    ) != null);
+    try std.testing.expect(std.mem.find(
+        u8,
+        out,
+        "pub fn UnescapeComponentOwned(self: *const IUriEscapeStatics, p0: HSTRING) !win_core.Hstring {",
+    ) != null);
+    // Input HSTRING is created from the slice, propagates the actual
+    // `Hstring.create` error, and is still deferred on success.
+    try std.testing.expect(std.mem.find(
+        u8,
+        out,
+        "var h0 = try win_core.Hstring.create(p0);",
     ) != null);
     // Output HSTRING is wrapped in owning Hstring.
     try std.testing.expect(std.mem.find(
