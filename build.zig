@@ -1,9 +1,9 @@
 //! windows-zig top-level build script.
 //!
-//! Wires up the six in-tree packages (`winmd`, `win-core`, `winbindgen`,
-//! `win-sys`, `win`, `win-targets`), their unit tests, and the `bindings`
-//! step that regenerates `win-sys` / `win` sources from the vendored
-//! `.winmd` metadata.
+//! Wires up the seven in-tree packages (`winmd`, `win-core`, `winbindgen`,
+//! `win-sys`, `win-time`, `win`, `win-targets`), their unit tests, and
+//! the `bindings` step that regenerates `win-sys` / `win` sources from
+//! the vendored `.winmd` metadata.
 //!
 //! Requires Zig 0.16.0 or newer.
 
@@ -76,6 +76,16 @@ pub fn build(b: *std.Build) void {
     });
     win_sys_mod.addImport("win-core", win_core_mod);
 
+    const win_time_mod = b.addModule("win-time", .{
+        .root_source_file = b.path("packages/win-time/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    win_time_mod.addImport("win-sys", win_sys_mod);
+    if (target.result.os.tag == .windows) {
+        win_time_mod.linkSystemLibrary("kernel32", .{});
+    }
+
     const win_mod = b.addModule("win", .{
         .root_source_file = b.path("packages/win/src/root.zig"),
         .target = target,
@@ -105,6 +115,7 @@ pub fn build(b: *std.Build) void {
         .{ .name = "winmd", .mod = winmd_mod },
         .{ .name = "win-core", .mod = win_core_mod },
         .{ .name = "win-sys", .mod = win_sys_mod, .windows_only = true },
+        .{ .name = "win-time", .mod = win_time_mod, .windows_only = true },
         // NOTE: `win` is intentionally omitted from test_pkgs while the
         // VARIANT emitter gap is pending. A test-harness rooted at
         // `win/root.zig` analyzes `Com`'s pub decls, some of which
