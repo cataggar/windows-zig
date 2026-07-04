@@ -130,6 +130,38 @@ pub fn build(b: *std.Build) void {
     }
 
     // ------------------------------------------------------------------
+    // `fetch-winui-metadata` step — downloads the WinUI3 `.winmd` files
+    // (`Microsoft.UI.Xaml.winmd`, `Microsoft.UI.Text.winmd`) from the
+    // `Microsoft.WindowsAppSDK.WinUI` NuGet package into `vendor/winmd/`.
+    // Unlike the MIT win32metadata-derived files, these ship under
+    // Microsoft's proprietary Windows App SDK license, so — mirroring how
+    // windows-rs itself never commits `.winmd` to git — they're fetched on
+    // demand rather than checked into source control (see
+    // `vendor/winmd/README` and `.gitignore`). Not part of the default
+    // `zig build` graph; run explicitly with `zig build fetch-winui-metadata`.
+    // Must run on the host regardless of any user-supplied `-Dtarget`.
+    // ------------------------------------------------------------------
+
+    const fetch_winui_metadata_mod = b.createModule(.{
+        .root_source_file = b.path("tools/fetch-winui-metadata/main.zig"),
+        .target = b.graph.host,
+        .optimize = optimize,
+    });
+    const fetch_winui_metadata_exe = b.addExecutable(.{
+        .name = "fetch-winui-metadata",
+        .root_module = fetch_winui_metadata_mod,
+    });
+    const run_fetch_winui_metadata = b.addRunArtifact(fetch_winui_metadata_exe);
+    // Always rerun on request rather than caching on argv — this hits the
+    // network and writes outside the build's normal output tree.
+    run_fetch_winui_metadata.has_side_effects = true;
+    const fetch_winui_metadata_step = b.step(
+        "fetch-winui-metadata",
+        "Download WinUI3 .winmd metadata into vendor/winmd/ (proprietary-licensed; not committed)",
+    );
+    fetch_winui_metadata_step.dependOn(&run_fetch_winui_metadata.step);
+
+    // ------------------------------------------------------------------
     // `bindings` step — placeholder until winbindgen exposes a CLI.
     // ------------------------------------------------------------------
 

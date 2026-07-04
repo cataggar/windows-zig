@@ -1,2 +1,9 @@
 .zig-cache/
 zig-out/
+
+# WinUI3 / Windows App SDK metadata: ships under Microsoft's proprietary
+# Windows App SDK license (not MIT, unlike the vendored win32metadata
+# files), so it's fetched on demand via `zig build fetch-winui-metadata`
+# rather than committed. See vendor/winmd/README.
+/vendor/winmd/Microsoft.UI.Xaml.winmd
+/vendor/winmd/Microsoft.UI.Text.winmd
