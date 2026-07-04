@@ -1,9 +1,9 @@
 //! windows-zig top-level build script.
 //!
-//! Wires up the six in-tree packages (`winmd`, `win-core`, `winbindgen`,
-//! `win-sys`, `win`, `win-targets`), their unit tests, and the `bindings`
-//! step that regenerates `win-sys` / `win` sources from the vendored
-//! `.winmd` metadata.
+//! Wires up the seven in-tree packages (`winmd`, `win-core`,
+//! `win-numerics`, `winbindgen`, `win-sys`, `win`, `win-targets`),
+//! their unit tests, and the `bindings` step that regenerates `win-sys`
+//! / `win` sources from the vendored `.winmd` metadata.
 //!
 //! Requires Zig 0.16.0 or newer.
 
@@ -50,6 +50,12 @@ pub fn build(b: *std.Build) void {
         win_core_mod.linkSystemLibrary("api-ms-win-core-winrt-string-l1-1-0", .{});
         win_core_mod.linkSystemLibrary("api-ms-win-core-winrt-l1-1-0", .{});
     }
+
+    const win_numerics_mod = b.addModule("win-numerics", .{
+        .root_source_file = b.path("packages/win-numerics/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
 
     const winbindgen_mod = b.addModule("winbindgen", .{
         .root_source_file = b.path("packages/winbindgen/src/root.zig"),
@@ -104,6 +110,7 @@ pub fn build(b: *std.Build) void {
     const test_pkgs = [_]TestPkg{
         .{ .name = "winmd", .mod = winmd_mod },
         .{ .name = "win-core", .mod = win_core_mod },
+        .{ .name = "win-numerics", .mod = win_numerics_mod },
         .{ .name = "win-sys", .mod = win_sys_mod, .windows_only = true },
         // NOTE: `win` is intentionally omitted from test_pkgs while the
         // VARIANT emitter gap is pending. A test-harness rooted at
