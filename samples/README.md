@@ -61,6 +61,12 @@ zig build run-find-files     # build + run one
 |------------------|----------------------------------------------------------------|
 | `create-window`  | **Delegate-typed struct field**: `WNDCLASSA.lpfnWndProc` projects as `?*const anyopaque`. Sample registers a class, creates a window, drains the message loop, and lets `WM_DESTROY` fire `PostQuitMessage(0)` for a clean exit. Also shows the alias-form (`?*anyopaque` handles) vs struct-form (`extern struct { Value: *anyopaque }`) bridge at `.{ .Value = ... }` assignments. |
 
+### Graphics / COM
+
+| Sample            | Shape exercised                                                |
+|-------------------|----------------------------------------------------------------|
+| `direct2d-clock`  | **Heavy classic-COM graphics pipeline**: `D2D1CreateFactory` → `ID2D1Factory1` → `ID2D1DeviceContext`, `D3D11CreateDevice`, `IDXGISwapChain1`, and `IUIAnimationManager` working together in a live Win32 render loop. |
+
 ## The shapes, distilled
 
 ### PWSTR-in (constant literal)
