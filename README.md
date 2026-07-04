@@ -17,6 +17,7 @@ packages/
   win-core/            # GUID, HRESULT, BOOL, PCWSTR, COM vtable helpers
   winbindgen/          # .winmd -> .zig codegen + comptime projection
   win-sys/             # C-style Win32 (analogue of windows-sys)
+  win-threading/       # thread-pool wrappers over Windows.Win32.System.Threading
   win/                 # safer wrappers + COM/WinRT (analogue of windows)
   win-targets/         # .def -> import lib build step
 tools/
@@ -66,4 +67,3 @@ zig build bindings   # regenerate win-sys / win sources
 
 Licensed under either of [MIT license](license-mit) or
 [Apache License, Version 2.0](license-apache-2.0) at your option.
-

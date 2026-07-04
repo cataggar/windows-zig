@@ -1,7 +1,7 @@
 //! windows-zig top-level build script.
 //!
-//! Wires up the six in-tree packages (`winmd`, `win-core`, `winbindgen`,
-//! `win-sys`, `win`, `win-targets`), their unit tests, and the `bindings`
+//! Wires up the seven in-tree packages (`winmd`, `win-core`, `winbindgen`,
+//! `win-sys`, `win-threading`, `win`, `win-targets`), their unit tests, and the `bindings`
 //! step that regenerates `win-sys` / `win` sources from the vendored
 //! `.winmd` metadata.
 //!
@@ -76,6 +76,16 @@ pub fn build(b: *std.Build) void {
     });
     win_sys_mod.addImport("win-core", win_core_mod);
 
+    const win_threading_mod = b.addModule("win-threading", .{
+        .root_source_file = b.path("packages/win-threading/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    win_threading_mod.addImport("win-sys", win_sys_mod);
+    if (target.result.os.tag == .windows) {
+        win_threading_mod.linkSystemLibrary("kernel32", .{});
+    }
+
     const win_mod = b.addModule("win", .{
         .root_source_file = b.path("packages/win/src/root.zig"),
         .target = target,
@@ -105,6 +115,7 @@ pub fn build(b: *std.Build) void {
         .{ .name = "winmd", .mod = winmd_mod },
         .{ .name = "win-core", .mod = win_core_mod },
         .{ .name = "win-sys", .mod = win_sys_mod, .windows_only = true },
+        .{ .name = "win-threading", .mod = win_threading_mod, .windows_only = true },
         // NOTE: `win` is intentionally omitted from test_pkgs while the
         // VARIANT emitter gap is pending. A test-harness rooted at
         // `win/root.zig` analyzes `Com`'s pub decls, some of which
@@ -117,9 +128,10 @@ pub fn build(b: *std.Build) void {
     };
 
     for (test_pkgs) |p| {
-        // win-sys tests call `project()` which emits `@extern(..., library_name="KERNEL32", ...)`
-        // — that cannot link against a native Linux target. Cross coverage
-        // for win-sys already happens via `compile-check-bundle-*` below.
+        // win-sys / win-threading tests call `project()` which emits
+        // `@extern(..., library_name="KERNEL32", ...)` — that cannot link
+        // against a native Linux target. Cross coverage for win-sys already
+        // happens via `compile-check-bundle-*` below.
         if (p.windows_only and target.result.os.tag != .windows) continue;
         const t = b.addTest(.{
             .name = b.fmt("test-{s}", .{p.name}),
