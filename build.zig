@@ -8,6 +8,7 @@
 //! Requires Zig 0.16.0 or newer.
 
 const std = @import("std");
+const bundle_artifacts = @import("packages/winbindgen/src/bundle_artifacts.zig");
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
@@ -1214,7 +1215,7 @@ pub fn build(b: *std.Build) void {
         addGeneratedNamespaceImports(ns_mod, bundle_namespaces[0..], bundle_mods[0..], i);
     }
 
-    const win_bundle_root = bundle_outdir.path(b, "win_bundle.zig");
+    const win_bundle_root = bundle_outdir.path(b, bundle_artifacts.BundleFacadeFileName);
     const win_bundle_mod = b.createModule(.{
         .root_source_file = win_bundle_root,
         .target = target,
@@ -1294,7 +1295,7 @@ pub fn build(b: *std.Build) void {
         }
 
         const cross_bundle_mod = b.createModule(.{
-            .root_source_file = cross_bundle_outdir.path(b, "win_bundle.zig"),
+            .root_source_file = cross_bundle_outdir.path(b, bundle_artifacts.BundleFacadeFileName),
             .target = cross_target,
             .optimize = optimize,
         });
