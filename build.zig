@@ -1,7 +1,7 @@
 //! windows-zig top-level build script.
 //!
-//! Wires up the six in-tree packages (`winmd`, `win-core`, `winbindgen`,
-//! `win-sys`, `win`, `win-targets`), their unit tests, and the `bindings`
+//! Wires up the seven in-tree packages (`winmd`, `win-core`, `winbindgen`,
+//! `win-sys`, `win`, `win-reference`, `win-targets`), their unit tests, and the `bindings`
 //! step that regenerates `win-sys` / `win` sources from the vendored
 //! `.winmd` metadata.
 //!
@@ -12,6 +12,19 @@ const std = @import("std");
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
+    const arch_flag: ?[]const u8 = switch (target.result.cpu.arch) {
+        .x86 => "--arch=x86",
+        .x86_64 => "--arch=x64",
+        .aarch64 => "--arch=arm64",
+        else => null,
+    };
+    const host_target = b.graph.host.result;
+    const host_is_windows = b.graph.host.result.os.tag == .windows;
+    const host_runs_target =
+        target.result.os.tag == host_target.os.tag and
+        target.result.cpu.arch == host_target.cpu.arch and
+        target.result.abi == host_target.abi;
+    const native_windows_target = host_is_windows and host_runs_target;
 
     // ------------------------------------------------------------------
     // Modules (one per package). These are kept minimal until the package
@@ -115,19 +128,6 @@ pub fn build(b: *std.Build) void {
         .{ .name = "winbindgen", .mod = winbindgen_mod },
         .{ .name = "win-targets", .mod = win_targets_mod },
     };
-
-    for (test_pkgs) |p| {
-        // win-sys tests call `project()` which emits `@extern(..., library_name="KERNEL32", ...)`
-        // — that cannot link against a native Linux target. Cross coverage
-        // for win-sys already happens via `compile-check-bundle-*` below.
-        if (p.windows_only and target.result.os.tag != .windows) continue;
-        const t = b.addTest(.{
-            .name = b.fmt("test-{s}", .{p.name}),
-            .root_module = p.mod,
-        });
-        const run_t = b.addRunArtifact(t);
-        test_step.dependOn(&run_t.step);
-    }
 
     // ------------------------------------------------------------------
     // `fetch-winui-metadata` step — downloads the WinUI3 `.winmd` files
@@ -727,12 +727,38 @@ pub fn build(b: *std.Build) void {
         "Windows.Win32.Foundation",
     };
 
-    const arch_flag: ?[]const u8 = switch (target.result.cpu.arch) {
-        .x86 => "--arch=x86",
-        .x86_64 => "--arch=x64",
-        .aarch64 => "--arch=arm64",
-        else => null,
-    };
+    const win_reference_mod = b.addModule("win-reference", .{
+        .root_source_file = b.path("packages/win-reference/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    win_reference_mod.addImport("win-core", win_core_mod);
+    win_reference_mod.addImport("win", win_mod);
+    if (target.result.os.tag == .windows) {
+        win_reference_mod.linkSystemLibrary("ole32", .{});
+    }
+
+    for (test_pkgs) |p| {
+        // win-sys tests call `project()` which emits `@extern(..., library_name="KERNEL32", ...)`
+        // — that cannot link against a native Linux target. Cross coverage
+        // for win-sys already happens via `compile-check-bundle-*` below.
+        if (p.windows_only and !native_windows_target) continue;
+        const t = b.addTest(.{
+            .name = b.fmt("test-{s}", .{p.name}),
+            .root_module = p.mod,
+        });
+        const run_t = b.addRunArtifact(t);
+        test_step.dependOn(&run_t.step);
+    }
+
+    if (native_windows_target) {
+        const t = b.addTest(.{
+            .name = "test-win-reference",
+            .root_module = win_reference_mod,
+        });
+        const run_t = b.addRunArtifact(t);
+        test_step.dependOn(&run_t.step);
+    }
 
     // The native `gen_obj` / `bundle_obj` checks below link against real
     // Windows system libraries (kernel32, ntdll, oleaut32, ...) and execute
@@ -740,9 +766,7 @@ pub fn build(b: *std.Build) void {
     // Windows. On non-Windows hosts we still get full coverage via the
     // per-arch cross loop further down (compile-only against x86/x64/arm64
     // Windows targets). Skip the host-linked checks when cross-compiling.
-    const host_is_windows = target.result.os.tag == .windows;
-
-    if (host_is_windows) {
+    if (native_windows_target) {
         for (compile_check_namespaces) |ns| {
             const gen_run = b.addRunArtifact(winbindgen_exe);
             if (arch_flag) |f| gen_run.addArg(f);
@@ -1223,7 +1247,7 @@ pub fn build(b: *std.Build) void {
     addGeneratedNamespaceImports(win_bundle_mod, bundle_namespaces[0..], bundle_mods[0..], null);
     win_mod.addImport("win-bundle", win_bundle_mod);
 
-    if (host_is_windows) {
+    if (native_windows_target) {
         const bundle_obj = b.addTest(.{
             .name = "compile-check-bundle",
             .root_module = win_bundle_mod,
@@ -1504,7 +1528,7 @@ pub fn build(b: *std.Build) void {
     // `@extern(..., .{ .library_name = ... })` cannot resolve Windows
     // DLLs on a Linux target. Linux test coverage still compiles every
     // namespace via the `compile-check-bundle-*` cross loop above.
-    if (host_is_windows) {
+    if (native_windows_target) {
         test_step.dependOn(samples_step);
     }
 
@@ -1522,7 +1546,7 @@ pub fn build(b: *std.Build) void {
     // `@extern` reason as samples.
     // ------------------------------------------------------------------
     const bench_step = b.step("bench", "Compile the Phase 4 comptime-projection benchmark");
-    if (host_is_windows) {
+    if (native_windows_target) {
         const bench_mod = b.createModule(.{
             .root_source_file = b.path("benches/project_bench/main.zig"),
             .target = target,
