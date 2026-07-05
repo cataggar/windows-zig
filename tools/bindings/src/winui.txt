@@ -1,0 +1,8 @@
+--out packages/win/src/generated/winui.zig
+--flat --no-comment --no-allow
+
+--filter
+    Microsoft.UI.Xaml.Application
+    Microsoft.UI.Xaml.Window
+    Microsoft.UI.Xaml.Controls.Button
+    Microsoft.UI.Xaml.Controls.TextBlock
