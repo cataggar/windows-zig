@@ -151,6 +151,12 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
+    const reactor_manifest_mod = b.addModule("reactor-manifest", .{
+        .root_source_file = b.path("tools/reactor/manifest.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+
     // ------------------------------------------------------------------
     // Unit tests
     // ------------------------------------------------------------------
@@ -180,6 +186,7 @@ pub fn build(b: *std.Build) void {
         // and by consumer samples like `com_uri`.
         .{ .name = "winbindgen", .mod = winbindgen_mod },
         .{ .name = "win-targets", .mod = win_targets_mod },
+        .{ .name = "reactor-manifest", .mod = reactor_manifest_mod },
     };
 
     for (test_pkgs) |p| {
