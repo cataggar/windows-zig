@@ -5,6 +5,7 @@
 //! and (eventually) WinRT activation / async helpers.
 
 pub const core = @import("win-core");
+pub const future = @import("win-future");
 pub const sys = @import("win-sys");
 
 const bundle = @import("win-bundle");

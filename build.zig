@@ -1,10 +1,10 @@
 //! windows-zig top-level build script.
 //!
 //! Wires up the in-tree packages (`winmd`, `win-core`, `win-numerics`,
-//! `win-time`, `win-threading`, `win-reference`, `win-collections`,
-//! `winbindgen`, `win-sys`, `win`, `win-targets`), their unit tests, and
-//! the `bindings` step that regenerates `win-sys` / `win` sources from
-//! the vendored `.winmd` metadata.
+//! `win-time`, `win-threading`, `win-reference`, `win-future`,
+//! `win-collections`, `winbindgen`, `win-sys`, `win`, `win-targets`),
+//! their unit tests, and the `bindings` step that regenerates `win-sys`
+//! / `win` sources from the vendored `.winmd` metadata.
 //!
 //! Requires Zig 0.16.0 or newer.
 
@@ -73,6 +73,17 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
+    const win_future_mod = b.addModule("win-future", .{
+        .root_source_file = b.path("packages/win-future/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    win_future_mod.addImport("win-core", win_core_mod);
+    win_future_mod.addImport("winmd", winmd_mod);
+    win_future_mod.addAnonymousImport("Windows.winmd", .{
+        .root_source_file = b.path("vendor/winmd/Windows.winmd"),
+    });
+
     const win_collections_mod = b.addModule("win-collections", .{
         .root_source_file = b.path("packages/win-collections/src/root.zig"),
         .target = target,
@@ -131,6 +142,7 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
     win_mod.addImport("win-core", win_core_mod);
+    win_mod.addImport("win-future", win_future_mod);
     win_mod.addImport("win-sys", win_sys_mod);
 
     const win_targets_mod = b.addModule("win-targets", .{
@@ -154,6 +166,7 @@ pub fn build(b: *std.Build) void {
         .{ .name = "winmd", .mod = winmd_mod },
         .{ .name = "win-core", .mod = win_core_mod },
         .{ .name = "win-numerics", .mod = win_numerics_mod },
+        .{ .name = "win-future", .mod = win_future_mod },
         .{ .name = "win-collections", .mod = win_collections_mod, .windows_only = true },
         .{ .name = "win-sys", .mod = win_sys_mod, .windows_only = true },
         .{ .name = "win-time", .mod = win_time_mod, .windows_only = true },
@@ -1500,6 +1513,11 @@ pub fn build(b: *std.Build) void {
             .needs_win = true,
         },
         .{
+            .name = "winrt-future",
+            .root = "samples/winrt_future/main.zig",
+            .needs_win = true,
+        },
+        .{
             .name = "message-box",
             .root = "samples/message_box/main.zig",
         },
@@ -1536,7 +1554,9 @@ pub fn build(b: *std.Build) void {
             .target = target,
             .optimize = optimize,
         });
+        addGeneratedNamespaceImports(sample_mod, bundle_namespaces[0..], bundle_mods[0..], null);
         sample_mod.addImport("win-sys", win_sys_mod);
+        sample_mod.addImport("win-future", win_future_mod);
         if (s.needs_win) {
             sample_mod.addImport("win", win_mod);
             addGeneratedNamespaceImports(sample_mod, bundle_namespaces[0..], bundle_mods[0..], null);
