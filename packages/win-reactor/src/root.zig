@@ -9,6 +9,8 @@
 
 const context = @import("context.zig");
 const element = @import("element.zig");
+const backend = @import("backend.zig");
+const reconciler = @import("reconciler.zig");
 const render_cx = @import("render_cx.zig");
 
 pub const ContextId = context.ContextId;
@@ -39,6 +41,9 @@ pub const provide = element.provide;
 pub const intoElement = element.intoElement;
 pub const collectElements = element.collectElements;
 
+pub const WidgetId = backend.WidgetId;
+pub const Backend = backend.Backend;
+
 pub const RequestRerender = render_cx.RequestRerender;
 pub const ContextIdSet = render_cx.ContextIdSet;
 pub const HookSlot = render_cx.HookSlot;
@@ -54,10 +59,20 @@ pub const HookRef = render_cx.HookRef;
 pub const AsyncSetState = render_cx.AsyncSetState;
 pub const AsyncStateResult = render_cx.AsyncStateResult;
 
+pub const Tree = reconciler.Tree;
+pub const MountedWidget = reconciler.MountedWidget;
+pub const MountedComponent = reconciler.MountedComponent;
+pub const MountedProvider = reconciler.MountedProvider;
+pub const MountedGroup = reconciler.MountedGroup;
+pub const MountedElement = reconciler.MountedElement;
+pub const Reconciler = reconciler.Reconciler;
+
 pub const Error = render_cx.Error;
 
 test {
+    _ = @import("backend.zig");
     _ = @import("context.zig");
     _ = @import("element.zig");
+    _ = @import("reconciler.zig");
     _ = @import("render_cx.zig");
 }
