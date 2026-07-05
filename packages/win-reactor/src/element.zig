@@ -9,16 +9,26 @@ pub const Allocator = std.mem.Allocator;
 /// evaluating consumers, and a small amount of structural validation.
 pub const Error = Allocator.Error || render_cx.Error || error{
     LeafCannotHaveChildren,
+    WindowCannotHaveMultipleChildren,
 };
 
-/// Placeholder widget catalog for the pure-logic M3 tree. Issue #20 will grow
-/// this into real WinUI3-facing builders (`text_block`, `button`, `vstack`,
-/// `hstack`, ...), while issues #17/#18 can keep lowering generated setters and
-/// event attachers into the generic `props` / `events` bags below.
 pub const WidgetKind = enum {
     leaf,
     container,
+    application,
+    window,
+    button,
+    stack_panel,
+    text_block,
+    text_box,
 };
+
+pub fn widgetKindAllowsChildren(kind: WidgetKind) bool {
+    return switch (kind) {
+        .container, .application, .window, .stack_panel => true,
+        .leaf, .button, .text_block, .text_box => false,
+    };
+}
 
 /// Zero-argument event callback. Concrete WinUI event payloads arrive later;
 /// for now the tree only needs stable callback identity plus an invocation
@@ -98,9 +108,34 @@ pub const Property = struct {
         const owned_name = try dupString(allocator, name);
         errdefer freeString(allocator, owned_name);
 
+        const value_box = switch (@typeInfo(@TypeOf(value))) {
+            .pointer => |info| blk: {
+                if (info.size == .slice and info.child == u8) {
+                    break :blk try box.ValueBox.init(allocator, @as([]const u8, value));
+                }
+                if (info.size == .one and @typeInfo(info.child) == .array) {
+                    const array_info = @typeInfo(info.child).array;
+                    if (array_info.child == u8) {
+                        if (array_info.sentinel() != null) {
+                            break :blk try box.ValueBox.init(allocator, std.mem.span(value));
+                        }
+                        break :blk try box.ValueBox.init(allocator, value[0..]);
+                    }
+                }
+                break :blk try box.ValueBox.init(allocator, value);
+            },
+            .array => |info| blk: {
+                if (info.child == u8) {
+                    break :blk try box.ValueBox.init(allocator, value[0..]);
+                }
+                break :blk try box.ValueBox.init(allocator, value);
+            },
+            else => try box.ValueBox.init(allocator, value),
+        };
+
         return .{
             .name = owned_name,
-            .value = try box.ValueBox.init(allocator, value),
+            .value = value_box,
         };
     }
 
@@ -761,14 +796,28 @@ pub fn WidgetBuilder(comptime kind: WidgetKind) type {
         }
 
         pub fn child(self: *@This(), value: anytype) Error!*@This() {
-            if (kind != .container) @compileError("leaf widget builders cannot accept children");
+            comptime {
+                switch (kind) {
+                    .leaf, .button, .text_block, .text_box => {
+                        @compileError("this widget builder cannot accept children");
+                    },
+                    else => {},
+                }
+            }
 
             try self.children.append(self.allocator, try intoElement(self.allocator, value));
             return self;
         }
 
         pub fn childrenFrom(self: *@This(), values: anytype) Error!*@This() {
-            if (kind != .container) @compileError("leaf widget builders cannot accept children");
+            comptime {
+                switch (kind) {
+                    .leaf, .button, .text_block, .text_box => {
+                        @compileError("this widget builder cannot accept children");
+                    },
+                    else => {},
+                }
+            }
 
             const owned_children = try collectElements(self.allocator, values);
             errdefer {
@@ -784,7 +833,12 @@ pub fn WidgetBuilder(comptime kind: WidgetKind) type {
         }
 
         pub fn build(self: *@This()) Error!Element {
-            if (kind == .leaf and self.children.items.len != 0) return error.LeafCannotHaveChildren;
+            if (!widgetKindAllowsChildren(kind) and self.children.items.len != 0) {
+                return error.LeafCannotHaveChildren;
+            }
+            if (kind == .window and self.children.items.len > 1) {
+                return error.WindowCannotHaveMultipleChildren;
+            }
 
             const allocator = self.allocator;
             const key = self.key;
@@ -830,6 +884,12 @@ pub fn WidgetBuilder(comptime kind: WidgetKind) type {
 
 pub const LeafBuilder = WidgetBuilder(.leaf);
 pub const ContainerBuilder = WidgetBuilder(.container);
+pub const ApplicationBuilder = WidgetBuilder(.application);
+pub const WindowBuilder = WidgetBuilder(.window);
+pub const ButtonBuilder = WidgetBuilder(.button);
+pub const StackPanelBuilder = WidgetBuilder(.stack_panel);
+pub const TextBlockBuilder = WidgetBuilder(.text_block);
+pub const TextBoxBuilder = WidgetBuilder(.text_box);
 
 pub fn leaf(allocator: Allocator) LeafBuilder {
     return LeafBuilder.init(allocator);
@@ -837,6 +897,30 @@ pub fn leaf(allocator: Allocator) LeafBuilder {
 
 pub fn container(allocator: Allocator) ContainerBuilder {
     return ContainerBuilder.init(allocator);
+}
+
+pub fn application(allocator: Allocator) ApplicationBuilder {
+    return ApplicationBuilder.init(allocator);
+}
+
+pub fn window(allocator: Allocator) WindowBuilder {
+    return WindowBuilder.init(allocator);
+}
+
+pub fn button(allocator: Allocator) ButtonBuilder {
+    return ButtonBuilder.init(allocator);
+}
+
+pub fn stack_panel(allocator: Allocator) StackPanelBuilder {
+    return StackPanelBuilder.init(allocator);
+}
+
+pub fn text_block(allocator: Allocator) TextBlockBuilder {
+    return TextBlockBuilder.init(allocator);
+}
+
+pub fn text_box(allocator: Allocator) TextBoxBuilder {
+    return TextBoxBuilder.init(allocator);
 }
 
 fn appendElementInputs(items: *std.ArrayListUnmanaged(Element), allocator: Allocator, values: anytype) Error!void {
@@ -1049,10 +1133,10 @@ test "widget builders convert into element trees with props, children, and handl
     try std.testing.expectEqual(WidgetKind.leaf, title.widget.kind);
     try std.testing.expectEqualStrings("hello", title.widget.propertyValue([]const u8, "text").?);
 
-    const button = &root.widget.children[1];
-    try std.testing.expect(button.* == .widget);
-    try std.testing.expectEqualStrings("primary", button.widget.propertyValue([]const u8, "role").?);
-    button.widget.event("click").?.invoke();
+    const button_el = &root.widget.children[1];
+    try std.testing.expect(button_el.* == .widget);
+    try std.testing.expectEqualStrings("primary", button_el.widget.propertyValue([]const u8, "role").?);
+    button_el.widget.event("click").?.invoke();
     try std.testing.expectEqual(@as(u32, 1), clicks);
 }
 

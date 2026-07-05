@@ -4,7 +4,7 @@ const std = @import("std");
 const win_core = @import("win-core");
 
 pub const InvokeFn = *const fn (
-    this: *const anyopaque,
+    user_data: ?*anyopaque,
     sender: ?*const anyopaque,
     args: ?*const anyopaque,
 ) callconv(.winapi) win_core.HRESULT;
@@ -12,6 +12,8 @@ pub const InvokeFn = *const fn (
 pub fn Connection(comptime Token: type) type {
     return struct {
         token: ?Token = null,
+        cleanup_user_data: ?*anyopaque = null,
+        cleanup_fn: ?*const fn (?*anyopaque) void = null,
 
         pub fn isConnected(self: @This()) bool {
             return self.token != null;
@@ -28,9 +30,41 @@ pub fn connect(
     user_data: ?*anyopaque,
     add_fn: anytype,
 ) (win_core.hresult.Error || error{OutOfMemory})!Connection(Token) {
-    const D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), iid);
-    const handler = try D.create(allocator, invoke, user_data);
-    defer _ = D.release(handler);
+    const DelegateInvoke = fn (
+        this: *anyopaque,
+        sender: ?*const anyopaque,
+        args: ?*const anyopaque,
+    ) callconv(.winapi) win_core.HRESULT;
+    const D = win_core.Delegate(DelegateInvoke, iid);
+    const HandlerContext = struct {
+        allocator: std.mem.Allocator,
+        invoke: InvokeFn,
+        user_data: ?*anyopaque,
+    };
+    const context = try allocator.create(HandlerContext);
+    errdefer allocator.destroy(context);
+    context.* = .{
+        .allocator = allocator,
+        .invoke = invoke,
+        .user_data = user_data,
+    };
+
+    const Trampoline = struct {
+        fn call(
+            this: *anyopaque,
+            sender: ?*const anyopaque,
+            args: ?*const anyopaque,
+        ) callconv(.winapi) win_core.HRESULT {
+            const raw_ctx = D.userData(this) orelse return win_core.hresult.S_OK;
+            const ctx: *HandlerContext = @ptrCast(@alignCast(raw_ctx));
+            return ctx.invoke(ctx.user_data, sender, args);
+        }
+    };
+    const handler = try D.create(allocator, &Trampoline.call, context);
+    defer {
+        const remaining = D.release(handler);
+        if (remaining == 0) allocator.destroy(context);
+    }
 
     const add_info = @typeInfo(@TypeOf(add_fn)).@"fn";
     const delegate_param_ty = add_info.params[1].type orelse
@@ -42,7 +76,17 @@ pub fn connect(
         @as(delegate_param_ty, @ptrCast(@alignCast(handler))),
         &token,
     }));
-    return .{ .token = token };
+    return .{
+        .token = token,
+        .cleanup_user_data = context,
+        .cleanup_fn = struct {
+            fn destroy(raw: ?*anyopaque) void {
+                const typed = raw orelse return;
+                const ctx: *HandlerContext = @ptrCast(@alignCast(typed));
+                ctx.allocator.destroy(ctx);
+            }
+        }.destroy,
+    };
 }
 
 pub fn disconnect(
@@ -54,6 +98,11 @@ pub fn disconnect(
     const token = connection.token orelse return;
     try win_core.hresult.ok(@call(.auto, remove_fn, .{ target, token }));
     connection.token = null;
+    if (connection.cleanup_fn) |cleanup| {
+        cleanup(connection.cleanup_user_data);
+    }
+    connection.cleanup_user_data = null;
+    connection.cleanup_fn = null;
 }
 
 test "connect and disconnect swap handlers without leaking registrations" {
@@ -122,12 +171,11 @@ test "connect and disconnect swap handlers without leaking registrations" {
     };
 
     const Callbacks = struct {
-        fn onInvoked(this: *const anyopaque, sender: ?*const anyopaque, args: ?*const anyopaque) callconv(.winapi) win_core.HRESULT {
+        fn onInvoked(user_data: ?*anyopaque, sender: ?*const anyopaque, args: ?*const anyopaque) callconv(.winapi) win_core.HRESULT {
             _ = sender;
             _ = args;
 
-            const D = win_core.Delegate(@TypeOf(onInvoked), test_iid);
-            const raw_ctx = D.userData(@constCast(this)) orelse return win_core.hresult.S_OK;
+            const raw_ctx = user_data orelse return win_core.hresult.S_OK;
             const counter: *Counter = @ptrCast(@alignCast(raw_ctx));
             counter.fired += 1;
             return win_core.hresult.S_OK;
