@@ -2,6 +2,7 @@ const std = @import("std");
 const backend = @import("backend.zig");
 const context = @import("context.zig");
 const element = @import("element.zig");
+const RecordingBackend = @import("recording_backend.zig").RecordingBackend;
 const render_cx = @import("render_cx.zig");
 
 pub const Allocator = std.mem.Allocator;
@@ -31,7 +32,7 @@ pub const MountedWidget = struct {
 
 pub const MountedComponent = struct {
     id: usize,
-    render_cx: render_cx.RenderCx,
+    render_cx: *render_cx.RenderCx,
     last_rendered: Element,
     rendered: *MountedElement,
     read_contexts: ContextIdSet = .empty,
@@ -63,6 +64,7 @@ pub const MountedElement = union(enum) {
                 component_state.last_rendered.deinit(allocator);
                 component_state.read_contexts.deinit(allocator);
                 component_state.render_cx.deinit();
+                allocator.destroy(component_state.render_cx);
             },
             .provider => |*provider| {
                 provider.child.deinit(allocator);
@@ -272,12 +274,14 @@ pub const Reconciler = struct {
         parent_ctx: *ParentContext,
         component_element: *const element.ComponentElement,
     ) anyerror!MountedElement {
-        var cx = render_cx.RenderCx.init(self.allocator, self.request_rerender);
+        const cx = try self.allocator.create(render_cx.RenderCx);
+        errdefer self.allocator.destroy(cx);
+        cx.* = render_cx.RenderCx.init(self.allocator, self.request_rerender);
         errdefer cx.deinit();
         cx.setContextStack(&self.context_stack);
 
         cx.beginRender();
-        var rendered = try component_element.render(&cx);
+        var rendered = try component_element.render(cx);
         errdefer rendered.deinit(self.allocator);
         try cx.finishRender();
 
@@ -433,7 +437,7 @@ pub const Reconciler = struct {
                 component_state.render_cx.setContextStack(&self.context_stack);
                 component_state.render_cx.beginRender();
 
-                var rendered = try new.component.render(&component_state.render_cx);
+                var rendered = try new.component.render(component_state.render_cx);
                 errdefer rendered.deinit(self.allocator);
                 try component_state.render_cx.finishRender();
 
@@ -1023,159 +1027,6 @@ fn lastProvision(
     return null;
 }
 
-const FakeBackend = struct {
-    allocator: Allocator,
-    next_id: WidgetId = 1,
-    calls: std.ArrayListUnmanaged(Call) = .empty,
-
-    const Call = union(enum) {
-        mount_widget: struct {
-            parent: ?WidgetId,
-            index: usize,
-            kind: element.WidgetKind,
-            id: WidgetId,
-        },
-        unmount_widget: WidgetId,
-        reorder_children: struct {
-            parent: ?WidgetId,
-            children: []WidgetId,
-        },
-        set_property: struct {
-            id: WidgetId,
-            property: element.Property,
-        },
-        unset_property: struct {
-            id: WidgetId,
-            name: []const u8,
-        },
-        attach_event: struct {
-            id: WidgetId,
-            handler: element.EventHandler,
-        },
-        detach_event: struct {
-            id: WidgetId,
-            name: []const u8,
-        },
-
-        fn deinit(self: *Call, allocator: Allocator) void {
-            switch (self.*) {
-                .reorder_children => |*reorder| {
-                    if (reorder.children.len > 0) allocator.free(reorder.children);
-                },
-                .set_property => |*set_property| {
-                    set_property.property.deinit(allocator);
-                },
-                .unset_property => |*unset_property| {
-                    if (unset_property.name.len > 0) allocator.free(unset_property.name);
-                },
-                .attach_event => |*attach_event| {
-                    attach_event.handler.deinit(allocator);
-                },
-                .detach_event => |*detach_event| {
-                    if (detach_event.name.len > 0) allocator.free(detach_event.name);
-                },
-                else => {},
-            }
-            self.* = undefined;
-        }
-    };
-
-    fn init(allocator: Allocator) FakeBackend {
-        return .{ .allocator = allocator };
-    }
-
-    fn deinit(self: *FakeBackend) void {
-        for (self.calls.items) |*call| call.deinit(self.allocator);
-        self.calls.deinit(self.allocator);
-        self.* = undefined;
-    }
-
-    fn clearCalls(self: *FakeBackend) void {
-        for (self.calls.items) |*call| call.deinit(self.allocator);
-        self.calls.clearRetainingCapacity();
-    }
-
-    pub fn mountWidget(
-        self: *FakeBackend,
-        parent: ?WidgetId,
-        index: usize,
-        kind: element.WidgetKind,
-    ) anyerror!WidgetId {
-        const id = self.next_id;
-        self.next_id += 1;
-        try self.calls.append(self.allocator, .{
-            .mount_widget = .{
-                .parent = parent,
-                .index = index,
-                .kind = kind,
-                .id = id,
-            },
-        });
-        return id;
-    }
-
-    pub fn unmountWidget(self: *FakeBackend, id: WidgetId) anyerror!void {
-        try self.calls.append(self.allocator, .{ .unmount_widget = id });
-    }
-
-    pub fn reorderChildren(
-        self: *FakeBackend,
-        parent: ?WidgetId,
-        children: []const WidgetId,
-    ) anyerror!void {
-        try self.calls.append(self.allocator, .{
-            .reorder_children = .{
-                .parent = parent,
-                .children = try self.allocator.dupe(WidgetId, children),
-            },
-        });
-    }
-
-    pub fn setProperty(
-        self: *FakeBackend,
-        id: WidgetId,
-        property: *const element.Property,
-    ) anyerror!void {
-        try self.calls.append(self.allocator, .{
-            .set_property = .{
-                .id = id,
-                .property = try property.clone(self.allocator),
-            },
-        });
-    }
-
-    pub fn unsetProperty(self: *FakeBackend, id: WidgetId, name: []const u8) anyerror!void {
-        try self.calls.append(self.allocator, .{
-            .unset_property = .{
-                .id = id,
-                .name = try self.allocator.dupe(u8, name),
-            },
-        });
-    }
-
-    pub fn attachEvent(
-        self: *FakeBackend,
-        id: WidgetId,
-        handler: *const element.EventHandler,
-    ) anyerror!void {
-        try self.calls.append(self.allocator, .{
-            .attach_event = .{
-                .id = id,
-                .handler = try handler.clone(self.allocator),
-            },
-        });
-    }
-
-    pub fn detachEvent(self: *FakeBackend, id: WidgetId, name: []const u8) anyerror!void {
-        try self.calls.append(self.allocator, .{
-            .detach_event = .{
-                .id = id,
-                .name = try self.allocator.dupe(u8, name),
-            },
-        });
-    }
-};
-
 fn noopCallbackA() void {}
 fn noopCallbackB() void {}
 
@@ -1211,8 +1062,60 @@ fn buildLeafWithEvent(
     return builder.build();
 }
 
+fn StateCapture(comptime T: type) type {
+    return struct {
+        setter: ?render_cx.SetState(T) = null,
+    };
+}
+
+fn ReducerCapture(comptime State: type, comptime Action: type) type {
+    return struct {
+        update: ?render_cx.Updater(State) = null,
+        dispatch: ?render_cx.Dispatch(State, Action) = null,
+    };
+}
+
+const TestRerenderCounter = struct {
+    count: u32 = 0,
+
+    fn request(raw: ?*anyopaque) void {
+        const self: *TestRerenderCounter = @ptrCast(@alignCast(raw.?));
+        self.count += 1;
+    }
+};
+
+const TestLog = struct {
+    items: [16][]const u8 = undefined,
+    len: usize = 0,
+
+    fn push(self: *TestLog, value: []const u8) void {
+        self.items[self.len] = value;
+        self.len += 1;
+    }
+
+    fn slice(self: *const TestLog) []const []const u8 {
+        return self.items[0..self.len];
+    }
+};
+
+const CountAction = union(enum) {
+    add: i32,
+    reset,
+};
+
+fn incrementReducer(state: *const i32) i32 {
+    return state.* + 1;
+}
+
+fn countReducer(state: *const i32, action: CountAction) i32 {
+    return switch (action) {
+        .add => |amount| state.* + amount,
+        .reset => 0,
+    };
+}
+
 test "initial mount mounts widgets, props, and grouped children" {
-    var backend_state = FakeBackend.init(std.testing.allocator);
+    var backend_state = RecordingBackend.init(std.testing.allocator);
     defer backend_state.deinit();
 
     var reconciler = Reconciler.init(
@@ -1271,7 +1174,7 @@ test "memoized component rerender with identical props produces zero backend cal
         }
     };
 
-    var backend_state = FakeBackend.init(std.testing.allocator);
+    var backend_state = RecordingBackend.init(std.testing.allocator);
     defer backend_state.deinit();
     var reconciler = Reconciler.init(
         std.testing.allocator,
@@ -1310,7 +1213,7 @@ test "memoized component rerender with identical props produces zero backend cal
 }
 
 test "prop changes emit property update and event detach" {
-    var backend_state = FakeBackend.init(std.testing.allocator);
+    var backend_state = RecordingBackend.init(std.testing.allocator);
     defer backend_state.deinit();
     var reconciler = Reconciler.init(
         std.testing.allocator,
@@ -1348,7 +1251,7 @@ test "prop changes emit property update and event detach" {
 }
 
 test "adding and removing children emits mount and unmount calls" {
-    var backend_state = FakeBackend.init(std.testing.allocator);
+    var backend_state = RecordingBackend.init(std.testing.allocator);
     defer backend_state.deinit();
     var reconciler = Reconciler.init(
         std.testing.allocator,
@@ -1397,7 +1300,7 @@ test "adding and removing children emits mount and unmount calls" {
 }
 
 test "keyed child reorder emits reorder call without remounting" {
-    var backend_state = FakeBackend.init(std.testing.allocator);
+    var backend_state = RecordingBackend.init(std.testing.allocator);
     defer backend_state.deinit();
     var reconciler = Reconciler.init(
         std.testing.allocator,
@@ -1461,7 +1364,7 @@ test "provider changes force memoized consumers to rerender" {
         }
     };
 
-    var backend_state = FakeBackend.init(std.testing.allocator);
+    var backend_state = RecordingBackend.init(std.testing.allocator);
     defer backend_state.deinit();
     var reconciler = Reconciler.init(
         std.testing.allocator,
@@ -1511,4 +1414,460 @@ test "provider changes force memoized consumers to rerender" {
     try std.testing.expectEqual(@as(usize, 1), backend_state.calls.items.len);
     try std.testing.expectEqualStrings("theme", backend_state.calls.items[0].set_property.property.name);
     try std.testing.expectEqualStrings("light", backend_state.calls.items[0].set_property.property.get([]const u8).?);
+}
+
+test "useState rerenders memoized components in place" {
+    const Capture = StateCapture(i32);
+    const Props = struct {
+        capture: *Capture,
+        renders: *u32,
+    };
+    const Render = struct {
+        fn call(props: *const Props, cx: *render_cx.RenderCx) element.Error!Element {
+            props.renders.* += 1;
+            const state = try cx.useState(i32, 0);
+            props.capture.setter = state.set;
+            return buildLeaf(cx.getAllocator(), null, "count", state.value.*);
+        }
+    };
+
+    var capture: Capture = .{};
+    var renders: u32 = 0;
+    var rerenders: TestRerenderCounter = .{};
+    var backend_state = RecordingBackend.init(std.testing.allocator);
+    defer backend_state.deinit();
+    var reconciler = Reconciler.init(
+        std.testing.allocator,
+        Backend.from(&backend_state),
+        RequestRerender.init(@ptrCast(&rerenders), TestRerenderCounter.request),
+    );
+    defer reconciler.deinit();
+
+    var first = try element.memo(
+        std.testing.allocator,
+        "counter",
+        Props{ .capture = &capture, .renders = &renders },
+        Render.call,
+    );
+    defer first.deinit(std.testing.allocator);
+
+    var tree = try reconciler.mount(&first);
+    defer reconciler.unmountTree(&tree) catch unreachable;
+    try std.testing.expectEqual(@as(u32, 1), renders);
+
+    const leaf_id = backend_state.rootChildren()[0];
+    try std.testing.expectEqual(@as(i32, 0), backend_state.propertyValue(i32, leaf_id, "count").?);
+
+    backend_state.clearCalls();
+    capture.setter.?.call(1);
+    try std.testing.expectEqual(@as(u32, 1), rerenders.count);
+
+    var second = try element.memo(
+        std.testing.allocator,
+        "counter",
+        Props{ .capture = &capture, .renders = &renders },
+        Render.call,
+    );
+    defer second.deinit(std.testing.allocator);
+
+    try reconciler.update(&tree, &second);
+    try std.testing.expectEqual(@as(u32, 2), renders);
+    try std.testing.expectEqual(@as(usize, 1), backend_state.calls.items.len);
+    try std.testing.expect(backend_state.sawPropertySet(i32, leaf_id, "count", 1));
+    try std.testing.expectEqual(@as(i32, 1), backend_state.propertyValue(i32, leaf_id, "count").?);
+
+    backend_state.clearCalls();
+
+    var third = try element.memo(
+        std.testing.allocator,
+        "counter",
+        Props{ .capture = &capture, .renders = &renders },
+        Render.call,
+    );
+    defer third.deinit(std.testing.allocator);
+
+    try reconciler.update(&tree, &third);
+    try std.testing.expectEqual(@as(u32, 2), renders);
+    try std.testing.expectEqual(@as(usize, 0), backend_state.calls.items.len);
+}
+
+test "useEffect runs after mount and state updates" {
+    const Capture = StateCapture(i32);
+    const Props = struct {
+        capture: *Capture,
+        log: *TestLog,
+    };
+    const EffectContext = struct {
+        log: *TestLog,
+        value: i32,
+    };
+    const RunEffect = struct {
+        fn run(ctx: *const EffectContext) void {
+            switch (ctx.value) {
+                0 => ctx.log.push("effect-0"),
+                1 => ctx.log.push("effect-1"),
+                else => ctx.log.push("effect-other"),
+            }
+        }
+    };
+    const Render = struct {
+        fn call(props: *const Props, cx: *render_cx.RenderCx) element.Error!Element {
+            const state = try cx.useState(i32, 0);
+            props.capture.setter = state.set;
+            try cx.useEffect(state.value.*, EffectContext{
+                .log = props.log,
+                .value = state.value.*,
+            }, RunEffect.run);
+            return buildLeaf(cx.getAllocator(), null, "count", state.value.*);
+        }
+    };
+
+    var capture: Capture = .{};
+    var log: TestLog = .{};
+    var backend_state = RecordingBackend.init(std.testing.allocator);
+    defer backend_state.deinit();
+    var reconciler = Reconciler.init(
+        std.testing.allocator,
+        Backend.from(&backend_state),
+        RequestRerender.none(),
+    );
+    defer reconciler.deinit();
+
+    var first = try element.memo(
+        std.testing.allocator,
+        "effect-counter",
+        Props{ .capture = &capture, .log = &log },
+        Render.call,
+    );
+    defer first.deinit(std.testing.allocator);
+
+    var tree = try reconciler.mount(&first);
+    defer reconciler.unmountTree(&tree) catch unreachable;
+    try std.testing.expectEqualSlices([]const u8, &[_][]const u8{"effect-0"}, log.slice());
+
+    const leaf_id = backend_state.rootChildren()[0];
+    backend_state.clearCalls();
+    capture.setter.?.call(1);
+
+    var second = try element.memo(
+        std.testing.allocator,
+        "effect-counter",
+        Props{ .capture = &capture, .log = &log },
+        Render.call,
+    );
+    defer second.deinit(std.testing.allocator);
+
+    try reconciler.update(&tree, &second);
+    try std.testing.expectEqualSlices(
+        []const u8,
+        &[_][]const u8{ "effect-0", "effect-1" },
+        log.slice(),
+    );
+    try std.testing.expectEqual(@as(i32, 1), backend_state.propertyValue(i32, leaf_id, "count").?);
+}
+
+test "useEffectWithCleanup cleans up on rerender and unmount" {
+    const Capture = StateCapture(i32);
+    const Props = struct {
+        capture: *Capture,
+        log: *TestLog,
+    };
+    const EffectContext = struct {
+        log: *TestLog,
+        value: i32,
+    };
+    const CleanupContext = struct {
+        log: *TestLog,
+        value: i32,
+    };
+    const RunEffect = struct {
+        fn run(ctx: *const EffectContext) ?CleanupContext {
+            switch (ctx.value) {
+                0 => ctx.log.push("effect-0"),
+                1 => ctx.log.push("effect-1"),
+                else => ctx.log.push("effect-other"),
+            }
+            return .{
+                .log = ctx.log,
+                .value = ctx.value,
+            };
+        }
+    };
+    const RunCleanup = struct {
+        fn run(ctx: *CleanupContext) void {
+            switch (ctx.value) {
+                0 => ctx.log.push("cleanup-0"),
+                1 => ctx.log.push("cleanup-1"),
+                else => ctx.log.push("cleanup-other"),
+            }
+        }
+    };
+    const Render = struct {
+        fn call(props: *const Props, cx: *render_cx.RenderCx) element.Error!Element {
+            const state = try cx.useState(i32, 0);
+            props.capture.setter = state.set;
+            try cx.useEffectWithCleanup(CleanupContext, state.value.*, EffectContext{
+                .log = props.log,
+                .value = state.value.*,
+            }, RunEffect.run, RunCleanup.run);
+            return buildLeaf(cx.getAllocator(), null, "count", state.value.*);
+        }
+    };
+
+    var capture: Capture = .{};
+    var log: TestLog = .{};
+    var backend_state = RecordingBackend.init(std.testing.allocator);
+    defer backend_state.deinit();
+    var reconciler = Reconciler.init(
+        std.testing.allocator,
+        Backend.from(&backend_state),
+        RequestRerender.none(),
+    );
+    defer reconciler.deinit();
+
+    var first = try element.memo(
+        std.testing.allocator,
+        "cleanup-counter",
+        Props{ .capture = &capture, .log = &log },
+        Render.call,
+    );
+    defer first.deinit(std.testing.allocator);
+
+    var tree = try reconciler.mount(&first);
+    var mounted = true;
+    defer if (mounted) reconciler.unmountTree(&tree) catch unreachable;
+    try std.testing.expectEqualSlices([]const u8, &[_][]const u8{"effect-0"}, log.slice());
+
+    capture.setter.?.call(1);
+
+    var second = try element.memo(
+        std.testing.allocator,
+        "cleanup-counter",
+        Props{ .capture = &capture, .log = &log },
+        Render.call,
+    );
+    defer second.deinit(std.testing.allocator);
+
+    try reconciler.update(&tree, &second);
+    try std.testing.expectEqualSlices(
+        []const u8,
+        &[_][]const u8{ "effect-0", "cleanup-0", "effect-1" },
+        log.slice(),
+    );
+
+    try reconciler.unmountTree(&tree);
+    mounted = false;
+    try std.testing.expectEqualSlices(
+        []const u8,
+        &[_][]const u8{ "effect-0", "cleanup-0", "effect-1", "cleanup-1" },
+        log.slice(),
+    );
+}
+
+test "useReducer and useReducerFn drive backend diffs" {
+    const Capture = ReducerCapture(i32, CountAction);
+    const Props = struct {
+        capture: *Capture,
+        renders: *u32,
+    };
+    const Render = struct {
+        fn call(props: *const Props, cx: *render_cx.RenderCx) element.Error!Element {
+            props.renders.* += 1;
+            const reduced = try cx.useReducer(i32, 0);
+            const reduced_fn = try cx.useReducerFn(i32, CountAction, countReducer, 10);
+            props.capture.update = reduced.update;
+            props.capture.dispatch = reduced_fn.dispatch;
+
+            var builder = element.leaf(cx.getAllocator());
+            defer builder.deinit();
+            _ = try (try builder.prop("reduced", reduced.value.*)).prop("reduced_fn", reduced_fn.value.*);
+            return builder.build();
+        }
+    };
+
+    var capture: Capture = .{};
+    var renders: u32 = 0;
+    var rerenders: TestRerenderCounter = .{};
+    var backend_state = RecordingBackend.init(std.testing.allocator);
+    defer backend_state.deinit();
+    var reconciler = Reconciler.init(
+        std.testing.allocator,
+        Backend.from(&backend_state),
+        RequestRerender.init(@ptrCast(&rerenders), TestRerenderCounter.request),
+    );
+    defer reconciler.deinit();
+
+    var first = try element.memo(
+        std.testing.allocator,
+        "reducers",
+        Props{ .capture = &capture, .renders = &renders },
+        Render.call,
+    );
+    defer first.deinit(std.testing.allocator);
+
+    var tree = try reconciler.mount(&first);
+    defer reconciler.unmountTree(&tree) catch unreachable;
+    const leaf_id = backend_state.rootChildren()[0];
+
+    backend_state.clearCalls();
+    capture.update.?.call(incrementReducer);
+    capture.update.?.call(incrementReducer);
+    capture.dispatch.?.call(.{ .add = 5 });
+    capture.dispatch.?.call(.reset);
+    try std.testing.expectEqual(@as(u32, 4), rerenders.count);
+
+    var second = try element.memo(
+        std.testing.allocator,
+        "reducers",
+        Props{ .capture = &capture, .renders = &renders },
+        Render.call,
+    );
+    defer second.deinit(std.testing.allocator);
+
+    try reconciler.update(&tree, &second);
+    try std.testing.expectEqual(@as(u32, 2), renders);
+    try std.testing.expectEqual(@as(i32, 2), backend_state.propertyValue(i32, leaf_id, "reduced").?);
+    try std.testing.expectEqual(@as(i32, 0), backend_state.propertyValue(i32, leaf_id, "reduced_fn").?);
+}
+
+test "hook-order mismatch during component rerender propagates" {
+    const Props = struct {
+        include_ref: bool,
+    };
+    const Render = struct {
+        fn call(props: *const Props, cx: *render_cx.RenderCx) element.Error!Element {
+            _ = try cx.useState(i32, 1);
+            if (props.include_ref) {
+                _ = try cx.useRef(u32, 0);
+            }
+            return buildLeaf(cx.getAllocator(), null, "value", @as(i32, 1));
+        }
+    };
+
+    var backend_state = RecordingBackend.init(std.testing.allocator);
+    defer backend_state.deinit();
+    var reconciler = Reconciler.init(
+        std.testing.allocator,
+        Backend.from(&backend_state),
+        RequestRerender.none(),
+    );
+    defer reconciler.deinit();
+
+    var first = try element.component(
+        std.testing.allocator,
+        "hook-order",
+        Props{ .include_ref = true },
+        Render.call,
+    );
+    defer first.deinit(std.testing.allocator);
+
+    var tree = try reconciler.mount(&first);
+    defer reconciler.unmountTree(&tree) catch unreachable;
+    backend_state.clearCalls();
+
+    var second = try element.component(
+        std.testing.allocator,
+        "hook-order",
+        Props{ .include_ref = false },
+        Render.call,
+    );
+    defer second.deinit(std.testing.allocator);
+
+    try std.testing.expectError(error.HookOrderMismatch, reconciler.update(&tree, &second));
+    try std.testing.expectEqual(@as(usize, 0), backend_state.calls.items.len);
+}
+
+test "event handlers swap on rerender without leaking active registrations" {
+    const Capture = StateCapture(bool);
+    const EventCounts = struct {
+        first: u32 = 0,
+        second: u32 = 0,
+    };
+    const EventCallbacks = struct {
+        fn first(raw: ?*anyopaque) void {
+            const counts: *EventCounts = @ptrCast(@alignCast(raw.?));
+            counts.first += 1;
+        }
+
+        fn second(raw: ?*anyopaque) void {
+            const counts: *EventCounts = @ptrCast(@alignCast(raw.?));
+            counts.second += 1;
+        }
+    };
+    const Props = struct {
+        capture: *Capture,
+        counts: *EventCounts,
+    };
+    const Render = struct {
+        fn call(props: *const Props, cx: *render_cx.RenderCx) element.Error!Element {
+            const toggled = try cx.useState(bool, false);
+            props.capture.setter = toggled.set;
+
+            var builder = element.leaf(cx.getAllocator());
+            defer builder.deinit();
+
+            const callback = if (toggled.value.*)
+                element.EventCallback.init(@ptrCast(props.counts), EventCallbacks.second)
+            else
+                element.EventCallback.init(@ptrCast(props.counts), EventCallbacks.first);
+            _ = try builder.on("click", callback);
+            return builder.build();
+        }
+    };
+
+    var capture: Capture = .{};
+    var counts: EventCounts = .{};
+    var rerenders: TestRerenderCounter = .{};
+    var backend_state = RecordingBackend.init(std.testing.allocator);
+    defer backend_state.deinit();
+    var reconciler = Reconciler.init(
+        std.testing.allocator,
+        Backend.from(&backend_state),
+        RequestRerender.init(@ptrCast(&rerenders), TestRerenderCounter.request),
+    );
+    defer reconciler.deinit();
+
+    var first = try element.memo(
+        std.testing.allocator,
+        "swap-handler",
+        Props{ .capture = &capture, .counts = &counts },
+        Render.call,
+    );
+    defer first.deinit(std.testing.allocator);
+
+    var tree = try reconciler.mount(&first);
+    var mounted = true;
+    defer if (mounted) reconciler.unmountTree(&tree) catch unreachable;
+
+    const leaf_id = backend_state.rootChildren()[0];
+    try std.testing.expectEqual(@as(usize, 1), backend_state.activeEventCount());
+
+    try backend_state.fireEvent(leaf_id, "click");
+    try std.testing.expectEqual(@as(u32, 1), counts.first);
+    try std.testing.expectEqual(@as(u32, 0), counts.second);
+
+    backend_state.clearCalls();
+    capture.setter.?.call(true);
+    try std.testing.expectEqual(@as(u32, 1), rerenders.count);
+
+    var second = try element.memo(
+        std.testing.allocator,
+        "swap-handler",
+        Props{ .capture = &capture, .counts = &counts },
+        Render.call,
+    );
+    defer second.deinit(std.testing.allocator);
+
+    try reconciler.update(&tree, &second);
+    try std.testing.expectEqual(@as(usize, 1), backend_state.callCountOf(.attach_event));
+    try std.testing.expectEqual(@as(usize, 0), backend_state.callCountOf(.detach_event));
+    try std.testing.expectEqual(@as(usize, 1), backend_state.activeEventCount());
+
+    try backend_state.fireEvent(leaf_id, "click");
+    try std.testing.expectEqual(@as(u32, 1), counts.first);
+    try std.testing.expectEqual(@as(u32, 1), counts.second);
+
+    try reconciler.unmountTree(&tree);
+    mounted = false;
+    try std.testing.expectEqual(@as(usize, 0), backend_state.activeEventCount());
 }
