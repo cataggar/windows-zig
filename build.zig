@@ -162,6 +162,43 @@ pub fn build(b: *std.Build) void {
     fetch_winui_metadata_step.dependOn(&run_fetch_winui_metadata.step);
 
     // ------------------------------------------------------------------
+    // `stage-winui-runtime` step — copies the framework-dependent
+    // Windows App Runtime bootstrap assets next to `zig-out/bin/*.exe`.
+    //
+    // Mirrors `windows-reactor-setup::as_framework_dependent()` from the
+    // sibling `windows-rs` checkout: stage
+    // `Microsoft.WindowsAppRuntime.Bootstrap.dll` plus `resources.pri`
+    // so unpackaged WinUI 3 samples can be run directly from
+    // `zig-out/bin/`.
+    // ------------------------------------------------------------------
+
+    const stage_winui_runtime_mod = b.createModule(.{
+        .root_source_file = b.path("tools/stage-winui-runtime/main.zig"),
+        .target = b.graph.host,
+        .optimize = optimize,
+    });
+    const stage_winui_runtime_exe = b.addExecutable(.{
+        .name = "stage-winui-runtime",
+        .root_module = stage_winui_runtime_mod,
+    });
+    const run_stage_winui_runtime = b.addRunArtifact(stage_winui_runtime_exe);
+    run_stage_winui_runtime.has_side_effects = true;
+    run_stage_winui_runtime.addArg("--dest-dir");
+    run_stage_winui_runtime.addArg(b.getInstallPath(.bin, ""));
+    run_stage_winui_runtime.addArg("--arch");
+    run_stage_winui_runtime.addArg(switch (target.result.cpu.arch) {
+        .x86 => "x86",
+        .x86_64 => "x64",
+        .aarch64 => "arm64",
+        else => @panic("unsupported Windows App Runtime bootstrap architecture"),
+    });
+    const stage_winui_runtime_step = b.step(
+        "stage-winui-runtime",
+        "Copy Microsoft.WindowsAppRuntime.Bootstrap.dll and resources.pri into zig-out/bin/",
+    );
+    stage_winui_runtime_step.dependOn(&run_stage_winui_runtime.step);
+
+    // ------------------------------------------------------------------
     // `bindings` step — placeholder until winbindgen exposes a CLI.
     // ------------------------------------------------------------------
 
@@ -1337,6 +1374,13 @@ pub fn build(b: *std.Build) void {
         // pay the analysis cost of pulling in the full classic-COM
         // surface (`Com`, `Foundation`, ...).
         needs_win: bool = false,
+        // If true, `run-<name>` executes the installed `zig-out/bin`
+        // copy instead of the build-cache artifact. Needed when the
+        // sample relies on adjacent runtime assets staged into
+        // `zig-out/bin/`.
+        run_installed: bool = false,
+        // If true, `run-<name>` depends on `stage-winui-runtime`.
+        needs_staged_winui_runtime: bool = false,
     };
     const samples = [_]Sample{
         .{ .name = "last-error", .root = "samples/last_error/main.zig" },
@@ -1421,6 +1465,14 @@ pub fn build(b: *std.Build) void {
             .needs_win = true,
         },
         .{
+            .name = "hello-window",
+            .root = "samples/hello_window/main.zig",
+            .extra_libs = &.{"user32"},
+            .needs_win = true,
+            .run_installed = true,
+            .needs_staged_winui_runtime = true,
+        },
+        .{
             .name = "message-box",
             .root = "samples/message_box/main.zig",
         },
@@ -1485,14 +1537,27 @@ pub fn build(b: *std.Build) void {
         });
         const install_sample = b.addInstallArtifact(sample_exe, .{});
         samples_step.dependOn(&install_sample.step);
-
-        const run_sample = b.addRunArtifact(sample_exe);
-        run_sample.step.dependOn(&install_sample.step);
         const sample_run_step = b.step(
             b.fmt("run-{s}", .{s.name}),
             b.fmt("Build and run the `{s}` sample", .{s.name}),
         );
-        sample_run_step.dependOn(&run_sample.step);
+        if (s.run_installed) {
+            const installed_exe = b.getInstallPath(
+                .bin,
+                b.fmt("{s}{s}", .{ s.name, target.result.exeFileExt() }),
+            );
+            const run_sample = b.addSystemCommand(&.{installed_exe});
+            if (b.args) |user_args| run_sample.addArgs(user_args);
+            run_sample.step.dependOn(&install_sample.step);
+            if (s.needs_staged_winui_runtime) {
+                run_sample.step.dependOn(stage_winui_runtime_step);
+            }
+            sample_run_step.dependOn(&run_sample.step);
+        } else {
+            const run_sample = b.addRunArtifact(sample_exe);
+            run_sample.step.dependOn(&install_sample.step);
+            sample_run_step.dependOn(&run_sample.step);
+        }
     }
 
     // Make `zig build test` also compile every sample, so low-level
