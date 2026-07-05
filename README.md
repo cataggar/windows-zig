@@ -18,6 +18,8 @@ packages/
   win-future/          # blocking WinRT async helpers + combinators
   winbindgen/          # .winmd -> .zig codegen + comptime projection
   win-sys/             # C-style Win32 (analogue of windows-sys)
+  win-time/            # DateTime, TimeSpan WinRT value types
+  win-threading/       # thread-pool wrappers over Windows.Win32.System.Threading
   win/                 # safer wrappers + COM/WinRT (analogue of windows)
   win-targets/         # .def -> import lib build step
 tools/
