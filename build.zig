@@ -112,7 +112,7 @@ pub fn build(b: *std.Build) void {
     const test_pkgs = [_]TestPkg{
         .{ .name = "winmd", .mod = winmd_mod },
         .{ .name = "win-core", .mod = win_core_mod },
-        .{ .name = "win-collections", .mod = win_collections_mod },
+        .{ .name = "win-collections", .mod = win_collections_mod, .windows_only = true },
         .{ .name = "win-sys", .mod = win_sys_mod, .windows_only = true },
         // NOTE: `win` is intentionally omitted from test_pkgs while the
         // VARIANT emitter gap is pending. A test-harness rooted at
