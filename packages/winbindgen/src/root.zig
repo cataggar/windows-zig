@@ -3379,7 +3379,8 @@ fn writeMethodWrapper(
 
     // Combined sugar: if the method has HSTRING input AND returns HSTRING
     // via split out-param, emit `<Method>OwnedFromUtf16` that accepts
-    // `[]const u16` inputs and returns `!win_core.Hstring`.
+    // `[]const u16` inputs and returns `!win_core.Hstring` by composing
+    // the sibling `<Method>FromUtf16` helper with `win_core.hresult.ok`.
     if (has_hstring_in and split_return and sig.return_type == .string and !has_array_param) {
         try writer.print("    pub fn {s}OwnedFromUtf16(self: *const {s}", .{ method_name, this_name });
         for (sig.params, 0..) |p, i| {
@@ -3391,25 +3392,20 @@ fn writeMethodWrapper(
             }
         }
         try writer.writeAll(") !win_core.Hstring {\n");
-        for (sig.params, 0..) |p, i| {
-            if (p == .string) {
-                try writer.print(
-                    "        var h{d} = win_core.Hstring.create(p{d}) catch return error.OutOfMemory;\n",
-                    .{ i, i },
-                );
-                try writer.print("        defer h{d}.deinit();\n", .{i});
-            }
-        }
         try writer.writeAll("        var r: HSTRING = null;\n");
-        try writer.print("        try win_core.hresult.ok(self.vtable.@\"{s}\"(self", .{vtbl_field_name});
-        for (sig.params, 0..) |p, i| {
-            if (p == .string) {
-                try writer.print(", h{d}.raw", .{i});
-            } else {
-                try writer.print(", p{d}", .{i});
+        try writer.print("        try win_core.hresult.ok(self.{s}FromUtf16(", .{method_name});
+        var wrote_arg = false;
+        for (sig.params, 0..) |_, i| {
+            if (wrote_arg) {
+                try writer.writeAll(", ");
             }
+            try writer.print("p{d}", .{i});
+            wrote_arg = true;
         }
-        try writer.writeAll(", &r));\n");
+        if (wrote_arg) {
+            try writer.writeAll(", ");
+        }
+        try writer.writeAll("&r));\n");
         try writer.writeAll("        return win_core.Hstring.fromRaw(r);\n");
         try writer.writeAll("    }\n");
     }
@@ -4822,18 +4818,24 @@ test "emitInterfaceHandles writes IStringable handle with method wrappers" {
         out,
         "pub fn UnescapeComponentOwnedFromUtf16(self: *const IUriEscapeStatics, p0: []const u16) !win_core.Hstring {",
     ) != null);
-    // Input HSTRING is created from the slice and deferred.
+    // The combined helper reuses the sibling `FromUtf16` wrapper so
+    // HSTRING creation keeps the shared `E_OUTOFMEMORY` HRESULT path.
     try std.testing.expect(std.mem.find(
         u8,
         out,
-        "var h0 = win_core.Hstring.create(p0) catch return error.OutOfMemory;",
+        "try win_core.hresult.ok(self.UnescapeComponentFromUtf16(p0, &r));",
     ) != null);
     // Output HSTRING is wrapped in owning Hstring.
     try std.testing.expect(std.mem.find(
         u8,
         out,
-        "try win_core.hresult.ok(self.vtable.@\"UnescapeComponent\"(self, h0.raw, &r));",
+        "return win_core.Hstring.fromRaw(r);",
     ) != null);
+    try std.testing.expect(std.mem.find(
+        u8,
+        out,
+        "var h0 = win_core.Hstring.create(p0) catch return error.OutOfMemory;",
+    ) == null);
 
     // Methods that only have HSTRING input but non-HSTRING output
     // (e.g. CreateUri returns **Uri) should NOT get OwnedFromUtf16.
