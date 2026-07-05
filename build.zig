@@ -1812,6 +1812,13 @@ pub fn build(b: *std.Build) void {
             .needs_win_reactor = true,
         },
         .{
+            .name = "reactor-counter",
+            .root = "samples/reactor_counter/main.zig",
+            .run_installed = true,
+            .needs_staged_winui_runtime = true,
+            .needs_win_reactor = true,
+        },
+        .{
             .name = "message-box",
             .root = "samples/message_box/main.zig",
         },
