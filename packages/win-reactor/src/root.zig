@@ -3,6 +3,7 @@
 
 const context = @import("context.zig");
 const element = @import("element.zig");
+const recording_backend = @import("recording_backend.zig");
 const backend = @import("backend.zig");
 const reconciler = @import("reconciler.zig");
 const render_cx = @import("render_cx.zig");
@@ -53,6 +54,7 @@ pub const collectElements = element.collectElements;
 pub const WidgetId = backend.WidgetId;
 pub const Backend = backend.Backend;
 pub const WinUIBackend = winui_backend.WinUIBackend;
+pub const RecordingBackend = recording_backend.RecordingBackend;
 
 pub const RequestRerender = render_cx.RequestRerender;
 pub const ContextIdSet = render_cx.ContextIdSet;
@@ -95,6 +97,7 @@ test {
     _ = @import("backend.zig");
     _ = @import("context.zig");
     _ = @import("element.zig");
+    _ = @import("recording_backend.zig");
     _ = @import("reconciler.zig");
     _ = @import("render_cx.zig");
     _ = @import("winui_backend.zig");
