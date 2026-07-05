@@ -1453,6 +1453,11 @@ pub fn build(b: *std.Build) void {
             .needs_win = true,
         },
         .{
+            .name = "winui-minimal-bindings",
+            .root = "samples/winui_minimal_bindings/main.zig",
+            .needs_win = true,
+        },
+        .{
             .name = "message-box",
             .root = "samples/message_box/main.zig",
         },
