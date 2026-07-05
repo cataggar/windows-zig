@@ -1,7 +1,7 @@
 //! windows-zig top-level build script.
 //!
 //! Wires up the in-tree packages (`winmd`, `win-core`, `win-numerics`,
-//! `win-threading`, `winbindgen`, `win-sys`, `win`, `win-targets`),
+//! `win-time`, `win-threading`, `winbindgen`, `win-sys`, `win`, `win-targets`),
 //! their unit tests, and the `bindings` step that regenerates `win-sys`
 //! / `win` sources from the vendored `.winmd` metadata.
 //!
@@ -83,6 +83,16 @@ pub fn build(b: *std.Build) void {
     });
     win_sys_mod.addImport("win-core", win_core_mod);
 
+    const win_time_mod = b.addModule("win-time", .{
+        .root_source_file = b.path("packages/win-time/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    win_time_mod.addImport("win-sys", win_sys_mod);
+    if (target.result.os.tag == .windows) {
+        win_time_mod.linkSystemLibrary("kernel32", .{});
+    }
+
     const win_threading_mod = b.addModule("win-threading", .{
         .root_source_file = b.path("packages/win-threading/src/root.zig"),
         .target = target,
@@ -123,6 +133,7 @@ pub fn build(b: *std.Build) void {
         .{ .name = "win-core", .mod = win_core_mod },
         .{ .name = "win-numerics", .mod = win_numerics_mod },
         .{ .name = "win-sys", .mod = win_sys_mod, .windows_only = true },
+        .{ .name = "win-time", .mod = win_time_mod, .windows_only = true },
         .{ .name = "win-threading", .mod = win_threading_mod, .windows_only = true },
         // NOTE: `win` is intentionally omitted from test_pkgs while the
         // VARIANT emitter gap is pending. A test-harness rooted at
