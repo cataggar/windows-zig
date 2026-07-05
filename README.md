@@ -21,6 +21,7 @@ packages/
   win-time/            # DateTime, TimeSpan WinRT value types
   win-threading/       # thread-pool wrappers over Windows.Win32.System.Threading
   win/                 # safer wrappers + COM/WinRT (analogue of windows)
+    src/generated/     # WinUI bundle snapshots from `zig build bindings`
   win-targets/         # .def -> import lib build step
 tools/
   bindings/src/*.txt   # filter manifests, ported from windows-rs's
@@ -53,14 +54,15 @@ samples/               # end-to-end examples
 ```
 zig build            # build all packages
 zig build test       # run tests
-zig build bindings   # regenerate win-sys / win sources
+zig build bindings   # regenerate win-sys sidecars + WinUI snapshots
+                     # (auto-fetches WinUI metadata if needed)
 ```
 
 ## Two projection modes
 
 1. **Codegen** — `zig build bindings` writes `.zig` sources under
-   `packages/win-sys/src/` and `packages/win/src/`. Diffable, cacheable,
-   CI-enforced.
+   `packages/win-sys/src/generated/` and `packages/win/src/generated/`.
+   Diffable, cacheable, CI-enforced.
 2. **Comptime** — consumers call `win.project(.{ .filter = &.{ ... } })`;
    the compiler reads metadata and synthesizes types directly. No generated
    files. Opt-in; best for small, focused API surfaces.

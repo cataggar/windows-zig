@@ -1,8 +1,10 @@
 //! `winbindgen` CLI — prints the generated Zig source for one namespace
-//! to stdout, picking the right vendored `.winmd` by namespace prefix:
+//! to stdout, picking the right `.winmd` by namespace prefix:
 //!
 //!   * `Windows.Win32.*`  → `Windows.Win32.winmd`
 //!   * `Windows.Wdk.*`    → `Windows.Wdk.winmd`
+//!   * `Microsoft.UI.Text.*` → `Microsoft.UI.Text.winmd`
+//!   * `Microsoft.UI.*`   → `Microsoft.UI.Xaml.winmd`
 //!   * everything else    → `Windows.winmd` (WinRT)
 //!
 //! Usage:
@@ -10,10 +12,11 @@
 //!     winbindgen bundle --outdir <dir> [--arch=x86|x64|arm64] [--imports=relative|module] <namespace>...
 //!     winbindgen --list
 //!
-//! `--list` prints every distinct namespace across all three metadata
-//! files, one per line. Otherwise the single positional argument is
-//! the namespace to emit via `winbindgen.emitNamespace`, and its
-//! output is written to stdout. `--arch` picks which
+//! `--list` prints every distinct namespace across the committed
+//! metadata plus any locally fetched WinUI metadata present under
+//! `vendor/winmd/`, one per line. Otherwise the single positional
+//! argument is the namespace to emit via `winbindgen.emitNamespace`,
+//! and its output is written to stdout. `--arch` picks which
 //! `SupportedArchitectureAttribute`-gated overloads to emit; default
 //! is `x64`.
 //!
@@ -30,14 +33,98 @@ const winrt_bytes = @embedFile("Windows.winmd");
 const win32_bytes = @embedFile("Windows.Win32.winmd");
 const wdk_bytes = @embedFile("Windows.Wdk.winmd");
 
-fn selectBytes(namespace: []const u8) []const u8 {
-    if (std.mem.startsWith(u8, namespace, "Windows.Win32.") or
-        std.mem.eql(u8, namespace, "Windows.Win32"))
-        return win32_bytes;
-    if (std.mem.startsWith(u8, namespace, "Windows.Wdk.") or
-        std.mem.eql(u8, namespace, "Windows.Wdk"))
-        return wdk_bytes;
-    return winrt_bytes;
+const winui_xaml_path = "vendor/winmd/Microsoft.UI.Xaml.winmd";
+const winui_text_path = "vendor/winmd/Microsoft.UI.Text.winmd";
+
+const MetadataSource = enum {
+    winrt,
+    win32,
+    wdk,
+    winui_xaml,
+    winui_text,
+};
+
+fn namespaceMatchesPrefix(namespace: []const u8, prefix: []const u8) bool {
+    return std.mem.eql(u8, namespace, prefix) or
+        (namespace.len > prefix.len and
+            std.mem.startsWith(u8, namespace, prefix) and
+            namespace[prefix.len] == '.');
+}
+
+fn selectMetadataSource(namespace: []const u8) MetadataSource {
+    if (namespaceMatchesPrefix(namespace, "Windows.Win32")) return .win32;
+    if (namespaceMatchesPrefix(namespace, "Windows.Wdk")) return .wdk;
+    if (namespaceMatchesPrefix(namespace, "Microsoft.UI.Text")) return .winui_text;
+    if (namespaceMatchesPrefix(namespace, "Microsoft.UI")) return .winui_xaml;
+    return .winrt;
+}
+
+fn metadataDisplayName(source: MetadataSource) []const u8 {
+    return switch (source) {
+        .winrt => "Windows.winmd",
+        .win32 => "Windows.Win32.winmd",
+        .wdk => "Windows.Wdk.winmd",
+        .winui_xaml => "Microsoft.UI.Xaml.winmd",
+        .winui_text => "Microsoft.UI.Text.winmd",
+    };
+}
+
+fn metadataPath(source: MetadataSource) ?[]const u8 {
+    return switch (source) {
+        .winui_xaml => winui_xaml_path,
+        .winui_text => winui_text_path,
+        else => null,
+    };
+}
+
+fn isFetchedMetadata(source: MetadataSource) bool {
+    return switch (source) {
+        .winui_xaml, .winui_text => true,
+        else => false,
+    };
+}
+
+fn loadMetadataBytes(
+    arena: std.mem.Allocator,
+    io: std.Io,
+    source: MetadataSource,
+) ![]const u8 {
+    return switch (source) {
+        .winrt => winrt_bytes,
+        .win32 => win32_bytes,
+        .wdk => wdk_bytes,
+        .winui_xaml, .winui_text => blk: {
+            const path = metadataPath(source).?;
+            break :blk try std.Io.Dir.cwd().readFileAlloc(io, path, arena, .unlimited);
+        },
+    };
+}
+
+fn loadOptionalMetadataBytes(
+    arena: std.mem.Allocator,
+    io: std.Io,
+    source: MetadataSource,
+) !?[]const u8 {
+    if (!isFetchedMetadata(source)) return try loadMetadataBytes(arena, io, source);
+    return loadMetadataBytes(arena, io, source) catch |err| switch (err) {
+        error.FileNotFound => null,
+        else => return err,
+    };
+}
+
+fn writeMetadataLoadError(stderr: *std.Io.Writer, source: MetadataSource, err: anyerror) !void {
+    if (err == error.FileNotFound and isFetchedMetadata(source)) {
+        try stderr.print(
+            "missing {s}; run `zig build fetch-winui-metadata` to stage WinUI3 metadata under vendor/winmd/\n",
+            .{metadataPath(source).?},
+        );
+        return;
+    }
+    if (metadataPath(source)) |path| {
+        try stderr.print("failed to load {s} ({s}): {}\n", .{ metadataDisplayName(source), path, err });
+        return;
+    }
+    try stderr.print("failed to load {s}: {}\n", .{ metadataDisplayName(source), err });
 }
 
 pub fn main(init: std.process.Init) !void {
@@ -56,7 +143,13 @@ pub fn main(init: std.process.Init) !void {
 
     if (args.len == 2 and std.mem.eql(u8, args[1], "--list")) {
         const arena = init.arena.allocator();
-        inline for (.{ winrt_bytes, win32_bytes, wdk_bytes }) |bytes_src| {
+        for ([_]MetadataSource{ .winrt, .win32, .wdk, .winui_xaml, .winui_text }) |source| {
+            const maybe_bytes = loadOptionalMetadataBytes(arena, io, source) catch |err| {
+                try writeMetadataLoadError(stderr, source, err);
+                try stderr.flush();
+                std.process.exit(1);
+            };
+            const bytes_src = maybe_bytes orelse continue;
             var file = try winmd.parse(bytes_src);
             const names = try winmd.listNamespaces(arena, &file);
             for (names) |n| try stdout.print("{s}\n", .{n});
@@ -164,7 +257,12 @@ pub fn main(init: std.process.Init) !void {
     var buf: std.Io.Writer.Allocating = .init(gpa);
     defer buf.deinit();
 
-    const bytes = selectBytes(namespace);
+    const source = selectMetadataSource(namespace);
+    const bytes = loadMetadataBytes(init.arena.allocator(), io, source) catch |err| {
+        try writeMetadataLoadError(stderr, source, err);
+        try stderr.flush();
+        std.process.exit(1);
+    };
     var file = try winmd.parse(bytes);
     if (index_only) {
         // `--index` emits a standalone `.zig` fragment: a header that
@@ -379,12 +477,16 @@ fn runBundle(
     // generic routing happens only within the same winmd. Phase 4b's
     // WinRT-only routing is a natural fit for this grouping because the
     // Windows.winmd group is where all closed generics live.
-    var groups: std.AutoArrayHashMapUnmanaged([*]const u8, std.ArrayListUnmanaged([]const u8)) = .empty;
+    var groups = [_]std.ArrayListUnmanaged([]const u8){
+        .empty,
+        .empty,
+        .empty,
+        .empty,
+        .empty,
+    };
     for (namespaces.items) |ns| {
-        const bytes = selectBytes(ns);
-        const gop = try groups.getOrPut(arena, bytes.ptr);
-        if (!gop.found_existing) gop.value_ptr.* = .empty;
-        try gop.value_ptr.append(arena, ns);
+        const source = selectMetadataSource(ns);
+        try groups[@intFromEnum(source)].append(arena, ns);
     }
 
     var dir = try std.Io.Dir.cwd().createDirPathOpen(io, dir_path, .{});
@@ -396,10 +498,14 @@ fn runBundle(
         .facade = "",
     };
 
-    var git = groups.iterator();
-    while (git.next()) |entry| {
-        const group_ns = entry.value_ptr.items;
-        const group_bytes = selectBytes(group_ns[0]);
+    for ([_]MetadataSource{ .winrt, .win32, .wdk, .winui_xaml, .winui_text }) |source| {
+        const group_ns = groups[@intFromEnum(source)].items;
+        if (group_ns.len == 0) continue;
+        const group_bytes = loadMetadataBytes(arena, io, source) catch |err| {
+            try writeMetadataLoadError(stderr, source, err);
+            try stderr.flush();
+            std.process.exit(1);
+        };
 
         var file = try winmd.parse(group_bytes);
         const emission = try winbindgen.emitBundleWithImports(arena, &file, group_ns, arch, import_style);
