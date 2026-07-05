@@ -1,10 +1,10 @@
 //! windows-zig top-level build script.
 //!
 //! Wires up the in-tree packages (`winmd`, `win-core`, `win-numerics`,
-//! `win-time`, `win-threading`, `win-reference`, `win-future`, `winbindgen`,
-//! `win-sys`, `win`, `win-targets`), their unit tests, and the `bindings`
-//! step that regenerates `win-sys` / `win` sources from the vendored
-//! `.winmd` metadata.
+//! `win-time`, `win-threading`, `win-reference`, `win-future`,
+//! `win-collections`, `winbindgen`, `win-sys`, `win`, `win-targets`),
+//! their unit tests, and the `bindings` step that regenerates `win-sys`
+//! / `win` sources from the vendored `.winmd` metadata.
 //!
 //! Requires Zig 0.16.0 or newer.
 
@@ -61,6 +61,7 @@ pub fn build(b: *std.Build) void {
     // `HSTRING` helpers and WinRT activation. Link the corresponding
     // import libs on Windows targets.
     if (target.result.os.tag == .windows) {
+        win_core_mod.linkSystemLibrary("ole32", .{});
         win_core_mod.linkSystemLibrary("oleaut32", .{});
         win_core_mod.linkSystemLibrary("api-ms-win-core-winrt-string-l1-1-0", .{});
         win_core_mod.linkSystemLibrary("api-ms-win-core-winrt-l1-1-0", .{});
@@ -82,6 +83,13 @@ pub fn build(b: *std.Build) void {
     win_future_mod.addAnonymousImport("Windows.winmd", .{
         .root_source_file = b.path("vendor/winmd/Windows.winmd"),
     });
+
+    const win_collections_mod = b.addModule("win-collections", .{
+        .root_source_file = b.path("packages/win-collections/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    win_collections_mod.addImport("win-core", win_core_mod);
 
     const winbindgen_mod = b.addModule("winbindgen", .{
         .root_source_file = b.path("packages/winbindgen/src/root.zig"),
@@ -159,6 +167,7 @@ pub fn build(b: *std.Build) void {
         .{ .name = "win-core", .mod = win_core_mod },
         .{ .name = "win-numerics", .mod = win_numerics_mod },
         .{ .name = "win-future", .mod = win_future_mod },
+        .{ .name = "win-collections", .mod = win_collections_mod, .windows_only = true },
         .{ .name = "win-sys", .mod = win_sys_mod, .windows_only = true },
         .{ .name = "win-time", .mod = win_time_mod, .windows_only = true },
         .{ .name = "win-threading", .mod = win_threading_mod, .windows_only = true },
@@ -1304,6 +1313,7 @@ pub fn build(b: *std.Build) void {
     });
     addGeneratedNamespaceImports(win_bundle_mod, bundle_namespaces[0..], bundle_mods[0..], null);
     win_mod.addImport("win-bundle", win_bundle_mod);
+    win_collections_mod.addImport("win", win_mod);
 
     if (native_windows_target) {
         const bundle_obj = b.addTest(.{
