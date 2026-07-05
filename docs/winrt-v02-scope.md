@@ -319,12 +319,11 @@ method sugar (e.g. `GetInt32ArrayOwned` → `![]i32`).
   to v0.4.
 - **Generic methods** (`.mvar_generic` still resolves to
   `UnsupportedElement`).
-- **Cross-namespace generic delegate event sugar.** v0.2 emits
-  `addX`/`removeX` only when the closed-generic delegate lives in
-  the same namespace as the host interface (covers the entire
-  v0.2 corpus). Cross-namespace delegates need import plumbing on
-  the host side; tracked separately. See
-  [generic-delegates.md](generic-delegates.md).
+- **Cross-namespace generic delegate event sugar.** Shipped via
+  issue #34. Bundle-mode emission now qualifies imported
+  `TypedEventHandler<...>` instantiations on the host side, and
+  `samples/device_watcher` exercises `IDeviceWatcher.addAdded` /
+  `addEnumerationCompleted` against `Windows.Foundation` delegates.
 - **`<Method>OwnedFromUtf16`** — shipped (issue #16). Combined
   input-and-return HSTRING sugar for methods that take `HSTRING` in
   and return `HSTRING` out. Accepts `[]const u16`, returns
