@@ -1,17 +1,32 @@
 //! windows-zig top-level build script.
 //!
-//! Wires up the seven in-tree packages (`winmd`, `win-core`, `win-collections`,
-//! `winbindgen`, `win-sys`, `win`, `win-targets`), their unit tests, and the `bindings`
-//! step that regenerates `win-sys` / `win` sources from the vendored
-//! `.winmd` metadata.
+//! Wires up the in-tree packages (`winmd`, `win-core`, `win-numerics`,
+//! `win-time`, `win-threading`, `win-reference`, `win-collections`,
+//! `winbindgen`, `win-sys`, `win`, `win-targets`), their unit tests, and
+//! the `bindings` step that regenerates `win-sys` / `win` sources from
+//! the vendored `.winmd` metadata.
 //!
 //! Requires Zig 0.16.0 or newer.
 
 const std = @import("std");
+const bundle_artifacts = @import("packages/winbindgen/src/bundle_artifacts.zig");
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
+    const arch_flag: ?[]const u8 = switch (target.result.cpu.arch) {
+        .x86 => "--arch=x86",
+        .x86_64 => "--arch=x64",
+        .aarch64 => "--arch=arm64",
+        else => null,
+    };
+    const host_target = b.graph.host.result;
+    const host_is_windows = b.graph.host.result.os.tag == .windows;
+    const host_runs_target =
+        target.result.os.tag == host_target.os.tag and
+        target.result.cpu.arch == host_target.cpu.arch and
+        target.result.abi == host_target.abi;
+    const native_windows_target = host_is_windows and host_runs_target;
 
     // ------------------------------------------------------------------
     // Modules (one per package). These are kept minimal until the package
@@ -52,6 +67,12 @@ pub fn build(b: *std.Build) void {
         win_core_mod.linkSystemLibrary("api-ms-win-core-winrt-l1-1-0", .{});
     }
 
+    const win_numerics_mod = b.addModule("win-numerics", .{
+        .root_source_file = b.path("packages/win-numerics/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+
     const win_collections_mod = b.addModule("win-collections", .{
         .root_source_file = b.path("packages/win-collections/src/root.zig"),
         .target = target,
@@ -84,6 +105,26 @@ pub fn build(b: *std.Build) void {
     });
     win_sys_mod.addImport("win-core", win_core_mod);
 
+    const win_time_mod = b.addModule("win-time", .{
+        .root_source_file = b.path("packages/win-time/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    win_time_mod.addImport("win-sys", win_sys_mod);
+    if (target.result.os.tag == .windows) {
+        win_time_mod.linkSystemLibrary("kernel32", .{});
+    }
+
+    const win_threading_mod = b.addModule("win-threading", .{
+        .root_source_file = b.path("packages/win-threading/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    win_threading_mod.addImport("win-sys", win_sys_mod);
+    if (target.result.os.tag == .windows) {
+        win_threading_mod.linkSystemLibrary("kernel32", .{});
+    }
+
     const win_mod = b.addModule("win", .{
         .root_source_file = b.path("packages/win/src/root.zig"),
         .target = target,
@@ -112,8 +153,11 @@ pub fn build(b: *std.Build) void {
     const test_pkgs = [_]TestPkg{
         .{ .name = "winmd", .mod = winmd_mod },
         .{ .name = "win-core", .mod = win_core_mod },
+        .{ .name = "win-numerics", .mod = win_numerics_mod },
         .{ .name = "win-collections", .mod = win_collections_mod, .windows_only = true },
         .{ .name = "win-sys", .mod = win_sys_mod, .windows_only = true },
+        .{ .name = "win-time", .mod = win_time_mod, .windows_only = true },
+        .{ .name = "win-threading", .mod = win_threading_mod, .windows_only = true },
         // NOTE: `win` is intentionally omitted from test_pkgs while the
         // VARIANT emitter gap is pending. A test-harness rooted at
         // `win/root.zig` analyzes `Com`'s pub decls, some of which
@@ -126,10 +170,11 @@ pub fn build(b: *std.Build) void {
     };
 
     for (test_pkgs) |p| {
-        // win-sys tests call `project()` which emits `@extern(..., library_name="KERNEL32", ...)`
-        // — that cannot link against a native Linux target. Cross coverage
-        // for win-sys already happens via `compile-check-bundle-*` below.
-        if (p.windows_only and target.result.os.tag != .windows) continue;
+        // win-sys / win-time / win-threading tests call `project()` which
+        // emits `@extern(..., library_name="KERNEL32", ...)` — that cannot
+        // link against a native Linux target. Cross coverage for win-sys
+        // already happens via `compile-check-bundle-*` below.
+        if (p.windows_only and !native_windows_target) continue;
         const t = b.addTest(.{
             .name = b.fmt("test-{s}", .{p.name}),
             .root_module = p.mod,
@@ -736,12 +781,38 @@ pub fn build(b: *std.Build) void {
         "Windows.Win32.Foundation",
     };
 
-    const arch_flag: ?[]const u8 = switch (target.result.cpu.arch) {
-        .x86 => "--arch=x86",
-        .x86_64 => "--arch=x64",
-        .aarch64 => "--arch=arm64",
-        else => null,
-    };
+    const win_reference_mod = b.addModule("win-reference", .{
+        .root_source_file = b.path("packages/win-reference/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    win_reference_mod.addImport("win-core", win_core_mod);
+    win_reference_mod.addImport("win", win_mod);
+    if (target.result.os.tag == .windows) {
+        win_reference_mod.linkSystemLibrary("ole32", .{});
+    }
+
+    for (test_pkgs) |p| {
+        // win-sys tests call `project()` which emits `@extern(..., library_name="KERNEL32", ...)`
+        // — that cannot link against a native Linux target. Cross coverage
+        // for win-sys already happens via `compile-check-bundle-*` below.
+        if (p.windows_only and !native_windows_target) continue;
+        const t = b.addTest(.{
+            .name = b.fmt("test-{s}", .{p.name}),
+            .root_module = p.mod,
+        });
+        const run_t = b.addRunArtifact(t);
+        test_step.dependOn(&run_t.step);
+    }
+
+    if (native_windows_target) {
+        const t = b.addTest(.{
+            .name = "test-win-reference",
+            .root_module = win_reference_mod,
+        });
+        const run_t = b.addRunArtifact(t);
+        test_step.dependOn(&run_t.step);
+    }
 
     // The native `gen_obj` / `bundle_obj` checks below link against real
     // Windows system libraries (kernel32, ntdll, oleaut32, ...) and execute
@@ -749,9 +820,7 @@ pub fn build(b: *std.Build) void {
     // Windows. On non-Windows hosts we still get full coverage via the
     // per-arch cross loop further down (compile-only against x86/x64/arm64
     // Windows targets). Skip the host-linked checks when cross-compiling.
-    const host_is_windows = target.result.os.tag == .windows;
-
-    if (host_is_windows) {
+    if (native_windows_target) {
         for (compile_check_namespaces) |ns| {
             const gen_run = b.addRunArtifact(winbindgen_exe);
             if (arch_flag) |f| gen_run.addArg(f);
@@ -1223,7 +1292,7 @@ pub fn build(b: *std.Build) void {
         addGeneratedNamespaceImports(ns_mod, bundle_namespaces[0..], bundle_mods[0..], i);
     }
 
-    const win_bundle_root = bundle_outdir.path(b, "win_bundle.zig");
+    const win_bundle_root = bundle_outdir.path(b, bundle_artifacts.BundleFacadeFileName);
     const win_bundle_mod = b.createModule(.{
         .root_source_file = win_bundle_root,
         .target = target,
@@ -1233,7 +1302,7 @@ pub fn build(b: *std.Build) void {
     win_mod.addImport("win-bundle", win_bundle_mod);
     win_collections_mod.addImport("win", win_mod);
 
-    if (host_is_windows) {
+    if (native_windows_target) {
         const bundle_obj = b.addTest(.{
             .name = "compile-check-bundle",
             .root_module = win_bundle_mod,
@@ -1304,7 +1373,7 @@ pub fn build(b: *std.Build) void {
         }
 
         const cross_bundle_mod = b.createModule(.{
-            .root_source_file = cross_bundle_outdir.path(b, "win_bundle.zig"),
+            .root_source_file = cross_bundle_outdir.path(b, bundle_artifacts.BundleFacadeFileName),
             .target = cross_target,
             .optimize = optimize,
         });
@@ -1453,6 +1522,12 @@ pub fn build(b: *std.Build) void {
             .extra_libs = &.{ "user32", "CoreMessaging" },
             .needs_win = true,
         },
+        .{
+            .name = "direct2d-clock",
+            .root = "samples/direct2d_clock/main.zig",
+            .extra_libs = &.{ "user32", "ole32", "d2d1", "d3d11", "dxgi" },
+            .needs_win = true,
+        },
     };
 
     for (samples) |s| {
@@ -1464,6 +1539,7 @@ pub fn build(b: *std.Build) void {
         sample_mod.addImport("win-sys", win_sys_mod);
         if (s.needs_win) {
             sample_mod.addImport("win", win_mod);
+            addGeneratedNamespaceImports(sample_mod, bundle_namespaces[0..], bundle_mods[0..], null);
         }
         // Every current sample needs kernel32 (last-error). Keeping the
         // link here rather than in `win-sys` mirrors what a downstream
@@ -1514,7 +1590,7 @@ pub fn build(b: *std.Build) void {
     // `@extern(..., .{ .library_name = ... })` cannot resolve Windows
     // DLLs on a Linux target. Linux test coverage still compiles every
     // namespace via the `compile-check-bundle-*` cross loop above.
-    if (host_is_windows) {
+    if (native_windows_target) {
         test_step.dependOn(samples_step);
     }
 
@@ -1532,7 +1608,7 @@ pub fn build(b: *std.Build) void {
     // `@extern` reason as samples.
     // ------------------------------------------------------------------
     const bench_step = b.step("bench", "Compile the Phase 4 comptime-projection benchmark");
-    if (host_is_windows) {
+    if (native_windows_target) {
         const bench_mod = b.createModule(.{
             .root_source_file = b.path("benches/project_bench/main.zig"),
             .target = target,
