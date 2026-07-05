@@ -378,6 +378,16 @@ pub const ProviderElement = struct {
         new_provisions[old_provisions.len] = provision;
         self.provisions = new_provisions;
     }
+
+    pub fn pushToContextStack(self: *const ProviderElement, stack: *context.ContextStack) Error!usize {
+        const mark = stack.mark();
+        errdefer stack.popToMark(mark);
+
+        for (self.provisions) |*provision| {
+            try stack.pushBox(provision.context_id, &provision.value);
+        }
+        return mark;
+    }
 };
 
 pub const GroupElement = struct {
@@ -536,12 +546,8 @@ pub const Element = union(enum) {
             .component => {},
             .provider => |provider_element| {
                 if (cx.contextStack()) |stack| {
-                    const mark = stack.mark();
+                    const mark = try provider_element.pushToContextStack(stack);
                     defer stack.popToMark(mark);
-
-                    for (provider_element.provisions) |*provision| {
-                        try stack.pushBox(provision.context_id, &provision.value);
-                    }
                     try provider_element.child.walk(cx, visitor);
                 } else {
                     try provider_element.child.walk(cx, visitor);
@@ -993,13 +999,13 @@ fn cloneProvisionList(
 }
 
 fn optionalStringEql(lhs: ?[]const u8, rhs: ?[]const u8) bool {
-    return switch (lhs) {
-        null => rhs == null,
-        else => |lhs_value| switch (rhs) {
-            null => false,
-            else => |rhs_value| std.mem.eql(u8, lhs_value, rhs_value),
-        },
-    };
+    if (lhs) |lhs_value| {
+        if (rhs) |rhs_value| {
+            return std.mem.eql(u8, lhs_value, rhs_value);
+        }
+        return false;
+    }
+    return rhs == null;
 }
 
 fn functionPtrEql(lhs: anytype, rhs: @TypeOf(lhs)) bool {
