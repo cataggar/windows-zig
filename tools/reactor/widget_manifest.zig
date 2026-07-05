@@ -54,4 +54,15 @@ pub const raw_widgets = .{
             },
         },
     },
+
+    .@"Microsoft.UI.Xaml.Controls.TextBox" = .{
+        .events = .{
+            .TextChanged = Event{
+                .payload = .string,
+                .source = .{
+                    .sender_property = "Text",
+                },
+            },
+        },
+    },
 };

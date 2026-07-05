@@ -54,9 +54,22 @@ and commits the generated setter glue to:
 tools/reactor/generated/generated_set_prop.zig
 ```
 
+Issue #18 extends the same step with a sibling generated event-connector file:
+
+```text
+tools/reactor/generated/generated_attach_event.zig
+```
+
 This keeps the WinMD loading / build-step plumbing in one place while
-leaving room for future reactor-specific emitters (for example event
-attacher glue) to land as sibling generated files in the same directory.
+letting reactor-specific emitters land as sibling generated files in the
+same directory.
+
+Because manifest events can resolve through related WinUI interfaces
+outside the control's top-level namespace (`Button.Click` comes from
+`Microsoft.UI.Xaml.Controls.Primitives.IButtonBase`), the same
+`zig build bindings` step also snapshots that narrow extra WinUI namespace
+alongside the existing `Microsoft.UI.Xaml` / `Microsoft.UI.Xaml.Controls`
+files under `packages/win/src/generated/`.
 
 ## Shape
 
@@ -302,6 +315,7 @@ The checked-in manifest covers the first M5 widget batch:
 - `Microsoft.UI.Xaml.Application`
 - `Microsoft.UI.Xaml.Window` (`Title`)
 - `Microsoft.UI.Xaml.Controls.TextBlock` (`Text`)
+- `Microsoft.UI.Xaml.Controls.TextBox` (`TextChanged`)
 - `Microsoft.UI.Xaml.Controls.Button` (`Content`, `Click`)
 - `Microsoft.UI.Xaml.Controls.StackPanel` (`Orientation`, `Spacing`)
 
@@ -309,7 +323,7 @@ This is enough to anchor:
 
 - the text/button counter sample from issue #20
 - scalar setter codegen for strings, floats, and enums
-- unit event codegen (`Button.Click`)
+- unit event codegen (`Button.Click`) plus sender-property payload metadata (`TextBox.TextChanged`)
 - future extension to bool/args-based events without changing the top-level shape
 
 ## How issues #17 and #18 should consume it

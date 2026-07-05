@@ -164,12 +164,52 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
+    const reactor_event_runtime_mod = b.addModule("reactor-event-runtime", .{
+        .root_source_file = b.path("tools/reactor/event_runtime.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    reactor_event_runtime_mod.addImport("win-core", win_core_mod);
+
+    const reactor_foundation_stub_mod = b.addModule("reactor-foundation-stub", .{
+        .root_source_file = b.path("tools/reactor/testdeps/foundation_stub.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    reactor_foundation_stub_mod.addImport("win-core", win_core_mod);
+
+    const reactor_controls_primitives_stub_mod = b.addModule("reactor-controls-primitives-stub", .{
+        .root_source_file = b.path("tools/reactor/testdeps/microsoft_ui_xaml_controls_primitives_stub.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    reactor_controls_primitives_stub_mod.addImport("win-core", win_core_mod);
+    reactor_controls_primitives_stub_mod.addImport("Windows.Foundation", reactor_foundation_stub_mod);
+
+    const reactor_controls_stub_mod = b.addModule("reactor-controls-stub", .{
+        .root_source_file = b.path("tools/reactor/testdeps/microsoft_ui_xaml_controls_stub.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    reactor_controls_stub_mod.addImport("win-core", win_core_mod);
+    reactor_controls_stub_mod.addImport("Windows.Foundation", reactor_foundation_stub_mod);
+
     const reactor_codegen_mod = b.addModule("reactor-codegen", .{
         .root_source_file = b.path("tools/reactor/codegen.zig"),
         .target = target,
         .optimize = optimize,
     });
     reactor_codegen_mod.addImport("winmd", winmd_mod);
+
+    const reactor_generated_attach_canary_mod = b.addModule("reactor-generated-attach-event-canary", .{
+        .root_source_file = b.path("tools/reactor/generated_attach_event_canary.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    reactor_generated_attach_canary_mod.addImport("win-core", win_core_mod);
+    reactor_generated_attach_canary_mod.addImport("Windows.Foundation", reactor_foundation_stub_mod);
+    reactor_generated_attach_canary_mod.addImport("Microsoft.UI.Xaml.Controls", reactor_controls_stub_mod);
+    reactor_generated_attach_canary_mod.addImport("Microsoft.UI.Xaml.Controls.Primitives", reactor_controls_primitives_stub_mod);
 
     // ------------------------------------------------------------------
     // Unit tests
@@ -202,7 +242,9 @@ pub fn build(b: *std.Build) void {
         .{ .name = "winbindgen", .mod = winbindgen_mod },
         .{ .name = "win-targets", .mod = win_targets_mod },
         .{ .name = "reactor-manifest", .mod = reactor_manifest_mod },
+        .{ .name = "reactor-event-runtime", .mod = reactor_event_runtime_mod },
         .{ .name = "reactor-codegen", .mod = reactor_codegen_mod },
+        .{ .name = "reactor-generated-attach-event-canary", .mod = reactor_generated_attach_canary_mod },
     };
 
     for (test_pkgs) |p| {
@@ -806,6 +848,25 @@ pub fn build(b: *std.Build) void {
     );
     bindings_step.dependOn(&winui_bundle_update.step);
 
+    // Button.Click resolves through `Microsoft.UI.Xaml.Controls.Primitives.IButtonBase`,
+    // so issue #18 needs that narrow extra namespace snapshot alongside the
+    // existing two starter WinUI files.
+    const winui_primitives_bundle_run = b.addRunArtifact(winbindgen_exe);
+    winui_primitives_bundle_run.step.dependOn(&run_fetch_winui_metadata.step);
+    winui_primitives_bundle_run.addArg("bundle");
+    winui_primitives_bundle_run.addArg("--arch=x64");
+    winui_primitives_bundle_run.addArg("--imports=module");
+    winui_primitives_bundle_run.addArg("--outdir");
+    const winui_primitives_outdir = winui_primitives_bundle_run.addOutputDirectoryArg("winui-primitives-bundle");
+    winui_primitives_bundle_run.addArg("Microsoft.UI.Xaml.Controls.Primitives");
+
+    const winui_primitives_update = b.addUpdateSourceFiles();
+    winui_primitives_update.addCopyFileToSource(
+        winui_primitives_outdir.path(b, "Microsoft.UI.Xaml.Controls.Primitives.zig"),
+        "packages/win/src/generated/Microsoft.UI.Xaml.Controls.Primitives.zig",
+    );
+    bindings_step.dependOn(&winui_primitives_update.step);
+
     const reactor_bindings_run = b.addRunArtifact(winbindgen_exe);
     reactor_bindings_run.step.dependOn(&run_fetch_winui_metadata.step);
     reactor_bindings_run.addArg("reactor-bindings");
@@ -816,6 +877,10 @@ pub fn build(b: *std.Build) void {
     reactor_bindings_update.addCopyFileToSource(
         reactor_bindings_outdir.path(b, "generated_set_prop.zig"),
         "tools/reactor/generated/generated_set_prop.zig",
+    );
+    reactor_bindings_update.addCopyFileToSource(
+        reactor_bindings_outdir.path(b, "generated_attach_event.zig"),
+        "tools/reactor/generated/generated_attach_event.zig",
     );
     bindings_step.dependOn(&reactor_bindings_update.step);
 
