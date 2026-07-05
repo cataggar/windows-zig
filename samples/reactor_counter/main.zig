@@ -1,0 +1,104 @@
+//! Minimal end-to-end counter built on the real WinUI-backed reactor stack.
+//!
+//! Run interactively:
+//!   zig build run-reactor-counter
+//!
+//! Run with an auto-exit timer (useful for CLI verification):
+//!   zig build run-reactor-counter -- --exit-after-ms 1500
+
+const std = @import("std");
+const reactor = @import("win-reactor");
+
+const Options = struct {
+    exit_after_ms: ?u32 = null,
+};
+
+const CountLabel = struct {
+    buffers: [2][32]u8 = undefined,
+    active: usize = 0,
+    text: []const u8 = "",
+
+    fn update(self: *@This(), count: i32) []const u8 {
+        const next = (self.active + 1) % self.buffers.len;
+        self.text = std.fmt.bufPrint(&self.buffers[next], "Count: {d}", .{count}) catch unreachable;
+        self.active = next;
+        return self.text;
+    }
+};
+
+const ClickCapture = struct {
+    count: i32 = 0,
+    setter: ?reactor.SetState(i32) = null,
+
+    fn onClick(raw: ?*anyopaque) void {
+        const self: *@This() = @ptrCast(@alignCast(raw.?));
+        self.setter.?.call(self.count + 1);
+    }
+};
+
+pub fn main(init: std.process.Init) !void {
+    const allocator = init.arena.allocator();
+    var args = try std.process.Args.Iterator.initAllocator(init.minimal.args, allocator);
+    defer args.deinit();
+
+    const options = try parseArgs(&args);
+
+    var app = reactor.App.init(allocator);
+    app.exit_after_ms = options.exit_after_ms;
+    try app.render(renderRoot);
+}
+
+fn renderRoot(cx: *reactor.RenderCx) reactor.ElementError!reactor.Element {
+    const allocator = cx.getAllocator();
+    const count = try cx.useState(i32, 0);
+
+    const label_state = try cx.useRef(CountLabel, .{});
+    const label_text = label_state.getMut().update(count.value.*);
+
+    const click_capture = try cx.useRef(ClickCapture, .{});
+    click_capture.getMut().* = .{
+        .count = count.value.*,
+        .setter = count.set,
+    };
+
+    var label = try reactor.text_block(allocator, label_text);
+    defer label.deinit(allocator);
+
+    var increment = try reactor.button(
+        allocator,
+        "+",
+        reactor.EventCallback.init(@ptrCast(click_capture.getMut()), ClickCapture.onClick),
+    );
+    defer increment.deinit(allocator);
+
+    var content = try reactor.vstack(allocator, .{ &label, &increment });
+    defer content.deinit(allocator);
+
+    var window_builder = reactor.window(allocator);
+    defer window_builder.deinit();
+    _ = try window_builder.prop("Title", @as([]const u8, "windows-zig reactor counter"));
+    _ = try window_builder.child(&content);
+    return window_builder.build();
+}
+
+fn parseArgs(args: *std.process.Args.Iterator) !Options {
+    var options: Options = .{};
+
+    _ = args.next();
+    while (args.next()) |arg| {
+        if (std.mem.eql(u8, arg, "--exit-after-ms")) {
+            const value = args.next() orelse return error.MissingExitAfterValue;
+            options.exit_after_ms = try std.fmt.parseUnsigned(u32, value, 10);
+        } else if (std.mem.startsWith(u8, arg, "--exit-after-ms=")) {
+            options.exit_after_ms = try std.fmt.parseUnsigned(
+                u32,
+                arg["--exit-after-ms=".len..],
+                10,
+            );
+        } else {
+            return error.UnknownArgument;
+        }
+    }
+
+    return options;
+}

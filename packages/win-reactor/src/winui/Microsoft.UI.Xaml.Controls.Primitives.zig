@@ -26,10 +26,10 @@ pub const IButtonBase = extern struct {
     vtable: *const IButtonBase_Vtbl,
     pub const Vtbl = IButtonBase_Vtbl;
     pub const IID: GUID = .{
-        .data1 = 0x3F7D7A33,
-        .data2 = 0x79F4,
-        .data3 = 0x5E58,
-        .data4 = .{ 0x8F, 0x3F, 0x4E, 0x6A, 0x10, 0x3D, 0xD2, 0xE2 },
+        .data1 = 0x65714269,
+        .data2 = 0x2473,
+        .data3 = 0x5327,
+        .data4 = .{ 0xA6, 0x52, 0x0E, 0xA6, 0xBC, 0xE7, 0xF4, 0x03 },
     };
 
     pub fn QueryInterface(self: *const IButtonBase, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {

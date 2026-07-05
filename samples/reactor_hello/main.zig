@@ -20,25 +20,19 @@ pub fn main(init: std.process.Init) !void {
 fn renderRoot(cx: *reactor.RenderCx) reactor.ElementError!reactor.Element {
     const allocator = cx.getAllocator();
 
-    var button_builder = reactor.button(allocator);
-    defer button_builder.deinit();
-    _ = try button_builder.prop("Content", @as([]const u8, "WinUI 3 button"));
+    var button = try reactor.button(allocator, "WinUI 3 button", null);
+    defer button.deinit(allocator);
 
-    var text_builder = reactor.text_block(allocator);
-    defer text_builder.deinit();
-    _ = try text_builder.prop("Text", @as([]const u8, "Hello from the reconciler-driven backend."));
+    var text = try reactor.text_block(allocator, "Hello from the reconciler-driven backend.");
+    defer text.deinit(allocator);
 
-    var stack_builder = reactor.stack_panel(allocator);
-    defer stack_builder.deinit();
-    _ = try stack_builder.prop("Orientation", reactor.XamlControls.Orientation.Vertical);
-    _ = try stack_builder.prop("Spacing", @as(f64, 12.0));
-    _ = try stack_builder.child(&button_builder);
-    _ = try stack_builder.child(&text_builder);
+    var content = try reactor.vstack(allocator, .{ &button, &text });
+    defer content.deinit(allocator);
 
     var window_builder = reactor.window(allocator);
     defer window_builder.deinit();
     _ = try window_builder.prop("Title", @as([]const u8, "windows-zig reactor hello"));
-    _ = try window_builder.child(&stack_builder);
+    _ = try window_builder.child(&content);
 
     return window_builder.build();
 }
