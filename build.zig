@@ -1559,6 +1559,11 @@ pub fn build(b: *std.Build) void {
             .needs_win = true,
         },
         .{
+            .name = "winui-minimal-bindings",
+            .root = "samples/winui_minimal_bindings/main.zig",
+            .needs_win = true,
+        },
+        .{
             .name = "winrt-future",
             .root = "samples/winrt_future/main.zig",
             .needs_win = true,
