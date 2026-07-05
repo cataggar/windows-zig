@@ -67,6 +67,7 @@ pub const hresult = struct {
     pub const S_FALSE: HRESULT = 1;
     // Common errors — keep tiny; the generated code will add more via
     // comptime-produced constants once `winbindgen` lands.
+    pub const E_BOUNDS: HRESULT = @bitCast(@as(u32, 0x8000_000B));
     pub const E_NOTIMPL: HRESULT = @bitCast(@as(u32, 0x8000_4001));
     pub const E_NOINTERFACE: HRESULT = @bitCast(@as(u32, 0x8000_4002));
     pub const E_POINTER: HRESULT = @bitCast(@as(u32, 0x8000_4003));
@@ -113,6 +114,7 @@ pub const hresult = struct {
     pub const Error = error{
         Aborted,
         AccessDenied,
+        Bounds,
         Fail,
         InvalidArg,
         NoInterface,
@@ -137,6 +139,7 @@ pub const hresult = struct {
         return switch (hr) {
             E_ABORT => error.Aborted,
             E_ACCESSDENIED => error.AccessDenied,
+            E_BOUNDS => error.Bounds,
             E_FAIL => error.Fail,
             E_INVALIDARG => error.InvalidArg,
             E_NOINTERFACE => error.NoInterface,
@@ -480,6 +483,411 @@ pub fn Delegate(comptime VtblInvokeFn: type, comptime iid: GUID) type {
     };
 }
 
+fn multiFace(comptime Handle: type) type {
+    return extern struct {
+        iface: Handle,
+        owner: *anyopaque,
+    };
+}
+
+fn multiFaceFieldName(comptime index: usize) [:0]const u8 {
+    return std.fmt.comptimePrint("face_{d}", .{index}) ++ "";
+}
+
+fn multiVtblBaseType(comptime Handle: type) type {
+    const info = @typeInfo(Handle.Vtbl).@"struct";
+    if (info.fields.len == 0 or !std.mem.eql(u8, info.fields[0].name, "base"))
+        @compileError("Handle.Vtbl must begin with a field named `base`");
+    return info.fields[0].type;
+}
+
+fn multiBuildStorageType(comptime StateT: type, comptime specs: anytype) type {
+    const field_count = 3 + specs.len;
+    comptime var names: [field_count][:0]const u8 = undefined;
+    comptime var types: [field_count]type = undefined;
+    comptime var attrs: [field_count]std.builtin.Type.StructField.Attributes = undefined;
+
+    names[0] = "refcount";
+    types[0] = std.atomic.Value(u32);
+    attrs[0] = .{};
+
+    names[1] = "allocator";
+    types[1] = std.mem.Allocator;
+    attrs[1] = .{};
+
+    names[2] = "state";
+    types[2] = StateT;
+    attrs[2] = .{};
+
+    inline for (specs, 0..) |spec, i| {
+        names[3 + i] = multiFaceFieldName(i);
+        types[3 + i] = multiFace(spec.Handle);
+        attrs[3 + i] = .{};
+    }
+
+    return @Struct(.auto, null, names[0..field_count], types[0..field_count], attrs[0..field_count]);
+}
+
+pub const MultiInterfaceOptions = struct {
+    /// Returned by `IInspectable.GetRuntimeClassName`. Pass `null` to
+    /// return a null `HSTRING` instead.
+    runtime_class_name: ?[]const u16 = null,
+    /// Returned by `IInspectable.GetTrustLevel`.
+    trust_level: i32 = 0,
+    /// If true, `QueryInterface(IID_IAgileObject)` succeeds and returns
+    /// the identity face.
+    agile: bool = true,
+};
+
+/// Comptime helper for authoring a single heap allocation that exposes
+/// multiple COM/WinRT interfaces.
+///
+/// Each `interfaces` entry is created with `interfaceSpec(Handle, vtbl)`,
+/// where `Handle` is an `extern struct` with a leading `vtable` field and
+/// `vtbl` is a comptime `Handle.Vtbl` value whose `base` field is ignored
+/// (the helper fills in `QueryInterface` / `AddRef` / `Release` and, for
+/// WinRT interfaces, `GetIids` / `GetRuntimeClassName` / `GetTrustLevel`).
+///
+/// The returned namespace type exposes:
+///
+///   * `create(allocator, state) !*Storage` — allocates the object with
+///     refcount 1.
+///   * `as(storage, Handle)` — borrowed pointer to one authored face.
+///   * `storageFrom(Handle, iface)` / `stateFrom(Handle, iface)` —
+///     recover the backing allocation or user state from any authored face.
+///   * If `State` exposes `pub fn deinit(self)` or
+///     `pub fn deinit(self, allocator)`, it runs just before the backing
+///     allocation is freed.
+///
+/// The helper always answers `IID_IUnknown` and every authored IID. If at
+/// least one authored interface is WinRT (`IInspectable_Vtbl` base), it also
+/// answers `IID_IInspectable`. `IID_IAgileObject` is optional via `options`.
+pub fn MultiInterfaceObject(
+    comptime State: type,
+    comptime options: MultiInterfaceOptions,
+    comptime interfaces: anytype,
+) type {
+    const interfaces_info = @typeInfo(@TypeOf(interfaces));
+    if (interfaces_info != .@"struct" or interfaces_info.@"struct".fields.len == 0)
+        @compileError("MultiInterfaceObject requires a non-empty tuple of interfaceSpec(...) entries");
+
+    @setEvalBranchQuota(1_000_000);
+
+    inline for (interfaces, 0..) |spec, i| {
+        if (!@hasField(@TypeOf(spec), "Handle") or !@hasField(@TypeOf(spec), "vtbl"))
+            @compileError(std.fmt.comptimePrint(
+                "interfaces[{d}] must come from interfaceSpec(Handle, vtbl)",
+                .{i},
+            ));
+        const base_ty = multiVtblBaseType(spec.Handle);
+        if (base_ty != IUnknown_Vtbl and base_ty != IInspectable_Vtbl)
+            @compileError("interfaceSpec Handle.Vtbl.base must be IUnknown_Vtbl or IInspectable_Vtbl");
+    }
+
+    const inspectable_index: ?usize = comptime blk: {
+        for (interfaces, 0..) |spec, i| {
+            if (multiVtblBaseType(spec.Handle) == IInspectable_Vtbl) break :blk i;
+        }
+        break :blk null;
+    };
+
+    const StorageT = comptime multiBuildStorageType(State, interfaces);
+
+    return struct {
+        const Self = @This();
+        pub const Storage = StorageT;
+
+        fn Face(comptime Handle: type) type {
+            return extern struct {
+                iface: Handle,
+                owner: *anyopaque,
+            };
+        }
+
+        fn faceFieldName(comptime index: usize) [:0]const u8 {
+            return std.fmt.comptimePrint("face_{d}", .{index}) ++ "";
+        }
+
+        fn vtblBaseType(comptime Handle: type) type {
+            const info = @typeInfo(Handle.Vtbl).@"struct";
+            if (info.fields.len == 0 or !std.mem.eql(u8, info.fields[0].name, "base"))
+                @compileError("Handle.Vtbl must begin with a field named `base`");
+            return info.fields[0].type;
+        }
+
+        fn buildStorageType(comptime StateT: type, comptime specs: anytype) type {
+            const field_count = 3 + specs.len;
+            comptime var names: [field_count][:0]const u8 = undefined;
+            comptime var types: [field_count]type = undefined;
+            comptime var attrs: [field_count]std.builtin.Type.StructField.Attributes = undefined;
+
+            names[0] = "refcount";
+            types[0] = std.atomic.Value(u32);
+            attrs[0] = .{};
+
+            names[1] = "allocator";
+            types[1] = std.mem.Allocator;
+            attrs[1] = .{};
+
+            names[2] = "state";
+            types[2] = StateT;
+            attrs[2] = .{};
+
+            inline for (specs, 0..) |spec, i| {
+                names[3 + i] = faceFieldName(i);
+                types[3 + i] = Face(spec.Handle);
+                attrs[3 + i] = .{};
+            }
+
+            return @Struct(.auto, null, names[0..field_count], types[0..field_count], attrs[0..field_count]);
+        }
+
+        fn interfacePtrRaw(storage: *Storage, comptime index: usize) *anyopaque {
+            return @ptrCast(&@field(storage.*, faceFieldName(index)).iface);
+        }
+
+        fn identityPtr(storage: *Storage) *anyopaque {
+            return interfacePtrRaw(storage, 0);
+        }
+
+        fn inspectablePtr(storage: *Storage) *anyopaque {
+            if (inspectable_index) |i| return interfacePtrRaw(storage, i);
+            return identityPtr(storage);
+        }
+
+        fn storageFromFace(comptime Handle: type, iface: *const Handle) *Storage {
+            const face: *const Face(Handle) = @fieldParentPtr("iface", iface);
+            return @ptrCast(@alignCast(face.owner));
+        }
+
+        fn storageFromThis(comptime Handle: type, this: *anyopaque) *Storage {
+            const iface: *const Handle = @ptrCast(@alignCast(this));
+            return storageFromFace(Handle, iface);
+        }
+
+        fn addRefStorage(storage: *Storage) u32 {
+            return storage.refcount.fetchAdd(1, .acq_rel) + 1;
+        }
+
+        fn deinitState(storage: *Storage) void {
+            if (@hasDecl(State, "deinit")) {
+                const DeinitFn = @TypeOf(State.deinit);
+                const params = @typeInfo(DeinitFn).@"fn".params;
+                if (params.len == 1) {
+                    storage.state.deinit();
+                } else if (params.len == 2) {
+                    storage.state.deinit(storage.allocator);
+                } else {
+                    @compileError("State.deinit must take either (self) or (self, allocator)");
+                }
+            }
+        }
+
+        fn releaseStorage(storage: *Storage) u32 {
+            const prev = storage.refcount.fetchSub(1, .acq_rel);
+            const remaining = prev - 1;
+            if (prev == 1) {
+                deinitState(storage);
+                const allocator = storage.allocator;
+                allocator.destroy(storage);
+            }
+            return remaining;
+        }
+
+        fn qiFn(comptime index: usize) *const fn (*anyopaque, *const GUID, *?*anyopaque) callconv(.winapi) HRESULT {
+            return struct {
+                fn impl(this: *anyopaque, riid: *const GUID, out: *?*anyopaque) callconv(.winapi) HRESULT {
+                    if (@intFromPtr(riid) == 0 or @intFromPtr(out) == 0) return hresult.E_POINTER;
+                    const storage = storageFromThis(interfaces[index].Handle, this);
+
+                    if (std.meta.eql(riid.*, IID_IUnknown)) {
+                        _ = addRefStorage(storage);
+                        out.* = identityPtr(storage);
+                        return hresult.S_OK;
+                    }
+                    if (inspectable_index != null and std.meta.eql(riid.*, IID_IInspectable)) {
+                        _ = addRefStorage(storage);
+                        out.* = inspectablePtr(storage);
+                        return hresult.S_OK;
+                    }
+                    if (options.agile and std.meta.eql(riid.*, IID_IAgileObject)) {
+                        _ = addRefStorage(storage);
+                        out.* = identityPtr(storage);
+                        return hresult.S_OK;
+                    }
+
+                    inline for (interfaces, 0..) |spec, i| {
+                        if (std.meta.eql(riid.*, spec.Handle.IID)) {
+                            _ = addRefStorage(storage);
+                            out.* = interfacePtrRaw(storage, i);
+                            return hresult.S_OK;
+                        }
+                    }
+
+                    out.* = null;
+                    return hresult.E_NOINTERFACE;
+                }
+            }.impl;
+        }
+
+        fn addRefFn(comptime index: usize) *const fn (*anyopaque) callconv(.winapi) u32 {
+            return struct {
+                fn impl(this: *anyopaque) callconv(.winapi) u32 {
+                    return addRefStorage(storageFromThis(interfaces[index].Handle, this));
+                }
+            }.impl;
+        }
+
+        fn releaseFn(comptime index: usize) *const fn (*anyopaque) callconv(.winapi) u32 {
+            return struct {
+                fn impl(this: *anyopaque) callconv(.winapi) u32 {
+                    return releaseStorage(storageFromThis(interfaces[index].Handle, this));
+                }
+            }.impl;
+        }
+
+        fn getIidsFn(comptime index: usize) *const fn (*anyopaque, *u32, *?[*]GUID) callconv(.winapi) HRESULT {
+            _ = index;
+            return struct {
+                const authored_iids = blk: {
+                    var ids: [interfaces.len]GUID = undefined;
+                    for (interfaces, 0..) |spec, i| ids[i] = spec.Handle.IID;
+                    break :blk ids;
+                };
+
+                fn impl(_: *anyopaque, count: *u32, values: *?[*]GUID) callconv(.winapi) HRESULT {
+                    if (@intFromPtr(count) == 0 or @intFromPtr(values) == 0) return hresult.E_POINTER;
+                    if (authored_iids.len == 0) {
+                        count.* = 0;
+                        values.* = null;
+                        return hresult.S_OK;
+                    }
+
+                    const bytes = authored_iids.len * @sizeOf(GUID);
+                    const raw = ole32.CoTaskMemAlloc(bytes) orelse {
+                        count.* = 0;
+                        values.* = null;
+                        return hresult.E_OUTOFMEMORY;
+                    };
+
+                    const out: [*]GUID = @ptrCast(@alignCast(raw));
+                    inline for (authored_iids, 0..) |iid, i| out[i] = iid;
+                    count.* = authored_iids.len;
+                    values.* = out;
+                    return hresult.S_OK;
+                }
+            }.impl;
+        }
+
+        fn getRuntimeClassNameFn(comptime index: usize) *const fn (*anyopaque, *HSTRING) callconv(.winapi) HRESULT {
+            _ = index;
+            return struct {
+                fn impl(_: *anyopaque, value: *HSTRING) callconv(.winapi) HRESULT {
+                    if (@intFromPtr(value) == 0) return hresult.E_POINTER;
+                    if (options.runtime_class_name) |name| {
+                        const source: ?[*]const u16 = if (name.len == 0) null else name.ptr;
+                        return combase.WindowsCreateString(source, @intCast(name.len), value);
+                    }
+                    value.* = null;
+                    return hresult.S_OK;
+                }
+            }.impl;
+        }
+
+        fn getTrustLevelFn(comptime index: usize) *const fn (*anyopaque, *i32) callconv(.winapi) HRESULT {
+            _ = index;
+            return struct {
+                fn impl(_: *anyopaque, value: *i32) callconv(.winapi) HRESULT {
+                    if (@intFromPtr(value) == 0) return hresult.E_POINTER;
+                    value.* = options.trust_level;
+                    return hresult.S_OK;
+                }
+            }.impl;
+        }
+
+        fn authoredVtblPtr(comptime index: usize) *const @TypeOf(interfaces[index].vtbl) {
+            return &struct {
+                const value = buildVtbl(index);
+            }.value;
+        }
+
+        fn buildVtbl(comptime index: usize) @TypeOf(interfaces[index].vtbl) {
+            var vtbl = interfaces[index].vtbl;
+            const base_ty = vtblBaseType(interfaces[index].Handle);
+            if (base_ty == IUnknown_Vtbl) {
+                @field(vtbl, "base") = .{
+                    .QueryInterface = qiFn(index),
+                    .AddRef = addRefFn(index),
+                    .Release = releaseFn(index),
+                };
+            } else if (base_ty == IInspectable_Vtbl) {
+                @field(vtbl, "base") = .{
+                    .base = .{
+                        .QueryInterface = qiFn(index),
+                        .AddRef = addRefFn(index),
+                        .Release = releaseFn(index),
+                    },
+                    .GetIids = getIidsFn(index),
+                    .GetRuntimeClassName = getRuntimeClassNameFn(index),
+                    .GetTrustLevel = getTrustLevelFn(index),
+                };
+            } else {
+                @compileError("unsupported Handle.Vtbl.base type");
+            }
+            return vtbl;
+        }
+
+        fn interfaceIndex(comptime Handle: type) usize {
+            inline for (interfaces, 0..) |spec, i| {
+                if (Handle == spec.Handle) return i;
+            }
+            @compileError("requested Handle is not part of this MultiInterfaceObject");
+        }
+
+        pub fn create(allocator: std.mem.Allocator, state: State) error{OutOfMemory}!*Storage {
+            const storage = try allocator.create(Storage);
+            storage.refcount = std.atomic.Value(u32).init(1);
+            storage.allocator = allocator;
+            storage.state = state;
+            inline for (interfaces, 0..) |spec, i| {
+                _ = spec;
+                @field(storage.*, faceFieldName(i)) = .{
+                    .iface = .{ .vtable = authoredVtblPtr(i) },
+                    .owner = @ptrCast(storage),
+                };
+            }
+            return storage;
+        }
+
+        pub fn as(storage: *Storage, comptime Handle: type) *Handle {
+            const index = comptime interfaceIndex(Handle);
+            return &@field(storage.*, faceFieldName(index)).iface;
+        }
+
+        pub fn storageFrom(comptime Handle: type, iface: *const Handle) *Storage {
+            return storageFromFace(Handle, iface);
+        }
+
+        pub fn stateFrom(comptime Handle: type, iface: *const Handle) *State {
+            return &storageFromFace(Handle, iface).state;
+        }
+
+        pub fn allocatorFrom(comptime Handle: type, iface: *const Handle) std.mem.Allocator {
+            return storageFromFace(Handle, iface).allocator;
+        }
+    };
+}
+
+pub fn interfaceSpec(
+    comptime Handle: type,
+    comptime vtbl: Handle.Vtbl,
+) @TypeOf(.{ .Handle = Handle, .vtbl = vtbl }) {
+    return .{
+        .Handle = Handle,
+        .vtbl = vtbl,
+    };
+}
+
 // ---- Async ----------------------------------------------------------------
 
 /// Blocking wait helpers for WinRT async contracts (`IAsyncAction`,
@@ -714,6 +1122,11 @@ pub const oleaut32 = struct {
     pub extern "oleaut32" fn SysStringLen(bstr: BSTR) callconv(.winapi) u32;
 };
 
+pub const ole32 = struct {
+    pub extern "ole32" fn CoTaskMemAlloc(size: usize) callconv(.winapi) ?*anyopaque;
+    pub extern "ole32" fn CoTaskMemFree(ptr: ?*anyopaque) callconv(.winapi) void;
+};
+
 /// Owning `BSTR` wrapper. Free-at-drop via `SysFreeString`; cheap to move
 /// (it's just a pointer); cannot be cloned without the OS allocator.
 ///
@@ -782,6 +1195,11 @@ pub const combase = struct {
         string: *HSTRING,
     ) callconv(.winapi) HRESULT;
 
+    pub extern "api-ms-win-core-winrt-string-l1-1-0" fn WindowsDuplicateString(
+        string: HSTRING,
+        new_string: *HSTRING,
+    ) callconv(.winapi) HRESULT;
+
     pub extern "api-ms-win-core-winrt-string-l1-1-0" fn WindowsDeleteString(
         string: HSTRING,
     ) callconv(.winapi) HRESULT;
@@ -823,6 +1241,13 @@ pub const Hstring = struct {
         return create(wide);
     }
 
+    /// Duplicate an existing `HSTRING`, producing a new owned handle.
+    pub fn clone(self: Hstring) !Hstring {
+        var out: HSTRING = null;
+        try hresult.ok(combase.WindowsDuplicateString(self.raw, &out));
+        return .{ .raw = out };
+    }
+
     /// Number of UTF-16 code units. Null maps to 0.
     pub fn len(self: Hstring) u32 {
         return combase.WindowsGetStringLen(self.raw);
@@ -836,6 +1261,11 @@ pub const Hstring = struct {
         const p = combase.WindowsGetStringRawBuffer(self.raw, null) orelse
             return &[_]u16{};
         return p[0..n];
+    }
+
+    /// Value equality over UTF-16 contents (null and empty both compare by slice).
+    pub fn eql(a: Hstring, b: Hstring) bool {
+        return std.mem.eql(u16, a.slice(), b.slice());
     }
 
     /// Release the OS-owned storage. Idempotent; leaves `raw` null.
