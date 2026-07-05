@@ -1,10 +1,11 @@
-//! Port of `crates/samples/windows/counter` — reads CPU usage via
-//! Performance Data Helper (PDH) in a loop.
+//! Port of `crates/samples/windows/samples/examples/counter.rs` —
+//! reads CPU usage via Performance Data Helper (PDH) in a loop.
 //!
-//! Exercises: Win32 PDH APIs, opaque handle types, extern union access.
+//! Exercises: Win32 PDH APIs, generated handle aliases, and generated
+//! `PDH_FMT_COUNTERVALUE` layout access.
 //!
-//! Build:  `zig build counter`
-//! Run:    `.\zig-out\bin\counter.exe`
+//! Build:  `zig build samples`
+//! Run:    `zig build run-counter`
 
 const std = @import("std");
 const win_sys = @import("win-sys");
@@ -15,57 +16,74 @@ const win = win_sys.project(.{
         "PdhAddCounterW",
         "PdhCollectQueryData",
         "PdhGetFormattedCounterValue",
+        "PdhCloseQuery",
     },
     .@"Windows.Win32.System.Threading" = .{"Sleep"},
 });
+const perf = win_sys.index.@"Windows.Win32.System.Performance";
 
-// PDH handles are opaque (?*anyopaque aliases).
-// PDH_FMT_COUNTERVALUE is an extern struct with an Anonymous union.
-// We define the struct inline since it's not in the curated structs proxy.
-const PDH_FMT_COUNTERVALUE = extern struct {
-    CStatus: u32,
-    Anonymous: extern union {
-        longValue: i32,
-        doubleValue: f64,
-        largeValue: i64,
-    },
-};
+pub fn main() !void {
+    var query: perf.aliases.PDH_HQUERY = null;
+    const open_status = win.PdhOpenQueryW(null, 0, &query);
+    if (open_status != 0) {
+        std.debug.print("PdhOpenQueryW failed: PDH_STATUS = 0x{x:0>8}\n", .{open_status});
+        return error.PdhOpenQueryFailed;
+    }
+    defer _ = win.PdhCloseQuery(query);
 
-const PDH_FMT_DOUBLE: u32 = 512;
+    const counter_path_literal = std.unicode.utf8ToUtf16LeStringLiteral(
+        "\\Processor(0)\\% Processor Time",
+    );
+    const counter_path: ?[*:0]u16 =
+        @constCast(@as([*:0]const u16, counter_path_literal));
 
-pub fn main() void {
-    var query: ?*anyopaque = null;
-    if (win.PdhOpenQueryW(null, 0, &query) != 0) {
-        std.debug.print("PdhOpenQueryW failed\n", .{});
-        return;
+    var counter: perf.aliases.PDH_HCOUNTER = null;
+    const add_status = win.PdhAddCounterW(query, counter_path, 0, &counter);
+    if (add_status != 0) {
+        std.debug.print("PdhAddCounterW failed: PDH_STATUS = 0x{x:0>8}\n", .{add_status});
+        return error.PdhAddCounterFailed;
     }
 
-    const counter_path = comptime blk: {
-        const s = "\\Processor(0)\\% Processor Time";
-        var buf: [s.len:0]u16 = undefined;
-        for (s, 0..) |c, i| buf[i] = c;
-        buf[s.len] = 0;
-        break :blk buf;
-    };
-
-    var counter: ?*anyopaque = null;
-    if (win.PdhAddCounterW(query, @ptrCast(@constCast(&counter_path)), 0, &counter) != 0) {
-        std.debug.print("PdhAddCounterW failed\n", .{});
-        return;
+    // Rate counters need a baseline sample before the first formatted read.
+    const initial_collect_status = win.PdhCollectQueryData(query);
+    if (initial_collect_status != 0) {
+        std.debug.print(
+            "Initial PdhCollectQueryData failed: PDH_STATUS = 0x{x:0>8}\n",
+            .{initial_collect_status},
+        );
+        return error.PdhCollectQueryDataFailed;
     }
 
     std.debug.print("Reading CPU usage...\n", .{});
 
-    var i: u32 = 0;
-    while (i < 10) : (i += 1) {
+    var sample_index: u32 = 0;
+    while (sample_index < 10) : (sample_index += 1) {
         win.Sleep(1000);
-        if (win.PdhCollectQueryData(query) != 0) continue;
 
-        var value: PDH_FMT_COUNTERVALUE = undefined;
-        @memset(std.mem.asBytes(&value), 0);
-        var counter_type: u32 = 0;
-        if (win.PdhGetFormattedCounterValue(counter, PDH_FMT_DOUBLE, &counter_type, @ptrCast(&value)) == 0) {
-            std.debug.print("{d:.2}%\n", .{value.Anonymous.doubleValue});
+        const collect_status = win.PdhCollectQueryData(query);
+        if (collect_status != 0) {
+            std.debug.print(
+                "PdhCollectQueryData failed: PDH_STATUS = 0x{x:0>8}\n",
+                .{collect_status},
+            );
+            return error.PdhCollectQueryDataFailed;
         }
+
+        var value = std.mem.zeroes(win_sys.structs.PDH_FMT_COUNTERVALUE);
+        const format_status = win.PdhGetFormattedCounterValue(
+            counter,
+            perf.PDH_FMT_DOUBLE,
+            null,
+            &value,
+        );
+        if (format_status != 0) {
+            std.debug.print(
+                "PdhGetFormattedCounterValue failed: PDH_STATUS = 0x{x:0>8}\n",
+                .{format_status},
+            );
+            return error.PdhGetFormattedCounterValueFailed;
+        }
+
+        std.debug.print("{d:.2}%\n", .{value.Anonymous.doubleValue});
     }
 }

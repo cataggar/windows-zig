@@ -93,15 +93,14 @@ All five milestones landed on `cataggar:zig` via PR #27:
 | M0 | `4102f80dd`  | Closed-generic `_Vtbl` now uses `IUnknown_Vtbl` base when the open type extends `MulticastDelegate`; regression test added. |
 | M1 | `5475d7314`  | `win_core.Delegate(InvokeFn, iid)` shipped with `create` / `userData` / IAgileObject QI / fired-once unit test. |
 | M2 | `12f4c21a1`  | Event-pair detector in `winbindgen` recognises `(add_X, remove_X)` by signature; snapshot-tested against `Windows.Foundation`. |
-| M3 | `9ba2d0e75`  | Per-interface `addX` / `removeX` sugar emitted whenever a detected pair targets a closed-generic delegate in the same namespace. |
+| M3 | `9ba2d0e75`  | Per-interface `addX` / `removeX` sugar emitted whenever a detected pair targets a closed-generic delegate; the initial landing covered same-namespace events and issue #34 extended it across namespaces. |
 | M4 | `185024fb8`  | `zig/samples/winrt_event_sugar/main.zig` smoke sample exercises the full `MemoryBuffer → IMemoryBufferReference.Closed → IClosable.Close → token unregister` round-trip. |
 
 ### The shipped API surface
 
 For each detected `(add_X, remove_X)` pair where the handler resolves
-to a closed generic delegate **in the same namespace** as the
-interface (the M3 cross-namespace constraint — see below), the emitter
-generates:
+to a closed generic delegate whose type arguments are mangleable, the
+emitter generates:
 
 ```zig
 pub fn addX(
@@ -137,19 +136,19 @@ fn onClosed(
 }
 ```
 
-The full canary lives in `zig/samples/winrt_event_sugar/main.zig`.
+The full canaries live in `zig/samples/winrt_event_sugar/main.zig` and
+`zig/samples/device_watcher/main.zig`.
 
-### Same-namespace constraint (still in scope for #14)
+### Cross-namespace delegates
 
-M3 only emits sugar when the closed generic delegate lives in the same
-namespace as the host interface. This avoids cross-namespace import
-plumbing in the emitter and covers every event currently in the
-v0.2 corpus (`MemoryBuffer.Closed` is the canonical case). Lifting this
-constraint is tracked separately — when needed, the emitter will need
-to import the delegate's namespace alias on the host side. Callers
-hitting an event whose handler crosses namespaces today can still
-register it manually via `core.Delegate(...).create(...)` and the raw
-`add_X` slot.
+Cross-namespace event delegates now project too. When the host
+interface lives outside the delegate's home namespace (for example
+`Windows.Devices.Enumeration.IDeviceWatcher`, whose events use
+`Windows.Foundation.TypedEventHandler<...>`), the emitted sugar
+qualifies the delegate through the imported home namespace and relies
+on bundle-mode generic seeding to materialize the closed instantiation
+there. `samples/device_watcher` exercises this path via
+`IDeviceWatcher.addAdded` and `addEnumerationCompleted`.
 
 ## Reference implementation (M1 target)
 
