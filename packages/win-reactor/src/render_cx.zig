@@ -521,6 +521,14 @@ pub const RenderCx = struct {
         self.context_stack = stack;
     }
 
+    pub fn contextStack(self: *const RenderCx) ?*context.ContextStack {
+        return self.context_stack;
+    }
+
+    pub fn getAllocator(self: *const RenderCx) Allocator {
+        return self.allocator;
+    }
+
     pub fn takeReadContexts(self: *RenderCx) ContextIdSet {
         const out = self.read_contexts;
         self.read_contexts = .empty;

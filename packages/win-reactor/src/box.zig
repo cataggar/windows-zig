@@ -178,3 +178,77 @@ pub const EqBox = struct {
         }.call;
     }
 };
+
+/// Cloneable/equatable boxed value for copy-safe data carried through the
+/// element tree (generic props, component props, provider values). Like the
+/// hook-state contract, callers should keep owned resources behind pointers
+/// and pass only copy-safe values by value here.
+pub const ValueBox = struct {
+    inner: AnyBox,
+    eql_fn: *const fn (lhs: *const anyopaque, rhs: *const anyopaque) bool,
+    clone_fn: *const fn (allocator: Allocator, source: *const anyopaque) Allocator.Error!AnyBox,
+
+    pub fn init(allocator: Allocator, value: anytype) Allocator.Error!ValueBox {
+        const T = @TypeOf(value);
+        comptime assertBorrowedValueType(T, "ValueBox.init");
+        return .{
+            .inner = try AnyBox.init(allocator, value),
+            .eql_fn = EqBox.eqlFn(T),
+            .clone_fn = cloneFn(T),
+        };
+    }
+
+    pub fn deinit(self: *ValueBox, allocator: Allocator) void {
+        self.inner.deinit(allocator);
+        self.* = undefined;
+    }
+
+    pub fn clone(self: *const ValueBox, allocator: Allocator) Allocator.Error!ValueBox {
+        return .{
+            .inner = try self.clone_fn(allocator, self.inner.ptr),
+            .eql_fn = self.eql_fn,
+            .clone_fn = self.clone_fn,
+        };
+    }
+
+    pub fn is(self: ValueBox, comptime T: type) bool {
+        return self.inner.is(T);
+    }
+
+    pub fn get(self: ValueBox, comptime T: type) *T {
+        return self.inner.get(T);
+    }
+
+    pub fn getConst(self: ValueBox, comptime T: type) *const T {
+        return self.inner.getConst(T);
+    }
+
+    pub fn eqlValue(self: *const ValueBox, value: anytype) bool {
+        const T = @TypeOf(value);
+        if (!self.is(T)) return false;
+        var tmp = value;
+        return self.eql_fn(self.inner.ptr, @ptrCast(&tmp));
+    }
+
+    pub fn eqlBox(self: *const ValueBox, other: *const ValueBox) bool {
+        if (self.eql_fn != other.eql_fn) return false;
+        return self.eql_fn(self.inner.ptr, other.inner.ptr);
+    }
+
+    pub fn typeName(self: ValueBox) []const u8 {
+        return self.inner.typeName();
+    }
+
+    pub fn rawConstPtr(self: *const ValueBox) *const anyopaque {
+        return self.inner.ptr;
+    }
+
+    fn cloneFn(comptime T: type) *const fn (allocator: Allocator, source: *const anyopaque) Allocator.Error!AnyBox {
+        return &struct {
+            fn call(allocator: Allocator, source_raw: *const anyopaque) Allocator.Error!AnyBox {
+                const source: *const T = @ptrCast(@alignCast(source_raw));
+                return AnyBox.init(allocator, source.*);
+            }
+        }.call;
+    }
+};
