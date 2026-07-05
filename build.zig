@@ -1,7 +1,7 @@
 //! windows-zig top-level build script.
 //!
-//! Wires up the six in-tree packages (`winmd`, `win-core`, `winbindgen`,
-//! `win-sys`, `win`, `win-targets`), their unit tests, and the `bindings`
+//! Wires up the seven in-tree packages (`winmd`, `win-core`, `win-collections`,
+//! `winbindgen`, `win-sys`, `win`, `win-targets`), their unit tests, and the `bindings`
 //! step that regenerates `win-sys` / `win` sources from the vendored
 //! `.winmd` metadata.
 //!
@@ -46,10 +46,18 @@ pub fn build(b: *std.Build) void {
     // `HSTRING` helpers and WinRT activation. Link the corresponding
     // import libs on Windows targets.
     if (target.result.os.tag == .windows) {
+        win_core_mod.linkSystemLibrary("ole32", .{});
         win_core_mod.linkSystemLibrary("oleaut32", .{});
         win_core_mod.linkSystemLibrary("api-ms-win-core-winrt-string-l1-1-0", .{});
         win_core_mod.linkSystemLibrary("api-ms-win-core-winrt-l1-1-0", .{});
     }
+
+    const win_collections_mod = b.addModule("win-collections", .{
+        .root_source_file = b.path("packages/win-collections/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    win_collections_mod.addImport("win-core", win_core_mod);
 
     const winbindgen_mod = b.addModule("winbindgen", .{
         .root_source_file = b.path("packages/winbindgen/src/root.zig"),
@@ -104,6 +112,7 @@ pub fn build(b: *std.Build) void {
     const test_pkgs = [_]TestPkg{
         .{ .name = "winmd", .mod = winmd_mod },
         .{ .name = "win-core", .mod = win_core_mod },
+        .{ .name = "win-collections", .mod = win_collections_mod },
         .{ .name = "win-sys", .mod = win_sys_mod, .windows_only = true },
         // NOTE: `win` is intentionally omitted from test_pkgs while the
         // VARIANT emitter gap is pending. A test-harness rooted at
@@ -1222,6 +1231,7 @@ pub fn build(b: *std.Build) void {
     });
     addGeneratedNamespaceImports(win_bundle_mod, bundle_namespaces[0..], bundle_mods[0..], null);
     win_mod.addImport("win-bundle", win_bundle_mod);
+    win_collections_mod.addImport("win", win_mod);
 
     if (host_is_windows) {
         const bundle_obj = b.addTest(.{
