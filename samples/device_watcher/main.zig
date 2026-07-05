@@ -1,75 +1,89 @@
-//! Port of `crates/samples/windows/device_watcher` — enumerates
-//! devices using WinRT `DeviceWatcher` with event callbacks.
+//! Port of `crates/samples/windows/samples/examples/device_watcher.rs`.
 //!
-//! Exercises: WinRT activation, COM delegate construction (cross-
-//! namespace `TypedEventHandler`), event registration via raw
-//! `add_Added` / `add_EnumerationCompleted` vtable slots.
+//! Exercises the full cross-namespace WinRT event-sugar path:
 //!
-//! Build:  `zig build device-watcher`
-//! Run:    `.\zig-out\bin\device-watcher.exe`
+//!   * `DeviceInformation.statics3().CreateWatcher()` creates a
+//!     `DeviceWatcher`.
+//!   * `IDeviceWatcher.addAdded` wires a Zig callback through
+//!     `win_core.Delegate` into
+//!     `Windows.Foundation.TypedEventHandler<DeviceWatcher, DeviceInformation>`.
+//!   * `IDeviceWatcher.addEnumerationCompleted` does the same for the
+//!     `TypedEventHandler<DeviceWatcher, object>` completion event.
+//!   * A Win32 event handle lets the sample wait until enumeration
+//!     completes instead of sleeping for a fixed duration.
+//!
+//! Build: `zig build`
+//! Run:   `zig build run-device-watcher`
 
 const std = @import("std");
 const win = @import("win");
+const win_sys = @import("win-sys");
 
 const core = win.core;
 const HRESULT = core.HRESULT;
-const GUID = core.GUID;
-const HSTRING = core.HSTRING;
-const Hstring = core.Hstring;
 
 const Devices = win.WinRT.Devices.Enumeration;
 const Foundation = win.WinRT.Foundation;
 
-/// TypedEventHandler<DeviceWatcher, DeviceInformation> Invoke signature.
-/// fn(this, sender: *DeviceWatcher, args: *DeviceInformation) -> HRESULT
-const AddedHandlerInvoke = fn (
-    this: *anyopaque,
-    sender: *anyopaque,
-    args: *anyopaque,
-) callconv(.winapi) HRESULT;
+const kernel32 = win_sys.project(.{
+    .@"Windows.Win32.System.Threading" = .{
+        "CreateEventW",
+        "SetEvent",
+        "WaitForSingleObject",
+    },
+    .@"Windows.Win32.Foundation" = .{"CloseHandle"},
+});
 
-/// TypedEventHandler<DeviceWatcher, object> Invoke for EnumerationCompleted.
-const CompletedHandlerInvoke = fn (
-    this: *anyopaque,
-    sender: *anyopaque,
-    args: *anyopaque,
-) callconv(.winapi) HRESULT;
+const WAIT_OBJECT_0: u32 = 0x0;
+const WAIT_TIMEOUT: u32 = 0x102;
 
-// IID for TypedEventHandler<DeviceWatcher, DeviceInformation>
-// {03c5a07b-990c-5d09-b0b8-5734eaa38222}
-const IID_AddedHandler = GUID.parse("03c5a07b-990c-5d09-b0b8-5734eaa38222");
+const AddedHandler = Foundation.TypedEventHandler__G2__Windows_Devices_Enumeration_DeviceWatcher__Windows_Devices_Enumeration_DeviceInformation;
+const CompletedHandler = Foundation.TypedEventHandler__G2__Windows_Devices_Enumeration_DeviceWatcher__object;
 
-// IID for TypedEventHandler<DeviceWatcher, object>
-// {9234630f-1ff4-54f6-9e3f-ac20369b7725}
-const IID_CompletedHandler = GUID.parse("9234630f-1ff4-54f6-9e3f-ac20369b7725");
+const Context = struct {
+    done_event: ?*anyopaque,
+    device_count: u32 = 0,
+};
 
 fn onDeviceAdded(
-    _: *anyopaque,
-    _: *anyopaque,
-    args: *anyopaque,
+    this: *const AddedHandler,
+    _: *Devices.DeviceWatcher,
+    args: *Devices.DeviceInformation,
 ) callconv(.winapi) HRESULT {
-    // args is *IDeviceInformation — read its Name property.
+    const D = core.Delegate(@TypeOf(onDeviceAdded), AddedHandler.IID);
+    const ctx_raw = D.userData(@ptrCast(@constCast(this))) orelse return core.hresult.S_OK;
+    const ctx: *Context = @ptrCast(@alignCast(ctx_raw));
+    ctx.device_count += 1;
+
     const info: *const Devices.IDeviceInformation = @ptrCast(@alignCast(args));
-    var name: HSTRING = null;
+    var name: core.HSTRING = null;
     const hr = info.get_Name(&name);
     if (hr < 0) return hr;
-    var owned = Hstring.fromRaw(name);
+    var owned = core.Hstring.fromRaw(name);
     defer owned.deinit();
 
     var utf8_buf: [512]u8 = undefined;
-    const n = std.unicode.utf16LeToUtf8(&utf8_buf, owned.slice()) catch 0;
-    if (n > 0) {
-        std.debug.print("{s}\n", .{utf8_buf[0..n]});
-    }
+    const n = std.unicode.utf16LeToUtf8(&utf8_buf, owned.slice()) catch {
+        std.debug.print("<device name too long>\n", .{});
+        return core.hresult.S_OK;
+    };
+    std.debug.print("{s}\n", .{utf8_buf[0..n]});
     return core.hresult.S_OK;
 }
 
 fn onEnumerationCompleted(
-    _: *anyopaque,
-    _: *anyopaque,
-    _: *anyopaque,
+    this: *const CompletedHandler,
+    _: *Devices.DeviceWatcher,
+    _: ?*const anyopaque,
 ) callconv(.winapi) HRESULT {
+    const D = core.Delegate(@TypeOf(onEnumerationCompleted), CompletedHandler.IID);
+    const ctx_raw = D.userData(@ptrCast(@constCast(this))) orelse return core.hresult.S_OK;
+    const ctx: *Context = @ptrCast(@alignCast(ctx_raw));
+
     std.debug.print("done!\n", .{});
+    if (ctx.done_event) |done_event| {
+        _ = kernel32.SetEvent(done_event);
+    }
     return core.hresult.S_OK;
 }
 
@@ -77,51 +91,45 @@ pub fn main() !void {
     try core.roInitialize(.multi_threaded);
     defer core.winrt.RoUninitialize();
 
-    const allocator = std.heap.page_allocator;
+    // The no-filter `CreateWatcher()` overload lives on
+    // `IDeviceInformationStatics`, which the generated class facade
+    // currently exposes as `.Statics3`.
+    const statics = try Devices.DeviceInformation.statics3();
+    defer statics.deinit();
 
-    // Get DeviceInformation statics and QI to IDeviceInformationStatics
-    // (which has CreateWatcher).
-    const statics2 = try Devices.DeviceInformation.statics();
-    defer statics2.deinit();
+    const statics_this: *const Devices.IDeviceInformationStatics =
+        @ptrCast(@alignCast(statics.ptr));
 
-    // QI for IDeviceInformationStatics (has CreateWatcher without filters).
-    var statics_ptr: ?*anyopaque = null;
-    try core.hresult.ok(statics2.vtbl().base.base.QueryInterface(
-        statics2.ptr,
-        &Devices.IDeviceInformationStatics.IID,
-        &statics_ptr,
-    ));
-    const statics: *const Devices.IDeviceInformationStatics = @ptrCast(@alignCast(statics_ptr.?));
-    defer _ = statics.Release();
-
-    // Create a DeviceWatcher.
     var watcher: *Devices.IDeviceWatcher = undefined;
-    try core.hresult.ok(statics.CreateWatcher(@ptrCast(&watcher)));
+    try core.hresult.ok(statics_this.CreateWatcher(@ptrCast(&watcher)));
     defer _ = watcher.Release();
 
-    // Register Added handler.
-    const AddedDelegate = core.Delegate(AddedHandlerInvoke, IID_AddedHandler);
-    const added_handler = try AddedDelegate.create(allocator, &onDeviceAdded, null);
-    var added_token: Foundation.EventRegistrationToken = undefined;
-    @memset(std.mem.asBytes(&added_token), 0);
-    try core.hresult.ok(watcher.add_Added(added_handler, &added_token));
-    _ = AddedDelegate.release(added_handler);
+    const done_event = kernel32.CreateEventW(null, 1, 0, null);
+    if (done_event == null) return error.CreateEventFailed;
+    defer _ = kernel32.CloseHandle(done_event);
 
-    // Register EnumerationCompleted handler.
-    const CompletedDelegate = core.Delegate(CompletedHandlerInvoke, IID_CompletedHandler);
-    const completed_handler = try CompletedDelegate.create(allocator, &onEnumerationCompleted, null);
-    var completed_token: Foundation.EventRegistrationToken = undefined;
-    @memset(std.mem.asBytes(&completed_token), 0);
-    try core.hresult.ok(watcher.add_EnumerationCompleted(completed_handler, &completed_token));
-    _ = CompletedDelegate.release(completed_handler);
+    const allocator = std.heap.page_allocator;
+    var ctx: Context = .{ .done_event = done_event };
 
-    // Start watching.
+    const added_token = try watcher.addAdded(allocator, &onDeviceAdded, &ctx);
+    defer watcher.removeAdded(added_token) catch {};
+
+    const completed_token = try watcher.addEnumerationCompleted(
+        allocator,
+        &onEnumerationCompleted,
+        &ctx,
+    );
+    defer watcher.removeEnumerationCompleted(completed_token) catch {};
+
     try core.hresult.ok(watcher.Start());
+    defer _ = watcher.Stop();
 
-    // Wait a few seconds for enumeration to complete.
-    std.debug.print("Enumerating devices for 5 seconds...\n", .{});
-    const Sleep = struct {
-        extern "kernel32" fn Sleep(dwMilliseconds: u32) callconv(.winapi) void;
-    }.Sleep;
-    Sleep(5000);
+    std.debug.print("Enumerating devices...\n", .{});
+    switch (kernel32.WaitForSingleObject(done_event, 10_000)) {
+        WAIT_OBJECT_0 => {},
+        WAIT_TIMEOUT => return error.EnumerationTimedOut,
+        else => return error.WaitFailed,
+    }
+
+    std.debug.print("Enumerated {d} device(s).\n", .{ctx.device_count});
 }

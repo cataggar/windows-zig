@@ -6,6 +6,11 @@ underpin virtually every modern Windows API. This document describes
 how the Zig projection bridges them with a minimal, safe helper in
 `win-core`.
 
+Issue #11 keeps that low-level `win_core.Async` surface intact and
+layers the richer `win-future` package on top for progress callbacks
+and blocking `join` / `when` composition. Native Zig async is still
+explicitly deferred.
+
 ## The four contracts
 
 All four extend `IAsyncInfo`, which provides:
@@ -164,10 +169,10 @@ The completion handler delegate is constructed via the same
 
 ## What's deferred
 
-- **Progress handlers.** `IAsyncActionWithProgress<P>` and
-  `IAsyncOperationWithProgress<T,P>` have a `put_Progress` method.
-  The blocking wait works for completion; progress callbacks are
-  deferred.
+- **Dedicated `win-core` progress sugar.** The low-level
+  `win_core.Async` helper remains completion-only; progress callback
+  registration now lives in the higher-level `win-future` package so
+  `win-core` can stay minimal and dependency-free.
 - **Cancellation tokens.** Callers can still call
   `IAsyncInfo.Cancel()` directly on the raw interface. A structured
   cancel-token abstraction is future work.
