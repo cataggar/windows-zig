@@ -38,6 +38,26 @@ This also fits the repo's broader "prefer Zig-native compile-time data
 when it keeps the codegen path simple" direction from
 `docs/comptime-vs-codegen.md`.
 
+## Current codegen wiring
+
+Issue #17's setter emitter reuses the existing `winbindgen` build-tool
+entry point, but keeps the reactor-specific logic under `tools/reactor/`.
+Running `zig build bindings` shells out to:
+
+```text
+winbindgen reactor-bindings --outdir <build-output>
+```
+
+and commits the generated setter glue to:
+
+```text
+tools/reactor/generated/generated_set_prop.zig
+```
+
+This keeps the WinMD loading / build-step plumbing in one place while
+leaving room for future reactor-specific emitters (for example event
+attacher glue) to land as sibling generated files in the same directory.
+
 ## Shape
 
 `tools/reactor/widget_manifest.zig` exports one constant:

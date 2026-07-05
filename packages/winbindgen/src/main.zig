@@ -10,6 +10,7 @@
 //! Usage:
 //!     winbindgen [--arch=x86|x64|arm64] <namespace>
 //!     winbindgen bundle --outdir <dir> [--arch=x86|x64|arm64] [--imports=relative|module] <namespace>...
+//!     winbindgen reactor-bindings --outdir <dir>
 //!     winbindgen --list
 //!
 //! `--list` prints every distinct namespace across the committed
@@ -26,6 +27,7 @@
 //! in later slices as they start to matter.
 
 const std = @import("std");
+const reactor_codegen = @import("reactor-codegen");
 const winbindgen = @import("winbindgen");
 const winmd = @import("winmd");
 
@@ -168,6 +170,21 @@ pub fn main(init: std.process.Init) !void {
     // routing happens within each metadata group.
     if (args.len >= 2 and std.mem.eql(u8, args[1], "bundle")) {
         try runBundle(
+            init.arena.allocator(),
+            gpa,
+            io,
+            args[2..],
+            stderr,
+        );
+        return;
+    }
+
+    // `reactor-bindings --outdir <dir>` emits the manifest-driven
+    // WinUI reactor glue that sits alongside the committed WinUI
+    // snapshot. Today that is `generated_set_prop.zig`; event
+    // attacher codegen can extend the same output directory later.
+    if (args.len >= 2 and std.mem.eql(u8, args[1], "reactor-bindings")) {
+        try runReactorBindings(
             init.arena.allocator(),
             gpa,
             io,
@@ -551,4 +568,64 @@ fn runBundle(
     // Suppress-unused-warning; gpa currently only needed for future
     // large-file buffers.
     _ = gpa;
+}
+
+fn runReactorBindings(
+    arena: std.mem.Allocator,
+    gpa: std.mem.Allocator,
+    io: std.Io,
+    args: []const []const u8,
+    stderr: *std.Io.Writer,
+) !void {
+    var outdir: ?[]const u8 = null;
+
+    var i: usize = 0;
+    while (i < args.len) : (i += 1) {
+        const a = args[i];
+        if (std.mem.startsWith(u8, a, "--outdir=")) {
+            outdir = a["--outdir=".len..];
+        } else if (std.mem.eql(u8, a, "--outdir")) {
+            i += 1;
+            if (i >= args.len) {
+                try stderr.writeAll("--outdir requires a path argument\n");
+                try stderr.flush();
+                std.process.exit(2);
+            }
+            outdir = args[i];
+        } else {
+            try stderr.writeAll(
+                \\usage: winbindgen reactor-bindings --outdir <dir>
+                \\
+            );
+            try stderr.flush();
+            std.process.exit(2);
+        }
+    }
+
+    const dir_path = outdir orelse {
+        try stderr.writeAll(
+            \\usage: winbindgen reactor-bindings --outdir <dir>
+            \\
+        );
+        try stderr.flush();
+        std.process.exit(2);
+    };
+
+    const bytes = loadMetadataBytes(arena, io, .winui_xaml) catch |err| {
+        try writeMetadataLoadError(stderr, .winui_xaml, err);
+        try stderr.flush();
+        std.process.exit(1);
+    };
+    var file = try winmd.parse(bytes);
+
+    var dir = try std.Io.Dir.cwd().createDirPathOpen(io, dir_path, .{});
+    defer dir.close(io);
+
+    var out_file = try dir.createFile(io, reactor_codegen.SetPropFileName, .{});
+    defer out_file.close(io);
+
+    var out_buf: [4096]u8 = undefined;
+    var out_writer = out_file.writer(io, &out_buf);
+    try reactor_codegen.emitSetPropFromManifest(&out_writer.interface, gpa, &file);
+    try out_writer.interface.flush();
 }

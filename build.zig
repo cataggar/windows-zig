@@ -1,8 +1,9 @@
 //! windows-zig top-level build script.
 //!
-//! Wires up the six in-tree packages (`winmd`, `win-core`, `winbindgen`,
-//! `win-sys`, `win`, `win-targets`), their unit tests, and the `bindings`
-//! step that regenerates `win-sys` / `win` sources from the vendored
+//! Wires up the eight in-tree packages (`winmd`, `win-core`, `winbindgen`,
+//! `win-sys`, `win`, `win-targets`, `reactor-manifest`, and
+//! `reactor-codegen`), their unit tests, and the `bindings` step that
+//! regenerates `win-sys` / `win` / reactor sources from the vendored
 //! `.winmd` metadata.
 //!
 //! Requires Zig 0.16.0 or newer.
@@ -96,6 +97,13 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
+    const reactor_codegen_mod = b.addModule("reactor-codegen", .{
+        .root_source_file = b.path("tools/reactor/codegen.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    reactor_codegen_mod.addImport("winmd", winmd_mod);
+
     // ------------------------------------------------------------------
     // Unit tests
     // ------------------------------------------------------------------
@@ -121,6 +129,7 @@ pub fn build(b: *std.Build) void {
         .{ .name = "winbindgen", .mod = winbindgen_mod },
         .{ .name = "win-targets", .mod = win_targets_mod },
         .{ .name = "reactor-manifest", .mod = reactor_manifest_mod },
+        .{ .name = "reactor-codegen", .mod = reactor_codegen_mod },
     };
 
     for (test_pkgs) |p| {
@@ -171,12 +180,12 @@ pub fn build(b: *std.Build) void {
     fetch_winui_metadata_step.dependOn(&run_fetch_winui_metadata.step);
 
     // ------------------------------------------------------------------
-    // `bindings` step — placeholder until winbindgen exposes a CLI.
+    // `bindings` step — refresh committed generated sources from winmd.
     // ------------------------------------------------------------------
 
     const bindings_step = b.step(
         "bindings",
-        "Regenerate win-sys and win sources from the vendored .winmd files",
+        "Regenerate win-sys, win, and reactor sources from the vendored .winmd files",
     );
 
     // ------------------------------------------------------------------
@@ -221,6 +230,13 @@ pub fn build(b: *std.Build) void {
         .root_source_file = b.path("vendor/winmd/Windows.Wdk.winmd"),
     });
 
+    const reactor_codegen_host_mod = b.createModule(.{
+        .root_source_file = b.path("tools/reactor/codegen.zig"),
+        .target = b.graph.host,
+        .optimize = optimize,
+    });
+    reactor_codegen_host_mod.addImport("winmd", winmd_host_mod);
+
     const winbindgen_main_mod = b.createModule(.{
         .root_source_file = b.path("packages/winbindgen/src/main.zig"),
         .target = b.graph.host,
@@ -228,6 +244,7 @@ pub fn build(b: *std.Build) void {
     });
     winbindgen_main_mod.addImport("winbindgen", winbindgen_host_mod);
     winbindgen_main_mod.addImport("winmd", winmd_host_mod);
+    winbindgen_main_mod.addImport("reactor-codegen", reactor_codegen_host_mod);
     winbindgen_main_mod.addAnonymousImport("Windows.winmd", .{
         .root_source_file = b.path("vendor/winmd/Windows.winmd"),
     });
@@ -676,6 +693,19 @@ pub fn build(b: *std.Build) void {
         "packages/win/src/generated/winui_bundle_deps.zig",
     );
     bindings_step.dependOn(&winui_bundle_update.step);
+
+    const reactor_bindings_run = b.addRunArtifact(winbindgen_exe);
+    reactor_bindings_run.step.dependOn(&run_fetch_winui_metadata.step);
+    reactor_bindings_run.addArg("reactor-bindings");
+    reactor_bindings_run.addArg("--outdir");
+    const reactor_bindings_outdir = reactor_bindings_run.addOutputDirectoryArg("reactor-bindings");
+
+    const reactor_bindings_update = b.addUpdateSourceFiles();
+    reactor_bindings_update.addCopyFileToSource(
+        reactor_bindings_outdir.path(b, "generated_set_prop.zig"),
+        "tools/reactor/generated/generated_set_prop.zig",
+    );
+    bindings_step.dependOn(&reactor_bindings_update.step);
 
     const run_winbindgen = b.addRunArtifact(winbindgen_exe);
     if (b.args) |user_args| run_winbindgen.addArgs(user_args);

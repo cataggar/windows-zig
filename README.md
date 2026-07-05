@@ -24,6 +24,8 @@ tools/
   bindings/src/*.txt   # filter manifests, ported from windows-rs's
                         # crates/tools/bindings/src — re-sync by hand when
                         # the Rust side's filters change
+  reactor/             # hand-authored widget manifest + generated
+                       # reactor glue (`zig build bindings`)
 vendor/
   winmd/               # vendored copies of the .winmd metadata files
                         # (Windows.winmd, Windows.Win32.winmd,
@@ -51,8 +53,9 @@ samples/               # end-to-end examples
 ```
 zig build            # build all packages
 zig build test       # run tests
-zig build bindings   # regenerate win-sys sidecars + WinUI snapshots
-                     # (auto-fetches WinUI metadata if needed)
+zig build bindings   # regenerate win-sys sidecars, WinUI snapshots,
+                     # and reactor glue (auto-fetches WinUI metadata
+                     # if needed)
 ```
 
 ## Two projection modes
