@@ -83,6 +83,12 @@ pub fn main(init: std.process.Init) !void {
     var out_dir = try cwd.openDir(io, out_dir_path, .{});
     defer out_dir.close(io);
 
+    if (try haveWantedFiles(io, out_dir)) {
+        try stderr.print("WinUI metadata already present under {s}; skipping download.\n", .{out_dir_path});
+        try stderr.flush();
+        return;
+    }
+
     // Stage the download + extraction inside a scratch directory so a
     // failed/partial run never leaves stray files next to the vendored
     // metadata, and so reruns start from a clean slate.
@@ -173,4 +179,14 @@ fn verifySha256(io: std.Io, gpa: std.mem.Allocator, dir: std.Io.Dir, path: []con
         );
         return error.ChecksumMismatch;
     }
+}
+
+fn haveWantedFiles(io: std.Io, out_dir: std.Io.Dir) !bool {
+    for (wanted_files) |wf| {
+        _ = out_dir.statFile(io, wf.dest_name, .{}) catch |err| switch (err) {
+            error.FileNotFound => return false,
+            else => return err,
+        };
+    }
+    return true;
 }

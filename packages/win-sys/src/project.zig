@@ -113,6 +113,11 @@ pub const structs = struct {
     /// §winbase.h. Projected from `Windows.Win32.Foundation.structs.zig`.
     pub const FILETIME = generated_structs.@"Windows.Win32.Foundation".FILETIME;
 
+    /// §pdh.h. Out-param of `PdhGetFormattedCounterValue`. For
+    /// `PDH_FMT_DOUBLE`, read `value.Anonymous.doubleValue`.
+    pub const PDH_FMT_COUNTERVALUE =
+        generated_structs.@"Windows.Win32.System.Performance".PDH_FMT_COUNTERVALUE;
+
     /// §minwinbase.h. Projected from
     /// `Windows.Win32.Storage.FileSystem.structs.zig`. Out-param
     /// of FindFirstFileW / FindNextFileW. cFileName has room for
@@ -139,6 +144,11 @@ pub const structs = struct {
     /// Anonymous struct inside SYSTEM_INFO_0. Re-exported for the
     /// same reason as `SYSTEM_INFO_0`.
     pub const SYSTEM_INFO_0_0 = SYSTEM_INFO_0.SYSTEM_INFO_0_0;
+
+    /// §threadpoolapiset.h. Callback environment used to associate
+    /// submissions with a private pool / cleanup group.
+    pub const TP_CALLBACK_ENVIRON_V3 =
+        generated_structs.@"Windows.Win32.System.Threading".TP_CALLBACK_ENVIRON_V3;
 
     /// §winuser.h. Projected from
     /// `Windows.Win32.UI.WindowsAndMessaging.structs.zig`. Passed by
