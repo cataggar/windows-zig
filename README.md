@@ -53,6 +53,15 @@ zig build test       # run tests
 zig build bindings   # regenerate win-sys / win sources
 ```
 
+## Design docs
+
+- [WinRT — v0.2 changelog](docs/winrt-v02-scope.md)
+- [Codegen vs comptime projection](docs/comptime-vs-codegen.md)
+- [Parameterised IIDs for closed WinRT generics](docs/parameterised-iids.md)
+- [Generic delegates and add/remove-handler sugar](docs/generic-delegates.md)
+- [Async bridge — blocking wait for WinRT async contracts](docs/async-bridge.md)
+- [Windows reactor port findings](docs/windows-reactor-port.md)
+
 ## Two projection modes
 
 1. **Codegen** — `zig build bindings` writes `.zig` sources under
@@ -66,4 +75,3 @@ zig build bindings   # regenerate win-sys / win sources
 
 Licensed under either of [MIT license](license-mit) or
 [Apache License, Version 2.0](license-apache-2.0) at your option.
-
