@@ -47,13 +47,16 @@ Fetch them with:
 zig build fetch-winui-metadata
 ```
 
+`zig build bindings` also invokes that step automatically before
+emitting the WinUI snapshot files under `packages/win/src/generated/`.
+
 This downloads `Microsoft.WindowsAppSDK.WinUI.2.2.1.nupkg` from
 nuget.org, verifies it against a sha256 pinned in
 `tools/fetch-winui-metadata/main.zig`, extracts
 `metadata/Microsoft.UI.Xaml.winmd` and `metadata/Microsoft.UI.Text.winmd`,
-and writes them here. Anyone building `win-sys`/`win` bindings for WinUI3
-types needs to run this once; it is not part of the default `zig build`
-graph.
+and writes them here. The helper is idempotent: once the two `.winmd`
+files are already present it prints a short "skipping download" message
+instead of hitting the network again.
 
 To bump the version: update `package_version` and `expected_sha256` in
 `tools/fetch-winui-metadata/main.zig` together (recompute the sha256 of the

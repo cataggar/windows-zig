@@ -1,17 +1,33 @@
 //! windows-zig top-level build script.
 //!
-//! Wires up the six in-tree packages (`winmd`, `win-core`, `winbindgen`,
-//! `win-sys`, `win`, `win-targets`), their unit tests, and the `bindings`
-//! step that regenerates `win-sys` / `win` sources from the vendored
-//! `.winmd` metadata.
+//! Wires up the in-tree packages (`winmd`, `win-core`, `win-numerics`,
+//! `win-time`, `win-threading`, `win-reference`, `win-future`,
+//! `win-collections`, `win-reactor`, `winbindgen`, `win-sys`, `win`,
+//! `win-targets`, `reactor-manifest`, `reactor-codegen`), their unit
+//! tests, and the `bindings` step that regenerates `win-sys` / `win` /
+//! reactor sources from the vendored `.winmd` metadata.
 //!
 //! Requires Zig 0.16.0 or newer.
 
 const std = @import("std");
+const bundle_artifacts = @import("packages/winbindgen/src/bundle_artifacts.zig");
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
+    const arch_flag: ?[]const u8 = switch (target.result.cpu.arch) {
+        .x86 => "--arch=x86",
+        .x86_64 => "--arch=x64",
+        .aarch64 => "--arch=arm64",
+        else => null,
+    };
+    const host_target = b.graph.host.result;
+    const host_is_windows = b.graph.host.result.os.tag == .windows;
+    const host_runs_target =
+        target.result.os.tag == host_target.os.tag and
+        target.result.cpu.arch == host_target.cpu.arch and
+        target.result.abi == host_target.abi;
+    const native_windows_target = host_is_windows and host_runs_target;
 
     // ------------------------------------------------------------------
     // Modules (one per package). These are kept minimal until the package
@@ -46,10 +62,35 @@ pub fn build(b: *std.Build) void {
     // `HSTRING` helpers and WinRT activation. Link the corresponding
     // import libs on Windows targets.
     if (target.result.os.tag == .windows) {
+        win_core_mod.linkSystemLibrary("ole32", .{});
         win_core_mod.linkSystemLibrary("oleaut32", .{});
         win_core_mod.linkSystemLibrary("api-ms-win-core-winrt-string-l1-1-0", .{});
         win_core_mod.linkSystemLibrary("api-ms-win-core-winrt-l1-1-0", .{});
     }
+
+    const win_numerics_mod = b.addModule("win-numerics", .{
+        .root_source_file = b.path("packages/win-numerics/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+
+    const win_future_mod = b.addModule("win-future", .{
+        .root_source_file = b.path("packages/win-future/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    win_future_mod.addImport("win-core", win_core_mod);
+    win_future_mod.addImport("winmd", winmd_mod);
+    win_future_mod.addAnonymousImport("Windows.winmd", .{
+        .root_source_file = b.path("vendor/winmd/Windows.winmd"),
+    });
+
+    const win_collections_mod = b.addModule("win-collections", .{
+        .root_source_file = b.path("packages/win-collections/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    win_collections_mod.addImport("win-core", win_core_mod);
 
     const winbindgen_mod = b.addModule("winbindgen", .{
         .root_source_file = b.path("packages/winbindgen/src/root.zig"),
@@ -76,12 +117,33 @@ pub fn build(b: *std.Build) void {
     });
     win_sys_mod.addImport("win-core", win_core_mod);
 
+    const win_time_mod = b.addModule("win-time", .{
+        .root_source_file = b.path("packages/win-time/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    win_time_mod.addImport("win-sys", win_sys_mod);
+    if (target.result.os.tag == .windows) {
+        win_time_mod.linkSystemLibrary("kernel32", .{});
+    }
+
+    const win_threading_mod = b.addModule("win-threading", .{
+        .root_source_file = b.path("packages/win-threading/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    win_threading_mod.addImport("win-sys", win_sys_mod);
+    if (target.result.os.tag == .windows) {
+        win_threading_mod.linkSystemLibrary("kernel32", .{});
+    }
+
     const win_mod = b.addModule("win", .{
         .root_source_file = b.path("packages/win/src/root.zig"),
         .target = target,
         .optimize = optimize,
     });
     win_mod.addImport("win-core", win_core_mod);
+    win_mod.addImport("win-future", win_future_mod);
     win_mod.addImport("win-sys", win_sys_mod);
 
     const win_targets_mod = b.addModule("win-targets", .{
@@ -89,6 +151,25 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
+
+    const win_reactor_mod = b.addModule("win-reactor", .{
+        .root_source_file = b.path("packages/win-reactor/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+
+    const reactor_manifest_mod = b.addModule("reactor-manifest", .{
+        .root_source_file = b.path("tools/reactor/manifest.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+
+    const reactor_codegen_mod = b.addModule("reactor-codegen", .{
+        .root_source_file = b.path("tools/reactor/codegen.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    reactor_codegen_mod.addImport("winmd", winmd_mod);
 
     // ------------------------------------------------------------------
     // Unit tests
@@ -104,7 +185,13 @@ pub fn build(b: *std.Build) void {
     const test_pkgs = [_]TestPkg{
         .{ .name = "winmd", .mod = winmd_mod },
         .{ .name = "win-core", .mod = win_core_mod },
+        .{ .name = "win-numerics", .mod = win_numerics_mod },
+        .{ .name = "win-future", .mod = win_future_mod },
+        .{ .name = "win-collections", .mod = win_collections_mod, .windows_only = true },
         .{ .name = "win-sys", .mod = win_sys_mod, .windows_only = true },
+        .{ .name = "win-time", .mod = win_time_mod, .windows_only = true },
+        .{ .name = "win-threading", .mod = win_threading_mod, .windows_only = true },
+        .{ .name = "win-reactor", .mod = win_reactor_mod },
         // NOTE: `win` is intentionally omitted from test_pkgs while the
         // VARIANT emitter gap is pending. A test-harness rooted at
         // `win/root.zig` analyzes `Com`'s pub decls, some of which
@@ -114,13 +201,16 @@ pub fn build(b: *std.Build) void {
         // and by consumer samples like `com_uri`.
         .{ .name = "winbindgen", .mod = winbindgen_mod },
         .{ .name = "win-targets", .mod = win_targets_mod },
+        .{ .name = "reactor-manifest", .mod = reactor_manifest_mod },
+        .{ .name = "reactor-codegen", .mod = reactor_codegen_mod },
     };
 
     for (test_pkgs) |p| {
-        // win-sys tests call `project()` which emits `@extern(..., library_name="KERNEL32", ...)`
-        // — that cannot link against a native Linux target. Cross coverage
-        // for win-sys already happens via `compile-check-bundle-*` below.
-        if (p.windows_only and target.result.os.tag != .windows) continue;
+        // win-sys / win-time / win-threading tests call `project()` which
+        // emits `@extern(..., library_name="KERNEL32", ...)` — that cannot
+        // link against a native Linux target. Cross coverage for win-sys
+        // already happens via `compile-check-bundle-*` below.
+        if (p.windows_only and !native_windows_target) continue;
         const t = b.addTest(.{
             .name = b.fmt("test-{s}", .{p.name}),
             .root_module = p.mod,
@@ -137,8 +227,10 @@ pub fn build(b: *std.Build) void {
     // Microsoft's proprietary Windows App SDK license, so — mirroring how
     // windows-rs itself never commits `.winmd` to git — they're fetched on
     // demand rather than checked into source control (see
-    // `vendor/winmd/README` and `.gitignore`). Not part of the default
-    // `zig build` graph; run explicitly with `zig build fetch-winui-metadata`.
+    // `vendor/winmd/README` and `.gitignore`). Exposed as an explicit
+    // `zig build fetch-winui-metadata` step, and also wired into
+    // `zig build bindings`'s WinUI snapshot generation so the first
+    // WinUI codegen run self-stages the metadata.
     // Must run on the host regardless of any user-supplied `-Dtarget`.
     // ------------------------------------------------------------------
 
@@ -162,12 +254,50 @@ pub fn build(b: *std.Build) void {
     fetch_winui_metadata_step.dependOn(&run_fetch_winui_metadata.step);
 
     // ------------------------------------------------------------------
-    // `bindings` step — placeholder until winbindgen exposes a CLI.
+    // `stage-winui-runtime` step — copies the framework-dependent
+    // Windows App Runtime bootstrap assets next to `zig-out/bin/*.exe`.
+    //
+    // Mirrors `windows-reactor-setup::as_framework_dependent()` from the
+    // sibling `windows-rs` checkout: stage
+    // `Microsoft.WindowsAppRuntime.Bootstrap.dll` plus `resources.pri`
+    // so unpackaged WinUI 3 samples can be run directly from
+    // `zig-out/bin/`.
+    // ------------------------------------------------------------------
+
+    const stage_winui_runtime_mod = b.createModule(.{
+        .root_source_file = b.path("tools/stage-winui-runtime/main.zig"),
+        .target = b.graph.host,
+        .optimize = optimize,
+    });
+    const stage_winui_runtime_exe = b.addExecutable(.{
+        .name = "stage-winui-runtime",
+        .root_module = stage_winui_runtime_mod,
+    });
+    const run_stage_winui_runtime = b.addRunArtifact(stage_winui_runtime_exe);
+    run_stage_winui_runtime.has_side_effects = true;
+    run_stage_winui_runtime.addArg("--dest-dir");
+    run_stage_winui_runtime.addArg(b.getInstallPath(.bin, ""));
+    run_stage_winui_runtime.addArg("--arch");
+    run_stage_winui_runtime.addArg(switch (target.result.cpu.arch) {
+        .x86 => "x86",
+        .x86_64 => "x64",
+        .aarch64 => "arm64",
+        else => @panic("unsupported Windows App Runtime bootstrap architecture"),
+    });
+    const stage_winui_runtime_step = b.step(
+        "stage-winui-runtime",
+        "Copy Microsoft.WindowsAppRuntime.Bootstrap.dll and resources.pri into zig-out/bin/",
+    );
+    stage_winui_runtime_step.dependOn(&run_stage_winui_runtime.step);
+
+    // ------------------------------------------------------------------
+    // `bindings` step — refresh committed generated sources from winmd.
+    // ------------------------------------------------------------------
     // ------------------------------------------------------------------
 
     const bindings_step = b.step(
         "bindings",
-        "Regenerate win-sys and win sources from the vendored .winmd files",
+        "Regenerate win-sys, win, and reactor sources from the vendored .winmd files",
     );
 
     // ------------------------------------------------------------------
@@ -212,6 +342,13 @@ pub fn build(b: *std.Build) void {
         .root_source_file = b.path("vendor/winmd/Windows.Wdk.winmd"),
     });
 
+    const reactor_codegen_host_mod = b.createModule(.{
+        .root_source_file = b.path("tools/reactor/codegen.zig"),
+        .target = b.graph.host,
+        .optimize = optimize,
+    });
+    reactor_codegen_host_mod.addImport("winmd", winmd_host_mod);
+
     const winbindgen_main_mod = b.createModule(.{
         .root_source_file = b.path("packages/winbindgen/src/main.zig"),
         .target = b.graph.host,
@@ -219,6 +356,7 @@ pub fn build(b: *std.Build) void {
     });
     winbindgen_main_mod.addImport("winbindgen", winbindgen_host_mod);
     winbindgen_main_mod.addImport("winmd", winmd_host_mod);
+    winbindgen_main_mod.addImport("reactor-codegen", reactor_codegen_host_mod);
     winbindgen_main_mod.addAnonymousImport("Windows.winmd", .{
         .root_source_file = b.path("vendor/winmd/Windows.winmd"),
     });
@@ -638,6 +776,49 @@ pub fn build(b: *std.Build) void {
     );
     bindings_step.dependOn(&mod_update.step);
 
+    // Bindings-only WinUI snapshot: emit the two starter namespaces
+    // requested by `tools/bindings/src/winui.txt` using module-style
+    // imports and commit the generated Zig so #3 can catalog any
+    // remaining opaque placeholders without first teaching the runtime
+    // bundle about every transitive Windows App SDK dependency.
+    const winui_bundle_run = b.addRunArtifact(winbindgen_exe);
+    winui_bundle_run.step.dependOn(&run_fetch_winui_metadata.step);
+    winui_bundle_run.addArg("bundle");
+    winui_bundle_run.addArg("--arch=x64");
+    winui_bundle_run.addArg("--imports=module");
+    winui_bundle_run.addArg("--outdir");
+    const winui_bundle_outdir = winui_bundle_run.addOutputDirectoryArg("winui-bundle");
+    winui_bundle_run.addArg("Microsoft.UI.Xaml");
+    winui_bundle_run.addArg("Microsoft.UI.Xaml.Controls");
+
+    const winui_bundle_update = b.addUpdateSourceFiles();
+    winui_bundle_update.addCopyFileToSource(
+        winui_bundle_outdir.path(b, "Microsoft.UI.Xaml.zig"),
+        "packages/win/src/generated/Microsoft.UI.Xaml.zig",
+    );
+    winui_bundle_update.addCopyFileToSource(
+        winui_bundle_outdir.path(b, "Microsoft.UI.Xaml.Controls.zig"),
+        "packages/win/src/generated/Microsoft.UI.Xaml.Controls.zig",
+    );
+    winui_bundle_update.addCopyFileToSource(
+        winui_bundle_outdir.path(b, "win_bundle_deps.zig"),
+        "packages/win/src/generated/winui_bundle_deps.zig",
+    );
+    bindings_step.dependOn(&winui_bundle_update.step);
+
+    const reactor_bindings_run = b.addRunArtifact(winbindgen_exe);
+    reactor_bindings_run.step.dependOn(&run_fetch_winui_metadata.step);
+    reactor_bindings_run.addArg("reactor-bindings");
+    reactor_bindings_run.addArg("--outdir");
+    const reactor_bindings_outdir = reactor_bindings_run.addOutputDirectoryArg("reactor-bindings");
+
+    const reactor_bindings_update = b.addUpdateSourceFiles();
+    reactor_bindings_update.addCopyFileToSource(
+        reactor_bindings_outdir.path(b, "generated_set_prop.zig"),
+        "tools/reactor/generated/generated_set_prop.zig",
+    );
+    bindings_step.dependOn(&reactor_bindings_update.step);
+
     const run_winbindgen = b.addRunArtifact(winbindgen_exe);
     if (b.args) |user_args| run_winbindgen.addArgs(user_args);
     const run_step = b.step("run", "Run the winbindgen CLI (pass args with `--`)");
@@ -727,12 +908,38 @@ pub fn build(b: *std.Build) void {
         "Windows.Win32.Foundation",
     };
 
-    const arch_flag: ?[]const u8 = switch (target.result.cpu.arch) {
-        .x86 => "--arch=x86",
-        .x86_64 => "--arch=x64",
-        .aarch64 => "--arch=arm64",
-        else => null,
-    };
+    const win_reference_mod = b.addModule("win-reference", .{
+        .root_source_file = b.path("packages/win-reference/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    win_reference_mod.addImport("win-core", win_core_mod);
+    win_reference_mod.addImport("win", win_mod);
+    if (target.result.os.tag == .windows) {
+        win_reference_mod.linkSystemLibrary("ole32", .{});
+    }
+
+    for (test_pkgs) |p| {
+        // win-sys tests call `project()` which emits `@extern(..., library_name="KERNEL32", ...)`
+        // — that cannot link against a native Linux target. Cross coverage
+        // for win-sys already happens via `compile-check-bundle-*` below.
+        if (p.windows_only and !native_windows_target) continue;
+        const t = b.addTest(.{
+            .name = b.fmt("test-{s}", .{p.name}),
+            .root_module = p.mod,
+        });
+        const run_t = b.addRunArtifact(t);
+        test_step.dependOn(&run_t.step);
+    }
+
+    if (native_windows_target) {
+        const t = b.addTest(.{
+            .name = "test-win-reference",
+            .root_module = win_reference_mod,
+        });
+        const run_t = b.addRunArtifact(t);
+        test_step.dependOn(&run_t.step);
+    }
 
     // The native `gen_obj` / `bundle_obj` checks below link against real
     // Windows system libraries (kernel32, ntdll, oleaut32, ...) and execute
@@ -740,9 +947,7 @@ pub fn build(b: *std.Build) void {
     // Windows. On non-Windows hosts we still get full coverage via the
     // per-arch cross loop further down (compile-only against x86/x64/arm64
     // Windows targets). Skip the host-linked checks when cross-compiling.
-    const host_is_windows = target.result.os.tag == .windows;
-
-    if (host_is_windows) {
+    if (native_windows_target) {
         for (compile_check_namespaces) |ns| {
             const gen_run = b.addRunArtifact(winbindgen_exe);
             if (arch_flag) |f| gen_run.addArg(f);
@@ -1214,7 +1419,7 @@ pub fn build(b: *std.Build) void {
         addGeneratedNamespaceImports(ns_mod, bundle_namespaces[0..], bundle_mods[0..], i);
     }
 
-    const win_bundle_root = bundle_outdir.path(b, "win_bundle.zig");
+    const win_bundle_root = bundle_outdir.path(b, bundle_artifacts.BundleFacadeFileName);
     const win_bundle_mod = b.createModule(.{
         .root_source_file = win_bundle_root,
         .target = target,
@@ -1222,8 +1427,9 @@ pub fn build(b: *std.Build) void {
     });
     addGeneratedNamespaceImports(win_bundle_mod, bundle_namespaces[0..], bundle_mods[0..], null);
     win_mod.addImport("win-bundle", win_bundle_mod);
+    win_collections_mod.addImport("win", win_mod);
 
-    if (host_is_windows) {
+    if (native_windows_target) {
         const bundle_obj = b.addTest(.{
             .name = "compile-check-bundle",
             .root_module = win_bundle_mod,
@@ -1294,7 +1500,7 @@ pub fn build(b: *std.Build) void {
         }
 
         const cross_bundle_mod = b.createModule(.{
-            .root_source_file = cross_bundle_outdir.path(b, "win_bundle.zig"),
+            .root_source_file = cross_bundle_outdir.path(b, bundle_artifacts.BundleFacadeFileName),
             .target = cross_target,
             .optimize = optimize,
         });
@@ -1337,6 +1543,13 @@ pub fn build(b: *std.Build) void {
         // pay the analysis cost of pulling in the full classic-COM
         // surface (`Com`, `Foundation`, ...).
         needs_win: bool = false,
+        // If true, `run-<name>` executes the installed `zig-out/bin`
+        // copy instead of the build-cache artifact. Needed when the
+        // sample relies on adjacent runtime assets staged into
+        // `zig-out/bin/`.
+        run_installed: bool = false,
+        // If true, `run-<name>` depends on `stage-winui-runtime`.
+        needs_staged_winui_runtime: bool = false,
     };
     const samples = [_]Sample{
         .{ .name = "last-error", .root = "samples/last_error/main.zig" },
@@ -1421,6 +1634,24 @@ pub fn build(b: *std.Build) void {
             .needs_win = true,
         },
         .{
+            .name = "winui-minimal-bindings",
+            .root = "samples/winui_minimal_bindings/main.zig",
+            .needs_win = true,
+        },
+        .{
+            .name = "winrt-future",
+            .root = "samples/winrt_future/main.zig",
+            .needs_win = true,
+        },
+        .{
+            .name = "hello-window",
+            .root = "samples/hello_window/main.zig",
+            .extra_libs = &.{"user32"},
+            .needs_win = true,
+            .run_installed = true,
+            .needs_staged_winui_runtime = true,
+        },
+        .{
             .name = "message-box",
             .root = "samples/message_box/main.zig",
         },
@@ -1443,6 +1674,12 @@ pub fn build(b: *std.Build) void {
             .extra_libs = &.{ "user32", "CoreMessaging" },
             .needs_win = true,
         },
+        .{
+            .name = "direct2d-clock",
+            .root = "samples/direct2d_clock/main.zig",
+            .extra_libs = &.{ "user32", "ole32", "d2d1", "d3d11", "dxgi" },
+            .needs_win = true,
+        },
     };
 
     for (samples) |s| {
@@ -1451,9 +1688,12 @@ pub fn build(b: *std.Build) void {
             .target = target,
             .optimize = optimize,
         });
+        addGeneratedNamespaceImports(sample_mod, bundle_namespaces[0..], bundle_mods[0..], null);
         sample_mod.addImport("win-sys", win_sys_mod);
+        sample_mod.addImport("win-future", win_future_mod);
         if (s.needs_win) {
             sample_mod.addImport("win", win_mod);
+            addGeneratedNamespaceImports(sample_mod, bundle_namespaces[0..], bundle_mods[0..], null);
         }
         // Every current sample needs kernel32 (last-error). Keeping the
         // link here rather than in `win-sys` mirrors what a downstream
@@ -1485,14 +1725,27 @@ pub fn build(b: *std.Build) void {
         });
         const install_sample = b.addInstallArtifact(sample_exe, .{});
         samples_step.dependOn(&install_sample.step);
-
-        const run_sample = b.addRunArtifact(sample_exe);
-        run_sample.step.dependOn(&install_sample.step);
         const sample_run_step = b.step(
             b.fmt("run-{s}", .{s.name}),
             b.fmt("Build and run the `{s}` sample", .{s.name}),
         );
-        sample_run_step.dependOn(&run_sample.step);
+        if (s.run_installed) {
+            const installed_exe = b.getInstallPath(
+                .bin,
+                b.fmt("{s}{s}", .{ s.name, target.result.exeFileExt() }),
+            );
+            const run_sample = b.addSystemCommand(&.{installed_exe});
+            if (b.args) |user_args| run_sample.addArgs(user_args);
+            run_sample.step.dependOn(&install_sample.step);
+            if (s.needs_staged_winui_runtime) {
+                run_sample.step.dependOn(stage_winui_runtime_step);
+            }
+            sample_run_step.dependOn(&run_sample.step);
+        } else {
+            const run_sample = b.addRunArtifact(sample_exe);
+            run_sample.step.dependOn(&install_sample.step);
+            sample_run_step.dependOn(&run_sample.step);
+        }
     }
 
     // Make `zig build test` also compile every sample, so low-level
@@ -1504,7 +1757,7 @@ pub fn build(b: *std.Build) void {
     // `@extern(..., .{ .library_name = ... })` cannot resolve Windows
     // DLLs on a Linux target. Linux test coverage still compiles every
     // namespace via the `compile-check-bundle-*` cross loop above.
-    if (host_is_windows) {
+    if (native_windows_target) {
         test_step.dependOn(samples_step);
     }
 
@@ -1522,7 +1775,7 @@ pub fn build(b: *std.Build) void {
     // `@extern` reason as samples.
     // ------------------------------------------------------------------
     const bench_step = b.step("bench", "Compile the Phase 4 comptime-projection benchmark");
-    if (host_is_windows) {
+    if (native_windows_target) {
         const bench_mod = b.createModule(.{
             .root_source_file = b.path("benches/project_bench/main.zig"),
             .target = target,

@@ -41,6 +41,8 @@ pub const index = struct {
         @import("generated/Windows.Win32.Foundation.index.zig");
     pub const @"Windows.Win32.System.LibraryLoader" =
         @import("generated/Windows.Win32.System.LibraryLoader.index.zig");
+    pub const @"Windows.Win32.System.Performance" =
+        @import("generated/Windows.Win32.System.Performance.index.zig");
     pub const @"Windows.Win32.System.Threading" =
         @import("generated/Windows.Win32.System.Threading.index.zig");
     pub const @"Windows.Win32.System.Console" =
@@ -85,6 +87,16 @@ test "prebuilt index: Windows.Win32.Foundation has SysAllocString" {
         @as(?@TypeOf(rec.?), null),
         index.@"Windows.Win32.Foundation".method_def_by_name.get("NotARealApi"),
     );
+}
+
+test "prebuilt index: Windows.Win32.System.Performance has PdhOpenQueryW" {
+    const std = @import("std");
+
+    const rec = comptime index.@"Windows.Win32.System.Performance"
+        .method_def_by_name.get("PdhOpenQueryW");
+    try std.testing.expect(rec != null);
+    try std.testing.expectEqualStrings("pdh", rec.?.library);
+    try std.testing.expectEqualStrings("PdhOpenQueryW", rec.?.import);
 }
 
 test "prebuilt index: resolveTypeRef maps SysAllocString return's BSTR coded index" {
