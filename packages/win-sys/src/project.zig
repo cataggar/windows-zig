@@ -145,6 +145,11 @@ pub const structs = struct {
     /// same reason as `SYSTEM_INFO_0`.
     pub const SYSTEM_INFO_0_0 = SYSTEM_INFO_0.SYSTEM_INFO_0_0;
 
+    /// §threadpoolapiset.h. Callback environment used to associate
+    /// submissions with a private pool / cleanup group.
+    pub const TP_CALLBACK_ENVIRON_V3 =
+        generated_structs.@"Windows.Win32.System.Threading".TP_CALLBACK_ENVIRON_V3;
+
     /// §winuser.h. Projected from
     /// `Windows.Win32.UI.WindowsAndMessaging.structs.zig`. Passed by
     /// pointer to `RegisterClassA`. `lpfnWndProc` is a delegate-typed
