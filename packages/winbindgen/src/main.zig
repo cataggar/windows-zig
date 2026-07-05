@@ -181,8 +181,8 @@ pub fn main(init: std.process.Init) !void {
 
     // `reactor-bindings --outdir <dir>` emits the manifest-driven
     // WinUI reactor glue that sits alongside the committed WinUI
-    // snapshot. Today that is `generated_set_prop.zig`; event
-    // attacher codegen can extend the same output directory later.
+    // snapshot. Today that includes both `generated_set_prop.zig`
+    // and `generated_attach_event.zig`.
     if (args.len >= 2 and std.mem.eql(u8, args[1], "reactor-bindings")) {
         try runReactorBindings(
             init.arena.allocator(),
@@ -621,11 +621,23 @@ fn runReactorBindings(
     var dir = try std.Io.Dir.cwd().createDirPathOpen(io, dir_path, .{});
     defer dir.close(io);
 
-    var out_file = try dir.createFile(io, reactor_codegen.SetPropFileName, .{});
-    defer out_file.close(io);
+    {
+        var out_file = try dir.createFile(io, reactor_codegen.SetPropFileName, .{});
+        defer out_file.close(io);
 
-    var out_buf: [4096]u8 = undefined;
-    var out_writer = out_file.writer(io, &out_buf);
-    try reactor_codegen.emitSetPropFromManifest(&out_writer.interface, gpa, &file);
-    try out_writer.interface.flush();
+        var out_buf: [4096]u8 = undefined;
+        var out_writer = out_file.writer(io, &out_buf);
+        try reactor_codegen.emitSetPropFromManifest(&out_writer.interface, gpa, &file);
+        try out_writer.interface.flush();
+    }
+
+    {
+        var out_file = try dir.createFile(io, reactor_codegen.AttachEventFileName, .{});
+        defer out_file.close(io);
+
+        var out_buf: [4096]u8 = undefined;
+        var out_writer = out_file.writer(io, &out_buf);
+        try reactor_codegen.emitAttachEventFromManifest(&out_writer.interface, gpa, &file);
+        try out_writer.interface.flush();
+    }
 }

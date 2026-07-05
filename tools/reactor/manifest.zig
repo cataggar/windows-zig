@@ -222,7 +222,7 @@ test "production manifest covers the initial widget set" {
     var manifest = try load(std.testing.allocator);
     defer manifest.deinit();
 
-    try std.testing.expectEqual(@as(usize, 5), manifest.widgets.len);
+    try std.testing.expectEqual(@as(usize, 6), manifest.widgets.len);
 
     const application = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Application") orelse return error.TestUnexpectedResult;
     try std.testing.expectEqual(@as(usize, 0), application.props.len);
@@ -239,6 +239,16 @@ test "production manifest covers the initial widget set" {
     const text = findProp(text_block, "Text") orelse return error.TestUnexpectedResult;
     try std.testing.expectEqualStrings("text", text.field);
     try std.testing.expect(text.value.? == .string);
+
+    const text_box = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.TextBox") orelse return error.TestUnexpectedResult;
+    try std.testing.expectEqual(@as(usize, 0), text_box.props.len);
+    const text_changed = findEvent(text_box, "TextChanged") orelse return error.TestUnexpectedResult;
+    try std.testing.expectEqualStrings("on_text_changed", text_changed.field);
+    try std.testing.expect(text_changed.payload.? == .string);
+    switch (text_changed.source) {
+        .sender_property => |name| try std.testing.expectEqualStrings("Text", name),
+        else => return error.TestUnexpectedResult,
+    }
 
     const button = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.Button") orelse return error.TestUnexpectedResult;
     const content = findProp(button, "Content") orelse return error.TestUnexpectedResult;
