@@ -113,6 +113,11 @@ pub const structs = struct {
     /// §winbase.h. Projected from `Windows.Win32.Foundation.structs.zig`.
     pub const FILETIME = generated_structs.@"Windows.Win32.Foundation".FILETIME;
 
+    /// §pdh.h. Out-param of `PdhGetFormattedCounterValue`. For
+    /// `PDH_FMT_DOUBLE`, read `value.Anonymous.doubleValue`.
+    pub const PDH_FMT_COUNTERVALUE =
+        generated_structs.@"Windows.Win32.System.Performance".PDH_FMT_COUNTERVALUE;
+
     /// §minwinbase.h. Projected from
     /// `Windows.Win32.Storage.FileSystem.structs.zig`. Out-param
     /// of FindFirstFileW / FindNextFileW. cFileName has room for

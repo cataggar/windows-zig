@@ -1,13 +1,14 @@
 //! windows-zig top-level build script.
 //!
-//! Wires up the seven in-tree packages (`winmd`, `win-core`, `winbindgen`,
-//! `win-sys`, `win-time`, `win`, `win-targets`), their unit tests, and
-//! the `bindings` step that regenerates `win-sys` / `win` sources from
-//! the vendored `.winmd` metadata.
+//! Wires up the in-tree packages (`winmd`, `win-core`, `win-numerics`,
+//! `win-time`, `winbindgen`, `win-sys`, `win`, `win-targets`),
+//! their unit tests, and the `bindings` step that regenerates `win-sys`
+//! / `win` sources from the vendored `.winmd` metadata.
 //!
 //! Requires Zig 0.16.0 or newer.
 
 const std = @import("std");
+const bundle_artifacts = @import("packages/winbindgen/src/bundle_artifacts.zig");
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
@@ -50,6 +51,12 @@ pub fn build(b: *std.Build) void {
         win_core_mod.linkSystemLibrary("api-ms-win-core-winrt-string-l1-1-0", .{});
         win_core_mod.linkSystemLibrary("api-ms-win-core-winrt-l1-1-0", .{});
     }
+
+    const win_numerics_mod = b.addModule("win-numerics", .{
+        .root_source_file = b.path("packages/win-numerics/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
 
     const winbindgen_mod = b.addModule("winbindgen", .{
         .root_source_file = b.path("packages/winbindgen/src/root.zig"),
@@ -114,6 +121,7 @@ pub fn build(b: *std.Build) void {
     const test_pkgs = [_]TestPkg{
         .{ .name = "winmd", .mod = winmd_mod },
         .{ .name = "win-core", .mod = win_core_mod },
+        .{ .name = "win-numerics", .mod = win_numerics_mod },
         .{ .name = "win-sys", .mod = win_sys_mod, .windows_only = true },
         .{ .name = "win-time", .mod = win_time_mod, .windows_only = true },
         // NOTE: `win` is intentionally omitted from test_pkgs while the
@@ -1225,7 +1233,7 @@ pub fn build(b: *std.Build) void {
         addGeneratedNamespaceImports(ns_mod, bundle_namespaces[0..], bundle_mods[0..], i);
     }
 
-    const win_bundle_root = bundle_outdir.path(b, "win_bundle.zig");
+    const win_bundle_root = bundle_outdir.path(b, bundle_artifacts.BundleFacadeFileName);
     const win_bundle_mod = b.createModule(.{
         .root_source_file = win_bundle_root,
         .target = target,
@@ -1305,7 +1313,7 @@ pub fn build(b: *std.Build) void {
         }
 
         const cross_bundle_mod = b.createModule(.{
-            .root_source_file = cross_bundle_outdir.path(b, "win_bundle.zig"),
+            .root_source_file = cross_bundle_outdir.path(b, bundle_artifacts.BundleFacadeFileName),
             .target = cross_target,
             .optimize = optimize,
         });
@@ -1454,6 +1462,12 @@ pub fn build(b: *std.Build) void {
             .extra_libs = &.{ "user32", "CoreMessaging" },
             .needs_win = true,
         },
+        .{
+            .name = "direct2d-clock",
+            .root = "samples/direct2d_clock/main.zig",
+            .extra_libs = &.{ "user32", "ole32", "d2d1", "d3d11", "dxgi" },
+            .needs_win = true,
+        },
     };
 
     for (samples) |s| {
@@ -1465,6 +1479,7 @@ pub fn build(b: *std.Build) void {
         sample_mod.addImport("win-sys", win_sys_mod);
         if (s.needs_win) {
             sample_mod.addImport("win", win_mod);
+            addGeneratedNamespaceImports(sample_mod, bundle_namespaces[0..], bundle_mods[0..], null);
         }
         // Every current sample needs kernel32 (last-error). Keeping the
         // link here rather than in `win-sys` mirrors what a downstream
