@@ -2433,10 +2433,11 @@ pub fn emitInterfaceHandles(
 
         // M3: emit ergonomic event sugar (`addX` / `removeX`) for
         // every detected `(add_X, remove_X)` pair whose delegate is
-        // a same-namespace closed-generic. See `tryEmitEventSugar`
-        // for the gating rules; unsupported pairs leave only the
-        // raw `add_X` / `remove_X` slots emitted above.
-        try tryEmitEventSugar(writer, arena, file, row, name, namespace, &seen_names);
+        // a closed-generic we can name. Same-namespace delegates use
+        // the local instantiation; cross-namespace delegates qualify
+        // through the imported home namespace. Unsupported pairs leave
+        // only the raw `add_X` / `remove_X` slots emitted above.
+        try tryEmitEventSugar(writer, arena, file, row, name, namespace, cross, &seen_names);
 
         try writer.writeAll("};\n");
     }
@@ -2988,7 +2989,7 @@ pub fn collectEventPairs(
 
 /// M3: ergonomic sugar for WinRT event sources. For every
 /// `(add_X, remove_X)` pair detected by `collectEventPairs` whose
-/// handler delegate is a **same-namespace closed-generic**, emit two
+/// handler delegate is a closed-generic we can name, emit two
 /// companion methods on the interface struct:
 ///
 /// ```zig
@@ -3013,19 +3014,21 @@ pub fn collectEventPairs(
 ///   * delegate is a `class_name` whose name has a backtick (closed
 ///     generic) and at least one type argument;
 ///   * every type argument is `isMangleableArg`;
-///   * the delegate's home namespace equals `current_namespace`
-///     (cross-namespace closed-generic delegates need home-ns seed
-///     plumbing — deferred to a follow-up);
+///   * the delegate's home namespace is either `current_namespace` or
+///     another projectable namespace we can import. Cross-namespace
+///     delegates qualify through `@"<home-ns>".<Mangled>` and rely on
+///     the bundle driver's seed pass to emit the imported
+///     instantiation in its home namespace;
 ///   * sugar method names `addX` / `removeX` don't collide with an
 ///     already-emitted method (e.g. an underlying `addX` ABI slot).
 ///
-/// The generated body assumes `<Mangled>_Vtbl` and `<Mangled>.IID`
-/// are emitted later in the same namespace by
-/// `emitGenericInstantiations` — Zig's order-independent decl
-/// resolution makes the forward reference legal. If
-/// `emitGenericInstantiations` fails to emit IID for an unusual
-/// signature shape, the sugar body fails to compile with a clear
-/// "no field 'IID'" error rather than silent ABI breakage.
+/// The generated body assumes the delegate handle and IID exist
+/// either later in the same namespace or in an imported home
+/// namespace seeded by bundle mode. Zig's order-independent decl
+/// resolution makes the forward reference legal. If the home
+/// namespace fails to emit IID for an unusual signature shape, the
+/// sugar body fails to compile with a clear "no field 'IID'" error
+/// rather than silent ABI breakage.
 fn tryEmitEventSugar(
     writer: *std.Io.Writer,
     arena: std.mem.Allocator,
@@ -3033,6 +3036,7 @@ fn tryEmitEventSugar(
     type_def_row: u32,
     iface_name: []const u8,
     current_namespace: []const u8,
+    cross: *CrossNsSet,
     seen_names: *std.StringHashMapUnmanaged(u32),
 ) !void {
     const pairs = try collectEventPairs(arena, file, type_def_row);
@@ -3053,12 +3057,24 @@ fn tryEmitEventSugar(
             }
         }
         if (!all_mangleable) continue;
-        // Same-namespace only — cross-ns deferred (see doc above).
-        if (!std.mem.eql(u8, tn.namespace, current_namespace)) continue;
-
         // Build the mangled delegate handle name (e.g.
         // `TypedEventHandler__G2__Windows_Foundation_IMemoryBufferReference__object`).
         const mangled = try mangleInstAlloc(arena, tn.name, tn.generics);
+        const delegate_ref = blk: {
+            if (std.mem.eql(u8, tn.namespace, current_namespace)) {
+                break :blk mangled;
+            }
+            if (!isProjectableNs(tn.namespace)) continue;
+            try cross.put(arena, tn.namespace, {});
+            break :blk try std.fmt.allocPrint(arena, "@\"{s}\".{s}", .{ tn.namespace, mangled });
+        };
+        const token_ref = blk: {
+            if (std.mem.eql(u8, current_namespace, "Windows.Foundation")) {
+                break :blk "EventRegistrationToken";
+            }
+            try cross.put(arena, "Windows.Foundation", {});
+            break :blk "@\"Windows.Foundation\".EventRegistrationToken";
+        };
 
         // Avoid colliding with an already-emitted method. Sugar names
         // are camelCase (no underscore); raw slots use `add_` /
@@ -3080,26 +3096,29 @@ fn tryEmitEventSugar(
             \\        allocator: std.mem.Allocator,
             \\        invoke: @FieldType({s}_Vtbl, "Invoke"),
             \\        user_data: ?*anyopaque,
-            \\    ) (win_core.hresult.Error || error{{OutOfMemory}})!EventRegistrationToken {{
+            \\    ) (win_core.hresult.Error || error{{OutOfMemory}})!{s} {{
             \\        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), {s}.IID);
             \\        const _handler = try _D.create(allocator, invoke, user_data);
             \\        defer _ = _D.release(_handler);
-            \\        var _token: EventRegistrationToken = undefined;
+            \\        var _token: {s} = undefined;
             \\        try win_core.hresult.ok(self.add_{s}(@ptrCast(@alignCast(_handler)), &_token));
             \\        return _token;
             \\    }}
-            \\    pub fn {s}(self: *const {s}, token: EventRegistrationToken) win_core.hresult.Error!void {{
+            \\    pub fn {s}(self: *const {s}, token: {s}) win_core.hresult.Error!void {{
             \\        try win_core.hresult.ok(self.remove_{s}(token));
             \\    }}
             \\
         , .{
             add_sugar,
             iface_name,
-            mangled,
-            mangled,
+            delegate_ref,
+            token_ref,
+            delegate_ref,
+            token_ref,
             pair.event_name,
             remove_sugar,
             iface_name,
+            token_ref,
             pair.event_name,
         });
     }
@@ -5667,33 +5686,72 @@ test "emitNamespace emits addX/removeX sugar for IMemoryBufferReference.Closed" 
     ) != null);
 }
 
-test "emitNamespace emits no sugar for cross-namespace event delegates" {
-    // `Windows.Storage.Streams.IDataReader` (and many other interfaces
-    // outside `Windows.Foundation`) use `TypedEventHandler` from
-    // `Windows.Foundation`. Cross-namespace closed-generic delegates
-    // are deferred — verify the sugar is silently skipped while the
-    // raw `add_X` / `remove_X` slots remain.
+test "emitBundle emits sugar for cross-namespace DeviceWatcher events" {
+    // `Windows.Devices.Enumeration.IDeviceWatcher` uses
+    // `Windows.Foundation.TypedEventHandler<...>` for Added /
+    // EnumerationCompleted. Bundle mode should seed those closed
+    // generics into `Windows.Foundation` and let the consumer-side
+    // sugar qualify them through the imported namespace.
     const bytes = @embedFile("Windows.winmd");
     var file = try winmd.parse(bytes);
 
     var arena = std.heap.ArenaAllocator.init(std.testing.allocator);
     defer arena.deinit();
 
-    var buf: std.Io.Writer.Allocating = .init(std.testing.allocator);
-    defer buf.deinit();
+    const namespaces = [_][]const u8{
+        "Windows.Foundation",
+        "Windows.Devices.Enumeration",
+    };
 
-    try emitNamespace(&buf.writer, arena.allocator(), &file, "Windows.Storage", .x64);
-    const out = buf.written();
+    const out = try emitBundle(arena.allocator(), &file, &namespaces, .x64);
+    const foundation = out.get("Windows.Foundation") orelse return error.NoFoundationOutput;
+    const enumeration = out.get("Windows.Devices.Enumeration") orelse return error.NoEnumerationOutput;
 
-    // The sugar pattern should not appear anywhere in this namespace.
-    // (Defensive: if a same-namespace pair sneaks in here we'd want
-    // to know — but `Windows.Storage` declares no delegates, so any
-    // event source there has a cross-ns delegate.)
+    // The bundle must seed the closed-generic delegates into their
+    // home namespace.
     try std.testing.expect(std.mem.find(
         u8,
-        out,
-        "win_core.Delegate(std.meta.Child(@TypeOf(invoke))",
-    ) == null);
+        foundation,
+        "pub const TypedEventHandler__G2__Windows_Devices_Enumeration_DeviceWatcher__Windows_Devices_Enumeration_DeviceInformation_Vtbl = extern struct {",
+    ) != null);
+    try std.testing.expect(std.mem.find(
+        u8,
+        foundation,
+        "pub const TypedEventHandler__G2__Windows_Devices_Enumeration_DeviceWatcher__object_Vtbl = extern struct {",
+    ) != null);
+
+    // Consumer-side sugar should qualify the delegate through the
+    // imported `Windows.Foundation` namespace.
+    try std.testing.expect(std.mem.find(
+        u8,
+        enumeration,
+        "    pub fn addAdded(",
+    ) != null);
+    try std.testing.expect(std.mem.find(
+        u8,
+        enumeration,
+        "invoke: @FieldType(@\"Windows.Foundation\".TypedEventHandler__G2__Windows_Devices_Enumeration_DeviceWatcher__Windows_Devices_Enumeration_DeviceInformation_Vtbl, \"Invoke\")",
+    ) != null);
+    try std.testing.expect(std.mem.find(
+        u8,
+        enumeration,
+        "const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @\"Windows.Foundation\".TypedEventHandler__G2__Windows_Devices_Enumeration_DeviceWatcher__Windows_Devices_Enumeration_DeviceInformation.IID);",
+    ) != null);
+    try std.testing.expect(std.mem.find(
+        u8,
+        enumeration,
+        "    pub fn removeAdded(self: *const IDeviceWatcher, token: @\"Windows.Foundation\".EventRegistrationToken) win_core.hresult.Error!void {",
+    ) != null);
+    try std.testing.expect(std.mem.find(
+        u8,
+        enumeration,
+        "    pub fn addEnumerationCompleted(",
+    ) != null);
+    try std.testing.expect(std.mem.find(
+        u8,
+        enumeration,
+        "invoke: @FieldType(@\"Windows.Foundation\".TypedEventHandler__G2__Windows_Devices_Enumeration_DeviceWatcher__object_Vtbl, \"Invoke\")",
+    ) != null);
 }
 
 test "emitNamespaceEx accepts external generic seeds" {
