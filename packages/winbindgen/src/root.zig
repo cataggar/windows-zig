@@ -155,14 +155,17 @@ pub const BundleFacadeSource =
 ;
 
 /// Is `ns` a namespace we are willing to emit a cross-namespace
-/// import alias for?  Today only `Windows.*` (and the bare root
-/// `Windows`) qualify — `System.Guid`, `System.Object`, etc. are
-/// either aliased to primitives by the emitter or fall through to
-/// the opaque fallback, so qualifying them as `@"System".Guid` and
-/// generating a dangling `@import("System.zig")` would just noise up
-/// the output.
+/// import alias for?  Today `Windows.*`/`Windows` plus the WinUI3
+/// `Microsoft.UI.*` surface qualify — `System.Guid`,
+/// `System.Object`, etc. are either aliased to primitives by the
+/// emitter or fall through to the opaque fallback, so qualifying them
+/// as `@"System".Guid` and generating a dangling
+/// `@import("System.zig")` would just noise up the output.
 fn isProjectableNs(ns: []const u8) bool {
-    return std.mem.eql(u8, ns, "Windows") or std.mem.startsWith(u8, ns, "Windows.");
+    return std.mem.eql(u8, ns, "Windows") or
+        std.mem.startsWith(u8, ns, "Windows.") or
+        std.mem.eql(u8, ns, "Microsoft.UI") or
+        std.mem.startsWith(u8, ns, "Microsoft.UI.");
 }
 
 /// Placeholder — full CLI lands later in Phase 3.
@@ -6753,7 +6756,6 @@ test "emitBundle can render module-name imports and dependency manifest" {
         out.facade,
         "pub const Globalization = @import(\"Windows.Globalization\");",
     ) != null);
-
     var manifest: std.Io.Writer.Allocating = .init(std.testing.allocator);
     defer manifest.deinit();
     try emitBundleDependencyManifest(&manifest.writer, arena.allocator(), out);

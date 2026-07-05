@@ -144,8 +144,10 @@ pub fn build(b: *std.Build) void {
     // Microsoft's proprietary Windows App SDK license, so — mirroring how
     // windows-rs itself never commits `.winmd` to git — they're fetched on
     // demand rather than checked into source control (see
-    // `vendor/winmd/README` and `.gitignore`). Not part of the default
-    // `zig build` graph; run explicitly with `zig build fetch-winui-metadata`.
+    // `vendor/winmd/README` and `.gitignore`). Exposed as an explicit
+    // `zig build fetch-winui-metadata` step, and also wired into
+    // `zig build bindings`'s WinUI snapshot generation so the first
+    // WinUI codegen run self-stages the metadata.
     // Must run on the host regardless of any user-supplied `-Dtarget`.
     // ------------------------------------------------------------------
 
@@ -644,6 +646,36 @@ pub fn build(b: *std.Build) void {
         "packages/win-sys/src/generated/mod.zig",
     );
     bindings_step.dependOn(&mod_update.step);
+
+    // Bindings-only WinUI snapshot: emit the two starter namespaces
+    // requested by `tools/bindings/src/winui.txt` using module-style
+    // imports and commit the generated Zig so #3 can catalog any
+    // remaining opaque placeholders without first teaching the runtime
+    // bundle about every transitive Windows App SDK dependency.
+    const winui_bundle_run = b.addRunArtifact(winbindgen_exe);
+    winui_bundle_run.step.dependOn(&run_fetch_winui_metadata.step);
+    winui_bundle_run.addArg("bundle");
+    winui_bundle_run.addArg("--arch=x64");
+    winui_bundle_run.addArg("--imports=module");
+    winui_bundle_run.addArg("--outdir");
+    const winui_bundle_outdir = winui_bundle_run.addOutputDirectoryArg("winui-bundle");
+    winui_bundle_run.addArg("Microsoft.UI.Xaml");
+    winui_bundle_run.addArg("Microsoft.UI.Xaml.Controls");
+
+    const winui_bundle_update = b.addUpdateSourceFiles();
+    winui_bundle_update.addCopyFileToSource(
+        winui_bundle_outdir.path(b, "Microsoft.UI.Xaml.zig"),
+        "packages/win/src/generated/Microsoft.UI.Xaml.zig",
+    );
+    winui_bundle_update.addCopyFileToSource(
+        winui_bundle_outdir.path(b, "Microsoft.UI.Xaml.Controls.zig"),
+        "packages/win/src/generated/Microsoft.UI.Xaml.Controls.zig",
+    );
+    winui_bundle_update.addCopyFileToSource(
+        winui_bundle_outdir.path(b, "win_bundle_deps.zig"),
+        "packages/win/src/generated/winui_bundle_deps.zig",
+    );
+    bindings_step.dependOn(&winui_bundle_update.step);
 
     const run_winbindgen = b.addRunArtifact(winbindgen_exe);
     if (b.args) |user_args| run_winbindgen.addArgs(user_args);
