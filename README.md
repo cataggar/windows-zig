@@ -15,6 +15,7 @@ build.zig.zon          # dependency manifest
 packages/
   winmd/               # ECMA-335 metadata reader
   win-core/            # GUID, HRESULT, BOOL, PCWSTR, COM vtable helpers
+  win-future/          # blocking WinRT async helpers + combinators
   winbindgen/          # .winmd -> .zig codegen + comptime projection
   win-sys/             # C-style Win32 (analogue of windows-sys)
   win-time/            # DateTime, TimeSpan WinRT value types
