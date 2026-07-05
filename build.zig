@@ -1450,6 +1450,12 @@ pub fn build(b: *std.Build) void {
             .extra_libs = &.{ "user32", "CoreMessaging" },
             .needs_win = true,
         },
+        .{
+            .name = "direct2d-clock",
+            .root = "samples/direct2d_clock/main.zig",
+            .extra_libs = &.{ "user32", "ole32", "d2d1", "d3d11", "dxgi" },
+            .needs_win = true,
+        },
     };
 
     for (samples) |s| {
@@ -1461,6 +1467,7 @@ pub fn build(b: *std.Build) void {
         sample_mod.addImport("win-sys", win_sys_mod);
         if (s.needs_win) {
             sample_mod.addImport("win", win_mod);
+            addGeneratedNamespaceImports(sample_mod, bundle_namespaces[0..], bundle_mods[0..], null);
         }
         // Every current sample needs kernel32 (last-error). Keeping the
         // link here rather than in `win-sys` mirrors what a downstream
