@@ -1,11 +1,5 @@
-//! `win-reactor` — backend-agnostic hook-slot engine for the future
-//! Reactor render tree and reconciler.
-//!
-//! This package intentionally stays pure Zig + `std`: no WinRT, WinUI3,
-//! COM, or `win-core` dependency. The core abstraction is a per-node
-//! `RenderCx` whose render-order hook slots persist state, memo values,
-//! deferred effects, async state, and context subscriptions across
-//! re-renders.
+//! `win-reactor` — a reconciler-driven hook engine plus the first real
+//! WinUI 3 backend and app host.
 
 const context = @import("context.zig");
 const element = @import("element.zig");
@@ -13,6 +7,9 @@ const recording_backend = @import("recording_backend.zig");
 const backend = @import("backend.zig");
 const reconciler = @import("reconciler.zig");
 const render_cx = @import("render_cx.zig");
+const app = @import("app.zig");
+const winui_backend = @import("winui_backend.zig");
+const winui_dispatcher = @import("winui_dispatcher.zig");
 
 pub const ContextId = context.ContextId;
 pub const Context = context.Context;
@@ -33,8 +30,20 @@ pub const Element = element.Element;
 pub const ElementError = element.Error;
 pub const LeafBuilder = element.LeafBuilder;
 pub const ContainerBuilder = element.ContainerBuilder;
+pub const ApplicationBuilder = element.ApplicationBuilder;
+pub const WindowBuilder = element.WindowBuilder;
+pub const ButtonBuilder = element.ButtonBuilder;
+pub const StackPanelBuilder = element.StackPanelBuilder;
+pub const TextBlockBuilder = element.TextBlockBuilder;
+pub const TextBoxBuilder = element.TextBoxBuilder;
 pub const leaf = element.leaf;
 pub const container = element.container;
+pub const application = element.application;
+pub const window = element.window;
+pub const button = element.button;
+pub const stack_panel = element.stack_panel;
+pub const text_block = element.text_block;
+pub const text_box = element.text_box;
 pub const component = element.component;
 pub const memo = element.memo;
 pub const group = element.group;
@@ -44,6 +53,7 @@ pub const collectElements = element.collectElements;
 
 pub const WidgetId = backend.WidgetId;
 pub const Backend = backend.Backend;
+pub const WinUIBackend = winui_backend.WinUIBackend;
 pub const RecordingBackend = recording_backend.RecordingBackend;
 
 pub const RequestRerender = render_cx.RequestRerender;
@@ -70,12 +80,26 @@ pub const MountedElement = reconciler.MountedElement;
 pub const Reconciler = reconciler.Reconciler;
 
 pub const Error = render_cx.Error;
+pub const App = app.App;
+pub const RootRenderFn = app.RootRenderFn;
+pub const DispatcherPriority = winui_dispatcher.DispatcherPriority;
+pub const UiTask = winui_dispatcher.Task;
+pub const SendDispatcher = winui_dispatcher.SendDispatcher;
+pub const UiMarshaller = winui_dispatcher.UiMarshaller;
+pub const ChannelDispatcher = winui_dispatcher.ChannelDispatcher;
+pub const WinUIDispatcher = winui_dispatcher.WinUIDispatcher;
+pub const Xaml = @import("Microsoft.UI.Xaml");
+pub const XamlControls = @import("Microsoft.UI.Xaml.Controls");
+pub const XamlControlsPrimitives = @import("Microsoft.UI.Xaml.Controls.Primitives");
 
 test {
+    _ = @import("app.zig");
     _ = @import("backend.zig");
     _ = @import("context.zig");
     _ = @import("element.zig");
     _ = @import("recording_backend.zig");
     _ = @import("reconciler.zig");
     _ = @import("render_cx.zig");
+    _ = @import("winui_backend.zig");
+    _ = @import("winui_dispatcher.zig");
 }
