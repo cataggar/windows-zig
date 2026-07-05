@@ -151,6 +151,12 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
+    const win_reactor_mod = b.addModule("win-reactor", .{
+        .root_source_file = b.path("packages/win-reactor/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+
     const reactor_manifest_mod = b.addModule("reactor-manifest", .{
         .root_source_file = b.path("tools/reactor/manifest.zig"),
         .target = target,
@@ -177,6 +183,7 @@ pub fn build(b: *std.Build) void {
         .{ .name = "win-sys", .mod = win_sys_mod, .windows_only = true },
         .{ .name = "win-time", .mod = win_time_mod, .windows_only = true },
         .{ .name = "win-threading", .mod = win_threading_mod, .windows_only = true },
+        .{ .name = "win-reactor", .mod = win_reactor_mod },
         // NOTE: `win` is intentionally omitted from test_pkgs while the
         // VARIANT emitter gap is pending. A test-harness rooted at
         // `win/root.zig` analyzes `Com`'s pub decls, some of which
