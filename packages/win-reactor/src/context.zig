@@ -33,7 +33,7 @@ pub fn Context(comptime T: type) type {
 
 const ContextEntry = struct {
     context_id: ContextId,
-    value: box.AnyBox,
+    value: box.ValueBox,
 };
 
 /// Minimal provider stack that issue #13's `Element` tree can push/pop
@@ -58,7 +58,9 @@ pub const ContextStack = struct {
     }
 
     pub fn push(self: *ContextStack, comptime T: type, context: *const Context(T), value: T) Error!ContextScope {
-        var stored = try box.AnyBox.init(self.allocator, value);
+        comptime box.assertBorrowedValueType(T, "ContextStack.push");
+
+        var stored = try box.ValueBox.init(self.allocator, value);
         errdefer stored.deinit(self.allocator);
 
         try self.entries.append(self.allocator, .{
@@ -67,6 +69,26 @@ pub const ContextStack = struct {
         });
 
         return .{ .stack = self };
+    }
+
+    pub fn pushBox(self: *ContextStack, context_id: ContextId, value: *const box.ValueBox) Error!void {
+        var stored = try value.clone(self.allocator);
+        errdefer stored.deinit(self.allocator);
+
+        try self.entries.append(self.allocator, .{
+            .context_id = context_id,
+            .value = stored,
+        });
+    }
+
+    pub fn mark(self: *const ContextStack) usize {
+        return self.entries.items.len;
+    }
+
+    pub fn popToMark(self: *ContextStack, stack_mark: usize) void {
+        while (self.entries.items.len > stack_mark) {
+            self.popOne();
+        }
     }
 
     pub fn get(self: *const ContextStack, comptime T: type, context: *const Context(T)) Error!?T {
@@ -114,4 +136,21 @@ test "context stack returns default-like shadowing order" {
     var inner = try stack.push([]const u8, &theme, "high-contrast");
     defer inner.deinit();
     try std.testing.expectEqualStrings("high-contrast", (try stack.get([]const u8, &theme)).?);
+}
+
+test "context stack can clone boxed provider values to a mark" {
+    const ThemeContext = Context([]const u8);
+    const theme = ThemeContext.init("light");
+
+    var stack = ContextStack.init(std.testing.allocator);
+    defer stack.deinit();
+
+    var boxed = try box.ValueBox.init(std.testing.allocator, @as([]const u8, "dark"));
+    defer boxed.deinit(std.testing.allocator);
+
+    const mark = stack.mark();
+    try stack.pushBox(theme.id, &boxed);
+    try std.testing.expectEqualStrings("dark", (try stack.get([]const u8, &theme)).?);
+    stack.popToMark(mark);
+    try std.testing.expect(try stack.get([]const u8, &theme) == null);
 }
