@@ -1,7 +1,7 @@
 //! windows-zig top-level build script.
 //!
-//! Wires up the six in-tree packages (`winmd`, `win-core`, `winbindgen`,
-//! `win-sys`, `win`, `win-targets`), their unit tests, and the `bindings`
+//! Wires up the seven in-tree packages (`winmd`, `win-core`, `win-future`,
+//! `winbindgen`, `win-sys`, `win`, `win-targets`), their unit tests, and the `bindings`
 //! step that regenerates `win-sys` / `win` sources from the vendored
 //! `.winmd` metadata.
 //!
@@ -51,6 +51,17 @@ pub fn build(b: *std.Build) void {
         win_core_mod.linkSystemLibrary("api-ms-win-core-winrt-l1-1-0", .{});
     }
 
+    const win_future_mod = b.addModule("win-future", .{
+        .root_source_file = b.path("packages/win-future/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    win_future_mod.addImport("win-core", win_core_mod);
+    win_future_mod.addImport("winmd", winmd_mod);
+    win_future_mod.addAnonymousImport("Windows.winmd", .{
+        .root_source_file = b.path("vendor/winmd/Windows.winmd"),
+    });
+
     const winbindgen_mod = b.addModule("winbindgen", .{
         .root_source_file = b.path("packages/winbindgen/src/root.zig"),
         .target = target,
@@ -82,6 +93,7 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
     win_mod.addImport("win-core", win_core_mod);
+    win_mod.addImport("win-future", win_future_mod);
     win_mod.addImport("win-sys", win_sys_mod);
 
     const win_targets_mod = b.addModule("win-targets", .{
@@ -104,6 +116,7 @@ pub fn build(b: *std.Build) void {
     const test_pkgs = [_]TestPkg{
         .{ .name = "winmd", .mod = winmd_mod },
         .{ .name = "win-core", .mod = win_core_mod },
+        .{ .name = "win-future", .mod = win_future_mod },
         .{ .name = "win-sys", .mod = win_sys_mod, .windows_only = true },
         // NOTE: `win` is intentionally omitted from test_pkgs while the
         // VARIANT emitter gap is pending. A test-harness rooted at
@@ -1421,6 +1434,11 @@ pub fn build(b: *std.Build) void {
             .needs_win = true,
         },
         .{
+            .name = "winrt-future",
+            .root = "samples/winrt_future/main.zig",
+            .needs_win = true,
+        },
+        .{
             .name = "message-box",
             .root = "samples/message_box/main.zig",
         },
@@ -1451,7 +1469,9 @@ pub fn build(b: *std.Build) void {
             .target = target,
             .optimize = optimize,
         });
+        addGeneratedNamespaceImports(sample_mod, bundle_namespaces[0..], bundle_mods[0..], null);
         sample_mod.addImport("win-sys", win_sys_mod);
+        sample_mod.addImport("win-future", win_future_mod);
         if (s.needs_win) {
             sample_mod.addImport("win", win_mod);
         }
