@@ -1151,6 +1151,333 @@ pub const IItemsControl = extern struct {
     }
 };
 
+pub const ICheckBox_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+};
+
+pub const ICheckBox = extern struct {
+    vtable: *const ICheckBox_Vtbl,
+    pub const Vtbl = ICheckBox_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0xC5830000,
+        .data2 = 0x4C9D,
+        .data3 = 0x5FDD,
+        .data4 = .{ 0x93, 0x46, 0x67, 0x4C, 0x71, 0xCD, 0x80, 0xC5 },
+    };
+
+    pub fn QueryInterface(self: *const ICheckBox, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.base.base.QueryInterface(@ptrCast(@constCast(self)), iid, interface);
+    }
+
+    pub fn AddRef(self: *const ICheckBox) callconv(.winapi) u32 {
+        return self.vtable.base.base.AddRef(@ptrCast(@constCast(self)));
+    }
+
+    pub fn Release(self: *const ICheckBox) callconv(.winapi) u32 {
+        return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn cast(self: *const ICheckBox, comptime T: type) ?*const T {
+        var out: ?*anyopaque = null;
+        if (self.QueryInterface(&T.IID, &out) < 0) return null;
+        return @ptrCast(@alignCast(out));
+    }
+};
+
+pub const ICheckBoxFactory_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    CreateInstance: *const fn (
+        this: *const ICheckBoxFactory,
+        outer: ?*const anyopaque,
+        inner: ?*?*const anyopaque,
+        result: **CheckBox,
+    ) callconv(.winapi) HRESULT,
+};
+
+pub const ICheckBoxFactory = extern struct {
+    vtable: *const ICheckBoxFactory_Vtbl,
+    pub const Vtbl = ICheckBoxFactory_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0xF43FF58D,
+        .data2 = 0x31D5,
+        .data3 = 0x5835,
+        .data4 = .{ 0xAF, 0x7B, 0x37, 0x5B, 0xC6, 0xA9, 0xBC, 0xF3 },
+    };
+
+    pub fn CreateInstance(self: *const ICheckBoxFactory, outer: ?*const anyopaque, inner: ?*?*const anyopaque, result: **CheckBox) callconv(.winapi) HRESULT {
+        return self.vtable.CreateInstance(self, outer, inner, result);
+    }
+};
+
+pub const CheckBox = extern struct {
+    vtable: *const ICheckBox_Vtbl,
+    pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.CheckBox";
+    pub const NAME_W = std.unicode.utf8ToUtf16LeStringLiteral(NAME).*;
+};
+
+pub const IComboBox_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+};
+
+pub const IComboBox = extern struct {
+    vtable: *const IComboBox_Vtbl,
+    pub const Vtbl = IComboBox_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0xC77DA58B,
+        .data2 = 0x4FD7,
+        .data3 = 0x51E0,
+        .data4 = .{ 0xA4, 0x31, 0xF8, 0x46, 0x58, 0xA8, 0x3E, 0x9E },
+    };
+
+    pub fn QueryInterface(self: *const IComboBox, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.base.base.QueryInterface(@ptrCast(@constCast(self)), iid, interface);
+    }
+
+    pub fn AddRef(self: *const IComboBox) callconv(.winapi) u32 {
+        return self.vtable.base.base.AddRef(@ptrCast(@constCast(self)));
+    }
+
+    pub fn Release(self: *const IComboBox) callconv(.winapi) u32 {
+        return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn cast(self: *const IComboBox, comptime T: type) ?*const T {
+        var out: ?*anyopaque = null;
+        if (self.QueryInterface(&T.IID, &out) < 0) return null;
+        return @ptrCast(@alignCast(out));
+    }
+};
+
+pub const IComboBoxFactory_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    CreateInstance: *const fn (
+        this: *const IComboBoxFactory,
+        outer: ?*const anyopaque,
+        inner: ?*?*const anyopaque,
+        result: **ComboBox,
+    ) callconv(.winapi) HRESULT,
+};
+
+pub const IComboBoxFactory = extern struct {
+    vtable: *const IComboBoxFactory_Vtbl,
+    pub const Vtbl = IComboBoxFactory_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0x71C1014B,
+        .data2 = 0xACDF,
+        .data3 = 0x5C03,
+        .data4 = .{ 0xB5, 0xED, 0x02, 0x87, 0x1C, 0xAA, 0xEB, 0x6B },
+    };
+
+    pub fn CreateInstance(self: *const IComboBoxFactory, outer: ?*const anyopaque, inner: ?*?*const anyopaque, result: **ComboBox) callconv(.winapi) HRESULT {
+        return self.vtable.CreateInstance(self, outer, inner, result);
+    }
+};
+
+pub const ComboBox = extern struct {
+    vtable: *const IComboBox_Vtbl,
+    pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.ComboBox";
+    pub const NAME_W = std.unicode.utf8ToUtf16LeStringLiteral(NAME).*;
+};
+
+pub const ISlider_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+};
+
+pub const ISlider = extern struct {
+    vtable: *const ISlider_Vtbl,
+    pub const Vtbl = ISlider_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0xF7418ECF,
+        .data2 = 0x7C35,
+        .data3 = 0x5216,
+        .data4 = .{ 0x8B, 0xF1, 0xD8, 0x2D, 0x47, 0xCC, 0xE5, 0xDF },
+    };
+
+    pub fn QueryInterface(self: *const ISlider, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.base.base.QueryInterface(@ptrCast(@constCast(self)), iid, interface);
+    }
+
+    pub fn AddRef(self: *const ISlider) callconv(.winapi) u32 {
+        return self.vtable.base.base.AddRef(@ptrCast(@constCast(self)));
+    }
+
+    pub fn Release(self: *const ISlider) callconv(.winapi) u32 {
+        return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn cast(self: *const ISlider, comptime T: type) ?*const T {
+        var out: ?*anyopaque = null;
+        if (self.QueryInterface(&T.IID, &out) < 0) return null;
+        return @ptrCast(@alignCast(out));
+    }
+};
+
+pub const ISliderFactory_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    CreateInstance: *const fn (
+        this: *const ISliderFactory,
+        outer: ?*const anyopaque,
+        inner: ?*?*const anyopaque,
+        result: **Slider,
+    ) callconv(.winapi) HRESULT,
+};
+
+pub const ISliderFactory = extern struct {
+    vtable: *const ISliderFactory_Vtbl,
+    pub const Vtbl = ISliderFactory_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0x06604D71,
+        .data2 = 0x34CA,
+        .data3 = 0x5F39,
+        .data4 = .{ 0x96, 0x56, 0x29, 0xD8, 0x1D, 0x3C, 0x11, 0x0C },
+    };
+
+    pub fn CreateInstance(self: *const ISliderFactory, outer: ?*const anyopaque, inner: ?*?*const anyopaque, result: **Slider) callconv(.winapi) HRESULT {
+        return self.vtable.CreateInstance(self, outer, inner, result);
+    }
+};
+
+pub const Slider = extern struct {
+    vtable: *const ISlider_Vtbl,
+    pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.Slider";
+    pub const NAME_W = std.unicode.utf8ToUtf16LeStringLiteral(NAME).*;
+};
+
+pub const IRadioButton_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+};
+
+pub const IRadioButton = extern struct {
+    vtable: *const IRadioButton_Vtbl,
+    pub const Vtbl = IRadioButton_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0x38F30CEE,
+        .data2 = 0xE75A,
+        .data3 = 0x5BA1,
+        .data4 = .{ 0xAE, 0x64, 0x44, 0x74, 0xA3, 0xAB, 0xEA, 0xC7 },
+    };
+
+    pub fn QueryInterface(self: *const IRadioButton, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.base.base.QueryInterface(@ptrCast(@constCast(self)), iid, interface);
+    }
+
+    pub fn AddRef(self: *const IRadioButton) callconv(.winapi) u32 {
+        return self.vtable.base.base.AddRef(@ptrCast(@constCast(self)));
+    }
+
+    pub fn Release(self: *const IRadioButton) callconv(.winapi) u32 {
+        return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn cast(self: *const IRadioButton, comptime T: type) ?*const T {
+        var out: ?*anyopaque = null;
+        if (self.QueryInterface(&T.IID, &out) < 0) return null;
+        return @ptrCast(@alignCast(out));
+    }
+};
+
+pub const IRadioButtonFactory_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    CreateInstance: *const fn (
+        this: *const IRadioButtonFactory,
+        outer: ?*const anyopaque,
+        inner: ?*?*const anyopaque,
+        result: **RadioButton,
+    ) callconv(.winapi) HRESULT,
+};
+
+pub const IRadioButtonFactory = extern struct {
+    vtable: *const IRadioButtonFactory_Vtbl,
+    pub const Vtbl = IRadioButtonFactory_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0x5772C79A,
+        .data2 = 0xB3EB,
+        .data3 = 0x5719,
+        .data4 = .{ 0x80, 0x05, 0x2A, 0x51, 0x34, 0x29, 0x49, 0x5A },
+    };
+
+    pub fn CreateInstance(self: *const IRadioButtonFactory, outer: ?*const anyopaque, inner: ?*?*const anyopaque, result: **RadioButton) callconv(.winapi) HRESULT {
+        return self.vtable.CreateInstance(self, outer, inner, result);
+    }
+};
+
+pub const RadioButton = extern struct {
+    vtable: *const IRadioButton_Vtbl,
+    pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.RadioButton";
+    pub const NAME_W = std.unicode.utf8ToUtf16LeStringLiteral(NAME).*;
+};
+
+pub const IToggleSwitch_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    get_IsOn: *const fn (this: *const IToggleSwitch, result: *BOOL) callconv(.winapi) HRESULT,
+    put_IsOn: *const fn (this: *const IToggleSwitch, value: BOOL) callconv(.winapi) HRESULT,
+    get_Header: *const fn (this: *const IToggleSwitch, result: *?*const anyopaque) callconv(.winapi) HRESULT,
+    put_Header: *const fn (this: *const IToggleSwitch, value: ?*const anyopaque) callconv(.winapi) HRESULT,
+    get_HeaderTemplate: *const fn (this: *const IToggleSwitch, result: **xaml.DataTemplate) callconv(.winapi) HRESULT,
+    put_HeaderTemplate: *const fn (this: *const IToggleSwitch, value: *xaml.DataTemplate) callconv(.winapi) HRESULT,
+    get_OnContent: *const fn (this: *const IToggleSwitch, result: *?*const anyopaque) callconv(.winapi) HRESULT,
+    put_OnContent: *const fn (this: *const IToggleSwitch, value: ?*const anyopaque) callconv(.winapi) HRESULT,
+    get_OnContentTemplate: *const fn (this: *const IToggleSwitch, result: **xaml.DataTemplate) callconv(.winapi) HRESULT,
+    put_OnContentTemplate: *const fn (this: *const IToggleSwitch, value: *xaml.DataTemplate) callconv(.winapi) HRESULT,
+    get_OffContent: *const fn (this: *const IToggleSwitch, result: *?*const anyopaque) callconv(.winapi) HRESULT,
+    put_OffContent: *const fn (this: *const IToggleSwitch, value: ?*const anyopaque) callconv(.winapi) HRESULT,
+    get_OffContentTemplate: *const fn (this: *const IToggleSwitch, result: **xaml.DataTemplate) callconv(.winapi) HRESULT,
+    put_OffContentTemplate: *const fn (this: *const IToggleSwitch, value: *xaml.DataTemplate) callconv(.winapi) HRESULT,
+    get_TemplateSettings: *const fn (this: *const IToggleSwitch, result: *?*anyopaque) callconv(.winapi) HRESULT,
+    add_Toggled: *const fn (this: *const IToggleSwitch, handler: *xaml.RoutedEventHandler, result: *foundation.EventRegistrationToken) callconv(.winapi) HRESULT,
+    remove_Toggled: *const fn (this: *const IToggleSwitch, token: foundation.EventRegistrationToken) callconv(.winapi) HRESULT,
+};
+
+pub const IToggleSwitch = extern struct {
+    vtable: *const IToggleSwitch_Vtbl,
+    pub const Vtbl = IToggleSwitch_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0x1B17EEB1,
+        .data2 = 0x74BF,
+        .data3 = 0x5A83,
+        .data4 = .{ 0x81, 0x61, 0xA8, 0x6F, 0x0F, 0xDC, 0xDF, 0x24 },
+    };
+
+    pub fn QueryInterface(self: *const IToggleSwitch, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.base.base.QueryInterface(@ptrCast(@constCast(self)), iid, interface);
+    }
+
+    pub fn AddRef(self: *const IToggleSwitch) callconv(.winapi) u32 {
+        return self.vtable.base.base.AddRef(@ptrCast(@constCast(self)));
+    }
+
+    pub fn Release(self: *const IToggleSwitch) callconv(.winapi) u32 {
+        return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn get_IsOn(self: *const IToggleSwitch, result: *BOOL) callconv(.winapi) HRESULT {
+        return self.vtable.get_IsOn(self, result);
+    }
+
+    pub fn put_IsOn(self: *const IToggleSwitch, value: BOOL) callconv(.winapi) HRESULT {
+        return self.vtable.put_IsOn(self, value);
+    }
+
+    pub fn add_Toggled(self: *const IToggleSwitch, handler: *xaml.RoutedEventHandler, result: *foundation.EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.add_Toggled(self, handler, result);
+    }
+
+    pub fn remove_Toggled(self: *const IToggleSwitch, token: foundation.EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.remove_Toggled(self, token);
+    }
+};
+
+pub const ToggleSwitch = extern struct {
+    vtable: *const IToggleSwitch_Vtbl,
+    pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.ToggleSwitch";
+    pub const NAME_W = std.unicode.utf8ToUtf16LeStringLiteral(NAME).*;
+
+    pub fn activate() !*ToggleSwitch {
+        const raw = try win_core.activateInstance(IToggleSwitch, &NAME_W);
+        return @ptrCast(raw);
+    }
+};
+
 pub const IItemsRepeater_Vtbl = extern struct {
     base: IInspectable_Vtbl,
     get_ItemsSource: *const fn (this: *const IItemsRepeater, result: *?*const anyopaque) callconv(.winapi) HRESULT,

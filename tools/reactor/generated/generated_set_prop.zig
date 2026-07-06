@@ -2,8 +2,10 @@
 const std = @import("std");
 const schema = @import("reactor-schema");
 const win_core = @import("win-core");
+const win_reference = @import("win-reference");
 const @"Microsoft.UI.Xaml" = @import("Microsoft.UI.Xaml");
 const @"Microsoft.UI.Xaml.Controls" = @import("Microsoft.UI.Xaml.Controls");
+const @"Microsoft.UI.Xaml.Controls.Primitives" = @import("Microsoft.UI.Xaml.Controls.Primitives");
 
 pub const ValueKind = schema.ValueKind;
 pub const SetterKind = schema.SetterKind;
@@ -14,7 +16,9 @@ pub const Error = win_core.hresult.Error || error{
 };
 pub const SetterValue = union(enum) {
     string: []const u16,
+    string_list: *const anyopaque,
     object: ?*const anyopaque,
+    bool: bool,
     f64: f64,
     i32: i32,
     enum_i32: i32,
@@ -179,6 +183,72 @@ fn applyMicrosoftUIXamlControlsCanvasZIndex(widget: *anyopaque, value: SetterVal
     try setMicrosoftUIXamlControlsCanvasZIndex(@ptrCast(@alignCast(widget)), typed_value);
 }
 
+pub fn setMicrosoftUIXamlControlsCheckBoxContent(widget: *@"Microsoft.UI.Xaml.Controls".CheckBox, value: []const u16) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ICheckBox = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls".IContentControl) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    const text_block = try @"Microsoft.UI.Xaml.Controls".TextBlock.activate();
+    const text_block_iface: *const @"Microsoft.UI.Xaml.Controls".ITextBlock = @ptrCast(text_block);
+    defer _ = text_block_iface.Release();
+    try win_core.hresult.ok(text_block_iface.put_TextFromUtf16(value));
+    try win_core.hresult.ok(target.put_Content(@as(?*const anyopaque, @ptrCast(text_block))));
+}
+
+fn applyMicrosoftUIXamlControlsCheckBoxContent(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .string => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsCheckBoxContent(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsCheckBoxIsChecked(widget: *@"Microsoft.UI.Xaml.Controls".CheckBox, value: bool) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ICheckBox = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls.Primitives".IToggleButton) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    var boxed = try win_reference.box(value);
+    defer boxed.deinit();
+    try win_core.hresult.ok(target.put_IsChecked(@ptrCast(boxed.raw())));
+}
+
+fn applyMicrosoftUIXamlControlsCheckBoxIsChecked(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .bool => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsCheckBoxIsChecked(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsComboBoxItemsSource(widget: *@"Microsoft.UI.Xaml.Controls".ComboBox, value: *const anyopaque) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IComboBox = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls".IItemsControl) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try win_core.hresult.ok(target.put_ItemsSource(@as(?*const anyopaque, value)));
+}
+
+fn applyMicrosoftUIXamlControlsComboBoxItemsSource(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .string_list => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsComboBoxItemsSource(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsComboBoxSelectedIndex(widget: *@"Microsoft.UI.Xaml.Controls".ComboBox, value: i32) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IComboBox = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls.Primitives".ISelector) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try win_core.hresult.ok(target.put_SelectedIndex(value));
+}
+
+fn applyMicrosoftUIXamlControlsComboBoxSelectedIndex(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsComboBoxSelectedIndex(@ptrCast(@alignCast(widget)), typed_value);
+}
+
 pub fn setMicrosoftUIXamlControlsContentDialogCloseButtonText(widget: *@"Microsoft.UI.Xaml.Controls".ContentDialog, value: []const u16) Error!void {
     const target: *const @"Microsoft.UI.Xaml.Controls".IContentDialog = @ptrCast(widget);
     try win_core.hresult.ok(target.put_CloseButtonTextFromUtf16(value));
@@ -338,6 +408,42 @@ fn applyMicrosoftUIXamlControlsNavigationViewItemContent(widget: *anyopaque, val
     try setMicrosoftUIXamlControlsNavigationViewItemContent(@ptrCast(@alignCast(widget)), typed_value);
 }
 
+pub fn setMicrosoftUIXamlControlsRadioButtonContent(widget: *@"Microsoft.UI.Xaml.Controls".RadioButton, value: []const u16) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IRadioButton = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls".IContentControl) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    const text_block = try @"Microsoft.UI.Xaml.Controls".TextBlock.activate();
+    const text_block_iface: *const @"Microsoft.UI.Xaml.Controls".ITextBlock = @ptrCast(text_block);
+    defer _ = text_block_iface.Release();
+    try win_core.hresult.ok(text_block_iface.put_TextFromUtf16(value));
+    try win_core.hresult.ok(target.put_Content(@as(?*const anyopaque, @ptrCast(text_block))));
+}
+
+fn applyMicrosoftUIXamlControlsRadioButtonContent(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .string => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsRadioButtonContent(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsRadioButtonIsChecked(widget: *@"Microsoft.UI.Xaml.Controls".RadioButton, value: bool) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IRadioButton = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls.Primitives".IToggleButton) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    var boxed = try win_reference.box(value);
+    defer boxed.deinit();
+    try win_core.hresult.ok(target.put_IsChecked(@ptrCast(boxed.raw())));
+}
+
+fn applyMicrosoftUIXamlControlsRadioButtonIsChecked(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .bool => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsRadioButtonIsChecked(@ptrCast(@alignCast(widget)), typed_value);
+}
+
 pub fn setMicrosoftUIXamlControlsScrollViewerContent(widget: *@"Microsoft.UI.Xaml.Controls".ScrollViewer, value: *@"Microsoft.UI.Xaml".UIElement) Error!void {
     const default_iface: *const @"Microsoft.UI.Xaml.Controls".IScrollViewer = @ptrCast(widget);
     const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls".IContentControl) orelse return error.InterfaceCastFailed;
@@ -351,6 +457,51 @@ fn applyMicrosoftUIXamlControlsScrollViewerContent(widget: *anyopaque, value: Se
         else => return error.ValueKindMismatch,
     };
     try setMicrosoftUIXamlControlsScrollViewerContent(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsSliderMaximum(widget: *@"Microsoft.UI.Xaml.Controls".Slider, value: f64) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ISlider = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls.Primitives".IRangeBase) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try win_core.hresult.ok(target.put_Maximum(value));
+}
+
+fn applyMicrosoftUIXamlControlsSliderMaximum(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .f64 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsSliderMaximum(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsSliderMinimum(widget: *@"Microsoft.UI.Xaml.Controls".Slider, value: f64) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ISlider = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls.Primitives".IRangeBase) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try win_core.hresult.ok(target.put_Minimum(value));
+}
+
+fn applyMicrosoftUIXamlControlsSliderMinimum(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .f64 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsSliderMinimum(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsSliderValue(widget: *@"Microsoft.UI.Xaml.Controls".Slider, value: f64) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ISlider = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls.Primitives".IRangeBase) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try win_core.hresult.ok(target.put_Value(value));
+}
+
+fn applyMicrosoftUIXamlControlsSliderValue(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .f64 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsSliderValue(@ptrCast(@alignCast(widget)), typed_value);
 }
 
 pub fn setMicrosoftUIXamlControlsStackPanelLeft(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel, value: f64) Error!void {
@@ -525,6 +676,19 @@ fn applyMicrosoftUIXamlControlsTextBoxLeft(widget: *anyopaque, value: SetterValu
     try setMicrosoftUIXamlControlsTextBoxLeft(@ptrCast(@alignCast(widget)), typed_value);
 }
 
+pub fn setMicrosoftUIXamlControlsTextBoxText(widget: *@"Microsoft.UI.Xaml.Controls".TextBox, value: []const u16) Error!void {
+    const target: *const @"Microsoft.UI.Xaml.Controls".ITextBox = @ptrCast(widget);
+    try win_core.hresult.ok(target.put_TextFromUtf16(value));
+}
+
+fn applyMicrosoftUIXamlControlsTextBoxText(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .string => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsTextBoxText(@ptrCast(@alignCast(widget)), typed_value);
+}
+
 pub fn setMicrosoftUIXamlControlsTextBoxTop(widget: *@"Microsoft.UI.Xaml.Controls".TextBox, value: f64) Error!void {
     const widget_object = win_core.IInspectable.from(@ptrCast(widget));
     const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
@@ -561,6 +725,19 @@ fn applyMicrosoftUIXamlControlsTextBoxZIndex(widget: *anyopaque, value: SetterVa
         else => return error.ValueKindMismatch,
     };
     try setMicrosoftUIXamlControlsTextBoxZIndex(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsToggleSwitchIsOn(widget: *@"Microsoft.UI.Xaml.Controls".ToggleSwitch, value: bool) Error!void {
+    const target: *const @"Microsoft.UI.Xaml.Controls".IToggleSwitch = @ptrCast(widget);
+    try win_core.hresult.ok(target.put_IsOn(win_core.boolToWin32(value)));
+}
+
+fn applyMicrosoftUIXamlControlsToggleSwitchIsOn(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .bool => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsToggleSwitchIsOn(@ptrCast(@alignCast(widget)), typed_value);
 }
 
 pub fn setMicrosoftUIXamlWindowTitle(widget: *@"Microsoft.UI.Xaml".Window, value: []const u16) Error!void {
@@ -656,6 +833,46 @@ pub const entries = [_]PropertySetter{
         .value_kind = .i32,
         .setter_kind = .attached,
         .apply = applyMicrosoftUIXamlControlsCanvasZIndex,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.CheckBox",
+        .widget_name = "CheckBox",
+        .handle_name = "CheckBox",
+        .property_name = "Content",
+        .field_name = "content",
+        .value_kind = .string,
+        .setter_kind = .text_block,
+        .apply = applyMicrosoftUIXamlControlsCheckBoxContent,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.CheckBox",
+        .widget_name = "CheckBox",
+        .handle_name = "CheckBox",
+        .property_name = "IsChecked",
+        .field_name = "is_checked",
+        .value_kind = .bool,
+        .setter_kind = .boxed_reference,
+        .apply = applyMicrosoftUIXamlControlsCheckBoxIsChecked,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ComboBox",
+        .widget_name = "ComboBox",
+        .handle_name = "ComboBox",
+        .property_name = "ItemsSource",
+        .field_name = "items_source",
+        .value_kind = .string_list,
+        .setter_kind = .direct,
+        .apply = applyMicrosoftUIXamlControlsComboBoxItemsSource,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ComboBox",
+        .widget_name = "ComboBox",
+        .handle_name = "ComboBox",
+        .property_name = "SelectedIndex",
+        .field_name = "selected_index",
+        .value_kind = .i32,
+        .setter_kind = .direct,
+        .apply = applyMicrosoftUIXamlControlsComboBoxSelectedIndex,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.ContentDialog",
@@ -768,6 +985,26 @@ pub const entries = [_]PropertySetter{
         .apply = applyMicrosoftUIXamlControlsNavigationViewItemContent,
     },
     .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.RadioButton",
+        .widget_name = "RadioButton",
+        .handle_name = "RadioButton",
+        .property_name = "Content",
+        .field_name = "content",
+        .value_kind = .string,
+        .setter_kind = .text_block,
+        .apply = applyMicrosoftUIXamlControlsRadioButtonContent,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.RadioButton",
+        .widget_name = "RadioButton",
+        .handle_name = "RadioButton",
+        .property_name = "IsChecked",
+        .field_name = "is_checked",
+        .value_kind = .bool,
+        .setter_kind = .boxed_reference,
+        .apply = applyMicrosoftUIXamlControlsRadioButtonIsChecked,
+    },
+    .{
         .widget_class = "Microsoft.UI.Xaml.Controls.ScrollViewer",
         .widget_name = "ScrollViewer",
         .handle_name = "ScrollViewer",
@@ -776,6 +1013,36 @@ pub const entries = [_]PropertySetter{
         .value_kind = .element,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsScrollViewerContent,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Slider",
+        .widget_name = "Slider",
+        .handle_name = "Slider",
+        .property_name = "Maximum",
+        .field_name = "maximum",
+        .value_kind = .f64,
+        .setter_kind = .direct,
+        .apply = applyMicrosoftUIXamlControlsSliderMaximum,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Slider",
+        .widget_name = "Slider",
+        .handle_name = "Slider",
+        .property_name = "Minimum",
+        .field_name = "minimum",
+        .value_kind = .f64,
+        .setter_kind = .direct,
+        .apply = applyMicrosoftUIXamlControlsSliderMinimum,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Slider",
+        .widget_name = "Slider",
+        .handle_name = "Slider",
+        .property_name = "Value",
+        .field_name = "value",
+        .value_kind = .f64,
+        .setter_kind = .direct,
+        .apply = applyMicrosoftUIXamlControlsSliderValue,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.StackPanel",
@@ -881,6 +1148,16 @@ pub const entries = [_]PropertySetter{
         .widget_class = "Microsoft.UI.Xaml.Controls.TextBox",
         .widget_name = "TextBox",
         .handle_name = "TextBox",
+        .property_name = "Text",
+        .field_name = "text",
+        .value_kind = .string,
+        .setter_kind = .direct,
+        .apply = applyMicrosoftUIXamlControlsTextBoxText,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.TextBox",
+        .widget_name = "TextBox",
+        .handle_name = "TextBox",
         .property_name = "Top",
         .field_name = "top",
         .value_kind = .f64,
@@ -896,6 +1173,16 @@ pub const entries = [_]PropertySetter{
         .value_kind = .i32,
         .setter_kind = .attached,
         .apply = applyMicrosoftUIXamlControlsTextBoxZIndex,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ToggleSwitch",
+        .widget_name = "ToggleSwitch",
+        .handle_name = "ToggleSwitch",
+        .property_name = "IsOn",
+        .field_name = "is_on",
+        .value_kind = .bool,
+        .setter_kind = .direct,
+        .apply = applyMicrosoftUIXamlControlsToggleSwitchIsOn,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Window",
@@ -918,31 +1205,42 @@ pub const by_widget_prop = std.StaticStringMap(usize).initComptime(.{
     .{ "Microsoft.UI.Xaml.Controls.Canvas#Left", 5 },
     .{ "Microsoft.UI.Xaml.Controls.Canvas#Top", 6 },
     .{ "Microsoft.UI.Xaml.Controls.Canvas#ZIndex", 7 },
-    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#CloseButtonText", 8 },
-    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#Content", 9 },
-    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#PrimaryButtonText", 10 },
-    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#SecondaryButtonText", 11 },
-    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#Title", 12 },
-    .{ "Microsoft.UI.Xaml.Controls.Flyout#Content", 13 },
-    .{ "Microsoft.UI.Xaml.Controls.ItemsRepeater#ItemsSource", 14 },
-    .{ "Microsoft.UI.Xaml.Controls.ListView#ItemsSource", 15 },
-    .{ "Microsoft.UI.Xaml.Controls.MenuBarItem#Title", 16 },
-    .{ "Microsoft.UI.Xaml.Controls.NavigationView#Content", 17 },
-    .{ "Microsoft.UI.Xaml.Controls.NavigationViewItem#Content", 18 },
-    .{ "Microsoft.UI.Xaml.Controls.ScrollViewer#Content", 19 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Left", 20 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Orientation", 21 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Spacing", 22 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Top", 23 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#ZIndex", 24 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Left", 25 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Text", 26 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Top", 27 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#ZIndex", 28 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#Left", 29 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#Top", 30 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#ZIndex", 31 },
-    .{ "Microsoft.UI.Xaml.Window#Title", 32 },
+    .{ "Microsoft.UI.Xaml.Controls.CheckBox#Content", 8 },
+    .{ "Microsoft.UI.Xaml.Controls.CheckBox#IsChecked", 9 },
+    .{ "Microsoft.UI.Xaml.Controls.ComboBox#ItemsSource", 10 },
+    .{ "Microsoft.UI.Xaml.Controls.ComboBox#SelectedIndex", 11 },
+    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#CloseButtonText", 12 },
+    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#Content", 13 },
+    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#PrimaryButtonText", 14 },
+    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#SecondaryButtonText", 15 },
+    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#Title", 16 },
+    .{ "Microsoft.UI.Xaml.Controls.Flyout#Content", 17 },
+    .{ "Microsoft.UI.Xaml.Controls.ItemsRepeater#ItemsSource", 18 },
+    .{ "Microsoft.UI.Xaml.Controls.ListView#ItemsSource", 19 },
+    .{ "Microsoft.UI.Xaml.Controls.MenuBarItem#Title", 20 },
+    .{ "Microsoft.UI.Xaml.Controls.NavigationView#Content", 21 },
+    .{ "Microsoft.UI.Xaml.Controls.NavigationViewItem#Content", 22 },
+    .{ "Microsoft.UI.Xaml.Controls.RadioButton#Content", 23 },
+    .{ "Microsoft.UI.Xaml.Controls.RadioButton#IsChecked", 24 },
+    .{ "Microsoft.UI.Xaml.Controls.ScrollViewer#Content", 25 },
+    .{ "Microsoft.UI.Xaml.Controls.Slider#Maximum", 26 },
+    .{ "Microsoft.UI.Xaml.Controls.Slider#Minimum", 27 },
+    .{ "Microsoft.UI.Xaml.Controls.Slider#Value", 28 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Left", 29 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Orientation", 30 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Spacing", 31 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Top", 32 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#ZIndex", 33 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Left", 34 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Text", 35 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Top", 36 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#ZIndex", 37 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#Left", 38 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#Text", 39 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#Top", 40 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#ZIndex", 41 },
+    .{ "Microsoft.UI.Xaml.Controls.ToggleSwitch#IsOn", 42 },
+    .{ "Microsoft.UI.Xaml.Window#Title", 43 },
 });
 
 pub fn find(widget_class: []const u8, property_name: []const u8) ?*const PropertySetter {

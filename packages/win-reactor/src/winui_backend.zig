@@ -108,9 +108,14 @@ pub const WinUIBackend = struct {
     const OwnedSetterValue = struct {
         value: generated_set_prop.SetterValue,
         owned_utf16: ?[]u16 = null,
+        owned_inspectable: ?win_core.IInspectable = null,
 
         fn deinit(self: *OwnedSetterValue, allocator: Allocator) void {
             if (self.owned_utf16) |text| allocator.free(text);
+            if (self.owned_inspectable) |owned| {
+                var inspectable = owned;
+                inspectable.deinit();
+            }
             self.* = undefined;
         }
     };
@@ -468,6 +473,34 @@ pub const WinUIBackend = struct {
                 try self.utf8SetterValue("")
             else
                 return error.UnsupportedProperty,
+            .check_box => if (std.mem.eql(u8, name, "Content"))
+                try self.utf8SetterValue("")
+            else if (std.mem.eql(u8, name, "IsChecked"))
+                OwnedSetterValue{ .value = .{ .bool = false } }
+            else
+                return error.UnsupportedProperty,
+            .slider => if (std.mem.eql(u8, name, "Value") or std.mem.eql(u8, name, "Minimum"))
+                OwnedSetterValue{ .value = .{ .f64 = 0.0 } }
+            else if (std.mem.eql(u8, name, "Maximum"))
+                OwnedSetterValue{ .value = .{ .f64 = 100.0 } }
+            else
+                return error.UnsupportedProperty,
+            .combo_box => if (std.mem.eql(u8, name, "ItemsSource"))
+                try self.stringListSetterValue(&[_][]const u8{})
+            else if (std.mem.eql(u8, name, "SelectedIndex"))
+                OwnedSetterValue{ .value = .{ .i32 = -1 } }
+            else
+                return error.UnsupportedProperty,
+            .toggle_switch => if (std.mem.eql(u8, name, "IsOn"))
+                OwnedSetterValue{ .value = .{ .bool = false } }
+            else
+                return error.UnsupportedProperty,
+            .radio_button => if (std.mem.eql(u8, name, "Content"))
+                try self.utf8SetterValue("")
+            else if (std.mem.eql(u8, name, "IsChecked"))
+                OwnedSetterValue{ .value = .{ .bool = false } }
+            else
+                return error.UnsupportedProperty,
             .stack_panel => if (std.mem.eql(u8, name, "Orientation"))
                 OwnedSetterValue{ .value = .{ .enum_i32 = @intFromEnum(controls.Orientation.Vertical) } }
             else if (std.mem.eql(u8, name, "Spacing"))
@@ -554,7 +587,12 @@ pub const WinUIBackend = struct {
             .scroll_viewer => ownInspectable(try controls.ScrollViewer.activate()),
             .border => ownInspectable(try controls.Border.activate()),
             .text_block => ownInspectable(try controls.TextBlock.activate()),
-            .text_box => ownInspectable(try createComposable(controls.TextBox, controls.ITextBoxFactory)),
+            .text_box => error.NotYetSupported,
+            .check_box => ownInspectable(try createComposable(controls.CheckBox, controls.ICheckBoxFactory)),
+            .slider => ownInspectable(try createComposable(controls.Slider, controls.ISliderFactory)),
+            .combo_box => ownInspectable(try createComposable(controls.ComboBox, controls.IComboBoxFactory)),
+            .toggle_switch => ownInspectable(try controls.ToggleSwitch.activate()),
+            .radio_button => ownInspectable(try createComposable(controls.RadioButton, controls.IRadioButtonFactory)),
             .content_dialog => ownInspectable(try createComposable(controls.ContentDialog, controls.IContentDialogFactory)),
             .flyout => ownInspectable(try createComposable(controls.Flyout, controls.IFlyoutFactory)),
             .navigation_view => ownInspectable(try createComposable(controls.NavigationView, controls.INavigationViewFactory)),
@@ -970,6 +1008,53 @@ pub const WinUIBackend = struct {
                 const text = property.get([]const u8) orelse return error.UnsupportedPropertyValue;
                 return self.utf8SetterValue(text);
             },
+            .check_box, .radio_button => {
+                if (std.mem.eql(u8, property.name, "Content")) {
+                    const text = property.get([]const u8) orelse return error.UnsupportedPropertyValue;
+                    return self.utf8SetterValue(text);
+                }
+                if (std.mem.eql(u8, property.name, "IsChecked")) {
+                    const value = property.get(bool) orelse return error.UnsupportedPropertyValue;
+                    return .{ .value = .{ .bool = value } };
+                }
+                return error.UnsupportedProperty;
+            },
+            .slider => {
+                if (std.mem.eql(u8, property.name, "Value") or
+                    std.mem.eql(u8, property.name, "Minimum") or
+                    std.mem.eql(u8, property.name, "Maximum"))
+                {
+                    if (property.get(f64)) |value| {
+                        return .{ .value = .{ .f64 = value } };
+                    }
+                    if (property.get(f32)) |value| {
+                        return .{ .value = .{ .f64 = value } };
+                    }
+                    if (property.get(i32)) |value| {
+                        return .{ .value = .{ .f64 = @floatFromInt(value) } };
+                    }
+                    return error.UnsupportedPropertyValue;
+                }
+                return error.UnsupportedProperty;
+            },
+            .combo_box => {
+                if (std.mem.eql(u8, property.name, "ItemsSource")) {
+                    const items = property.get([]const []const u8) orelse return error.UnsupportedPropertyValue;
+                    return self.stringListSetterValue(items);
+                }
+                if (std.mem.eql(u8, property.name, "SelectedIndex")) {
+                    const value = property.get(i32) orelse return error.UnsupportedPropertyValue;
+                    return .{ .value = .{ .i32 = value } };
+                }
+                return error.UnsupportedProperty;
+            },
+            .toggle_switch => {
+                if (std.mem.eql(u8, property.name, "IsOn")) {
+                    const value = property.get(bool) orelse return error.UnsupportedPropertyValue;
+                    return .{ .value = .{ .bool = value } };
+                }
+                return error.UnsupportedProperty;
+            },
             .flyout, .navigation_view => {
                 if (property.get(*xaml.UIElement)) |value| {
                     return .{ .value = .{ .element = value } };
@@ -1017,6 +1102,24 @@ pub const WinUIBackend = struct {
         return .{
             .value = .{ .string = wide },
             .owned_utf16 = wide,
+        };
+    }
+
+    fn stringListSetterValue(self: *WinUIBackend, items: []const []const u8) !OwnedSetterValue {
+        var strings: std.ArrayListUnmanaged(win_core.Hstring) = .empty;
+        defer {
+            for (strings.items) |*item| item.deinit();
+            strings.deinit(self.allocator);
+        }
+
+        for (items) |item| {
+            try strings.append(self.allocator, try win_core.Hstring.createUtf8(self.allocator, item));
+        }
+
+        const vector = try win_collections.createVector(win_core.Hstring, self.allocator, strings.items);
+        return .{
+            .value = .{ .string_list = @ptrCast(vector) },
+            .owned_inspectable = .from(@ptrCast(vector)),
         };
     }
 
@@ -1336,6 +1439,11 @@ fn widgetClassName(kind: element.WidgetKind) ?[]const u8 {
         .border => "Microsoft.UI.Xaml.Controls.Border",
         .text_block => "Microsoft.UI.Xaml.Controls.TextBlock",
         .text_box => "Microsoft.UI.Xaml.Controls.TextBox",
+        .check_box => "Microsoft.UI.Xaml.Controls.CheckBox",
+        .slider => "Microsoft.UI.Xaml.Controls.Slider",
+        .combo_box => "Microsoft.UI.Xaml.Controls.ComboBox",
+        .toggle_switch => "Microsoft.UI.Xaml.Controls.ToggleSwitch",
+        .radio_button => "Microsoft.UI.Xaml.Controls.RadioButton",
         .content_dialog => "Microsoft.UI.Xaml.Controls.ContentDialog",
         .flyout => "Microsoft.UI.Xaml.Controls.Flyout",
         .navigation_view => "Microsoft.UI.Xaml.Controls.NavigationView",
@@ -1467,8 +1575,20 @@ fn extractEventValue(
     const payload = entry.payload orelse return .{};
     return switch (payload) {
         .unit => .{},
+        .bool => switch (entry.source) {
+            .sender_property => |name| try extractSenderBoolProperty(sender, name),
+            else => .{},
+        },
         .string => switch (entry.source) {
             .sender_property => |name| try extractSenderStringProperty(entry.allocator, sender, name),
+            else => .{},
+        },
+        .f64 => switch (entry.source) {
+            .args_property => |name| try extractArgsF64Property(args, name),
+            else => .{},
+        },
+        .i32 => switch (entry.source) {
+            .sender_property => |name| try extractSenderI32Property(sender, name),
             else => .{},
         },
         .pointer => .{
@@ -1477,6 +1597,27 @@ fn extractEventValue(
             },
         },
         else => .{},
+    };
+}
+
+fn extractSenderBoolProperty(sender: ?*const anyopaque, name: []const u8) !WinUIBackend.OwnedEventValue {
+    if (!std.mem.eql(u8, name, "IsOn")) {
+        return .{
+            .value = .{ .bool = false },
+        };
+    }
+
+    const toggle_switch = queryInterfaceOwnedRaw(sender, controls.IToggleSwitch) orelse {
+        return .{
+            .value = .{ .bool = false },
+        };
+    };
+    defer _ = toggle_switch.Release();
+
+    var is_on: win_core.BOOL = 0;
+    try win_core.hresult.ok(toggle_switch.get_IsOn(&is_on));
+    return .{
+        .value = .{ .bool = is_on != 0 },
     };
 }
 
@@ -1505,6 +1646,48 @@ fn extractSenderStringProperty(
     return .{
         .value = .{ .string = utf8 },
         .owned_utf8 = utf8,
+    };
+}
+
+fn extractSenderI32Property(sender: ?*const anyopaque, name: []const u8) !WinUIBackend.OwnedEventValue {
+    if (!std.mem.eql(u8, name, "SelectedIndex")) {
+        return .{
+            .value = .{ .i32 = -1 },
+        };
+    }
+
+    const selector = queryInterfaceOwnedRaw(sender, controls_primitives.ISelector) orelse {
+        return .{
+            .value = .{ .i32 = -1 },
+        };
+    };
+    defer _ = selector.Release();
+
+    var selected_index: i32 = -1;
+    try win_core.hresult.ok(selector.get_SelectedIndex(&selected_index));
+    return .{
+        .value = .{ .i32 = selected_index },
+    };
+}
+
+fn extractArgsF64Property(args: ?*const anyopaque, name: []const u8) !WinUIBackend.OwnedEventValue {
+    if (!std.mem.eql(u8, name, "NewValue")) {
+        return .{
+            .value = .{ .f64 = 0.0 },
+        };
+    }
+
+    const raw_args = args orelse {
+        return .{
+            .value = .{ .f64 = 0.0 },
+        };
+    };
+
+    const value_args: *const controls_primitives.IRangeBaseValueChangedEventArgs = @ptrCast(@alignCast(raw_args));
+    var value: f64 = 0.0;
+    try win_core.hresult.ok(value_args.get_NewValue(&value));
+    return .{
+        .value = .{ .f64 = value },
     };
 }
 
