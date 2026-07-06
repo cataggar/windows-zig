@@ -318,6 +318,10 @@ pub fn build(b: *std.Build) void {
     // ------------------------------------------------------------------
 
     const test_step = b.step("test", "Run all package unit tests");
+    const reactor_selftest_step = b.step(
+        "reactor-selftest",
+        "Run win-reactor tests, build reactor samples, and smoke-test selected WinUI apps",
+    );
 
     const TestPkg = struct {
         name: []const u8,
@@ -361,6 +365,9 @@ pub fn build(b: *std.Build) void {
         });
         const run_t = b.addRunArtifact(t);
         test_step.dependOn(&run_t.step);
+        if (std.mem.eql(u8, p.name, "win-reactor")) {
+            reactor_selftest_step.dependOn(&run_t.step);
+        }
     }
 
     // ------------------------------------------------------------------
@@ -1954,6 +1961,9 @@ pub fn build(b: *std.Build) void {
         });
         const install_sample = b.addInstallArtifact(sample_exe, .{});
         samples_step.dependOn(&install_sample.step);
+        if (target.result.os.tag == .windows and s.needs_win_reactor) {
+            reactor_selftest_step.dependOn(&install_sample.step);
+        }
         const sample_run_step = b.step(
             b.fmt("run-{s}", .{s.name}),
             b.fmt("Build and run the `{s}` sample", .{s.name}),
@@ -1970,6 +1980,20 @@ pub fn build(b: *std.Build) void {
                 run_sample.step.dependOn(stage_winui_runtime_step);
             }
             sample_run_step.dependOn(&run_sample.step);
+            if (native_windows_target and
+                (std.mem.eql(u8, s.name, "reactor-hello") or std.mem.eql(u8, s.name, "reactor-counter")))
+            {
+                const smoke_sample = b.addSystemCommand(&.{
+                    installed_exe,
+                    "--exit-after-ms",
+                    "1500",
+                });
+                smoke_sample.step.dependOn(&install_sample.step);
+                if (s.needs_staged_winui_runtime) {
+                    smoke_sample.step.dependOn(stage_winui_runtime_step);
+                }
+                reactor_selftest_step.dependOn(&smoke_sample.step);
+            }
         } else {
             const run_sample = b.addRunArtifact(sample_exe);
             run_sample.step.dependOn(&install_sample.step);

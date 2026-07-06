@@ -39,6 +39,8 @@ jobs:
         uses: mlugg/setup-zig@v2
         with:
           version: 0.16.0
+      - name: Fetch WinUI metadata
+        run: zig build fetch-winui-metadata --summary all
       - name: Build and test
         run: zig build test --summary all
 
@@ -74,6 +76,8 @@ jobs:
         uses: mlugg/setup-zig@v2
         with:
           version: 0.16.0
+      - name: Fetch WinUI metadata
+        run: zig build fetch-winui-metadata --summary all
       - name: Build all samples
         run: zig build samples
       - name: Run every sample
@@ -89,6 +93,51 @@ jobs:
             }
             Write-Host "::endgroup::"
           }
+
+  reactor-selftest:
+    runs-on: windows-2025
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Checkout windows-rs runtime assets
+        uses: actions/checkout@v6
+        with:
+          repository: cataggar/windows-rs
+          path: windows-rs
+      - name: Install Zig via ghr
+        uses: cataggar/ghr/actions/install@v0.6.1
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tools: |
+            cataggar/zig@v0.16.0 RWSGOq2NVecA2UPNdBUZykf1CCb147pkmdtYxgb3Ti+JO/wCYvhbAb/U
+      - name: Fetch WinUI metadata
+        run: zig build fetch-winui-metadata --summary all
+      - name: Install Windows App Runtime
+        shell: pwsh
+        run: |
+          $installerUrl = "https://aka.ms/windowsappsdk/2.0/2.0.1/windowsappruntimeinstall-x64.exe"
+          $installerPath = "$env:TEMP\WindowsAppRuntimeInstall.exe"
+          Invoke-WebRequest -Uri $installerUrl -OutFile $installerPath
+          Start-Process -FilePath $installerPath -ArgumentList "--quiet" -Wait -PassThru | Out-Null
+      - name: Point runtime staging at windows-rs assets
+        shell: pwsh
+        run: |
+          $bootstrap = "$env:GITHUB_WORKSPACE\windows-rs\crates\libs\reactor-setup\bootstrap\x64\Microsoft.WindowsAppRuntime.Bootstrap.dll"
+          $resources = "$env:GITHUB_WORKSPACE\windows-rs\crates\libs\reactor-setup\assets\resources.pri"
+          if (!(Test-Path $bootstrap)) {
+            Write-Host "::error::Missing bootstrap asset at $bootstrap"
+            exit 1
+          }
+          if (!(Test-Path $resources)) {
+            Write-Host "::error::Missing resources asset at $resources"
+            exit 1
+          }
+          "WINDOWS_APP_RUNTIME_BOOTSTRAP_DLL=$bootstrap" >> $env:GITHUB_ENV
+          "WINDOWS_APP_RUNTIME_RESOURCES_PRI=$resources" >> $env:GITHUB_ENV
+      - name: Run reactor selftest
+        run: zig build reactor-selftest --summary all
 
   lib:
     runs-on: ubuntu-22.04
