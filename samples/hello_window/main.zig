@@ -85,6 +85,16 @@ var g_main_hwnd: ?*anyopaque = null;
 var g_exit_after_ms: ?u32 = null;
 var g_timer_id: ?usize = null;
 
+fn releaseLifetime() void {
+    if (g_lifetime) |lifetime| {
+        lifetime.text_block.deinit();
+        lifetime.button.deinit();
+        lifetime.window.deinit();
+        lifetime.application.deinit();
+        g_lifetime = null;
+    }
+}
+
 const BootstrapRuntime = struct {
     module: ?*anyopaque,
     shutdown: MddBootstrapShutdownFn,
@@ -238,10 +248,6 @@ pub fn main(init: std.process.Init) !void {
         if (g_timer_id) |id| {
             _ = sys.KillTimer(null, id);
         }
-        // WinUI tears down these objects as part of `Application::Start()`
-        // shutdown; explicit Release calls here crash inside XAML teardown.
-        // Intentionally leak the final references on process exit.
-        g_lifetime = null;
         g_main_hwnd = null;
         g_exit_after_ms = null;
         g_timer_id = null;
@@ -252,6 +258,10 @@ pub fn main(init: std.process.Init) !void {
 
     var bootstrap = try BootstrapRuntime.init();
     defer bootstrap.deinit();
+    // Retained WinUI refs must be released on the original STA/UI thread
+    // after `Application.Start()` unwinds, but before bootstrap / WinRT
+    // teardown begins.
+    defer releaseLifetime();
 
     const app_statics = try core.activationFactory(
         surface.IApplicationStatics.Vtbl,

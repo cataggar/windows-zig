@@ -366,7 +366,7 @@ pub fn build(b: *std.Build) void {
             .name = b.fmt("test-{s}", .{p.name}),
             .root_module = p.mod,
         });
-        const run_t = b.addRunArtifact(t);
+        const run_t = addPackageTestRun(b, t, p.name);
         test_step.dependOn(&run_t.step);
         if (std.mem.eql(u8, p.name, "win-reactor")) {
             reactor_selftest_step.dependOn(&run_t.step);
@@ -1106,7 +1106,7 @@ pub fn build(b: *std.Build) void {
             .name = b.fmt("test-{s}", .{p.name}),
             .root_module = p.mod,
         });
-        const run_t = b.addRunArtifact(t);
+        const run_t = addPackageTestRun(b, t, p.name);
         test_step.dependOn(&run_t.step);
     }
 
@@ -2061,4 +2061,27 @@ fn addGeneratedNamespaceImports(
         }
         importing.addImport(namespace, module);
     }
+}
+
+fn addPackageTestRun(
+    b: *std.Build,
+    test_artifact: *std.Build.Step.Compile,
+    package_name: []const u8,
+) *std.Build.Step.Run {
+    // `winmd` and `reactor-manifest` pass when run directly, but Zig's
+    // Windows test-server protocol (`--listen=-`) intermittently times out
+    // before those metadata-heavy suites respond. Run them in simple
+    // exit-code mode so `zig build test` stays green.
+    if (!std.mem.eql(u8, package_name, "winmd") and !std.mem.eql(u8, package_name, "reactor-manifest")) {
+        return b.addRunArtifact(test_artifact);
+    }
+
+    const run_t = std.Build.Step.Run.create(
+        b,
+        b.fmt("run test(simple) {s}", .{package_name}),
+    );
+    run_t.addArtifactArg(test_artifact);
+    run_t.expectExitCode(0);
+    run_t.setCwd(b.path("."));
+    return run_t;
 }
