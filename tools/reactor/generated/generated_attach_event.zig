@@ -3,6 +3,7 @@ const std = @import("std");
 const schema = @import("reactor-schema");
 const reactor_event_runtime = @import("reactor-event-runtime");
 const win_core = @import("win-core");
+const @"Microsoft.UI.Xaml" = @import("Microsoft.UI.Xaml");
 const @"Microsoft.UI.Xaml.Controls" = @import("Microsoft.UI.Xaml.Controls");
 const @"Microsoft.UI.Xaml.Controls.Primitives" = @import("Microsoft.UI.Xaml.Controls.Primitives");
 const @"Windows.Foundation" = @import("Windows.Foundation");
@@ -75,6 +76,216 @@ fn dispatchDisconnectMicrosoftUIXamlControlsButtonClick(widget: *anyopaque, conn
     try disconnectMicrosoftUIXamlControlsButtonClick(@ptrCast(@alignCast(widget)), connection);
 }
 
+pub fn connectMicrosoftUIXamlControlsButtonPointerMoved(widget: *@"Microsoft.UI.Xaml.Controls".Button, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IButton = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0xa48a71e1, .data2 = 0x8bb4, .data3 = 0x5597, .data4 = .{ 0x9e, 0x31, 0x90, 0x3a, 0x3f, 0x6a, 0x04, 0xfb } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml".IUIElement.add_PointerMoved,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsButtonPointerMoved(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsButtonPointerMoved(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsButtonPointerMoved(widget: *@"Microsoft.UI.Xaml.Controls".Button, connection: *EventConnection) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IButton = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml".IUIElement.remove_PointerMoved,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsButtonPointerMoved(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsButtonPointerMoved(@ptrCast(@alignCast(widget)), connection);
+}
+
+pub fn connectMicrosoftUIXamlControlsButtonPointerPressed(widget: *@"Microsoft.UI.Xaml.Controls".Button, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IButton = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0xa48a71e1, .data2 = 0x8bb4, .data3 = 0x5597, .data4 = .{ 0x9e, 0x31, 0x90, 0x3a, 0x3f, 0x6a, 0x04, 0xfb } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml".IUIElement.add_PointerPressed,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsButtonPointerPressed(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsButtonPointerPressed(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsButtonPointerPressed(widget: *@"Microsoft.UI.Xaml.Controls".Button, connection: *EventConnection) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IButton = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml".IUIElement.remove_PointerPressed,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsButtonPointerPressed(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsButtonPointerPressed(@ptrCast(@alignCast(widget)), connection);
+}
+
+pub fn connectMicrosoftUIXamlControlsButtonPointerReleased(widget: *@"Microsoft.UI.Xaml.Controls".Button, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IButton = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0xa48a71e1, .data2 = 0x8bb4, .data3 = 0x5597, .data4 = .{ 0x9e, 0x31, 0x90, 0x3a, 0x3f, 0x6a, 0x04, 0xfb } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml".IUIElement.add_PointerReleased,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsButtonPointerReleased(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsButtonPointerReleased(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsButtonPointerReleased(widget: *@"Microsoft.UI.Xaml.Controls".Button, connection: *EventConnection) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IButton = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml".IUIElement.remove_PointerReleased,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsButtonPointerReleased(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsButtonPointerReleased(@ptrCast(@alignCast(widget)), connection);
+}
+
+pub fn connectMicrosoftUIXamlControlsCanvasPointerMoved(widget: *@"Microsoft.UI.Xaml.Controls".Canvas, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ICanvas = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0xa48a71e1, .data2 = 0x8bb4, .data3 = 0x5597, .data4 = .{ 0x9e, 0x31, 0x90, 0x3a, 0x3f, 0x6a, 0x04, 0xfb } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml".IUIElement.add_PointerMoved,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsCanvasPointerMoved(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsCanvasPointerMoved(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsCanvasPointerMoved(widget: *@"Microsoft.UI.Xaml.Controls".Canvas, connection: *EventConnection) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ICanvas = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml".IUIElement.remove_PointerMoved,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsCanvasPointerMoved(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsCanvasPointerMoved(@ptrCast(@alignCast(widget)), connection);
+}
+
+pub fn connectMicrosoftUIXamlControlsCanvasPointerPressed(widget: *@"Microsoft.UI.Xaml.Controls".Canvas, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ICanvas = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0xa48a71e1, .data2 = 0x8bb4, .data3 = 0x5597, .data4 = .{ 0x9e, 0x31, 0x90, 0x3a, 0x3f, 0x6a, 0x04, 0xfb } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml".IUIElement.add_PointerPressed,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsCanvasPointerPressed(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsCanvasPointerPressed(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsCanvasPointerPressed(widget: *@"Microsoft.UI.Xaml.Controls".Canvas, connection: *EventConnection) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ICanvas = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml".IUIElement.remove_PointerPressed,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsCanvasPointerPressed(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsCanvasPointerPressed(@ptrCast(@alignCast(widget)), connection);
+}
+
+pub fn connectMicrosoftUIXamlControlsCanvasPointerReleased(widget: *@"Microsoft.UI.Xaml.Controls".Canvas, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ICanvas = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0xa48a71e1, .data2 = 0x8bb4, .data3 = 0x5597, .data4 = .{ 0x9e, 0x31, 0x90, 0x3a, 0x3f, 0x6a, 0x04, 0xfb } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml".IUIElement.add_PointerReleased,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsCanvasPointerReleased(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsCanvasPointerReleased(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsCanvasPointerReleased(widget: *@"Microsoft.UI.Xaml.Controls".Canvas, connection: *EventConnection) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ICanvas = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml".IUIElement.remove_PointerReleased,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsCanvasPointerReleased(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsCanvasPointerReleased(@ptrCast(@alignCast(widget)), connection);
+}
+
 pub fn connectMicrosoftUIXamlControlsListViewSelectionChanged(widget: *@"Microsoft.UI.Xaml.Controls".ListView, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
     const default_iface: *const @"Microsoft.UI.Xaml.Controls".IListView = @ptrCast(widget);
     const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls.Primitives".ISelector) orelse return error.InterfaceCastFailed;
@@ -108,6 +319,321 @@ pub fn disconnectMicrosoftUIXamlControlsListViewSelectionChanged(widget: *@"Micr
 
 fn dispatchDisconnectMicrosoftUIXamlControlsListViewSelectionChanged(widget: *anyopaque, connection: *EventConnection) Error!void {
     try disconnectMicrosoftUIXamlControlsListViewSelectionChanged(@ptrCast(@alignCast(widget)), connection);
+}
+
+pub fn connectMicrosoftUIXamlControlsStackPanelPointerMoved(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IStackPanel = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0xa48a71e1, .data2 = 0x8bb4, .data3 = 0x5597, .data4 = .{ 0x9e, 0x31, 0x90, 0x3a, 0x3f, 0x6a, 0x04, 0xfb } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml".IUIElement.add_PointerMoved,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsStackPanelPointerMoved(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsStackPanelPointerMoved(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsStackPanelPointerMoved(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel, connection: *EventConnection) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IStackPanel = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml".IUIElement.remove_PointerMoved,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsStackPanelPointerMoved(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsStackPanelPointerMoved(@ptrCast(@alignCast(widget)), connection);
+}
+
+pub fn connectMicrosoftUIXamlControlsStackPanelPointerPressed(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IStackPanel = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0xa48a71e1, .data2 = 0x8bb4, .data3 = 0x5597, .data4 = .{ 0x9e, 0x31, 0x90, 0x3a, 0x3f, 0x6a, 0x04, 0xfb } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml".IUIElement.add_PointerPressed,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsStackPanelPointerPressed(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsStackPanelPointerPressed(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsStackPanelPointerPressed(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel, connection: *EventConnection) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IStackPanel = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml".IUIElement.remove_PointerPressed,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsStackPanelPointerPressed(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsStackPanelPointerPressed(@ptrCast(@alignCast(widget)), connection);
+}
+
+pub fn connectMicrosoftUIXamlControlsStackPanelPointerReleased(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IStackPanel = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0xa48a71e1, .data2 = 0x8bb4, .data3 = 0x5597, .data4 = .{ 0x9e, 0x31, 0x90, 0x3a, 0x3f, 0x6a, 0x04, 0xfb } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml".IUIElement.add_PointerReleased,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsStackPanelPointerReleased(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsStackPanelPointerReleased(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsStackPanelPointerReleased(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel, connection: *EventConnection) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IStackPanel = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml".IUIElement.remove_PointerReleased,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsStackPanelPointerReleased(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsStackPanelPointerReleased(@ptrCast(@alignCast(widget)), connection);
+}
+
+pub fn connectMicrosoftUIXamlControlsTextBlockPointerMoved(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ITextBlock = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0xa48a71e1, .data2 = 0x8bb4, .data3 = 0x5597, .data4 = .{ 0x9e, 0x31, 0x90, 0x3a, 0x3f, 0x6a, 0x04, 0xfb } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml".IUIElement.add_PointerMoved,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsTextBlockPointerMoved(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsTextBlockPointerMoved(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsTextBlockPointerMoved(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock, connection: *EventConnection) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ITextBlock = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml".IUIElement.remove_PointerMoved,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsTextBlockPointerMoved(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsTextBlockPointerMoved(@ptrCast(@alignCast(widget)), connection);
+}
+
+pub fn connectMicrosoftUIXamlControlsTextBlockPointerPressed(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ITextBlock = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0xa48a71e1, .data2 = 0x8bb4, .data3 = 0x5597, .data4 = .{ 0x9e, 0x31, 0x90, 0x3a, 0x3f, 0x6a, 0x04, 0xfb } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml".IUIElement.add_PointerPressed,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsTextBlockPointerPressed(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsTextBlockPointerPressed(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsTextBlockPointerPressed(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock, connection: *EventConnection) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ITextBlock = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml".IUIElement.remove_PointerPressed,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsTextBlockPointerPressed(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsTextBlockPointerPressed(@ptrCast(@alignCast(widget)), connection);
+}
+
+pub fn connectMicrosoftUIXamlControlsTextBlockPointerReleased(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ITextBlock = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0xa48a71e1, .data2 = 0x8bb4, .data3 = 0x5597, .data4 = .{ 0x9e, 0x31, 0x90, 0x3a, 0x3f, 0x6a, 0x04, 0xfb } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml".IUIElement.add_PointerReleased,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsTextBlockPointerReleased(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsTextBlockPointerReleased(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsTextBlockPointerReleased(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock, connection: *EventConnection) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ITextBlock = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml".IUIElement.remove_PointerReleased,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsTextBlockPointerReleased(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsTextBlockPointerReleased(@ptrCast(@alignCast(widget)), connection);
+}
+
+pub fn connectMicrosoftUIXamlControlsTextBoxPointerMoved(widget: *@"Microsoft.UI.Xaml.Controls".TextBox, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ITextBox = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0xa48a71e1, .data2 = 0x8bb4, .data3 = 0x5597, .data4 = .{ 0x9e, 0x31, 0x90, 0x3a, 0x3f, 0x6a, 0x04, 0xfb } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml".IUIElement.add_PointerMoved,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsTextBoxPointerMoved(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsTextBoxPointerMoved(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsTextBoxPointerMoved(widget: *@"Microsoft.UI.Xaml.Controls".TextBox, connection: *EventConnection) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ITextBox = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml".IUIElement.remove_PointerMoved,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsTextBoxPointerMoved(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsTextBoxPointerMoved(@ptrCast(@alignCast(widget)), connection);
+}
+
+pub fn connectMicrosoftUIXamlControlsTextBoxPointerPressed(widget: *@"Microsoft.UI.Xaml.Controls".TextBox, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ITextBox = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0xa48a71e1, .data2 = 0x8bb4, .data3 = 0x5597, .data4 = .{ 0x9e, 0x31, 0x90, 0x3a, 0x3f, 0x6a, 0x04, 0xfb } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml".IUIElement.add_PointerPressed,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsTextBoxPointerPressed(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsTextBoxPointerPressed(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsTextBoxPointerPressed(widget: *@"Microsoft.UI.Xaml.Controls".TextBox, connection: *EventConnection) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ITextBox = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml".IUIElement.remove_PointerPressed,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsTextBoxPointerPressed(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsTextBoxPointerPressed(@ptrCast(@alignCast(widget)), connection);
+}
+
+pub fn connectMicrosoftUIXamlControlsTextBoxPointerReleased(widget: *@"Microsoft.UI.Xaml.Controls".TextBox, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ITextBox = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0xa48a71e1, .data2 = 0x8bb4, .data3 = 0x5597, .data4 = .{ 0x9e, 0x31, 0x90, 0x3a, 0x3f, 0x6a, 0x04, 0xfb } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml".IUIElement.add_PointerReleased,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsTextBoxPointerReleased(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsTextBoxPointerReleased(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsTextBoxPointerReleased(widget: *@"Microsoft.UI.Xaml.Controls".TextBox, connection: *EventConnection) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ITextBox = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml".IUIElement.remove_PointerReleased,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsTextBoxPointerReleased(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsTextBoxPointerReleased(@ptrCast(@alignCast(widget)), connection);
 }
 
 pub fn connectMicrosoftUIXamlControlsTextBoxTextChanged(widget: *@"Microsoft.UI.Xaml.Controls".TextBox, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
@@ -154,6 +680,72 @@ pub const entries = [_]EventConnector{
         .disconnect = dispatchDisconnectMicrosoftUIXamlControlsButtonClick,
     },
     .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Button",
+        .widget_name = "Button",
+        .handle_name = "Button",
+        .event_name = "PointerMoved",
+        .field_name = "on_pointer_moved",
+        .payload = .pointer,
+        .source = .none,
+        .connect = dispatchConnectMicrosoftUIXamlControlsButtonPointerMoved,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsButtonPointerMoved,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Button",
+        .widget_name = "Button",
+        .handle_name = "Button",
+        .event_name = "PointerPressed",
+        .field_name = "on_pointer_pressed",
+        .payload = .pointer,
+        .source = .none,
+        .connect = dispatchConnectMicrosoftUIXamlControlsButtonPointerPressed,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsButtonPointerPressed,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Button",
+        .widget_name = "Button",
+        .handle_name = "Button",
+        .event_name = "PointerReleased",
+        .field_name = "on_pointer_released",
+        .payload = .pointer,
+        .source = .none,
+        .connect = dispatchConnectMicrosoftUIXamlControlsButtonPointerReleased,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsButtonPointerReleased,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Canvas",
+        .widget_name = "Canvas",
+        .handle_name = "Canvas",
+        .event_name = "PointerMoved",
+        .field_name = "on_pointer_moved",
+        .payload = .pointer,
+        .source = .none,
+        .connect = dispatchConnectMicrosoftUIXamlControlsCanvasPointerMoved,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsCanvasPointerMoved,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Canvas",
+        .widget_name = "Canvas",
+        .handle_name = "Canvas",
+        .event_name = "PointerPressed",
+        .field_name = "on_pointer_pressed",
+        .payload = .pointer,
+        .source = .none,
+        .connect = dispatchConnectMicrosoftUIXamlControlsCanvasPointerPressed,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsCanvasPointerPressed,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Canvas",
+        .widget_name = "Canvas",
+        .handle_name = "Canvas",
+        .event_name = "PointerReleased",
+        .field_name = "on_pointer_released",
+        .payload = .pointer,
+        .source = .none,
+        .connect = dispatchConnectMicrosoftUIXamlControlsCanvasPointerReleased,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsCanvasPointerReleased,
+    },
+    .{
         .widget_class = "Microsoft.UI.Xaml.Controls.ListView",
         .widget_name = "ListView",
         .handle_name = "ListView",
@@ -163,6 +755,105 @@ pub const entries = [_]EventConnector{
         .source = .none,
         .connect = dispatchConnectMicrosoftUIXamlControlsListViewSelectionChanged,
         .disconnect = dispatchDisconnectMicrosoftUIXamlControlsListViewSelectionChanged,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.StackPanel",
+        .widget_name = "StackPanel",
+        .handle_name = "StackPanel",
+        .event_name = "PointerMoved",
+        .field_name = "on_pointer_moved",
+        .payload = .pointer,
+        .source = .none,
+        .connect = dispatchConnectMicrosoftUIXamlControlsStackPanelPointerMoved,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsStackPanelPointerMoved,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.StackPanel",
+        .widget_name = "StackPanel",
+        .handle_name = "StackPanel",
+        .event_name = "PointerPressed",
+        .field_name = "on_pointer_pressed",
+        .payload = .pointer,
+        .source = .none,
+        .connect = dispatchConnectMicrosoftUIXamlControlsStackPanelPointerPressed,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsStackPanelPointerPressed,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.StackPanel",
+        .widget_name = "StackPanel",
+        .handle_name = "StackPanel",
+        .event_name = "PointerReleased",
+        .field_name = "on_pointer_released",
+        .payload = .pointer,
+        .source = .none,
+        .connect = dispatchConnectMicrosoftUIXamlControlsStackPanelPointerReleased,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsStackPanelPointerReleased,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.TextBlock",
+        .widget_name = "TextBlock",
+        .handle_name = "TextBlock",
+        .event_name = "PointerMoved",
+        .field_name = "on_pointer_moved",
+        .payload = .pointer,
+        .source = .none,
+        .connect = dispatchConnectMicrosoftUIXamlControlsTextBlockPointerMoved,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsTextBlockPointerMoved,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.TextBlock",
+        .widget_name = "TextBlock",
+        .handle_name = "TextBlock",
+        .event_name = "PointerPressed",
+        .field_name = "on_pointer_pressed",
+        .payload = .pointer,
+        .source = .none,
+        .connect = dispatchConnectMicrosoftUIXamlControlsTextBlockPointerPressed,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsTextBlockPointerPressed,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.TextBlock",
+        .widget_name = "TextBlock",
+        .handle_name = "TextBlock",
+        .event_name = "PointerReleased",
+        .field_name = "on_pointer_released",
+        .payload = .pointer,
+        .source = .none,
+        .connect = dispatchConnectMicrosoftUIXamlControlsTextBlockPointerReleased,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsTextBlockPointerReleased,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.TextBox",
+        .widget_name = "TextBox",
+        .handle_name = "TextBox",
+        .event_name = "PointerMoved",
+        .field_name = "on_pointer_moved",
+        .payload = .pointer,
+        .source = .none,
+        .connect = dispatchConnectMicrosoftUIXamlControlsTextBoxPointerMoved,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsTextBoxPointerMoved,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.TextBox",
+        .widget_name = "TextBox",
+        .handle_name = "TextBox",
+        .event_name = "PointerPressed",
+        .field_name = "on_pointer_pressed",
+        .payload = .pointer,
+        .source = .none,
+        .connect = dispatchConnectMicrosoftUIXamlControlsTextBoxPointerPressed,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsTextBoxPointerPressed,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.TextBox",
+        .widget_name = "TextBox",
+        .handle_name = "TextBox",
+        .event_name = "PointerReleased",
+        .field_name = "on_pointer_released",
+        .payload = .pointer,
+        .source = .none,
+        .connect = dispatchConnectMicrosoftUIXamlControlsTextBoxPointerReleased,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsTextBoxPointerReleased,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.TextBox",
@@ -179,8 +870,23 @@ pub const entries = [_]EventConnector{
 
 pub const by_widget_event = std.StaticStringMap(usize).initComptime(.{
     .{ "Microsoft.UI.Xaml.Controls.Button#Click", 0 },
-    .{ "Microsoft.UI.Xaml.Controls.ListView#SelectionChanged", 1 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#TextChanged", 2 },
+    .{ "Microsoft.UI.Xaml.Controls.Button#PointerMoved", 1 },
+    .{ "Microsoft.UI.Xaml.Controls.Button#PointerPressed", 2 },
+    .{ "Microsoft.UI.Xaml.Controls.Button#PointerReleased", 3 },
+    .{ "Microsoft.UI.Xaml.Controls.Canvas#PointerMoved", 4 },
+    .{ "Microsoft.UI.Xaml.Controls.Canvas#PointerPressed", 5 },
+    .{ "Microsoft.UI.Xaml.Controls.Canvas#PointerReleased", 6 },
+    .{ "Microsoft.UI.Xaml.Controls.ListView#SelectionChanged", 7 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#PointerMoved", 8 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#PointerPressed", 9 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#PointerReleased", 10 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#PointerMoved", 11 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#PointerPressed", 12 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#PointerReleased", 13 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#PointerMoved", 14 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#PointerPressed", 15 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#PointerReleased", 16 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#TextChanged", 17 },
 });
 
 pub fn find(widget_class: []const u8, event_name: []const u8) ?*const EventConnector {

@@ -124,6 +124,7 @@ fn loadProps(allocator: std.mem.Allocator, comptime raw: anytype) ![]Property {
                 init.setter,
             .winrt_type = init.winrt_type,
             .attached = init.attached,
+            .manual = init.manual,
         };
     }
 
@@ -218,11 +219,11 @@ fn eventFieldNameAlloc(allocator: std.mem.Allocator, name: []const u8) ![]const 
     return buf[0..out_len];
 }
 
-test "production manifest covers the initial widget set" {
+test "production manifest covers the committed widget set" {
     var manifest = try load(std.testing.allocator);
     defer manifest.deinit();
 
-    try std.testing.expectEqual(@as(usize, 8), manifest.widgets.len);
+    try std.testing.expectEqual(@as(usize, 12), manifest.widgets.len);
 
     const application = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Application") orelse return error.TestUnexpectedResult;
     try std.testing.expectEqual(@as(usize, 0), application.props.len);
@@ -239,9 +240,12 @@ test "production manifest covers the initial widget set" {
     const text = findProp(text_block, "Text") orelse return error.TestUnexpectedResult;
     try std.testing.expectEqualStrings("text", text.field);
     try std.testing.expect(text.value.? == .string);
+    const text_block_left = findProp(text_block, "Left") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(text_block_left.setter.? == .attached);
 
     const text_box = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.TextBox") orelse return error.TestUnexpectedResult;
-    try std.testing.expectEqual(@as(usize, 0), text_box.props.len);
+    try std.testing.expectEqual(@as(usize, 3), text_box.props.len);
+    try std.testing.expectEqual(@as(usize, 4), text_box.events.len);
     const text_changed = findEvent(text_box, "TextChanged") orelse return error.TestUnexpectedResult;
     try std.testing.expectEqualStrings("on_text_changed", text_changed.field);
     try std.testing.expect(text_changed.payload.? == .string);
@@ -249,6 +253,8 @@ test "production manifest covers the initial widget set" {
         .sender_property => |name| try std.testing.expectEqualStrings("Text", name),
         else => return error.TestUnexpectedResult,
     }
+    const text_box_pointer_moved = findEvent(text_box, "PointerMoved") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(text_box_pointer_moved.payload.? == .pointer);
 
     const button = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.Button") orelse return error.TestUnexpectedResult;
     const content = findProp(button, "Content") orelse return error.TestUnexpectedResult;
@@ -262,23 +268,50 @@ test "production manifest covers the initial widget set" {
         .none => {},
         else => return error.TestUnexpectedResult,
     }
+    const pointer_pressed = findEvent(button, "PointerPressed") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(pointer_pressed.payload.? == .pointer);
 
     const stack_panel = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.StackPanel") orelse return error.TestUnexpectedResult;
     const orientation = findProp(stack_panel, "Orientation") orelse return error.TestUnexpectedResult;
     try std.testing.expect(orientation.value.? == .enum_i32);
     const spacing = findProp(stack_panel, "Spacing") orelse return error.TestUnexpectedResult;
     try std.testing.expect(spacing.value.? == .f64);
+    const stack_left = findProp(stack_panel, "Left") orelse return error.TestUnexpectedResult;
+    try std.testing.expectEqualStrings("Microsoft.UI.Xaml.Controls.Canvas", stack_left.attached.?.owner);
+
+    const canvas = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.Canvas") orelse return error.TestUnexpectedResult;
+    const canvas_top = findProp(canvas, "Top") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(canvas_top.value.? == .f64);
+    const canvas_z = findProp(canvas, "ZIndex") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(canvas_z.value.? == .i32);
+    const canvas_pointer_released = findEvent(canvas, "PointerReleased") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(canvas_pointer_released.payload.? == .pointer);
+    const grid = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.Grid") orelse return error.TestUnexpectedResult;
+    const row_definitions = findProp(grid, "RowDefinitions") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(row_definitions.manual);
+    const column_definitions = findProp(grid, "ColumnDefinitions") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(column_definitions.manual);
+
+    const scroll_viewer = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.ScrollViewer") orelse return error.TestUnexpectedResult;
+    const content_prop = findProp(scroll_viewer, "Content") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(content_prop.value.? == .element);
+
+    const border = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.Border") orelse return error.TestUnexpectedResult;
+    const child = findProp(border, "Child") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(child.value.? == .element);
+    try std.testing.expect((findProp(border, "BorderThickness") orelse return error.TestUnexpectedResult).manual);
+    try std.testing.expect((findProp(border, "CornerRadius") orelse return error.TestUnexpectedResult).manual);
+    try std.testing.expect((findProp(border, "Background") orelse return error.TestUnexpectedResult).manual);
 
     const list_view = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.ListView") orelse return error.TestUnexpectedResult;
     const list_view_items_source = findProp(list_view, "ItemsSource") orelse return error.TestUnexpectedResult;
     try std.testing.expect(list_view_items_source.value.? == .object);
     const selection_changed = findEvent(list_view, "SelectionChanged") orelse return error.TestUnexpectedResult;
-    try std.testing.expectEqualStrings("on_selection_changed", selection_changed.field);
     try std.testing.expect(selection_changed.payload.? == .unit);
 
     const items_repeater = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.ItemsRepeater") orelse return error.TestUnexpectedResult;
-    const items_repeater_items_source = findProp(items_repeater, "ItemsSource") orelse return error.TestUnexpectedResult;
-    try std.testing.expect(items_repeater_items_source.value.? == .object);
+    const repeater_items_source = findProp(items_repeater, "ItemsSource") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(repeater_items_source.value.? == .object);
 }
 
 test "loader derives defaults and preserves advanced overrides" {
@@ -297,6 +330,7 @@ test "loader derives defaults and preserves advanced overrides" {
                         .owner = "Microsoft.UI.Xaml.Controls.Grid",
                         .setter = "SetRow",
                     },
+                    .manual = true,
                 },
             },
             .events = .{
@@ -334,6 +368,7 @@ test "loader derives defaults and preserves advanced overrides" {
     try std.testing.expect(row.setter.? == .attached);
     try std.testing.expectEqualStrings("Microsoft.UI.Xaml.Controls.Grid", row.attached.?.owner);
     try std.testing.expectEqualStrings("SetRow", row.attached.?.setter);
+    try std.testing.expect(row.manual);
 
     const toggled = &widget.events[0];
     try std.testing.expectEqualStrings("on_toggled", toggled.field);

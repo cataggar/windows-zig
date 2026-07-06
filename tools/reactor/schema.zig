@@ -53,6 +53,8 @@ pub const PropInit = struct {
     winrt_type: ?[]const u8 = null,
     /// Attached-property owner metadata when this is not an instance `put_*` setter.
     attached: ?AttachedPropertyInit = null,
+    /// Skip generated setter glue; a hand-written backend path will own it.
+    manual: bool = false,
 };
 
 /// Reactor-facing event payload kinds used by generated event glue.
@@ -62,6 +64,7 @@ pub const EventPayload = enum {
     string,
     f64,
     i32,
+    pointer,
     color,
     date_time,
     time_span,
@@ -111,6 +114,7 @@ pub const Property = struct {
     setter: ?SetterKind = null,
     winrt_type: ?[]const u8 = null,
     attached: ?AttachedPropertyInit = null,
+    manual: bool = false,
 };
 
 /// Normalized event declaration consumed by future codegen.
