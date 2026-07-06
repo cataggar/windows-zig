@@ -7,3 +7,4 @@ zig-out/
 # rather than committed. See vendor/winmd/README.
 /vendor/winmd/Microsoft.UI.Xaml.winmd
 /vendor/winmd/Microsoft.UI.Text.winmd
+/vendor/winmd/Microsoft.UI.winmd

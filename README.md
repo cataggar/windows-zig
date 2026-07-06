@@ -43,8 +43,9 @@ vendor/
                         # the latest files from
                         # windows-rs/crates/libs/bindgen/default/*.winmd.
                         # WinUI3 metadata (Microsoft.UI.Xaml.winmd,
-                        # Microsoft.UI.Text.winmd) is fetched on demand
-                        # via `zig build fetch-winui-metadata` instead of
+                        # Microsoft.UI.Text.winmd, Microsoft.UI.winmd)
+                        # is fetched on demand via
+                        # `zig build fetch-winui-metadata` instead of
                         # committed — see vendor/winmd/README.md for why.
 tests/                 # package-level tests
 samples/               # end-to-end examples

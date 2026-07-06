@@ -17,10 +17,10 @@ reactor port.
 
 | Slice | Outcome |
 |------|---------|
-| Issue #2 / PR #50 | `zig build fetch-winui-metadata` can fetch the WinUI 3 metadata on demand and `winbindgen` can route `Microsoft.UI.*` namespaces to it. |
+| Issue #2 / PR #50 | `zig build fetch-winui-metadata` can fetch the WinUI 3 metadata on demand and `winbindgen` can route `Microsoft.UI.*` namespaces to their correct metadata files. |
 | Issue #3 / PR #57 | A compile-only canary proved the minimal `Application` / `Window` / `Button` / `TextBlock` surface type-checks end-to-end. |
 | Issue #4 / PR #58 | A live `hello_window` sample opened a visible WinUI 3 window from Zig using Windows App Runtime bootstrap APIs. |
-| Follow-ups | Full checked-in WinUI namespace snapshots still hit the emitter gaps tracked in #52-#56, and `hello_window` teardown now relies on releasing the final WinUI refs before bootstrap/WinRT shutdown (#60). |
+| Follow-ups | Full checked-in WinUI namespace snapshots still have the remaining emitter gap tracked in #53, and `hello_window` now releases the final WinUI refs before bootstrap/WinRT shutdown (#60). |
 
 ## Metadata source and version
 
@@ -32,10 +32,11 @@ The fetch path is intentionally on-demand rather than vendored:
 - `zig build fetch-winui-metadata` downloads the `.nupkg` from NuGet's
   flat-container endpoint.
 - The tool verifies the package against a pinned SHA-256 before extracting it.
-- Only two files are copied into `vendor/winmd/`:
+- Three files are copied into `vendor/winmd/`:
   - `Microsoft.UI.Xaml.winmd`
   - `Microsoft.UI.Text.winmd`
-- If both files are already present, the tool skips the download.
+  - `Microsoft.UI.winmd`
+- If all three files are already present, the tool skips the download.
 
 This mirrors the existing repo policy for Windows App SDK metadata: the WinUI 3
 metadata ships under Microsoft's Windows App SDK license, so it is fetched on
@@ -43,13 +44,15 @@ demand rather than committed to source control.
 
 Once fetched, `winbindgen` selects metadata by namespace prefix:
 
+- `Microsoft.UI.Xaml.*` → `Microsoft.UI.Xaml.winmd`
 - `Microsoft.UI.Text.*` → `Microsoft.UI.Text.winmd`
-- `Microsoft.UI.*` → `Microsoft.UI.Xaml.winmd`
+- `Microsoft.UI.*` → `Microsoft.UI.winmd`
 - everything else keeps using the existing `Windows*.winmd` files
 
-That was enough to snapshot `Microsoft.UI.Xaml` and
-`Microsoft.UI.Xaml.Controls` and to drive the minimal WinUI validation work in
-M1.
+That is enough to snapshot `Microsoft.UI.Xaml`,
+`Microsoft.UI.Xaml.Controls`, and `Microsoft.UI.Xaml.Controls.Primitives`, and
+to regenerate a transitive WinUI dependency manifest for the checked-in
+starter surface.
 
 ## Minimal generated surface: what worked
 
@@ -78,15 +81,16 @@ minimal reactor bring-up path, with specific remaining gaps called out below."
 ## Emitter gaps found during validation
 
 The whole checked-in WinUI namespace snapshots are still not importable as a
-drop-in surface. M1 narrowed the problems to five follow-up issues:
+drop-in surface. M1 originally narrowed the problems to four follow-up issues;
+since then #54, #55, and #56 have been fixed, leaving #53 as the remaining
+open WinUI emitter gap:
 
 | Issue | Gap | M1 impact / workaround | Status |
 |------|-----|-------------------------|--------|
-| [#52](https://github.com/cataggar/windows-zig/issues/52) | Bundle generation emits empty `Microsoft.UI.*` dependency namespaces such as `Microsoft.UI.Dispatching`, `Microsoft.UI.Windowing`, and `Microsoft.UI.Composition`. | Full `Microsoft.UI.Xaml*` imports fail because referenced dependency types are missing. M1 used a local curated surface instead of the whole snapshot. | Open follow-up. |
-| [#53](https://github.com/cataggar/windows-zig/issues/53) | Generated WinUI files reference undeclared `IResourceManager` and `CoreWebView2*` identifiers. | The whole namespace files are syntactically present but not importable. M1 again avoided them with a local four-type surface. | Open follow-up. |
-| [#54](https://github.com/cataggar/windows-zig/issues/54) | Generated `activate()` helpers pass an `_Vtbl` type to `win_core.activateInstance` instead of the interface handle type. | `TextBlock.activate()` is broken today. The spike called `win_core.activateInstance(ITextBlock, &TextBlock.NAME_W)` directly. | Open follow-up. |
-| [#55](https://github.com/cataggar/windows-zig/issues/55) | Composable WinUI runtime classes do not get `Factory` / `factory()` helpers. | `Application`, `Window`, and `Button` are still constructible, but only through manual `activationFactory(...CreateInstance...)` plumbing. | Open follow-up. |
-| [#56](https://github.com/cataggar/windows-zig/issues/56) | Several WinUI event and collection members still fall back to `*anyopaque`. | Not a blocker for the minimal construction path, but still blocks a clean typed story for WinUI-specific events and collection APIs. | Open follow-up. |
+| [#53](https://github.com/cataggar/windows-zig/issues/53) | Generated WinUI files reference undeclared `IResourceManager` and `CoreWebView2*` identifiers. | The whole namespace files are syntactically present but not yet importable as a drop-in surface. M1 again avoided them with a local four-type surface. | Open follow-up. |
+| [#54](https://github.com/cataggar/windows-zig/issues/54) | Generated `activate()` helpers passed an `_Vtbl` type to `win_core.activateInstance` instead of the interface handle type. | `TextBlock.activate()` and similar helpers now pass the interface handle type directly. | Fixed in PR #78 / merged to `main`. |
+| [#55](https://github.com/cataggar/windows-zig/issues/55) | Composable WinUI runtime classes did not get `Factory` / `factory()` helpers. | `Application`, `Window`, `Button`, and similar composable WinUI classes now project those helpers. | Fixed in PR #81 / merged to `main`. |
+| [#56](https://github.com/cataggar/windows-zig/issues/56) | Several WinUI event and collection members fell back to `*anyopaque`. | WinUI event delegates and collection handles now project typed cross-namespace generic handles instead of erasing them. | Fixed in PR #79 / merged to `main`. |
 
 Taken together, these are real emitter defects, but they are also bounded:
 they break the "import the whole generated `Microsoft.UI.Xaml` namespace" path,
@@ -194,7 +198,7 @@ The differences were mostly about maturity:
 - Rust already packages this flow behind helper crates; Zig currently exposes it
   as a sample plus local staging/bootstrap helpers.
 - Rust's mature reactor stack does not rely on a hand-curated WinUI surface;
-  Zig still does until #52-#56 are fixed.
+  Zig still does until #53-#56 are fixed.
 - The remaining surprises were runtime/lifetime quirks (`RPC_E_WRONG_THREAD`,
   `E_INVALIDARG` on `TextWrapping`, and the need to release final WinUI refs
   before bootstrap/WinRT teardown) rather than evidence that the Rust
@@ -214,5 +218,5 @@ M1 answered the two existential questions positively:
 The important caveat is scope. Later milestones should proceed on top of the
 proven minimal surface and bootstrap path, but they should **not** assume the
 full generated `Microsoft.UI.*` namespace snapshots are production-ready yet.
-Those need the emitter follow-ups in #52-#56, and the shutdown/lifetime polish
+Those need the emitter follow-ups in #53-#56, and the shutdown/lifetime polish
 in #60, before "just import WinUI" becomes a clean story.
