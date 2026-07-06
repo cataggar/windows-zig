@@ -1,4 +1,6 @@
 const std = @import("std");
+const foundation = @import("Windows.Foundation");
+const input = @import("Microsoft.UI.Xaml.Input");
 const win_core = @import("win-core");
 
 pub const HRESULT = win_core.HRESULT;
@@ -63,6 +65,17 @@ pub const RoutedEventHandler = opaque {};
 
 pub const IUIElement_Vtbl = extern struct {
     base: IInspectable_Vtbl,
+    _reserved_before_pointer_events: [146]*const anyopaque,
+    add_PointerPressed: *const fn (this: *const IUIElement, handler: *input.PointerEventHandler, result: *foundation.EventRegistrationToken) callconv(.winapi) HRESULT,
+    remove_PointerPressed: *const fn (this: *const IUIElement, token: foundation.EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_PointerMoved: *const fn (this: *const IUIElement, handler: *input.PointerEventHandler, result: *foundation.EventRegistrationToken) callconv(.winapi) HRESULT,
+    remove_PointerMoved: *const fn (this: *const IUIElement, token: foundation.EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_PointerReleased: *const fn (this: *const IUIElement, handler: *input.PointerEventHandler, result: *foundation.EventRegistrationToken) callconv(.winapi) HRESULT,
+    remove_PointerReleased: *const fn (this: *const IUIElement, token: foundation.EventRegistrationToken) callconv(.winapi) HRESULT,
+    _reserved_before_capture: [54]*const anyopaque,
+    CapturePointer: *const fn (this: *const IUIElement, pointer: *input.Pointer, result: *BOOL) callconv(.winapi) HRESULT,
+    ReleasePointerCapture: *const fn (this: *const IUIElement, pointer: *input.Pointer) callconv(.winapi) HRESULT,
+    ReleasePointerCaptures: *const fn (this: *const IUIElement) callconv(.winapi) HRESULT,
 };
 
 pub const IUIElement = extern struct {
@@ -91,6 +104,42 @@ pub const IUIElement = extern struct {
         var out: ?*anyopaque = null;
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
+    }
+
+    pub fn add_PointerPressed(self: *const IUIElement, handler: *input.PointerEventHandler, result: *foundation.EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.add_PointerPressed(self, handler, result);
+    }
+
+    pub fn remove_PointerPressed(self: *const IUIElement, token: foundation.EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.remove_PointerPressed(self, token);
+    }
+
+    pub fn add_PointerMoved(self: *const IUIElement, handler: *input.PointerEventHandler, result: *foundation.EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.add_PointerMoved(self, handler, result);
+    }
+
+    pub fn remove_PointerMoved(self: *const IUIElement, token: foundation.EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.remove_PointerMoved(self, token);
+    }
+
+    pub fn add_PointerReleased(self: *const IUIElement, handler: *input.PointerEventHandler, result: *foundation.EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.add_PointerReleased(self, handler, result);
+    }
+
+    pub fn remove_PointerReleased(self: *const IUIElement, token: foundation.EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.remove_PointerReleased(self, token);
+    }
+
+    pub fn CapturePointer(self: *const IUIElement, pointer: *input.Pointer, result: *BOOL) callconv(.winapi) HRESULT {
+        return self.vtable.CapturePointer(self, pointer, result);
+    }
+
+    pub fn ReleasePointerCapture(self: *const IUIElement, pointer: *input.Pointer) callconv(.winapi) HRESULT {
+        return self.vtable.ReleasePointerCapture(self, pointer);
+    }
+
+    pub fn ReleasePointerCaptures(self: *const IUIElement) callconv(.winapi) HRESULT {
+        return self.vtable.ReleasePointerCaptures(self);
     }
 };
 

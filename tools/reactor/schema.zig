@@ -61,6 +61,7 @@ pub const EventPayload = enum {
     string,
     f64,
     i32,
+    pointer,
     color,
     date_time,
     time_span,
