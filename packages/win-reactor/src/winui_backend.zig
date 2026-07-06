@@ -3,19 +3,23 @@ const win = @import("win");
 
 const backend = @import("backend.zig");
 const element = @import("element.zig");
+const widgets_layout = @import("widgets_layout.zig");
 const generated_attach_event = @import("reactor-generated-attach-event");
 const generated_set_prop = @import("reactor-generated-set-prop");
 const controls = @import("Microsoft.UI.Xaml.Controls");
 const xaml = @import("Microsoft.UI.Xaml");
+const media = @import("Microsoft.UI.Xaml.Media");
 
 const win_core = win.core;
 
 const WidgetId = backend.WidgetId;
 const Allocator = std.mem.Allocator;
 
-/// Initial real WinUI backend surface: Application, Window, Button,
-/// StackPanel, TextBlock, and TextBox runtime objects, with generated
-/// property/event dispatch wired only for the manifest-covered subset.
+/// Real WinUI backend surface for the current reactor widget catalog:
+/// Application, Window, Button, StackPanel, Grid, ScrollViewer, Border,
+/// TextBlock, and TextBox runtime objects, with generated property/event
+/// dispatch wired for manifest-covered members and manual fallbacks for the
+/// current attached-property / collection-property gaps.
 pub const WinUIBackend = struct {
     allocator: Allocator,
     application: win_core.IInspectable,
@@ -169,7 +173,11 @@ pub const WinUIBackend = struct {
                     try replaceChildList(&parent_node.children, self.allocator, child_ids);
                     try self.refreshWindowContent(parent_node);
                 },
-                .stack_panel => {
+                .scroll_viewer, .border => {
+                    try replaceChildList(&parent_node.children, self.allocator, child_ids);
+                    try self.refreshSingleChildContainer(parent_node);
+                },
+                .stack_panel, .grid => {
                     const collection = try self.panelChildren(parent_node.handle);
                     defer collection.deinit();
                     const iface: *const controls.IUIElementCollection = @ptrCast(@alignCast(collection.ptr));
@@ -196,6 +204,8 @@ pub const WinUIBackend = struct {
     }
 
     pub fn setProperty(self: *WinUIBackend, id: WidgetId, property: *const element.Property) !void {
+        if (try self.setManualProperty(id, property)) return;
+
         const node = self.nodes.get(id) orelse return error.UnknownWidget;
         const widget_class = widgetClassName(node.kind) orelse return error.UnsupportedWidgetKind;
         var setter_value = try self.propertyToSetterValue(node.kind, property);
@@ -212,6 +222,8 @@ pub const WinUIBackend = struct {
 
     pub fn unsetProperty(self: *WinUIBackend, id: WidgetId, name: []const u8) !void {
         const node = self.nodes.get(id) orelse return error.UnknownWidget;
+        if (try self.unsetManualProperty(node.kind, node.handle, name)) return;
+
         var value = switch (node.kind) {
             .window => if (std.mem.eql(u8, name, "Title"))
                 try self.utf8SetterValue("")
@@ -231,6 +243,7 @@ pub const WinUIBackend = struct {
                 OwnedSetterValue{ .value = .{ .f64 = 0.0 } }
             else
                 return error.UnsupportedProperty,
+            .grid, .scroll_viewer, .border => return error.UnsupportedProperty,
             else => return error.UnsupportedProperty,
         };
         defer value.deinit(self.allocator);
@@ -300,6 +313,9 @@ pub const WinUIBackend = struct {
             .window => ownInspectable(try createComposable(xaml.Window, xaml.IWindowFactory)),
             .button => ownInspectable(try createComposable(controls.Button, controls.IButtonFactory)),
             .stack_panel => ownInspectable(try createComposable(controls.StackPanel, controls.IStackPanelFactory)),
+            .grid => ownInspectable(try createComposable(controls.Grid, controls.IGridFactory)),
+            .scroll_viewer => ownInspectable(try controls.ScrollViewer.activate()),
+            .border => ownInspectable(try controls.Border.activate()),
             .text_block => ownInspectable(try controls.TextBlock.activate()),
             .text_box => ownInspectable(try createComposable(controls.TextBox, controls.ITextBoxFactory)),
             else => error.UnsupportedWidgetKind,
@@ -347,7 +363,13 @@ pub const WinUIBackend = struct {
             .window => {
                 try self.setWindowContentHandle(parent_node, child_node.handle);
             },
-            .stack_panel => {
+            .scroll_viewer => {
+                try self.setContentControlContentHandle(parent_node, child_node.handle);
+            },
+            .border => {
+                try self.setBorderChildHandle(parent_node, child_node.handle);
+            },
+            .stack_panel, .grid => {
                 const collection = try self.panelChildren(parent_node.handle);
                 defer collection.deinit();
                 const iface: *const controls.IUIElementCollection = @ptrCast(@alignCast(collection.ptr));
@@ -379,7 +401,9 @@ pub const WinUIBackend = struct {
         switch (parent_node.kind) {
             .application => {},
             .window => {},
-            .stack_panel => {
+            .scroll_viewer => {},
+            .border => {},
+            .stack_panel, .grid => {
                 const collection = try self.panelChildren(parent_node.handle);
                 defer collection.deinit();
                 const iface: *const controls.IUIElementCollection = @ptrCast(@alignCast(collection.ptr));
@@ -391,6 +415,8 @@ pub const WinUIBackend = struct {
         _ = parent_node.children.orderedRemove(child_index);
         if (parent_node.kind == .window) {
             try self.refreshWindowContent(parent_node);
+        } else if (parent_node.kind == .scroll_viewer or parent_node.kind == .border) {
+            try self.refreshSingleChildContainer(parent_node);
         }
     }
 
@@ -417,6 +443,153 @@ pub const WinUIBackend = struct {
         defer window.deinit();
         const iface: *const xaml.IWindow = @ptrCast(@alignCast(window.ptr));
         try win_core.hresult.ok(iface.put_Content(value));
+    }
+
+    fn refreshSingleChildContainer(self: *WinUIBackend, node: *Node) !void {
+        if (node.children.items.len == 0) {
+            switch (node.kind) {
+                .scroll_viewer => try self.setContentControlContent(node, null),
+                .border => try self.setBorderChild(node, null),
+                else => return error.UnsupportedParentChild,
+            }
+            return;
+        }
+
+        const child_id = node.children.items[node.children.items.len - 1];
+        const child = self.nodes.get(child_id) orelse return error.UnknownWidget;
+        switch (node.kind) {
+            .scroll_viewer => try self.setContentControlContentHandle(node, child.handle),
+            .border => try self.setBorderChildHandle(node, child.handle),
+            else => return error.UnsupportedParentChild,
+        }
+    }
+
+    fn setContentControlContentHandle(self: *WinUIBackend, node: *Node, handle: win_core.IInspectable) !void {
+        const child_ui = try self.uiElementCom(handle);
+        defer child_ui.deinit();
+        const child_ptr: *xaml.UIElement = @ptrCast(@alignCast(child_ui.ptr));
+        try self.setContentControlContent(node, child_ptr);
+    }
+
+    fn setContentControlContent(self: *WinUIBackend, node: *Node, value: ?*xaml.UIElement) !void {
+        const content_control = try self.contentControlCom(node.handle);
+        defer content_control.deinit();
+        const iface: *const controls.IContentControl = @ptrCast(@alignCast(content_control.ptr));
+        try win_core.hresult.ok(iface.put_Content(if (value) |child|
+            @as(?*const anyopaque, @ptrCast(child))
+        else
+            null));
+    }
+
+    fn setBorderChildHandle(self: *WinUIBackend, node: *Node, handle: win_core.IInspectable) !void {
+        const child_ui = try self.uiElementCom(handle);
+        defer child_ui.deinit();
+        const child_ptr: *xaml.UIElement = @ptrCast(@alignCast(child_ui.ptr));
+        try self.setBorderChild(node, child_ptr);
+    }
+
+    fn setBorderChild(self: *WinUIBackend, node: *Node, value: ?*xaml.UIElement) !void {
+        const border = try self.borderCom(node.handle);
+        defer border.deinit();
+        const iface: *const controls.IBorder = @ptrCast(@alignCast(border.ptr));
+        try win_core.hresult.ok(iface.put_Child(value));
+    }
+
+    fn setManualProperty(self: *WinUIBackend, id: WidgetId, property: *const element.Property) !bool {
+        const node = self.nodes.get(id) orelse return error.UnknownWidget;
+
+        switch (node.kind) {
+            .button, .stack_panel, .grid, .scroll_viewer, .border, .text_block, .text_box => {
+                if (try self.setGridAttachedProperty(node.handle, property)) return true;
+            },
+            else => {},
+        }
+
+        switch (node.kind) {
+            .grid => {
+                if (std.mem.eql(u8, property.name, "RowDefinitions")) {
+                    const tracks = property.get(widgets_layout.GridTracks) orelse return error.UnsupportedPropertyValue;
+                    try self.setGridRowDefinitions(node.handle, tracks);
+                    return true;
+                }
+                if (std.mem.eql(u8, property.name, "ColumnDefinitions")) {
+                    const tracks = property.get(widgets_layout.GridTracks) orelse return error.UnsupportedPropertyValue;
+                    try self.setGridColumnDefinitions(node.handle, tracks);
+                    return true;
+                }
+            },
+            .border => {
+                if (std.mem.eql(u8, property.name, "BorderThickness")) {
+                    const value = property.get(xaml.Thickness) orelse return error.UnsupportedPropertyValue;
+                    const border = try self.borderCom(node.handle);
+                    defer border.deinit();
+                    const iface: *const controls.IBorder = @ptrCast(@alignCast(border.ptr));
+                    try win_core.hresult.ok(iface.put_BorderThickness(value));
+                    return true;
+                }
+                if (std.mem.eql(u8, property.name, "CornerRadius")) {
+                    const value = property.get(xaml.CornerRadius) orelse return error.UnsupportedPropertyValue;
+                    const border = try self.borderCom(node.handle);
+                    defer border.deinit();
+                    const iface: *const controls.IBorder = @ptrCast(@alignCast(border.ptr));
+                    try win_core.hresult.ok(iface.put_CornerRadius(value));
+                    return true;
+                }
+                if (std.mem.eql(u8, property.name, "Background")) {
+                    const value = property.get(widgets_layout.Color) orelse return error.UnsupportedPropertyValue;
+                    try self.setBorderBackground(node.handle, value);
+                    return true;
+                }
+            },
+            else => {},
+        }
+
+        return false;
+    }
+
+    fn unsetManualProperty(self: *WinUIBackend, kind: element.WidgetKind, handle: win_core.IInspectable, name: []const u8) !bool {
+        switch (kind) {
+            .button, .stack_panel, .grid, .scroll_viewer, .border, .text_block, .text_box => {
+                if (try self.clearGridAttachedProperty(handle, name)) return true;
+            },
+            else => {},
+        }
+
+        switch (kind) {
+            .grid => {
+                if (std.mem.eql(u8, name, "RowDefinitions")) {
+                    try self.clearGridRowDefinitions(handle);
+                    return true;
+                }
+                if (std.mem.eql(u8, name, "ColumnDefinitions")) {
+                    try self.clearGridColumnDefinitions(handle);
+                    return true;
+                }
+            },
+            .border => {
+                if (std.mem.eql(u8, name, "BorderThickness")) {
+                    const border = try self.borderCom(handle);
+                    defer border.deinit();
+                    const iface: *const controls.IBorder = @ptrCast(@alignCast(border.ptr));
+                    try win_core.hresult.ok(iface.put_BorderThickness(.{}));
+                    return true;
+                }
+                if (std.mem.eql(u8, name, "CornerRadius")) {
+                    const border = try self.borderCom(handle);
+                    defer border.deinit();
+                    const iface: *const controls.IBorder = @ptrCast(@alignCast(border.ptr));
+                    try win_core.hresult.ok(iface.put_CornerRadius(.{}));
+                    return true;
+                }
+                if (std.mem.eql(u8, name, "Background")) {
+                    try self.clearBorderBackground(handle);
+                    return true;
+                }
+            },
+            else => {},
+        }
+
+        return false;
     }
 
     fn propertyToSetterValue(self: *WinUIBackend, kind: element.WidgetKind, property: *const element.Property) !OwnedSetterValue {
@@ -448,6 +621,7 @@ pub const WinUIBackend = struct {
 
                 return error.UnsupportedProperty;
             },
+            .grid, .scroll_viewer, .border => return error.UnsupportedProperty,
             else => return error.UnsupportedProperty,
         }
     }
@@ -479,6 +653,22 @@ pub const WinUIBackend = struct {
         return handle.cast(xaml.IUIElement_Vtbl, &xaml.IUIElement.IID);
     }
 
+    fn frameworkElementCom(_: *WinUIBackend, handle: win_core.IInspectable) !win_core.Com(xaml.IFrameworkElement_Vtbl) {
+        return handle.cast(xaml.IFrameworkElement_Vtbl, &xaml.IFrameworkElement.IID);
+    }
+
+    fn contentControlCom(_: *WinUIBackend, handle: win_core.IInspectable) !win_core.Com(controls.IContentControl_Vtbl) {
+        return handle.cast(controls.IContentControl_Vtbl, &controls.IContentControl.IID);
+    }
+
+    fn borderCom(_: *WinUIBackend, handle: win_core.IInspectable) !win_core.Com(controls.IBorder_Vtbl) {
+        return handle.cast(controls.IBorder_Vtbl, &controls.IBorder.IID);
+    }
+
+    fn gridCom(_: *WinUIBackend, handle: win_core.IInspectable) !win_core.Com(controls.IGrid_Vtbl) {
+        return handle.cast(controls.IGrid_Vtbl, &controls.IGrid.IID);
+    }
+
     fn panelChildren(self: *WinUIBackend, handle: win_core.IInspectable) !win_core.Com(controls.IUIElementCollection_Vtbl) {
         const panel = try handle.cast(controls.IPanel_Vtbl, &controls.IPanel.IID);
         defer panel.deinit();
@@ -488,6 +678,134 @@ pub const WinUIBackend = struct {
         try win_core.hresult.ok(iface.get_Children(&children_ptr));
         _ = self;
         return .from(@ptrCast(children_ptr));
+    }
+
+    fn setGridAttachedProperty(self: *WinUIBackend, handle: win_core.IInspectable, property: *const element.Property) !bool {
+        const value = propertyI32(property) orelse {
+            if (isGridAttachedProperty(property.name)) return error.UnsupportedPropertyValue;
+            return false;
+        };
+
+        const statics = try controls.Grid.statics();
+        defer statics.deinit();
+        const iface: *const controls.IGridStatics = @ptrCast(@alignCast(statics.ptr));
+
+        const framework = try self.frameworkElementCom(handle);
+        defer framework.deinit();
+        const framework_ptr: *xaml.FrameworkElement = @ptrCast(@alignCast(framework.ptr));
+
+        if (std.mem.eql(u8, property.name, "Grid.Row")) {
+            try win_core.hresult.ok(iface.SetRow(framework_ptr, value));
+            return true;
+        }
+        if (std.mem.eql(u8, property.name, "Grid.Column")) {
+            try win_core.hresult.ok(iface.SetColumn(framework_ptr, value));
+            return true;
+        }
+        if (std.mem.eql(u8, property.name, "Grid.RowSpan")) {
+            try win_core.hresult.ok(iface.SetRowSpan(framework_ptr, value));
+            return true;
+        }
+        if (std.mem.eql(u8, property.name, "Grid.ColumnSpan")) {
+            try win_core.hresult.ok(iface.SetColumnSpan(framework_ptr, value));
+            return true;
+        }
+        return false;
+    }
+
+    fn clearGridAttachedProperty(self: *WinUIBackend, handle: win_core.IInspectable, name: []const u8) !bool {
+        if (!isGridAttachedProperty(name)) return false;
+
+        const value: i32 = if (std.mem.eql(u8, name, "Grid.RowSpan") or std.mem.eql(u8, name, "Grid.ColumnSpan"))
+            1
+        else
+            0;
+        var property = try element.Property.init(self.allocator, name, value);
+        defer property.deinit(self.allocator);
+        return try self.setGridAttachedProperty(handle, &property);
+    }
+
+    fn setGridRowDefinitions(self: *WinUIBackend, handle: win_core.IInspectable, tracks: widgets_layout.GridTracks) !void {
+        const grid = try self.gridCom(handle);
+        defer grid.deinit();
+        const iface: *const controls.IGrid = @ptrCast(@alignCast(grid.ptr));
+        var raw: *controls.RowDefinitionCollection = undefined;
+        try win_core.hresult.ok(iface.get_RowDefinitions(&raw));
+        const collection_ref = ownInspectable(raw);
+        defer collection_ref.deinit();
+        const vector: *const controls.IRowDefinitionVector = @ptrCast(raw);
+        var size: u32 = 0;
+        try win_core.hresult.ok(vector.get_Size(&size));
+        while (size > 0) : (size -= 1) {
+            try win_core.hresult.ok(vector.RemoveAtEnd());
+        }
+
+        for (tracks.slice()) |track| {
+            const row = try controls.RowDefinition.activate();
+            const row_iface: *const controls.IRowDefinition = @ptrCast(row);
+            defer _ = row_iface.Release();
+            try win_core.hresult.ok(row_iface.put_Height(track.toXaml()));
+            try win_core.hresult.ok(vector.Append(@ptrCast(row)));
+        }
+    }
+
+    fn clearGridRowDefinitions(self: *WinUIBackend, handle: win_core.IInspectable) !void {
+        try self.setGridRowDefinitions(handle, .{});
+    }
+
+    fn setGridColumnDefinitions(self: *WinUIBackend, handle: win_core.IInspectable, tracks: widgets_layout.GridTracks) !void {
+        const grid = try self.gridCom(handle);
+        defer grid.deinit();
+        const iface: *const controls.IGrid = @ptrCast(@alignCast(grid.ptr));
+        var raw: *controls.ColumnDefinitionCollection = undefined;
+        try win_core.hresult.ok(iface.get_ColumnDefinitions(&raw));
+        const collection_ref = ownInspectable(raw);
+        defer collection_ref.deinit();
+        const vector: *const controls.IColumnDefinitionVector = @ptrCast(raw);
+        var size: u32 = 0;
+        try win_core.hresult.ok(vector.get_Size(&size));
+        while (size > 0) : (size -= 1) {
+            try win_core.hresult.ok(vector.RemoveAtEnd());
+        }
+
+        for (tracks.slice()) |track| {
+            const column = try controls.ColumnDefinition.activate();
+            const column_iface: *const controls.IColumnDefinition = @ptrCast(column);
+            defer _ = column_iface.Release();
+            try win_core.hresult.ok(column_iface.put_Width(track.toXaml()));
+            try win_core.hresult.ok(vector.Append(@ptrCast(column)));
+        }
+    }
+
+    fn clearGridColumnDefinitions(self: *WinUIBackend, handle: win_core.IInspectable) !void {
+        try self.setGridColumnDefinitions(handle, .{});
+    }
+
+    fn setBorderBackground(self: *WinUIBackend, handle: win_core.IInspectable, value: widgets_layout.Color) !void {
+        const brush = try media.SolidColorBrush.activate();
+        const brush_iface: *const media.ISolidColorBrush = @ptrCast(brush);
+        defer _ = brush_iface.Release();
+        try win_core.hresult.ok(brush_iface.put_Color(.{
+            .A = value.a,
+            .R = value.r,
+            .G = value.g,
+            .B = value.b,
+        }));
+
+        const brush_base = brush_iface.cast(media.IBrush) orelse return error.InterfaceCastFailed;
+        defer _ = brush_base.Release();
+
+        const border = try self.borderCom(handle);
+        defer border.deinit();
+        const iface: *const controls.IBorder = @ptrCast(@alignCast(border.ptr));
+        try win_core.hresult.ok(iface.put_Background(@ptrCast(@constCast(brush_base))));
+    }
+
+    fn clearBorderBackground(self: *WinUIBackend, handle: win_core.IInspectable) !void {
+        const border = try self.borderCom(handle);
+        defer border.deinit();
+        const iface: *const controls.IBorder = @ptrCast(@alignCast(border.ptr));
+        try win_core.hresult.ok(iface.put_Background(null));
     }
 };
 
@@ -512,10 +830,30 @@ fn widgetClassName(kind: element.WidgetKind) ?[]const u8 {
         .window => "Microsoft.UI.Xaml.Window",
         .button => "Microsoft.UI.Xaml.Controls.Button",
         .stack_panel => "Microsoft.UI.Xaml.Controls.StackPanel",
+        .grid => "Microsoft.UI.Xaml.Controls.Grid",
+        .scroll_viewer => "Microsoft.UI.Xaml.Controls.ScrollViewer",
+        .border => "Microsoft.UI.Xaml.Controls.Border",
         .text_block => "Microsoft.UI.Xaml.Controls.TextBlock",
         .text_box => "Microsoft.UI.Xaml.Controls.TextBox",
         else => null,
     };
+}
+
+fn isGridAttachedProperty(name: []const u8) bool {
+    return std.mem.eql(u8, name, "Grid.Row") or
+        std.mem.eql(u8, name, "Grid.Column") or
+        std.mem.eql(u8, name, "Grid.RowSpan") or
+        std.mem.eql(u8, name, "Grid.ColumnSpan");
+}
+
+fn propertyI32(property: *const element.Property) ?i32 {
+    if (property.get(i32)) |value| return value;
+    if (property.get(i16)) |value| return value;
+    if (property.get(i8)) |value| return value;
+    if (property.get(u32)) |value| return std.math.cast(i32, value);
+    if (property.get(u16)) |value| return value;
+    if (property.get(u8)) |value| return value;
+    return null;
 }
 
 fn onEventInvoked(user_data: ?*anyopaque, _: ?*const anyopaque, _: ?*const anyopaque) callconv(.winapi) win_core.HRESULT {

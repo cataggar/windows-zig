@@ -29,6 +29,13 @@ pub const TextWrapping = enum(i32) {
     _,
 };
 
+pub const GridUnitType = enum(i32) {
+    Auto = 0,
+    Pixel = 1,
+    Star = 2,
+    _,
+};
+
 pub const Thickness = extern struct {
     Left: f64 = 0,
     Top: f64 = 0,
@@ -41,6 +48,11 @@ pub const CornerRadius = extern struct {
     TopRight: f64 = 0,
     BottomRight: f64 = 0,
     BottomLeft: f64 = 0,
+};
+
+pub const GridLength = extern struct {
+    Value: f64 = 0,
+    GridUnitType: i32 = @intFromEnum(GridUnitType.Pixel),
 };
 
 pub const ResourceDictionary = extern struct {
@@ -329,4 +341,41 @@ pub const IWindowNative = extern struct {
     pub fn WindowHandle(self: *const IWindowNative, hwnd: *?*anyopaque) callconv(.winapi) HRESULT {
         return self.vtable.WindowHandle(self, hwnd);
     }
+};
+
+pub const IFrameworkElement_Vtbl = extern struct {
+    base: IUIElement_Vtbl,
+};
+
+pub const IFrameworkElement = extern struct {
+    vtable: *const IFrameworkElement_Vtbl,
+    pub const Vtbl = IFrameworkElement_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0xFE08F13D,
+        .data2 = 0xDC6A,
+        .data3 = 0x5495,
+        .data4 = .{ 0xAD, 0x44, 0xC2, 0xD8, 0xD2, 0x18, 0x63, 0xB0 },
+    };
+
+    pub fn QueryInterface(self: *const IFrameworkElement, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.base.base.QueryInterface(@ptrCast(@constCast(self)), iid, interface);
+    }
+
+    pub fn AddRef(self: *const IFrameworkElement) callconv(.winapi) u32 {
+        return self.vtable.base.base.AddRef(@ptrCast(@constCast(self)));
+    }
+
+    pub fn Release(self: *const IFrameworkElement) callconv(.winapi) u32 {
+        return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn cast(self: *const IFrameworkElement, comptime T: type) ?*const T {
+        var out: ?*anyopaque = null;
+        if (self.QueryInterface(&T.IID, &out) < 0) return null;
+        return @ptrCast(@alignCast(out));
+    }
+};
+
+pub const FrameworkElement = extern struct {
+    vtable: *const IFrameworkElement_Vtbl,
 };

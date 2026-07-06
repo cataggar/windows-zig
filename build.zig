@@ -178,6 +178,13 @@ pub fn build(b: *std.Build) void {
     });
     reactor_winui_xaml_mod.addImport("win-core", win_core_mod);
 
+    const reactor_winui_media_mod = b.addModule("reactor-winui-media", .{
+        .root_source_file = b.path("packages/win-reactor/src/winui/Microsoft.UI.Xaml.Media.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    reactor_winui_media_mod.addImport("win-core", win_core_mod);
+
     const reactor_winui_controls_mod = b.addModule("reactor-winui-controls", .{
         .root_source_file = b.path("packages/win-reactor/src/winui/Microsoft.UI.Xaml.Controls.zig"),
         .target = target,
@@ -202,6 +209,7 @@ pub fn build(b: *std.Build) void {
     win_reactor_mod.addImport("reactor-windows-system", reactor_windows_system_mod);
     win_reactor_mod.addImport("Windows.Foundation", reactor_winui_foundation_mod);
     win_reactor_mod.addImport("Microsoft.UI.Xaml", reactor_winui_xaml_mod);
+    win_reactor_mod.addImport("Microsoft.UI.Xaml.Media", reactor_winui_media_mod);
     win_reactor_mod.addImport("Microsoft.UI.Xaml.Controls", reactor_winui_controls_mod);
     win_reactor_mod.addImport("Microsoft.UI.Xaml.Controls.Primitives", reactor_winui_controls_primitives_mod);
     if (target.result.os.tag == .windows) {
