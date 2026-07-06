@@ -19,6 +19,47 @@ Fix the real WinUI `TextBox` crash by merging `Microsoft.UI.Xaml.Controls.XamlCo
   - `winui_backend.zig` already hand-authors a narrow raw `ObjectVector` consumer when the generated surface is too weak to use directly (`packages/win-reactor/src/winui_backend.zig:123-145`).
 - The documented WinUI emitter follow-ups still matter, but only as context. #52-#55 explain why reactor continues to use a curated WinUI surface, and #56 explains why some collection properties still degrade to `*anyopaque` instead of a clean concrete type (`docs/windows-reactor-port.md:85-89`).
 
+## 2026-07-06 investigation findings (blocking)
+
+Temporary runtime probes were added to `packages/win-reactor/src/app.zig` and exercised with:
+
+```powershell
+zig build run-reactor-hello -- --exit-after-ms 1500
+```
+
+Those probes materially changed the diagnosis for this issue:
+
+- `Application.Resources` / `Application.put_Resources(...)` are **not** usable immediately after `Application` construction, even when the call happens inside the `Application.Start(...)` callback. Right after `createComposable(xaml.Application, xaml.IApplicationFactory)`, both calls returned `0x8000FFFF` (`E_UNEXPECTED`). The same `get_Resources(...)` and `get_MergedDictionaries(...)` calls only started returning `S_OK` **after** `mountInitial()` had already created the first reactor tree. This matches upstream WinUI app-model notes: `Application.Resources` is backed by the thread's `DXamlCore` / core-app handle and is only valid once XAML core initialization has reached that point (`docs/design-notes/app-model.md` in `microsoft/microsoft-ui-xaml`). In other words, the original Phase 2 requirement to merge resources *before* `mountInitial()` is not achievable in the current bare-`Application` host.
+
+- The curated ABI surface was **not** the active culprit for the `Application.Resources` failure. The `IApplication.get_Resources(...)` and `IResourceDictionary.get_MergedDictionaries(...)` slots were cross-checked against `packages/win/src/generated/Microsoft.UI.Xaml.zig`, and the exact same calls began returning `S_OK` after mount without any IID/vtable changes.
+
+- `XamlControlsResources` still cannot be constructed in the current host, even after the app reaches the UI thread and a window has been activated. The probe observed `0x80004005` (`E_FAIL`) from `IActivationFactory::ActivateInstance("Microsoft.UI.Xaml.Controls.XamlControlsResources")`:
+  - immediately after `Application` creation,
+  - after `mountInitial()`,
+  - after `activateWindows()`,
+  - and on a later dispatcher callback.
+
+- A plain `ResourceDictionary.Source = Uri("ms-appx:///Microsoft.UI.Xaml.Controls/Themes/themeresources.xaml")` probe also returned `0x80004005` at those same post-mount stages. That matters because upstream WinUI source shows `XamlControlsResources::UpdateSource()` does exactly that `Source(uri)` assignment and then immediately looks up the `"Default"` theme dictionary (`controls/dev/dll/XamlControlsResources.cpp` in `microsoft/microsoft-ui-xaml`). So the constructor failure is not just "the wrong helper signature" — the underlying MUX theme-resource URI load is failing in this host.
+
+- Upstream WinUI desktop app-model docs say that supporting `Microsoft.UI.Xaml.Controls.dll` in desktop apps requires **both**:
+  1. app-level `IXamlMetadataProvider` wiring that includes `Microsoft.UI.Xaml.XamlTypeInfo.XamlControlsXamlMetaDataProvider`, and
+  2. a `XamlControlsResources` instance in `Application.Resources`.
+
+  See `docs/design-notes/desktop-app-walkthrough.md` and `docs/design-notes/app-model.md` in `microsoft/microsoft-ui-xaml`. `win-reactor` currently creates a bare `Microsoft.UI.Xaml.Application` runtime object, not an app-defined `Application` subclass with XAML-generated metadata-provider plumbing, so sequencing changes alone cannot satisfy those requirements.
+
+### Impact on the original plan
+
+The original Phase 2 assumption — "merge `XamlControlsResources` into `Application.Resources.MergedDictionaries` before `mountInitial()`" — is invalid for the current host model. `Application.Resources` is unavailable until after the first mount, and the `XamlControlsResources` constructor then fails anyway because the underlying `ms-appx:///Microsoft.UI.Xaml.Controls/Themes/themeresources.xaml` load fails in the bare reactor app.
+
+### What would unblock this issue
+
+A real fix now appears to require a larger bootstrap / app-model change than issue #74 originally scoped:
+
+- either introduce a proper WinUI desktop-style `Application` subclass that implements / hosts `IXamlMetadataProvider` (including `XamlControlsXamlMetaDataProvider`) plus a resource-loading story equivalent to `App.xaml`,
+- or find a separate, reliable non-`ms-appx` way to load the WinUI theme dictionaries in unpackaged reactor apps.
+
+Until one of those exists, `.text_box` should remain `error.NotYetSupported`.
+
 ## Desired End State
 
 - `ReactorHost.start(...)` merges a `XamlControlsResources` instance into `Application.Resources.MergedDictionaries` before the first call to `mountInitial()`.
