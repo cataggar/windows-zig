@@ -11,6 +11,31 @@ const schema = @import("schema.zig");
 const Event = schema.EventInit;
 const Prop = schema.PropInit;
 
+const canvas_left = Prop{
+    .value = .f64,
+    .attached = .{
+        .owner = "Microsoft.UI.Xaml.Controls.Canvas",
+        .setter = "SetLeft",
+    },
+};
+const canvas_top = Prop{
+    .value = .f64,
+    .attached = .{
+        .owner = "Microsoft.UI.Xaml.Controls.Canvas",
+        .setter = "SetTop",
+    },
+};
+const canvas_z_index = Prop{
+    .value = .i32,
+    .attached = .{
+        .owner = "Microsoft.UI.Xaml.Controls.Canvas",
+        .setter = "SetZIndex",
+    },
+};
+const pointer_pressed = Event{ .payload = .pointer };
+const pointer_moved = Event{ .payload = .pointer };
+const pointer_released = Event{ .payload = .pointer };
+
 pub const raw_widgets = .{
     .@"Microsoft.UI.Xaml.Application" = .{},
 
@@ -28,11 +53,30 @@ pub const raw_widgets = .{
                 .value = .string,
                 .setter = .text_block,
             },
+            .Left = canvas_left,
+            .Top = canvas_top,
+            .ZIndex = canvas_z_index,
         },
         .events = .{
             .Click = Event{
                 .payload = .unit,
             },
+            .PointerPressed = pointer_pressed,
+            .PointerMoved = pointer_moved,
+            .PointerReleased = pointer_released,
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.Canvas" = .{
+        .props = .{
+            .Left = canvas_left,
+            .Top = canvas_top,
+            .ZIndex = canvas_z_index,
+        },
+        .events = .{
+            .PointerPressed = pointer_pressed,
+            .PointerMoved = pointer_moved,
+            .PointerReleased = pointer_released,
         },
     },
 
@@ -44,6 +88,14 @@ pub const raw_widgets = .{
             .Spacing = Prop{
                 .value = .f64,
             },
+            .Left = canvas_left,
+            .Top = canvas_top,
+            .ZIndex = canvas_z_index,
+        },
+        .events = .{
+            .PointerPressed = pointer_pressed,
+            .PointerMoved = pointer_moved,
+            .PointerReleased = pointer_released,
         },
     },
 
@@ -52,11 +104,27 @@ pub const raw_widgets = .{
             .Text = Prop{
                 .value = .string,
             },
+            .Left = canvas_left,
+            .Top = canvas_top,
+            .ZIndex = canvas_z_index,
+        },
+        .events = .{
+            .PointerPressed = pointer_pressed,
+            .PointerMoved = pointer_moved,
+            .PointerReleased = pointer_released,
         },
     },
 
     .@"Microsoft.UI.Xaml.Controls.TextBox" = .{
+        .props = .{
+            .Left = canvas_left,
+            .Top = canvas_top,
+            .ZIndex = canvas_z_index,
+        },
         .events = .{
+            .PointerPressed = pointer_pressed,
+            .PointerMoved = pointer_moved,
+            .PointerReleased = pointer_released,
             .TextChanged = Event{
                 .payload = .string,
                 .source = .{

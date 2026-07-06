@@ -280,6 +280,123 @@ pub const StackPanel = extern struct {
     pub const NAME_W = std.unicode.utf8ToUtf16LeStringLiteral(NAME).*;
 };
 
+pub const ICanvas_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+};
+
+pub const ICanvas = extern struct {
+    vtable: *const ICanvas_Vtbl,
+    pub const Vtbl = ICanvas_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0x457BA139,
+        .data2 = 0x1146,
+        .data3 = 0x51D2,
+        .data4 = .{ 0x80, 0x7E, 0xD9, 0xD6, 0x5C, 0x92, 0x70, 0x60 },
+    };
+
+    pub fn QueryInterface(self: *const ICanvas, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.base.base.QueryInterface(@ptrCast(@constCast(self)), iid, interface);
+    }
+
+    pub fn AddRef(self: *const ICanvas) callconv(.winapi) u32 {
+        return self.vtable.base.base.AddRef(@ptrCast(@constCast(self)));
+    }
+
+    pub fn Release(self: *const ICanvas) callconv(.winapi) u32 {
+        return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn cast(self: *const ICanvas, comptime T: type) ?*const T {
+        var out: ?*anyopaque = null;
+        if (self.QueryInterface(&T.IID, &out) < 0) return null;
+        return @ptrCast(@alignCast(out));
+    }
+};
+
+pub const ICanvasFactory_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    CreateInstance: *const fn (
+        this: *const ICanvasFactory,
+        outer: ?*const anyopaque,
+        inner: *?*const anyopaque,
+        result: **Canvas,
+    ) callconv(.winapi) HRESULT,
+};
+
+pub const ICanvasFactory = extern struct {
+    vtable: *const ICanvasFactory_Vtbl,
+    pub const Vtbl = ICanvasFactory_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0x374C5050,
+        .data2 = 0x3481,
+        .data3 = 0x5557,
+        .data4 = .{ 0x99, 0x48, 0x80, 0x4C, 0x0B, 0x8E, 0xEA, 0x89 },
+    };
+
+    pub fn CreateInstance(self: *const ICanvasFactory, outer: ?*const anyopaque, inner: *?*const anyopaque, result: **Canvas) callconv(.winapi) HRESULT {
+        return self.vtable.CreateInstance(self, outer, inner, result);
+    }
+};
+
+pub const ICanvasStatics_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    get_LeftProperty: *const fn (this: *const ICanvasStatics, result: **xaml.DependencyProperty) callconv(.winapi) HRESULT,
+    GetLeft: *const fn (this: *const ICanvasStatics, element: *xaml.UIElement, result: *f64) callconv(.winapi) HRESULT,
+    SetLeft: *const fn (this: *const ICanvasStatics, element: *xaml.UIElement, value: f64) callconv(.winapi) HRESULT,
+    get_TopProperty: *const fn (this: *const ICanvasStatics, result: **xaml.DependencyProperty) callconv(.winapi) HRESULT,
+    GetTop: *const fn (this: *const ICanvasStatics, element: *xaml.UIElement, result: *f64) callconv(.winapi) HRESULT,
+    SetTop: *const fn (this: *const ICanvasStatics, element: *xaml.UIElement, value: f64) callconv(.winapi) HRESULT,
+    get_ZIndexProperty: *const fn (this: *const ICanvasStatics, result: **xaml.DependencyProperty) callconv(.winapi) HRESULT,
+    GetZIndex: *const fn (this: *const ICanvasStatics, element: *xaml.UIElement, result: *i32) callconv(.winapi) HRESULT,
+    SetZIndex: *const fn (this: *const ICanvasStatics, element: *xaml.UIElement, value: i32) callconv(.winapi) HRESULT,
+};
+
+pub const ICanvasStatics = extern struct {
+    vtable: *const ICanvasStatics_Vtbl,
+    pub const Vtbl = ICanvasStatics_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0xC00D5E0F,
+        .data2 = 0x77E3,
+        .data3 = 0x5C59,
+        .data4 = .{ 0x8F, 0xCD, 0x86, 0x76, 0x1F, 0x0C, 0x66, 0x07 },
+    };
+
+    pub fn QueryInterface(self: *const ICanvasStatics, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.base.base.QueryInterface(@ptrCast(@constCast(self)), iid, interface);
+    }
+
+    pub fn AddRef(self: *const ICanvasStatics) callconv(.winapi) u32 {
+        return self.vtable.base.base.AddRef(@ptrCast(@constCast(self)));
+    }
+
+    pub fn Release(self: *const ICanvasStatics) callconv(.winapi) u32 {
+        return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn SetLeft(self: *const ICanvasStatics, element: *xaml.UIElement, value: f64) callconv(.winapi) HRESULT {
+        return self.vtable.SetLeft(self, element, value);
+    }
+
+    pub fn SetTop(self: *const ICanvasStatics, element: *xaml.UIElement, value: f64) callconv(.winapi) HRESULT {
+        return self.vtable.SetTop(self, element, value);
+    }
+
+    pub fn SetZIndex(self: *const ICanvasStatics, element: *xaml.UIElement, value: i32) callconv(.winapi) HRESULT {
+        return self.vtable.SetZIndex(self, element, value);
+    }
+};
+
+pub const Canvas = extern struct {
+    vtable: *const ICanvas_Vtbl,
+    pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.Canvas";
+    pub const NAME_W = std.unicode.utf8ToUtf16LeStringLiteral(NAME).*;
+    pub const Statics = ICanvasStatics;
+
+    pub fn statics() !win_core.Com(Statics.Vtbl) {
+        return win_core.activationFactory(Statics.Vtbl, &Statics.IID, &NAME_W);
+    }
+};
+
 pub const ITextBox_Vtbl = extern struct {
     base: IInspectable_Vtbl,
     get_Text: *const fn (this: *const ITextBox, result: *HSTRING) callconv(.winapi) HRESULT,
@@ -364,6 +481,12 @@ pub const ITextBox = extern struct {
         var out: ?*anyopaque = null;
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
+    }
+
+    pub fn get_TextOwned(self: *const ITextBox) !win_core.Hstring {
+        var text: HSTRING = null;
+        try win_core.hresult.ok(self.vtable.get_Text(self, &text));
+        return .fromRaw(text);
     }
 
     pub fn put_TextFromUtf16(self: *const ITextBox, value: []const u16) HRESULT {

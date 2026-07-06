@@ -15,6 +15,7 @@ pub const Error = win_core.hresult.Error || error{
 pub const SetterValue = union(enum) {
     string: []const u16,
     f64: f64,
+    i32: i32,
     enum_i32: i32,
     element: *@"Microsoft.UI.Xaml".UIElement,
 };
@@ -63,6 +64,120 @@ fn applyMicrosoftUIXamlControlsButtonContent(widget: *anyopaque, value: SetterVa
     try setMicrosoftUIXamlControlsButtonContent(@ptrCast(@alignCast(widget)), typed_value);
 }
 
+pub fn setMicrosoftUIXamlControlsButtonLeft(widget: *@"Microsoft.UI.Xaml.Controls".Button, value: f64) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".UIElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetLeft(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsButtonLeft(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .f64 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsButtonLeft(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsButtonTop(widget: *@"Microsoft.UI.Xaml.Controls".Button, value: f64) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".UIElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetTop(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsButtonTop(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .f64 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsButtonTop(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsButtonZIndex(widget: *@"Microsoft.UI.Xaml.Controls".Button, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".UIElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetZIndex(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsButtonZIndex(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsButtonZIndex(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsCanvasLeft(widget: *@"Microsoft.UI.Xaml.Controls".Canvas, value: f64) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".UIElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetLeft(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsCanvasLeft(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .f64 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsCanvasLeft(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsCanvasTop(widget: *@"Microsoft.UI.Xaml.Controls".Canvas, value: f64) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".UIElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetTop(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsCanvasTop(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .f64 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsCanvasTop(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsCanvasZIndex(widget: *@"Microsoft.UI.Xaml.Controls".Canvas, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".UIElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetZIndex(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsCanvasZIndex(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsCanvasZIndex(@ptrCast(@alignCast(widget)), typed_value);
+}
+
 pub fn setMicrosoftUIXamlControlsScrollViewerContent(widget: *@"Microsoft.UI.Xaml.Controls".ScrollViewer, value: *@"Microsoft.UI.Xaml".UIElement) Error!void {
     const default_iface: *const @"Microsoft.UI.Xaml.Controls".IScrollViewer = @ptrCast(widget);
     const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls".IContentControl) orelse return error.InterfaceCastFailed;
@@ -76,6 +191,25 @@ fn applyMicrosoftUIXamlControlsScrollViewerContent(widget: *anyopaque, value: Se
         else => return error.ValueKindMismatch,
     };
     try setMicrosoftUIXamlControlsScrollViewerContent(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsStackPanelLeft(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel, value: f64) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".UIElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetLeft(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsStackPanelLeft(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .f64 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsStackPanelLeft(@ptrCast(@alignCast(widget)), typed_value);
 }
 
 pub fn setMicrosoftUIXamlControlsStackPanelOrientation(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel, value: i32) Error!void {
@@ -104,6 +238,63 @@ fn applyMicrosoftUIXamlControlsStackPanelSpacing(widget: *anyopaque, value: Sett
     try setMicrosoftUIXamlControlsStackPanelSpacing(@ptrCast(@alignCast(widget)), typed_value);
 }
 
+pub fn setMicrosoftUIXamlControlsStackPanelTop(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel, value: f64) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".UIElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetTop(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsStackPanelTop(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .f64 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsStackPanelTop(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsStackPanelZIndex(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".UIElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetZIndex(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsStackPanelZIndex(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsStackPanelZIndex(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsTextBlockLeft(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock, value: f64) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".UIElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetLeft(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsTextBlockLeft(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .f64 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsTextBlockLeft(@ptrCast(@alignCast(widget)), typed_value);
+}
+
 pub fn setMicrosoftUIXamlControlsTextBlockText(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock, value: []const u16) Error!void {
     const target: *const @"Microsoft.UI.Xaml.Controls".ITextBlock = @ptrCast(widget);
     try win_core.hresult.ok(target.put_TextFromUtf16(value));
@@ -115,6 +306,101 @@ fn applyMicrosoftUIXamlControlsTextBlockText(widget: *anyopaque, value: SetterVa
         else => return error.ValueKindMismatch,
     };
     try setMicrosoftUIXamlControlsTextBlockText(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsTextBlockTop(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock, value: f64) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".UIElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetTop(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsTextBlockTop(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .f64 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsTextBlockTop(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsTextBlockZIndex(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".UIElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetZIndex(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsTextBlockZIndex(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsTextBlockZIndex(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsTextBoxLeft(widget: *@"Microsoft.UI.Xaml.Controls".TextBox, value: f64) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".UIElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetLeft(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsTextBoxLeft(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .f64 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsTextBoxLeft(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsTextBoxTop(widget: *@"Microsoft.UI.Xaml.Controls".TextBox, value: f64) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".UIElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetTop(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsTextBoxTop(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .f64 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsTextBoxTop(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsTextBoxZIndex(widget: *@"Microsoft.UI.Xaml.Controls".TextBox, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".UIElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetZIndex(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsTextBoxZIndex(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsTextBoxZIndex(@ptrCast(@alignCast(widget)), typed_value);
 }
 
 pub fn setMicrosoftUIXamlWindowTitle(widget: *@"Microsoft.UI.Xaml".Window, value: []const u16) Error!void {
@@ -152,6 +438,66 @@ pub const entries = [_]PropertySetter{
         .apply = applyMicrosoftUIXamlControlsButtonContent,
     },
     .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Button",
+        .widget_name = "Button",
+        .handle_name = "Button",
+        .property_name = "Left",
+        .field_name = "left",
+        .value_kind = .f64,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsButtonLeft,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Button",
+        .widget_name = "Button",
+        .handle_name = "Button",
+        .property_name = "Top",
+        .field_name = "top",
+        .value_kind = .f64,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsButtonTop,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Button",
+        .widget_name = "Button",
+        .handle_name = "Button",
+        .property_name = "ZIndex",
+        .field_name = "z_index",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsButtonZIndex,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Canvas",
+        .widget_name = "Canvas",
+        .handle_name = "Canvas",
+        .property_name = "Left",
+        .field_name = "left",
+        .value_kind = .f64,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsCanvasLeft,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Canvas",
+        .widget_name = "Canvas",
+        .handle_name = "Canvas",
+        .property_name = "Top",
+        .field_name = "top",
+        .value_kind = .f64,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsCanvasTop,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Canvas",
+        .widget_name = "Canvas",
+        .handle_name = "Canvas",
+        .property_name = "ZIndex",
+        .field_name = "z_index",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsCanvasZIndex,
+    },
+    .{
         .widget_class = "Microsoft.UI.Xaml.Controls.ScrollViewer",
         .widget_name = "ScrollViewer",
         .handle_name = "ScrollViewer",
@@ -160,6 +506,16 @@ pub const entries = [_]PropertySetter{
         .value_kind = .element,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsScrollViewerContent,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.StackPanel",
+        .widget_name = "StackPanel",
+        .handle_name = "StackPanel",
+        .property_name = "Left",
+        .field_name = "left",
+        .value_kind = .f64,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsStackPanelLeft,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.StackPanel",
@@ -182,6 +538,36 @@ pub const entries = [_]PropertySetter{
         .apply = applyMicrosoftUIXamlControlsStackPanelSpacing,
     },
     .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.StackPanel",
+        .widget_name = "StackPanel",
+        .handle_name = "StackPanel",
+        .property_name = "Top",
+        .field_name = "top",
+        .value_kind = .f64,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsStackPanelTop,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.StackPanel",
+        .widget_name = "StackPanel",
+        .handle_name = "StackPanel",
+        .property_name = "ZIndex",
+        .field_name = "z_index",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsStackPanelZIndex,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.TextBlock",
+        .widget_name = "TextBlock",
+        .handle_name = "TextBlock",
+        .property_name = "Left",
+        .field_name = "left",
+        .value_kind = .f64,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsTextBlockLeft,
+    },
+    .{
         .widget_class = "Microsoft.UI.Xaml.Controls.TextBlock",
         .widget_name = "TextBlock",
         .handle_name = "TextBlock",
@@ -190,6 +576,56 @@ pub const entries = [_]PropertySetter{
         .value_kind = .string,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsTextBlockText,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.TextBlock",
+        .widget_name = "TextBlock",
+        .handle_name = "TextBlock",
+        .property_name = "Top",
+        .field_name = "top",
+        .value_kind = .f64,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsTextBlockTop,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.TextBlock",
+        .widget_name = "TextBlock",
+        .handle_name = "TextBlock",
+        .property_name = "ZIndex",
+        .field_name = "z_index",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsTextBlockZIndex,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.TextBox",
+        .widget_name = "TextBox",
+        .handle_name = "TextBox",
+        .property_name = "Left",
+        .field_name = "left",
+        .value_kind = .f64,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsTextBoxLeft,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.TextBox",
+        .widget_name = "TextBox",
+        .handle_name = "TextBox",
+        .property_name = "Top",
+        .field_name = "top",
+        .value_kind = .f64,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsTextBoxTop,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.TextBox",
+        .widget_name = "TextBox",
+        .handle_name = "TextBox",
+        .property_name = "ZIndex",
+        .field_name = "z_index",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsTextBoxZIndex,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Window",
@@ -206,11 +642,26 @@ pub const entries = [_]PropertySetter{
 pub const by_widget_prop = std.StaticStringMap(usize).initComptime(.{
     .{ "Microsoft.UI.Xaml.Controls.Border#Child", 0 },
     .{ "Microsoft.UI.Xaml.Controls.Button#Content", 1 },
-    .{ "Microsoft.UI.Xaml.Controls.ScrollViewer#Content", 2 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Orientation", 3 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Spacing", 4 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Text", 5 },
-    .{ "Microsoft.UI.Xaml.Window#Title", 6 },
+    .{ "Microsoft.UI.Xaml.Controls.Button#Left", 2 },
+    .{ "Microsoft.UI.Xaml.Controls.Button#Top", 3 },
+    .{ "Microsoft.UI.Xaml.Controls.Button#ZIndex", 4 },
+    .{ "Microsoft.UI.Xaml.Controls.Canvas#Left", 5 },
+    .{ "Microsoft.UI.Xaml.Controls.Canvas#Top", 6 },
+    .{ "Microsoft.UI.Xaml.Controls.Canvas#ZIndex", 7 },
+    .{ "Microsoft.UI.Xaml.Controls.ScrollViewer#Content", 8 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Left", 9 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Orientation", 10 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Spacing", 11 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Top", 12 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#ZIndex", 13 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Left", 14 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Text", 15 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Top", 16 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#ZIndex", 17 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#Left", 18 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#Top", 19 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#ZIndex", 20 },
+    .{ "Microsoft.UI.Xaml.Window#Title", 21 },
 });
 
 pub fn find(widget_class: []const u8, property_name: []const u8) ?*const PropertySetter {
