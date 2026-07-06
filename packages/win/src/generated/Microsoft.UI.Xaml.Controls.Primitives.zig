@@ -1162,7 +1162,7 @@ pub const IAppBarButtonTemplateSettings = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_KeyboardAcceleratorTextMinWidth(self: *const IAppBarButtonTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_KeyboardAcceleratorTextMinWidth"(self, result);
+        return self.vtable.get_KeyboardAcceleratorTextMinWidth(self, result);
     }
 };
 pub const IAppBarTemplateSettings = extern struct {
@@ -1184,34 +1184,34 @@ pub const IAppBarTemplateSettings = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_ClipRect(self: *const IAppBarTemplateSettings, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ClipRect"(self, result);
+        return self.vtable.get_ClipRect(self, result);
     }
     pub fn get_CompactVerticalDelta(self: *const IAppBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CompactVerticalDelta"(self, result);
+        return self.vtable.get_CompactVerticalDelta(self, result);
     }
     pub fn get_CompactRootMargin(self: *const IAppBarTemplateSettings, result: *@"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CompactRootMargin"(self, result);
+        return self.vtable.get_CompactRootMargin(self, result);
     }
     pub fn get_MinimalVerticalDelta(self: *const IAppBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MinimalVerticalDelta"(self, result);
+        return self.vtable.get_MinimalVerticalDelta(self, result);
     }
     pub fn get_MinimalRootMargin(self: *const IAppBarTemplateSettings, result: *@"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MinimalRootMargin"(self, result);
+        return self.vtable.get_MinimalRootMargin(self, result);
     }
     pub fn get_HiddenVerticalDelta(self: *const IAppBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HiddenVerticalDelta"(self, result);
+        return self.vtable.get_HiddenVerticalDelta(self, result);
     }
     pub fn get_HiddenRootMargin(self: *const IAppBarTemplateSettings, result: *@"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HiddenRootMargin"(self, result);
+        return self.vtable.get_HiddenRootMargin(self, result);
     }
     pub fn get_NegativeCompactVerticalDelta(self: *const IAppBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_NegativeCompactVerticalDelta"(self, result);
+        return self.vtable.get_NegativeCompactVerticalDelta(self, result);
     }
     pub fn get_NegativeMinimalVerticalDelta(self: *const IAppBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_NegativeMinimalVerticalDelta"(self, result);
+        return self.vtable.get_NegativeMinimalVerticalDelta(self, result);
     }
     pub fn get_NegativeHiddenVerticalDelta(self: *const IAppBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_NegativeHiddenVerticalDelta"(self, result);
+        return self.vtable.get_NegativeHiddenVerticalDelta(self, result);
     }
 };
 pub const IAppBarToggleButtonTemplateSettings = extern struct {
@@ -1233,7 +1233,7 @@ pub const IAppBarToggleButtonTemplateSettings = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_KeyboardAcceleratorTextMinWidth(self: *const IAppBarToggleButtonTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_KeyboardAcceleratorTextMinWidth"(self, result);
+        return self.vtable.get_KeyboardAcceleratorTextMinWidth(self, result);
     }
 };
 pub const IAutoSuggestBoxHelper = extern struct {
@@ -1274,13 +1274,13 @@ pub const IAutoSuggestBoxHelperStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_KeepInteriorCornersSquareProperty(self: *const IAutoSuggestBoxHelperStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_KeepInteriorCornersSquareProperty"(self, result);
+        return self.vtable.get_KeepInteriorCornersSquareProperty(self, result);
     }
     pub fn SetKeepInteriorCornersSquare(self: *const IAutoSuggestBoxHelperStatics, p0: *@"Microsoft.UI.Xaml.Controls".AutoSuggestBox, p1: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"SetKeepInteriorCornersSquare"(self, p0, p1);
+        return self.vtable.SetKeepInteriorCornersSquare(self, p0, p1);
     }
     pub fn GetKeepInteriorCornersSquare(self: *const IAutoSuggestBoxHelperStatics, p0: *@"Microsoft.UI.Xaml.Controls".AutoSuggestBox, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"GetKeepInteriorCornersSquare"(self, p0, result);
+        return self.vtable.GetKeepInteriorCornersSquare(self, p0, result);
     }
 };
 pub const IButtonBase = extern struct {
@@ -1302,34 +1302,34 @@ pub const IButtonBase = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_ClickMode(self: *const IButtonBase, result: *@"Microsoft.UI.Xaml.Controls".ClickMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ClickMode"(self, result);
+        return self.vtable.get_ClickMode(self, result);
     }
     pub fn put_ClickMode(self: *const IButtonBase, p0: @"Microsoft.UI.Xaml.Controls".ClickMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ClickMode"(self, p0);
+        return self.vtable.put_ClickMode(self, p0);
     }
     pub fn get_IsPointerOver(self: *const IButtonBase, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsPointerOver"(self, result);
+        return self.vtable.get_IsPointerOver(self, result);
     }
     pub fn get_IsPressed(self: *const IButtonBase, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsPressed"(self, result);
+        return self.vtable.get_IsPressed(self, result);
     }
     pub fn get_Command(self: *const IButtonBase, result: **@"Microsoft.UI.Xaml.Input".ICommand) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Command"(self, result);
+        return self.vtable.get_Command(self, result);
     }
     pub fn put_Command(self: *const IButtonBase, p0: *@"Microsoft.UI.Xaml.Input".ICommand) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Command"(self, p0);
+        return self.vtable.put_Command(self, p0);
     }
     pub fn get_CommandParameter(self: *const IButtonBase, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CommandParameter"(self, result);
+        return self.vtable.get_CommandParameter(self, result);
     }
     pub fn put_CommandParameter(self: *const IButtonBase, p0: ?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CommandParameter"(self, p0);
+        return self.vtable.put_CommandParameter(self, p0);
     }
     pub fn add_Click(self: *const IButtonBase, p0: *@"Microsoft.UI.Xaml".RoutedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_Click"(self, p0, result);
+        return self.vtable.add_Click(self, p0, result);
     }
     pub fn remove_Click(self: *const IButtonBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_Click"(self, p0);
+        return self.vtable.remove_Click(self, p0);
     }
 };
 pub const IButtonBaseFactory = extern struct {
@@ -1351,7 +1351,7 @@ pub const IButtonBaseFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IButtonBaseFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **ButtonBase) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const IButtonBaseStatics = extern struct {
@@ -1373,19 +1373,19 @@ pub const IButtonBaseStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_ClickModeProperty(self: *const IButtonBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ClickModeProperty"(self, result);
+        return self.vtable.get_ClickModeProperty(self, result);
     }
     pub fn get_IsPointerOverProperty(self: *const IButtonBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsPointerOverProperty"(self, result);
+        return self.vtable.get_IsPointerOverProperty(self, result);
     }
     pub fn get_IsPressedProperty(self: *const IButtonBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsPressedProperty"(self, result);
+        return self.vtable.get_IsPressedProperty(self, result);
     }
     pub fn get_CommandProperty(self: *const IButtonBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CommandProperty"(self, result);
+        return self.vtable.get_CommandProperty(self, result);
     }
     pub fn get_CommandParameterProperty(self: *const IButtonBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CommandParameterProperty"(self, result);
+        return self.vtable.get_CommandParameterProperty(self, result);
     }
 };
 pub const ICalendarPanel = extern struct {
@@ -1426,89 +1426,89 @@ pub const ICalendarViewTemplateSettings = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_MinViewWidth(self: *const ICalendarViewTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MinViewWidth"(self, result);
+        return self.vtable.get_MinViewWidth(self, result);
     }
     pub fn get_HeaderText(self: *const ICalendarViewTemplateSettings, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HeaderText"(self, result);
+        return self.vtable.get_HeaderText(self, result);
     }
     pub fn get_HeaderTextOwned(self: *const ICalendarViewTemplateSettings) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.@"get_HeaderText"(self, &r));
+        try win_core.hresult.ok(self.vtable.get_HeaderText(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
     pub fn get_WeekDay1(self: *const ICalendarViewTemplateSettings, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_WeekDay1"(self, result);
+        return self.vtable.get_WeekDay1(self, result);
     }
     pub fn get_WeekDay1Owned(self: *const ICalendarViewTemplateSettings) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.@"get_WeekDay1"(self, &r));
+        try win_core.hresult.ok(self.vtable.get_WeekDay1(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
     pub fn get_WeekDay2(self: *const ICalendarViewTemplateSettings, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_WeekDay2"(self, result);
+        return self.vtable.get_WeekDay2(self, result);
     }
     pub fn get_WeekDay2Owned(self: *const ICalendarViewTemplateSettings) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.@"get_WeekDay2"(self, &r));
+        try win_core.hresult.ok(self.vtable.get_WeekDay2(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
     pub fn get_WeekDay3(self: *const ICalendarViewTemplateSettings, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_WeekDay3"(self, result);
+        return self.vtable.get_WeekDay3(self, result);
     }
     pub fn get_WeekDay3Owned(self: *const ICalendarViewTemplateSettings) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.@"get_WeekDay3"(self, &r));
+        try win_core.hresult.ok(self.vtable.get_WeekDay3(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
     pub fn get_WeekDay4(self: *const ICalendarViewTemplateSettings, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_WeekDay4"(self, result);
+        return self.vtable.get_WeekDay4(self, result);
     }
     pub fn get_WeekDay4Owned(self: *const ICalendarViewTemplateSettings) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.@"get_WeekDay4"(self, &r));
+        try win_core.hresult.ok(self.vtable.get_WeekDay4(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
     pub fn get_WeekDay5(self: *const ICalendarViewTemplateSettings, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_WeekDay5"(self, result);
+        return self.vtable.get_WeekDay5(self, result);
     }
     pub fn get_WeekDay5Owned(self: *const ICalendarViewTemplateSettings) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.@"get_WeekDay5"(self, &r));
+        try win_core.hresult.ok(self.vtable.get_WeekDay5(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
     pub fn get_WeekDay6(self: *const ICalendarViewTemplateSettings, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_WeekDay6"(self, result);
+        return self.vtable.get_WeekDay6(self, result);
     }
     pub fn get_WeekDay6Owned(self: *const ICalendarViewTemplateSettings) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.@"get_WeekDay6"(self, &r));
+        try win_core.hresult.ok(self.vtable.get_WeekDay6(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
     pub fn get_WeekDay7(self: *const ICalendarViewTemplateSettings, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_WeekDay7"(self, result);
+        return self.vtable.get_WeekDay7(self, result);
     }
     pub fn get_WeekDay7Owned(self: *const ICalendarViewTemplateSettings) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.@"get_WeekDay7"(self, &r));
+        try win_core.hresult.ok(self.vtable.get_WeekDay7(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
     pub fn get_HasMoreContentAfter(self: *const ICalendarViewTemplateSettings, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HasMoreContentAfter"(self, result);
+        return self.vtable.get_HasMoreContentAfter(self, result);
     }
     pub fn get_HasMoreContentBefore(self: *const ICalendarViewTemplateSettings, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HasMoreContentBefore"(self, result);
+        return self.vtable.get_HasMoreContentBefore(self, result);
     }
     pub fn get_HasMoreViews(self: *const ICalendarViewTemplateSettings, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HasMoreViews"(self, result);
+        return self.vtable.get_HasMoreViews(self, result);
     }
     pub fn get_ClipRect(self: *const ICalendarViewTemplateSettings, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ClipRect"(self, result);
+        return self.vtable.get_ClipRect(self, result);
     }
     pub fn get_CenterX(self: *const ICalendarViewTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CenterX"(self, result);
+        return self.vtable.get_CenterX(self, result);
     }
     pub fn get_CenterY(self: *const ICalendarViewTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CenterY"(self, result);
+        return self.vtable.get_CenterY(self, result);
     }
 };
 pub const ICarouselPanel = extern struct {
@@ -1530,85 +1530,85 @@ pub const ICarouselPanel = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_CanVerticallyScroll(self: *const ICarouselPanel, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CanVerticallyScroll"(self, result);
+        return self.vtable.get_CanVerticallyScroll(self, result);
     }
     pub fn put_CanVerticallyScroll(self: *const ICarouselPanel, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CanVerticallyScroll"(self, p0);
+        return self.vtable.put_CanVerticallyScroll(self, p0);
     }
     pub fn get_CanHorizontallyScroll(self: *const ICarouselPanel, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CanHorizontallyScroll"(self, result);
+        return self.vtable.get_CanHorizontallyScroll(self, result);
     }
     pub fn put_CanHorizontallyScroll(self: *const ICarouselPanel, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CanHorizontallyScroll"(self, p0);
+        return self.vtable.put_CanHorizontallyScroll(self, p0);
     }
     pub fn get_ExtentWidth(self: *const ICarouselPanel, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ExtentWidth"(self, result);
+        return self.vtable.get_ExtentWidth(self, result);
     }
     pub fn get_ExtentHeight(self: *const ICarouselPanel, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ExtentHeight"(self, result);
+        return self.vtable.get_ExtentHeight(self, result);
     }
     pub fn get_ViewportWidth(self: *const ICarouselPanel, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ViewportWidth"(self, result);
+        return self.vtable.get_ViewportWidth(self, result);
     }
     pub fn get_ViewportHeight(self: *const ICarouselPanel, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ViewportHeight"(self, result);
+        return self.vtable.get_ViewportHeight(self, result);
     }
     pub fn get_HorizontalOffset(self: *const ICarouselPanel, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HorizontalOffset"(self, result);
+        return self.vtable.get_HorizontalOffset(self, result);
     }
     pub fn get_VerticalOffset(self: *const ICarouselPanel, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_VerticalOffset"(self, result);
+        return self.vtable.get_VerticalOffset(self, result);
     }
     pub fn get_ScrollOwner(self: *const ICarouselPanel, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ScrollOwner"(self, result);
+        return self.vtable.get_ScrollOwner(self, result);
     }
     pub fn put_ScrollOwner(self: *const ICarouselPanel, p0: ?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ScrollOwner"(self, p0);
+        return self.vtable.put_ScrollOwner(self, p0);
     }
     pub fn LineUp(self: *const ICarouselPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"LineUp"(self);
+        return self.vtable.LineUp(self);
     }
     pub fn LineDown(self: *const ICarouselPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"LineDown"(self);
+        return self.vtable.LineDown(self);
     }
     pub fn LineLeft(self: *const ICarouselPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"LineLeft"(self);
+        return self.vtable.LineLeft(self);
     }
     pub fn LineRight(self: *const ICarouselPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"LineRight"(self);
+        return self.vtable.LineRight(self);
     }
     pub fn PageUp(self: *const ICarouselPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"PageUp"(self);
+        return self.vtable.PageUp(self);
     }
     pub fn PageDown(self: *const ICarouselPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"PageDown"(self);
+        return self.vtable.PageDown(self);
     }
     pub fn PageLeft(self: *const ICarouselPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"PageLeft"(self);
+        return self.vtable.PageLeft(self);
     }
     pub fn PageRight(self: *const ICarouselPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"PageRight"(self);
+        return self.vtable.PageRight(self);
     }
     pub fn MouseWheelUp(self: *const ICarouselPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"MouseWheelUp"(self);
+        return self.vtable.MouseWheelUp(self);
     }
     pub fn MouseWheelDown(self: *const ICarouselPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"MouseWheelDown"(self);
+        return self.vtable.MouseWheelDown(self);
     }
     pub fn MouseWheelLeft(self: *const ICarouselPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"MouseWheelLeft"(self);
+        return self.vtable.MouseWheelLeft(self);
     }
     pub fn MouseWheelRight(self: *const ICarouselPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"MouseWheelRight"(self);
+        return self.vtable.MouseWheelRight(self);
     }
     pub fn SetHorizontalOffset(self: *const ICarouselPanel, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"SetHorizontalOffset"(self, p0);
+        return self.vtable.SetHorizontalOffset(self, p0);
     }
     pub fn SetVerticalOffset(self: *const ICarouselPanel, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"SetVerticalOffset"(self, p0);
+        return self.vtable.SetVerticalOffset(self, p0);
     }
     pub fn MakeVisible(self: *const ICarouselPanel, p0: *@"Microsoft.UI.Xaml".UIElement, p1: @"Windows.Foundation".Rect, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT {
-        return self.vtable.@"MakeVisible"(self, p0, p1, result);
+        return self.vtable.MakeVisible(self, p0, p1, result);
     }
 };
 pub const ICarouselPanelFactory = extern struct {
@@ -1630,7 +1630,7 @@ pub const ICarouselPanelFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const ICarouselPanelFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **CarouselPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const IColorPickerSlider = extern struct {
@@ -1652,10 +1652,10 @@ pub const IColorPickerSlider = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_ColorChannel(self: *const IColorPickerSlider, result: *@"Microsoft.UI.Xaml.Controls".ColorPickerHsvChannel) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ColorChannel"(self, result);
+        return self.vtable.get_ColorChannel(self, result);
     }
     pub fn put_ColorChannel(self: *const IColorPickerSlider, p0: @"Microsoft.UI.Xaml.Controls".ColorPickerHsvChannel) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ColorChannel"(self, p0);
+        return self.vtable.put_ColorChannel(self, p0);
     }
 };
 pub const IColorPickerSliderFactory = extern struct {
@@ -1677,7 +1677,7 @@ pub const IColorPickerSliderFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IColorPickerSliderFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **ColorPickerSlider) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const IColorPickerSliderStatics = extern struct {
@@ -1699,7 +1699,7 @@ pub const IColorPickerSliderStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_ColorChannelProperty(self: *const IColorPickerSliderStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ColorChannelProperty"(self, result);
+        return self.vtable.get_ColorChannelProperty(self, result);
     }
 };
 pub const IColorSpectrum = extern struct {
@@ -1721,70 +1721,70 @@ pub const IColorSpectrum = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Color(self: *const IColorSpectrum, result: *@"Windows.UI".Color) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Color"(self, result);
+        return self.vtable.get_Color(self, result);
     }
     pub fn put_Color(self: *const IColorSpectrum, p0: @"Windows.UI".Color) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Color"(self, p0);
+        return self.vtable.put_Color(self, p0);
     }
     pub fn get_HsvColor(self: *const IColorSpectrum, result: *@"Windows.Foundation.Numerics".Vector4) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HsvColor"(self, result);
+        return self.vtable.get_HsvColor(self, result);
     }
     pub fn put_HsvColor(self: *const IColorSpectrum, p0: @"Windows.Foundation.Numerics".Vector4) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_HsvColor"(self, p0);
+        return self.vtable.put_HsvColor(self, p0);
     }
     pub fn get_MinHue(self: *const IColorSpectrum, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MinHue"(self, result);
+        return self.vtable.get_MinHue(self, result);
     }
     pub fn put_MinHue(self: *const IColorSpectrum, p0: i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_MinHue"(self, p0);
+        return self.vtable.put_MinHue(self, p0);
     }
     pub fn get_MaxHue(self: *const IColorSpectrum, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MaxHue"(self, result);
+        return self.vtable.get_MaxHue(self, result);
     }
     pub fn put_MaxHue(self: *const IColorSpectrum, p0: i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_MaxHue"(self, p0);
+        return self.vtable.put_MaxHue(self, p0);
     }
     pub fn get_MinSaturation(self: *const IColorSpectrum, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MinSaturation"(self, result);
+        return self.vtable.get_MinSaturation(self, result);
     }
     pub fn put_MinSaturation(self: *const IColorSpectrum, p0: i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_MinSaturation"(self, p0);
+        return self.vtable.put_MinSaturation(self, p0);
     }
     pub fn get_MaxSaturation(self: *const IColorSpectrum, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MaxSaturation"(self, result);
+        return self.vtable.get_MaxSaturation(self, result);
     }
     pub fn put_MaxSaturation(self: *const IColorSpectrum, p0: i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_MaxSaturation"(self, p0);
+        return self.vtable.put_MaxSaturation(self, p0);
     }
     pub fn get_MinValue(self: *const IColorSpectrum, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MinValue"(self, result);
+        return self.vtable.get_MinValue(self, result);
     }
     pub fn put_MinValue(self: *const IColorSpectrum, p0: i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_MinValue"(self, p0);
+        return self.vtable.put_MinValue(self, p0);
     }
     pub fn get_MaxValue(self: *const IColorSpectrum, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MaxValue"(self, result);
+        return self.vtable.get_MaxValue(self, result);
     }
     pub fn put_MaxValue(self: *const IColorSpectrum, p0: i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_MaxValue"(self, p0);
+        return self.vtable.put_MaxValue(self, p0);
     }
     pub fn get_Shape(self: *const IColorSpectrum, result: *@"Microsoft.UI.Xaml.Controls".ColorSpectrumShape) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Shape"(self, result);
+        return self.vtable.get_Shape(self, result);
     }
     pub fn put_Shape(self: *const IColorSpectrum, p0: @"Microsoft.UI.Xaml.Controls".ColorSpectrumShape) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Shape"(self, p0);
+        return self.vtable.put_Shape(self, p0);
     }
     pub fn get_Components(self: *const IColorSpectrum, result: *@"Microsoft.UI.Xaml.Controls".ColorSpectrumComponents) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Components"(self, result);
+        return self.vtable.get_Components(self, result);
     }
     pub fn put_Components(self: *const IColorSpectrum, p0: @"Microsoft.UI.Xaml.Controls".ColorSpectrumComponents) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Components"(self, p0);
+        return self.vtable.put_Components(self, p0);
     }
     pub fn add_ColorChanged(self: *const IColorSpectrum, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ColorSpectrum__Microsoft_UI_Xaml_Controls_ColorChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_ColorChanged"(self, p0, result);
+        return self.vtable.add_ColorChanged(self, p0, result);
     }
     pub fn remove_ColorChanged(self: *const IColorSpectrum, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_ColorChanged"(self, p0);
+        return self.vtable.remove_ColorChanged(self, p0);
     }
     pub fn addColorChanged(
         self: *const IColorSpectrum,
@@ -1822,7 +1822,7 @@ pub const IColorSpectrumFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IColorSpectrumFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **ColorSpectrum) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const IColorSpectrumStatics = extern struct {
@@ -1844,34 +1844,34 @@ pub const IColorSpectrumStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_ColorProperty(self: *const IColorSpectrumStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ColorProperty"(self, result);
+        return self.vtable.get_ColorProperty(self, result);
     }
     pub fn get_HsvColorProperty(self: *const IColorSpectrumStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HsvColorProperty"(self, result);
+        return self.vtable.get_HsvColorProperty(self, result);
     }
     pub fn get_MinHueProperty(self: *const IColorSpectrumStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MinHueProperty"(self, result);
+        return self.vtable.get_MinHueProperty(self, result);
     }
     pub fn get_MaxHueProperty(self: *const IColorSpectrumStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MaxHueProperty"(self, result);
+        return self.vtable.get_MaxHueProperty(self, result);
     }
     pub fn get_MinSaturationProperty(self: *const IColorSpectrumStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MinSaturationProperty"(self, result);
+        return self.vtable.get_MinSaturationProperty(self, result);
     }
     pub fn get_MaxSaturationProperty(self: *const IColorSpectrumStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MaxSaturationProperty"(self, result);
+        return self.vtable.get_MaxSaturationProperty(self, result);
     }
     pub fn get_MinValueProperty(self: *const IColorSpectrumStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MinValueProperty"(self, result);
+        return self.vtable.get_MinValueProperty(self, result);
     }
     pub fn get_MaxValueProperty(self: *const IColorSpectrumStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MaxValueProperty"(self, result);
+        return self.vtable.get_MaxValueProperty(self, result);
     }
     pub fn get_ShapeProperty(self: *const IColorSpectrumStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ShapeProperty"(self, result);
+        return self.vtable.get_ShapeProperty(self, result);
     }
     pub fn get_ComponentsProperty(self: *const IColorSpectrumStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ComponentsProperty"(self, result);
+        return self.vtable.get_ComponentsProperty(self, result);
     }
 };
 pub const IColumnMajorUniformToLargestGridLayout = extern struct {
@@ -1893,22 +1893,22 @@ pub const IColumnMajorUniformToLargestGridLayout = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_MaxColumns(self: *const IColumnMajorUniformToLargestGridLayout, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MaxColumns"(self, result);
+        return self.vtable.get_MaxColumns(self, result);
     }
     pub fn put_MaxColumns(self: *const IColumnMajorUniformToLargestGridLayout, p0: i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_MaxColumns"(self, p0);
+        return self.vtable.put_MaxColumns(self, p0);
     }
     pub fn get_ColumnSpacing(self: *const IColumnMajorUniformToLargestGridLayout, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ColumnSpacing"(self, result);
+        return self.vtable.get_ColumnSpacing(self, result);
     }
     pub fn put_ColumnSpacing(self: *const IColumnMajorUniformToLargestGridLayout, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ColumnSpacing"(self, p0);
+        return self.vtable.put_ColumnSpacing(self, p0);
     }
     pub fn get_RowSpacing(self: *const IColumnMajorUniformToLargestGridLayout, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_RowSpacing"(self, result);
+        return self.vtable.get_RowSpacing(self, result);
     }
     pub fn put_RowSpacing(self: *const IColumnMajorUniformToLargestGridLayout, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_RowSpacing"(self, p0);
+        return self.vtable.put_RowSpacing(self, p0);
     }
 };
 pub const IColumnMajorUniformToLargestGridLayoutFactory = extern struct {
@@ -1930,7 +1930,7 @@ pub const IColumnMajorUniformToLargestGridLayoutFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IColumnMajorUniformToLargestGridLayoutFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **ColumnMajorUniformToLargestGridLayout) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const IColumnMajorUniformToLargestGridLayoutStatics = extern struct {
@@ -1952,13 +1952,13 @@ pub const IColumnMajorUniformToLargestGridLayoutStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_MaxColumnsProperty(self: *const IColumnMajorUniformToLargestGridLayoutStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MaxColumnsProperty"(self, result);
+        return self.vtable.get_MaxColumnsProperty(self, result);
     }
     pub fn get_ColumnSpacingProperty(self: *const IColumnMajorUniformToLargestGridLayoutStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ColumnSpacingProperty"(self, result);
+        return self.vtable.get_ColumnSpacingProperty(self, result);
     }
     pub fn get_RowSpacingProperty(self: *const IColumnMajorUniformToLargestGridLayoutStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_RowSpacingProperty"(self, result);
+        return self.vtable.get_RowSpacingProperty(self, result);
     }
 };
 pub const IComboBoxHelper = extern struct {
@@ -1999,13 +1999,13 @@ pub const IComboBoxHelperStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_KeepInteriorCornersSquareProperty(self: *const IComboBoxHelperStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_KeepInteriorCornersSquareProperty"(self, result);
+        return self.vtable.get_KeepInteriorCornersSquareProperty(self, result);
     }
     pub fn SetKeepInteriorCornersSquare(self: *const IComboBoxHelperStatics, p0: *@"Microsoft.UI.Xaml.Controls".ComboBox, p1: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"SetKeepInteriorCornersSquare"(self, p0, p1);
+        return self.vtable.SetKeepInteriorCornersSquare(self, p0, p1);
     }
     pub fn GetKeepInteriorCornersSquare(self: *const IComboBoxHelperStatics, p0: *@"Microsoft.UI.Xaml.Controls".ComboBox, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"GetKeepInteriorCornersSquare"(self, p0, result);
+        return self.vtable.GetKeepInteriorCornersSquare(self, p0, result);
     }
 };
 pub const IComboBoxTemplateSettings = extern struct {
@@ -2027,19 +2027,19 @@ pub const IComboBoxTemplateSettings = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_DropDownOpenedHeight(self: *const IComboBoxTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DropDownOpenedHeight"(self, result);
+        return self.vtable.get_DropDownOpenedHeight(self, result);
     }
     pub fn get_DropDownClosedHeight(self: *const IComboBoxTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DropDownClosedHeight"(self, result);
+        return self.vtable.get_DropDownClosedHeight(self, result);
     }
     pub fn get_DropDownOffset(self: *const IComboBoxTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DropDownOffset"(self, result);
+        return self.vtable.get_DropDownOffset(self, result);
     }
     pub fn get_SelectedItemDirection(self: *const IComboBoxTemplateSettings, result: *AnimationDirection) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedItemDirection"(self, result);
+        return self.vtable.get_SelectedItemDirection(self, result);
     }
     pub fn get_DropDownContentMinWidth(self: *const IComboBoxTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DropDownContentMinWidth"(self, result);
+        return self.vtable.get_DropDownContentMinWidth(self, result);
     }
 };
 pub const ICommandBarFlyoutCommandBar = extern struct {
@@ -2061,7 +2061,7 @@ pub const ICommandBarFlyoutCommandBar = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_FlyoutTemplateSettings(self: *const ICommandBarFlyoutCommandBar, result: **CommandBarFlyoutCommandBarTemplateSettings) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_FlyoutTemplateSettings"(self, result);
+        return self.vtable.get_FlyoutTemplateSettings(self, result);
     }
 };
 pub const ICommandBarFlyoutCommandBar2 = extern struct {
@@ -2083,10 +2083,10 @@ pub const ICommandBarFlyoutCommandBar2 = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_SystemBackdrop(self: *const ICommandBarFlyoutCommandBar2, result: **@"Microsoft.UI.Xaml.Media".SystemBackdrop) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SystemBackdrop"(self, result);
+        return self.vtable.get_SystemBackdrop(self, result);
     }
     pub fn put_SystemBackdrop(self: *const ICommandBarFlyoutCommandBar2, p0: *@"Microsoft.UI.Xaml.Media".SystemBackdrop) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SystemBackdrop"(self, p0);
+        return self.vtable.put_SystemBackdrop(self, p0);
     }
 };
 pub const ICommandBarFlyoutCommandBarAutomationPropertiesStatics = extern struct {
@@ -2108,13 +2108,13 @@ pub const ICommandBarFlyoutCommandBarAutomationPropertiesStatics = extern struct
         return @ptrCast(@alignCast(out));
     }
     pub fn get_ControlTypeProperty(self: *const ICommandBarFlyoutCommandBarAutomationPropertiesStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ControlTypeProperty"(self, result);
+        return self.vtable.get_ControlTypeProperty(self, result);
     }
     pub fn GetControlType(self: *const ICommandBarFlyoutCommandBarAutomationPropertiesStatics, p0: *@"Microsoft.UI.Xaml".UIElement, result: *@"Microsoft.UI.Xaml.Automation.Peers".AutomationControlType) callconv(.winapi) HRESULT {
-        return self.vtable.@"GetControlType"(self, p0, result);
+        return self.vtable.GetControlType(self, p0, result);
     }
     pub fn SetControlType(self: *const ICommandBarFlyoutCommandBarAutomationPropertiesStatics, p0: *@"Microsoft.UI.Xaml".UIElement, p1: @"Microsoft.UI.Xaml.Automation.Peers".AutomationControlType) callconv(.winapi) HRESULT {
-        return self.vtable.@"SetControlType"(self, p0, p1);
+        return self.vtable.SetControlType(self, p0, p1);
     }
 };
 pub const ICommandBarFlyoutCommandBarFactory = extern struct {
@@ -2136,7 +2136,7 @@ pub const ICommandBarFlyoutCommandBarFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const ICommandBarFlyoutCommandBarFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **CommandBarFlyoutCommandBar) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const ICommandBarFlyoutCommandBarStatics = extern struct {
@@ -2158,7 +2158,7 @@ pub const ICommandBarFlyoutCommandBarStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_SystemBackdropProperty(self: *const ICommandBarFlyoutCommandBarStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SystemBackdropProperty"(self, result);
+        return self.vtable.get_SystemBackdropProperty(self, result);
     }
 };
 pub const ICommandBarFlyoutCommandBarTemplateSettings = extern struct {
@@ -2180,64 +2180,64 @@ pub const ICommandBarFlyoutCommandBarTemplateSettings = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_OpenAnimationStartPosition(self: *const ICommandBarFlyoutCommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_OpenAnimationStartPosition"(self, result);
+        return self.vtable.get_OpenAnimationStartPosition(self, result);
     }
     pub fn get_OpenAnimationEndPosition(self: *const ICommandBarFlyoutCommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_OpenAnimationEndPosition"(self, result);
+        return self.vtable.get_OpenAnimationEndPosition(self, result);
     }
     pub fn get_CloseAnimationEndPosition(self: *const ICommandBarFlyoutCommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CloseAnimationEndPosition"(self, result);
+        return self.vtable.get_CloseAnimationEndPosition(self, result);
     }
     pub fn get_CurrentWidth(self: *const ICommandBarFlyoutCommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CurrentWidth"(self, result);
+        return self.vtable.get_CurrentWidth(self, result);
     }
     pub fn get_ExpandedWidth(self: *const ICommandBarFlyoutCommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ExpandedWidth"(self, result);
+        return self.vtable.get_ExpandedWidth(self, result);
     }
     pub fn get_WidthExpansionDelta(self: *const ICommandBarFlyoutCommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_WidthExpansionDelta"(self, result);
+        return self.vtable.get_WidthExpansionDelta(self, result);
     }
     pub fn get_WidthExpansionAnimationStartPosition(self: *const ICommandBarFlyoutCommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_WidthExpansionAnimationStartPosition"(self, result);
+        return self.vtable.get_WidthExpansionAnimationStartPosition(self, result);
     }
     pub fn get_WidthExpansionAnimationEndPosition(self: *const ICommandBarFlyoutCommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_WidthExpansionAnimationEndPosition"(self, result);
+        return self.vtable.get_WidthExpansionAnimationEndPosition(self, result);
     }
     pub fn get_WidthExpansionMoreButtonAnimationStartPosition(self: *const ICommandBarFlyoutCommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_WidthExpansionMoreButtonAnimationStartPosition"(self, result);
+        return self.vtable.get_WidthExpansionMoreButtonAnimationStartPosition(self, result);
     }
     pub fn get_WidthExpansionMoreButtonAnimationEndPosition(self: *const ICommandBarFlyoutCommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_WidthExpansionMoreButtonAnimationEndPosition"(self, result);
+        return self.vtable.get_WidthExpansionMoreButtonAnimationEndPosition(self, result);
     }
     pub fn get_ExpandUpOverflowVerticalPosition(self: *const ICommandBarFlyoutCommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ExpandUpOverflowVerticalPosition"(self, result);
+        return self.vtable.get_ExpandUpOverflowVerticalPosition(self, result);
     }
     pub fn get_ExpandDownOverflowVerticalPosition(self: *const ICommandBarFlyoutCommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ExpandDownOverflowVerticalPosition"(self, result);
+        return self.vtable.get_ExpandDownOverflowVerticalPosition(self, result);
     }
     pub fn get_ExpandUpAnimationStartPosition(self: *const ICommandBarFlyoutCommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ExpandUpAnimationStartPosition"(self, result);
+        return self.vtable.get_ExpandUpAnimationStartPosition(self, result);
     }
     pub fn get_ExpandUpAnimationEndPosition(self: *const ICommandBarFlyoutCommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ExpandUpAnimationEndPosition"(self, result);
+        return self.vtable.get_ExpandUpAnimationEndPosition(self, result);
     }
     pub fn get_ExpandUpAnimationHoldPosition(self: *const ICommandBarFlyoutCommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ExpandUpAnimationHoldPosition"(self, result);
+        return self.vtable.get_ExpandUpAnimationHoldPosition(self, result);
     }
     pub fn get_ExpandDownAnimationStartPosition(self: *const ICommandBarFlyoutCommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ExpandDownAnimationStartPosition"(self, result);
+        return self.vtable.get_ExpandDownAnimationStartPosition(self, result);
     }
     pub fn get_ExpandDownAnimationEndPosition(self: *const ICommandBarFlyoutCommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ExpandDownAnimationEndPosition"(self, result);
+        return self.vtable.get_ExpandDownAnimationEndPosition(self, result);
     }
     pub fn get_ExpandDownAnimationHoldPosition(self: *const ICommandBarFlyoutCommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ExpandDownAnimationHoldPosition"(self, result);
+        return self.vtable.get_ExpandDownAnimationHoldPosition(self, result);
     }
     pub fn get_ContentClipRect(self: *const ICommandBarFlyoutCommandBarTemplateSettings, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ContentClipRect"(self, result);
+        return self.vtable.get_ContentClipRect(self, result);
     }
     pub fn get_OverflowContentClipRect(self: *const ICommandBarFlyoutCommandBarTemplateSettings, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_OverflowContentClipRect"(self, result);
+        return self.vtable.get_OverflowContentClipRect(self, result);
     }
 };
 pub const ICommandBarTemplateSettings = extern struct {
@@ -2259,40 +2259,40 @@ pub const ICommandBarTemplateSettings = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_ContentHeight(self: *const ICommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ContentHeight"(self, result);
+        return self.vtable.get_ContentHeight(self, result);
     }
     pub fn get_OverflowContentClipRect(self: *const ICommandBarTemplateSettings, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_OverflowContentClipRect"(self, result);
+        return self.vtable.get_OverflowContentClipRect(self, result);
     }
     pub fn get_OverflowContentMinWidth(self: *const ICommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_OverflowContentMinWidth"(self, result);
+        return self.vtable.get_OverflowContentMinWidth(self, result);
     }
     pub fn get_OverflowContentMaxWidth(self: *const ICommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_OverflowContentMaxWidth"(self, result);
+        return self.vtable.get_OverflowContentMaxWidth(self, result);
     }
     pub fn get_OverflowContentMaxHeight(self: *const ICommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_OverflowContentMaxHeight"(self, result);
+        return self.vtable.get_OverflowContentMaxHeight(self, result);
     }
     pub fn get_OverflowContentHorizontalOffset(self: *const ICommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_OverflowContentHorizontalOffset"(self, result);
+        return self.vtable.get_OverflowContentHorizontalOffset(self, result);
     }
     pub fn get_OverflowContentHeight(self: *const ICommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_OverflowContentHeight"(self, result);
+        return self.vtable.get_OverflowContentHeight(self, result);
     }
     pub fn get_NegativeOverflowContentHeight(self: *const ICommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_NegativeOverflowContentHeight"(self, result);
+        return self.vtable.get_NegativeOverflowContentHeight(self, result);
     }
     pub fn get_EffectiveOverflowButtonVisibility(self: *const ICommandBarTemplateSettings, result: *@"Microsoft.UI.Xaml".Visibility) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_EffectiveOverflowButtonVisibility"(self, result);
+        return self.vtable.get_EffectiveOverflowButtonVisibility(self, result);
     }
     pub fn get_OverflowContentCompactYTranslation(self: *const ICommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_OverflowContentCompactYTranslation"(self, result);
+        return self.vtable.get_OverflowContentCompactYTranslation(self, result);
     }
     pub fn get_OverflowContentMinimalYTranslation(self: *const ICommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_OverflowContentMinimalYTranslation"(self, result);
+        return self.vtable.get_OverflowContentMinimalYTranslation(self, result);
     }
     pub fn get_OverflowContentHiddenYTranslation(self: *const ICommandBarTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_OverflowContentHiddenYTranslation"(self, result);
+        return self.vtable.get_OverflowContentHiddenYTranslation(self, result);
     }
 };
 pub const ICornerRadiusFilterConverter = extern struct {
@@ -2314,16 +2314,16 @@ pub const ICornerRadiusFilterConverter = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Filter(self: *const ICornerRadiusFilterConverter, result: *CornerRadiusFilterKind) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Filter"(self, result);
+        return self.vtable.get_Filter(self, result);
     }
     pub fn put_Filter(self: *const ICornerRadiusFilterConverter, p0: CornerRadiusFilterKind) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Filter"(self, p0);
+        return self.vtable.put_Filter(self, p0);
     }
     pub fn get_Scale(self: *const ICornerRadiusFilterConverter, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Scale"(self, result);
+        return self.vtable.get_Scale(self, result);
     }
     pub fn put_Scale(self: *const ICornerRadiusFilterConverter, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Scale"(self, p0);
+        return self.vtable.put_Scale(self, p0);
     }
 };
 pub const ICornerRadiusFilterConverterStatics = extern struct {
@@ -2345,10 +2345,10 @@ pub const ICornerRadiusFilterConverterStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_FilterProperty(self: *const ICornerRadiusFilterConverterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_FilterProperty"(self, result);
+        return self.vtable.get_FilterProperty(self, result);
     }
     pub fn get_ScaleProperty(self: *const ICornerRadiusFilterConverterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ScaleProperty"(self, result);
+        return self.vtable.get_ScaleProperty(self, result);
     }
 };
 pub const ICornerRadiusToThicknessConverter = extern struct {
@@ -2370,16 +2370,16 @@ pub const ICornerRadiusToThicknessConverter = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_ConversionKind(self: *const ICornerRadiusToThicknessConverter, result: *CornerRadiusToThicknessConverterKind) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ConversionKind"(self, result);
+        return self.vtable.get_ConversionKind(self, result);
     }
     pub fn put_ConversionKind(self: *const ICornerRadiusToThicknessConverter, p0: CornerRadiusToThicknessConverterKind) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ConversionKind"(self, p0);
+        return self.vtable.put_ConversionKind(self, p0);
     }
     pub fn get_Multiplier(self: *const ICornerRadiusToThicknessConverter, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Multiplier"(self, result);
+        return self.vtable.get_Multiplier(self, result);
     }
     pub fn put_Multiplier(self: *const ICornerRadiusToThicknessConverter, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Multiplier"(self, p0);
+        return self.vtable.put_Multiplier(self, p0);
     }
 };
 pub const ICornerRadiusToThicknessConverterStatics = extern struct {
@@ -2401,10 +2401,10 @@ pub const ICornerRadiusToThicknessConverterStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_ConversionKindProperty(self: *const ICornerRadiusToThicknessConverterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ConversionKindProperty"(self, result);
+        return self.vtable.get_ConversionKindProperty(self, result);
     }
     pub fn get_MultiplierProperty(self: *const ICornerRadiusToThicknessConverterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MultiplierProperty"(self, result);
+        return self.vtable.get_MultiplierProperty(self, result);
     }
 };
 pub const IDragCompletedEventArgs = extern struct {
@@ -2426,13 +2426,13 @@ pub const IDragCompletedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_HorizontalChange(self: *const IDragCompletedEventArgs, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HorizontalChange"(self, result);
+        return self.vtable.get_HorizontalChange(self, result);
     }
     pub fn get_VerticalChange(self: *const IDragCompletedEventArgs, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_VerticalChange"(self, result);
+        return self.vtable.get_VerticalChange(self, result);
     }
     pub fn get_Canceled(self: *const IDragCompletedEventArgs, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Canceled"(self, result);
+        return self.vtable.get_Canceled(self, result);
     }
 };
 pub const IDragCompletedEventArgsFactory = extern struct {
@@ -2454,7 +2454,7 @@ pub const IDragCompletedEventArgsFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstanceWithHorizontalChangeVerticalChangeAndCanceled(self: *const IDragCompletedEventArgsFactory, p0: f64, p1: f64, p2: BOOL, p3: ?*const anyopaque, p4: *?*const anyopaque, result: **DragCompletedEventArgs) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstanceWithHorizontalChangeVerticalChangeAndCanceled"(self, p0, p1, p2, p3, p4, result);
+        return self.vtable.CreateInstanceWithHorizontalChangeVerticalChangeAndCanceled(self, p0, p1, p2, p3, p4, result);
     }
 };
 pub const IDragDeltaEventArgs = extern struct {
@@ -2476,10 +2476,10 @@ pub const IDragDeltaEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_HorizontalChange(self: *const IDragDeltaEventArgs, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HorizontalChange"(self, result);
+        return self.vtable.get_HorizontalChange(self, result);
     }
     pub fn get_VerticalChange(self: *const IDragDeltaEventArgs, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_VerticalChange"(self, result);
+        return self.vtable.get_VerticalChange(self, result);
     }
 };
 pub const IDragDeltaEventArgsFactory = extern struct {
@@ -2501,7 +2501,7 @@ pub const IDragDeltaEventArgsFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstanceWithHorizontalChangeAndVerticalChange(self: *const IDragDeltaEventArgsFactory, p0: f64, p1: f64, p2: ?*const anyopaque, p3: *?*const anyopaque, result: **DragDeltaEventArgs) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstanceWithHorizontalChangeAndVerticalChange"(self, p0, p1, p2, p3, result);
+        return self.vtable.CreateInstanceWithHorizontalChangeAndVerticalChange(self, p0, p1, p2, p3, result);
     }
 };
 pub const IDragStartedEventArgs = extern struct {
@@ -2523,10 +2523,10 @@ pub const IDragStartedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_HorizontalOffset(self: *const IDragStartedEventArgs, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HorizontalOffset"(self, result);
+        return self.vtable.get_HorizontalOffset(self, result);
     }
     pub fn get_VerticalOffset(self: *const IDragStartedEventArgs, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_VerticalOffset"(self, result);
+        return self.vtable.get_VerticalOffset(self, result);
     }
 };
 pub const IDragStartedEventArgsFactory = extern struct {
@@ -2548,7 +2548,7 @@ pub const IDragStartedEventArgsFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstanceWithHorizontalOffsetAndVerticalOffset(self: *const IDragStartedEventArgsFactory, p0: f64, p1: f64, p2: ?*const anyopaque, p3: *?*const anyopaque, result: **DragStartedEventArgs) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstanceWithHorizontalOffsetAndVerticalOffset"(self, p0, p1, p2, p3, result);
+        return self.vtable.CreateInstanceWithHorizontalOffsetAndVerticalOffset(self, p0, p1, p2, p3, result);
     }
 };
 pub const IFlyoutBase = extern struct {
@@ -2570,112 +2570,112 @@ pub const IFlyoutBase = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Placement(self: *const IFlyoutBase, result: *FlyoutPlacementMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Placement"(self, result);
+        return self.vtable.get_Placement(self, result);
     }
     pub fn put_Placement(self: *const IFlyoutBase, p0: FlyoutPlacementMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Placement"(self, p0);
+        return self.vtable.put_Placement(self, p0);
     }
     pub fn get_Target(self: *const IFlyoutBase, result: **@"Microsoft.UI.Xaml".FrameworkElement) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Target"(self, result);
+        return self.vtable.get_Target(self, result);
     }
     pub fn get_AllowFocusOnInteraction(self: *const IFlyoutBase, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_AllowFocusOnInteraction"(self, result);
+        return self.vtable.get_AllowFocusOnInteraction(self, result);
     }
     pub fn put_AllowFocusOnInteraction(self: *const IFlyoutBase, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_AllowFocusOnInteraction"(self, p0);
+        return self.vtable.put_AllowFocusOnInteraction(self, p0);
     }
     pub fn get_LightDismissOverlayMode(self: *const IFlyoutBase, result: *@"Microsoft.UI.Xaml.Controls".LightDismissOverlayMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_LightDismissOverlayMode"(self, result);
+        return self.vtable.get_LightDismissOverlayMode(self, result);
     }
     pub fn put_LightDismissOverlayMode(self: *const IFlyoutBase, p0: @"Microsoft.UI.Xaml.Controls".LightDismissOverlayMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_LightDismissOverlayMode"(self, p0);
+        return self.vtable.put_LightDismissOverlayMode(self, p0);
     }
     pub fn get_AllowFocusWhenDisabled(self: *const IFlyoutBase, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_AllowFocusWhenDisabled"(self, result);
+        return self.vtable.get_AllowFocusWhenDisabled(self, result);
     }
     pub fn put_AllowFocusWhenDisabled(self: *const IFlyoutBase, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_AllowFocusWhenDisabled"(self, p0);
+        return self.vtable.put_AllowFocusWhenDisabled(self, p0);
     }
     pub fn get_ShowMode(self: *const IFlyoutBase, result: *FlyoutShowMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ShowMode"(self, result);
+        return self.vtable.get_ShowMode(self, result);
     }
     pub fn put_ShowMode(self: *const IFlyoutBase, p0: FlyoutShowMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ShowMode"(self, p0);
+        return self.vtable.put_ShowMode(self, p0);
     }
     pub fn get_InputDevicePrefersPrimaryCommands(self: *const IFlyoutBase, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_InputDevicePrefersPrimaryCommands"(self, result);
+        return self.vtable.get_InputDevicePrefersPrimaryCommands(self, result);
     }
     pub fn get_AreOpenCloseAnimationsEnabled(self: *const IFlyoutBase, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_AreOpenCloseAnimationsEnabled"(self, result);
+        return self.vtable.get_AreOpenCloseAnimationsEnabled(self, result);
     }
     pub fn put_AreOpenCloseAnimationsEnabled(self: *const IFlyoutBase, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_AreOpenCloseAnimationsEnabled"(self, p0);
+        return self.vtable.put_AreOpenCloseAnimationsEnabled(self, p0);
     }
     pub fn get_ShouldConstrainToRootBounds(self: *const IFlyoutBase, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ShouldConstrainToRootBounds"(self, result);
+        return self.vtable.get_ShouldConstrainToRootBounds(self, result);
     }
     pub fn put_ShouldConstrainToRootBounds(self: *const IFlyoutBase, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ShouldConstrainToRootBounds"(self, p0);
+        return self.vtable.put_ShouldConstrainToRootBounds(self, p0);
     }
     pub fn get_IsConstrainedToRootBounds(self: *const IFlyoutBase, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsConstrainedToRootBounds"(self, result);
+        return self.vtable.get_IsConstrainedToRootBounds(self, result);
     }
     pub fn get_ElementSoundMode(self: *const IFlyoutBase, result: *@"Microsoft.UI.Xaml".ElementSoundMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ElementSoundMode"(self, result);
+        return self.vtable.get_ElementSoundMode(self, result);
     }
     pub fn put_ElementSoundMode(self: *const IFlyoutBase, p0: @"Microsoft.UI.Xaml".ElementSoundMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ElementSoundMode"(self, p0);
+        return self.vtable.put_ElementSoundMode(self, p0);
     }
     pub fn get_OverlayInputPassThroughElement(self: *const IFlyoutBase, result: **@"Microsoft.UI.Xaml".DependencyObject) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_OverlayInputPassThroughElement"(self, result);
+        return self.vtable.get_OverlayInputPassThroughElement(self, result);
     }
     pub fn put_OverlayInputPassThroughElement(self: *const IFlyoutBase, p0: *@"Microsoft.UI.Xaml".DependencyObject) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_OverlayInputPassThroughElement"(self, p0);
+        return self.vtable.put_OverlayInputPassThroughElement(self, p0);
     }
     pub fn get_IsOpen(self: *const IFlyoutBase, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsOpen"(self, result);
+        return self.vtable.get_IsOpen(self, result);
     }
     pub fn get_XamlRoot(self: *const IFlyoutBase, result: **@"Microsoft.UI.Xaml".XamlRoot) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_XamlRoot"(self, result);
+        return self.vtable.get_XamlRoot(self, result);
     }
     pub fn put_XamlRoot(self: *const IFlyoutBase, p0: *@"Microsoft.UI.Xaml".XamlRoot) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_XamlRoot"(self, p0);
+        return self.vtable.put_XamlRoot(self, p0);
     }
     pub fn add_Opened(self: *const IFlyoutBase, p0: *@"Windows.Foundation".EventHandler__G1__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_Opened"(self, p0, result);
+        return self.vtable.add_Opened(self, p0, result);
     }
     pub fn remove_Opened(self: *const IFlyoutBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_Opened"(self, p0);
+        return self.vtable.remove_Opened(self, p0);
     }
     pub fn add_Closed(self: *const IFlyoutBase, p0: *@"Windows.Foundation".EventHandler__G1__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_Closed"(self, p0, result);
+        return self.vtable.add_Closed(self, p0, result);
     }
     pub fn remove_Closed(self: *const IFlyoutBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_Closed"(self, p0);
+        return self.vtable.remove_Closed(self, p0);
     }
     pub fn add_Opening(self: *const IFlyoutBase, p0: *@"Windows.Foundation".EventHandler__G1__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_Opening"(self, p0, result);
+        return self.vtable.add_Opening(self, p0, result);
     }
     pub fn remove_Opening(self: *const IFlyoutBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_Opening"(self, p0);
+        return self.vtable.remove_Opening(self, p0);
     }
     pub fn add_Closing(self: *const IFlyoutBase, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_FlyoutBase__Microsoft_UI_Xaml_Controls_Primitives_FlyoutBaseClosingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_Closing"(self, p0, result);
+        return self.vtable.add_Closing(self, p0, result);
     }
     pub fn remove_Closing(self: *const IFlyoutBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_Closing"(self, p0);
+        return self.vtable.remove_Closing(self, p0);
     }
     pub fn ShowAt(self: *const IFlyoutBase, p0: *@"Microsoft.UI.Xaml".FrameworkElement) callconv(.winapi) HRESULT {
-        return self.vtable.@"ShowAt"(self, p0);
+        return self.vtable.ShowAt(self, p0);
     }
     pub fn ShowAt_2(self: *const IFlyoutBase, p0: *@"Microsoft.UI.Xaml".DependencyObject, p1: *FlyoutShowOptions) callconv(.winapi) HRESULT {
-        return self.vtable.@"ShowAt_2"(self, p0, p1);
+        return self.vtable.ShowAt_2(self, p0, p1);
     }
     pub fn Hide(self: *const IFlyoutBase) callconv(.winapi) HRESULT {
-        return self.vtable.@"Hide"(self);
+        return self.vtable.Hide(self);
     }
     pub fn TryInvokeKeyboardAccelerator(self: *const IFlyoutBase, p0: *@"Microsoft.UI.Xaml.Input".ProcessKeyboardAcceleratorEventArgs) callconv(.winapi) HRESULT {
-        return self.vtable.@"TryInvokeKeyboardAccelerator"(self, p0);
+        return self.vtable.TryInvokeKeyboardAccelerator(self, p0);
     }
     pub fn addOpening(
         self: *const IFlyoutBase,
@@ -2761,10 +2761,10 @@ pub const IFlyoutBase2 = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_SystemBackdrop(self: *const IFlyoutBase2, result: **@"Microsoft.UI.Xaml.Media".SystemBackdrop) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SystemBackdrop"(self, result);
+        return self.vtable.get_SystemBackdrop(self, result);
     }
     pub fn put_SystemBackdrop(self: *const IFlyoutBase2, p0: *@"Microsoft.UI.Xaml.Media".SystemBackdrop) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SystemBackdrop"(self, p0);
+        return self.vtable.put_SystemBackdrop(self, p0);
     }
 };
 pub const IFlyoutBaseClosingEventArgs = extern struct {
@@ -2786,10 +2786,10 @@ pub const IFlyoutBaseClosingEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Cancel(self: *const IFlyoutBaseClosingEventArgs, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Cancel"(self, result);
+        return self.vtable.get_Cancel(self, result);
     }
     pub fn put_Cancel(self: *const IFlyoutBaseClosingEventArgs, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Cancel"(self, p0);
+        return self.vtable.put_Cancel(self, p0);
     }
 };
 pub const IFlyoutBaseFactory = extern struct {
@@ -2811,7 +2811,7 @@ pub const IFlyoutBaseFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IFlyoutBaseFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **FlyoutBase) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const IFlyoutBaseOverrides = extern struct {
@@ -2833,10 +2833,10 @@ pub const IFlyoutBaseOverrides = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreatePresenter(self: *const IFlyoutBaseOverrides, result: **@"Microsoft.UI.Xaml.Controls".Control) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreatePresenter"(self, result);
+        return self.vtable.CreatePresenter(self, result);
     }
     pub fn OnProcessKeyboardAccelerators(self: *const IFlyoutBaseOverrides, p0: *@"Microsoft.UI.Xaml.Input".ProcessKeyboardAcceleratorEventArgs) callconv(.winapi) HRESULT {
-        return self.vtable.@"OnProcessKeyboardAccelerators"(self, p0);
+        return self.vtable.OnProcessKeyboardAccelerators(self, p0);
     }
 };
 pub const IFlyoutBaseStatics = extern struct {
@@ -2858,52 +2858,52 @@ pub const IFlyoutBaseStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_TargetProperty(self: *const IFlyoutBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_TargetProperty"(self, result);
+        return self.vtable.get_TargetProperty(self, result);
     }
     pub fn get_PlacementProperty(self: *const IFlyoutBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PlacementProperty"(self, result);
+        return self.vtable.get_PlacementProperty(self, result);
     }
     pub fn get_AllowFocusOnInteractionProperty(self: *const IFlyoutBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_AllowFocusOnInteractionProperty"(self, result);
+        return self.vtable.get_AllowFocusOnInteractionProperty(self, result);
     }
     pub fn get_LightDismissOverlayModeProperty(self: *const IFlyoutBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_LightDismissOverlayModeProperty"(self, result);
+        return self.vtable.get_LightDismissOverlayModeProperty(self, result);
     }
     pub fn get_AllowFocusWhenDisabledProperty(self: *const IFlyoutBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_AllowFocusWhenDisabledProperty"(self, result);
+        return self.vtable.get_AllowFocusWhenDisabledProperty(self, result);
     }
     pub fn get_ShowModeProperty(self: *const IFlyoutBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ShowModeProperty"(self, result);
+        return self.vtable.get_ShowModeProperty(self, result);
     }
     pub fn get_InputDevicePrefersPrimaryCommandsProperty(self: *const IFlyoutBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_InputDevicePrefersPrimaryCommandsProperty"(self, result);
+        return self.vtable.get_InputDevicePrefersPrimaryCommandsProperty(self, result);
     }
     pub fn get_AreOpenCloseAnimationsEnabledProperty(self: *const IFlyoutBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_AreOpenCloseAnimationsEnabledProperty"(self, result);
+        return self.vtable.get_AreOpenCloseAnimationsEnabledProperty(self, result);
     }
     pub fn get_ShouldConstrainToRootBoundsProperty(self: *const IFlyoutBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ShouldConstrainToRootBoundsProperty"(self, result);
+        return self.vtable.get_ShouldConstrainToRootBoundsProperty(self, result);
     }
     pub fn get_ElementSoundModeProperty(self: *const IFlyoutBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ElementSoundModeProperty"(self, result);
+        return self.vtable.get_ElementSoundModeProperty(self, result);
     }
     pub fn get_OverlayInputPassThroughElementProperty(self: *const IFlyoutBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_OverlayInputPassThroughElementProperty"(self, result);
+        return self.vtable.get_OverlayInputPassThroughElementProperty(self, result);
     }
     pub fn get_IsOpenProperty(self: *const IFlyoutBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsOpenProperty"(self, result);
+        return self.vtable.get_IsOpenProperty(self, result);
     }
     pub fn get_AttachedFlyoutProperty(self: *const IFlyoutBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_AttachedFlyoutProperty"(self, result);
+        return self.vtable.get_AttachedFlyoutProperty(self, result);
     }
     pub fn GetAttachedFlyout(self: *const IFlyoutBaseStatics, p0: *@"Microsoft.UI.Xaml".FrameworkElement, result: **FlyoutBase) callconv(.winapi) HRESULT {
-        return self.vtable.@"GetAttachedFlyout"(self, p0, result);
+        return self.vtable.GetAttachedFlyout(self, p0, result);
     }
     pub fn SetAttachedFlyout(self: *const IFlyoutBaseStatics, p0: *@"Microsoft.UI.Xaml".FrameworkElement, p1: *FlyoutBase) callconv(.winapi) HRESULT {
-        return self.vtable.@"SetAttachedFlyout"(self, p0, p1);
+        return self.vtable.SetAttachedFlyout(self, p0, p1);
     }
     pub fn ShowAttachedFlyout(self: *const IFlyoutBaseStatics, p0: *@"Microsoft.UI.Xaml".FrameworkElement) callconv(.winapi) HRESULT {
-        return self.vtable.@"ShowAttachedFlyout"(self, p0);
+        return self.vtable.ShowAttachedFlyout(self, p0);
     }
 };
 pub const IFlyoutBaseStatics2 = extern struct {
@@ -2925,7 +2925,7 @@ pub const IFlyoutBaseStatics2 = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_SystemBackdropProperty(self: *const IFlyoutBaseStatics2, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SystemBackdropProperty"(self, result);
+        return self.vtable.get_SystemBackdropProperty(self, result);
     }
 };
 pub const IFlyoutShowOptions = extern struct {
@@ -2947,28 +2947,28 @@ pub const IFlyoutShowOptions = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Position(self: *const IFlyoutShowOptions, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_Point) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Position"(self, result);
+        return self.vtable.get_Position(self, result);
     }
     pub fn put_Position(self: *const IFlyoutShowOptions, p0: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Point) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Position"(self, p0);
+        return self.vtable.put_Position(self, p0);
     }
     pub fn get_ExclusionRect(self: *const IFlyoutShowOptions, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_Rect) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ExclusionRect"(self, result);
+        return self.vtable.get_ExclusionRect(self, result);
     }
     pub fn put_ExclusionRect(self: *const IFlyoutShowOptions, p0: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Rect) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ExclusionRect"(self, p0);
+        return self.vtable.put_ExclusionRect(self, p0);
     }
     pub fn get_ShowMode(self: *const IFlyoutShowOptions, result: *FlyoutShowMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ShowMode"(self, result);
+        return self.vtable.get_ShowMode(self, result);
     }
     pub fn put_ShowMode(self: *const IFlyoutShowOptions, p0: FlyoutShowMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ShowMode"(self, p0);
+        return self.vtable.put_ShowMode(self, p0);
     }
     pub fn get_Placement(self: *const IFlyoutShowOptions, result: *FlyoutPlacementMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Placement"(self, result);
+        return self.vtable.get_Placement(self, result);
     }
     pub fn put_Placement(self: *const IFlyoutShowOptions, p0: FlyoutPlacementMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Placement"(self, p0);
+        return self.vtable.put_Placement(self, p0);
     }
 };
 pub const IFlyoutShowOptionsFactory = extern struct {
@@ -2990,7 +2990,7 @@ pub const IFlyoutShowOptionsFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IFlyoutShowOptionsFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **FlyoutShowOptions) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const IGeneratorPositionHelper = extern struct {
@@ -3031,7 +3031,7 @@ pub const IGeneratorPositionHelperStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn FromIndexAndOffset(self: *const IGeneratorPositionHelperStatics, p0: i32, p1: i32, result: *GeneratorPosition) callconv(.winapi) HRESULT {
-        return self.vtable.@"FromIndexAndOffset"(self, p0, p1, result);
+        return self.vtable.FromIndexAndOffset(self, p0, p1, result);
     }
 };
 pub const IGridViewItemPresenter = extern struct {
@@ -3053,136 +3053,136 @@ pub const IGridViewItemPresenter = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_SelectionCheckMarkVisualEnabled(self: *const IGridViewItemPresenter, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectionCheckMarkVisualEnabled"(self, result);
+        return self.vtable.get_SelectionCheckMarkVisualEnabled(self, result);
     }
     pub fn put_SelectionCheckMarkVisualEnabled(self: *const IGridViewItemPresenter, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectionCheckMarkVisualEnabled"(self, p0);
+        return self.vtable.put_SelectionCheckMarkVisualEnabled(self, p0);
     }
     pub fn get_CheckHintBrush(self: *const IGridViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckHintBrush"(self, result);
+        return self.vtable.get_CheckHintBrush(self, result);
     }
     pub fn put_CheckHintBrush(self: *const IGridViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CheckHintBrush"(self, p0);
+        return self.vtable.put_CheckHintBrush(self, p0);
     }
     pub fn get_CheckSelectingBrush(self: *const IGridViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckSelectingBrush"(self, result);
+        return self.vtable.get_CheckSelectingBrush(self, result);
     }
     pub fn put_CheckSelectingBrush(self: *const IGridViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CheckSelectingBrush"(self, p0);
+        return self.vtable.put_CheckSelectingBrush(self, p0);
     }
     pub fn get_CheckBrush(self: *const IGridViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBrush"(self, result);
+        return self.vtable.get_CheckBrush(self, result);
     }
     pub fn put_CheckBrush(self: *const IGridViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CheckBrush"(self, p0);
+        return self.vtable.put_CheckBrush(self, p0);
     }
     pub fn get_DragBackground(self: *const IGridViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DragBackground"(self, result);
+        return self.vtable.get_DragBackground(self, result);
     }
     pub fn put_DragBackground(self: *const IGridViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_DragBackground"(self, p0);
+        return self.vtable.put_DragBackground(self, p0);
     }
     pub fn get_DragForeground(self: *const IGridViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DragForeground"(self, result);
+        return self.vtable.get_DragForeground(self, result);
     }
     pub fn put_DragForeground(self: *const IGridViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_DragForeground"(self, p0);
+        return self.vtable.put_DragForeground(self, p0);
     }
     pub fn get_FocusBorderBrush(self: *const IGridViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_FocusBorderBrush"(self, result);
+        return self.vtable.get_FocusBorderBrush(self, result);
     }
     pub fn put_FocusBorderBrush(self: *const IGridViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_FocusBorderBrush"(self, p0);
+        return self.vtable.put_FocusBorderBrush(self, p0);
     }
     pub fn get_PlaceholderBackground(self: *const IGridViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PlaceholderBackground"(self, result);
+        return self.vtable.get_PlaceholderBackground(self, result);
     }
     pub fn put_PlaceholderBackground(self: *const IGridViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_PlaceholderBackground"(self, p0);
+        return self.vtable.put_PlaceholderBackground(self, p0);
     }
     pub fn get_PointerOverBackground(self: *const IGridViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PointerOverBackground"(self, result);
+        return self.vtable.get_PointerOverBackground(self, result);
     }
     pub fn put_PointerOverBackground(self: *const IGridViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_PointerOverBackground"(self, p0);
+        return self.vtable.put_PointerOverBackground(self, p0);
     }
     pub fn get_SelectedBackground(self: *const IGridViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedBackground"(self, result);
+        return self.vtable.get_SelectedBackground(self, result);
     }
     pub fn put_SelectedBackground(self: *const IGridViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectedBackground"(self, p0);
+        return self.vtable.put_SelectedBackground(self, p0);
     }
     pub fn get_SelectedForeground(self: *const IGridViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedForeground"(self, result);
+        return self.vtable.get_SelectedForeground(self, result);
     }
     pub fn put_SelectedForeground(self: *const IGridViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectedForeground"(self, p0);
+        return self.vtable.put_SelectedForeground(self, p0);
     }
     pub fn get_SelectedPointerOverBackground(self: *const IGridViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedPointerOverBackground"(self, result);
+        return self.vtable.get_SelectedPointerOverBackground(self, result);
     }
     pub fn put_SelectedPointerOverBackground(self: *const IGridViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectedPointerOverBackground"(self, p0);
+        return self.vtable.put_SelectedPointerOverBackground(self, p0);
     }
     pub fn get_SelectedPointerOverBorderBrush(self: *const IGridViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedPointerOverBorderBrush"(self, result);
+        return self.vtable.get_SelectedPointerOverBorderBrush(self, result);
     }
     pub fn put_SelectedPointerOverBorderBrush(self: *const IGridViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectedPointerOverBorderBrush"(self, p0);
+        return self.vtable.put_SelectedPointerOverBorderBrush(self, p0);
     }
     pub fn get_SelectedBorderThickness(self: *const IGridViewItemPresenter, result: *@"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedBorderThickness"(self, result);
+        return self.vtable.get_SelectedBorderThickness(self, result);
     }
     pub fn put_SelectedBorderThickness(self: *const IGridViewItemPresenter, p0: @"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectedBorderThickness"(self, p0);
+        return self.vtable.put_SelectedBorderThickness(self, p0);
     }
     pub fn get_DisabledOpacity(self: *const IGridViewItemPresenter, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DisabledOpacity"(self, result);
+        return self.vtable.get_DisabledOpacity(self, result);
     }
     pub fn put_DisabledOpacity(self: *const IGridViewItemPresenter, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_DisabledOpacity"(self, p0);
+        return self.vtable.put_DisabledOpacity(self, p0);
     }
     pub fn get_DragOpacity(self: *const IGridViewItemPresenter, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DragOpacity"(self, result);
+        return self.vtable.get_DragOpacity(self, result);
     }
     pub fn put_DragOpacity(self: *const IGridViewItemPresenter, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_DragOpacity"(self, p0);
+        return self.vtable.put_DragOpacity(self, p0);
     }
     pub fn get_ReorderHintOffset(self: *const IGridViewItemPresenter, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ReorderHintOffset"(self, result);
+        return self.vtable.get_ReorderHintOffset(self, result);
     }
     pub fn put_ReorderHintOffset(self: *const IGridViewItemPresenter, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ReorderHintOffset"(self, p0);
+        return self.vtable.put_ReorderHintOffset(self, p0);
     }
     pub fn get_GridViewItemPresenterHorizontalContentAlignment(self: *const IGridViewItemPresenter, result: *@"Microsoft.UI.Xaml".HorizontalAlignment) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_GridViewItemPresenterHorizontalContentAlignment"(self, result);
+        return self.vtable.get_GridViewItemPresenterHorizontalContentAlignment(self, result);
     }
     pub fn put_GridViewItemPresenterHorizontalContentAlignment(self: *const IGridViewItemPresenter, p0: @"Microsoft.UI.Xaml".HorizontalAlignment) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_GridViewItemPresenterHorizontalContentAlignment"(self, p0);
+        return self.vtable.put_GridViewItemPresenterHorizontalContentAlignment(self, p0);
     }
     pub fn get_GridViewItemPresenterVerticalContentAlignment(self: *const IGridViewItemPresenter, result: *@"Microsoft.UI.Xaml".VerticalAlignment) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_GridViewItemPresenterVerticalContentAlignment"(self, result);
+        return self.vtable.get_GridViewItemPresenterVerticalContentAlignment(self, result);
     }
     pub fn put_GridViewItemPresenterVerticalContentAlignment(self: *const IGridViewItemPresenter, p0: @"Microsoft.UI.Xaml".VerticalAlignment) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_GridViewItemPresenterVerticalContentAlignment"(self, p0);
+        return self.vtable.put_GridViewItemPresenterVerticalContentAlignment(self, p0);
     }
     pub fn get_GridViewItemPresenterPadding(self: *const IGridViewItemPresenter, result: *@"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_GridViewItemPresenterPadding"(self, result);
+        return self.vtable.get_GridViewItemPresenterPadding(self, result);
     }
     pub fn put_GridViewItemPresenterPadding(self: *const IGridViewItemPresenter, p0: @"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_GridViewItemPresenterPadding"(self, p0);
+        return self.vtable.put_GridViewItemPresenterPadding(self, p0);
     }
     pub fn get_PointerOverBackgroundMargin(self: *const IGridViewItemPresenter, result: *@"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PointerOverBackgroundMargin"(self, result);
+        return self.vtable.get_PointerOverBackgroundMargin(self, result);
     }
     pub fn put_PointerOverBackgroundMargin(self: *const IGridViewItemPresenter, p0: @"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_PointerOverBackgroundMargin"(self, p0);
+        return self.vtable.put_PointerOverBackgroundMargin(self, p0);
     }
     pub fn get_ContentMargin(self: *const IGridViewItemPresenter, result: *@"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ContentMargin"(self, result);
+        return self.vtable.get_ContentMargin(self, result);
     }
     pub fn put_ContentMargin(self: *const IGridViewItemPresenter, p0: @"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ContentMargin"(self, p0);
+        return self.vtable.put_ContentMargin(self, p0);
     }
 };
 pub const IGridViewItemPresenterFactory = extern struct {
@@ -3204,7 +3204,7 @@ pub const IGridViewItemPresenterFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IGridViewItemPresenterFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **GridViewItemPresenter) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const IGridViewItemPresenterStatics = extern struct {
@@ -3226,70 +3226,70 @@ pub const IGridViewItemPresenterStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_SelectionCheckMarkVisualEnabledProperty(self: *const IGridViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectionCheckMarkVisualEnabledProperty"(self, result);
+        return self.vtable.get_SelectionCheckMarkVisualEnabledProperty(self, result);
     }
     pub fn get_CheckHintBrushProperty(self: *const IGridViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckHintBrushProperty"(self, result);
+        return self.vtable.get_CheckHintBrushProperty(self, result);
     }
     pub fn get_CheckSelectingBrushProperty(self: *const IGridViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckSelectingBrushProperty"(self, result);
+        return self.vtable.get_CheckSelectingBrushProperty(self, result);
     }
     pub fn get_CheckBrushProperty(self: *const IGridViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBrushProperty"(self, result);
+        return self.vtable.get_CheckBrushProperty(self, result);
     }
     pub fn get_DragBackgroundProperty(self: *const IGridViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DragBackgroundProperty"(self, result);
+        return self.vtable.get_DragBackgroundProperty(self, result);
     }
     pub fn get_DragForegroundProperty(self: *const IGridViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DragForegroundProperty"(self, result);
+        return self.vtable.get_DragForegroundProperty(self, result);
     }
     pub fn get_FocusBorderBrushProperty(self: *const IGridViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_FocusBorderBrushProperty"(self, result);
+        return self.vtable.get_FocusBorderBrushProperty(self, result);
     }
     pub fn get_PlaceholderBackgroundProperty(self: *const IGridViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PlaceholderBackgroundProperty"(self, result);
+        return self.vtable.get_PlaceholderBackgroundProperty(self, result);
     }
     pub fn get_PointerOverBackgroundProperty(self: *const IGridViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PointerOverBackgroundProperty"(self, result);
+        return self.vtable.get_PointerOverBackgroundProperty(self, result);
     }
     pub fn get_SelectedBackgroundProperty(self: *const IGridViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedBackgroundProperty"(self, result);
+        return self.vtable.get_SelectedBackgroundProperty(self, result);
     }
     pub fn get_SelectedForegroundProperty(self: *const IGridViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedForegroundProperty"(self, result);
+        return self.vtable.get_SelectedForegroundProperty(self, result);
     }
     pub fn get_SelectedPointerOverBackgroundProperty(self: *const IGridViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedPointerOverBackgroundProperty"(self, result);
+        return self.vtable.get_SelectedPointerOverBackgroundProperty(self, result);
     }
     pub fn get_SelectedPointerOverBorderBrushProperty(self: *const IGridViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedPointerOverBorderBrushProperty"(self, result);
+        return self.vtable.get_SelectedPointerOverBorderBrushProperty(self, result);
     }
     pub fn get_SelectedBorderThicknessProperty(self: *const IGridViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedBorderThicknessProperty"(self, result);
+        return self.vtable.get_SelectedBorderThicknessProperty(self, result);
     }
     pub fn get_DisabledOpacityProperty(self: *const IGridViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DisabledOpacityProperty"(self, result);
+        return self.vtable.get_DisabledOpacityProperty(self, result);
     }
     pub fn get_DragOpacityProperty(self: *const IGridViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DragOpacityProperty"(self, result);
+        return self.vtable.get_DragOpacityProperty(self, result);
     }
     pub fn get_ReorderHintOffsetProperty(self: *const IGridViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ReorderHintOffsetProperty"(self, result);
+        return self.vtable.get_ReorderHintOffsetProperty(self, result);
     }
     pub fn get_GridViewItemPresenterHorizontalContentAlignmentProperty(self: *const IGridViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_GridViewItemPresenterHorizontalContentAlignmentProperty"(self, result);
+        return self.vtable.get_GridViewItemPresenterHorizontalContentAlignmentProperty(self, result);
     }
     pub fn get_GridViewItemPresenterVerticalContentAlignmentProperty(self: *const IGridViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_GridViewItemPresenterVerticalContentAlignmentProperty"(self, result);
+        return self.vtable.get_GridViewItemPresenterVerticalContentAlignmentProperty(self, result);
     }
     pub fn get_GridViewItemPresenterPaddingProperty(self: *const IGridViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_GridViewItemPresenterPaddingProperty"(self, result);
+        return self.vtable.get_GridViewItemPresenterPaddingProperty(self, result);
     }
     pub fn get_PointerOverBackgroundMarginProperty(self: *const IGridViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PointerOverBackgroundMarginProperty"(self, result);
+        return self.vtable.get_PointerOverBackgroundMarginProperty(self, result);
     }
     pub fn get_ContentMarginProperty(self: *const IGridViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ContentMarginProperty"(self, result);
+        return self.vtable.get_ContentMarginProperty(self, result);
     }
 };
 pub const IGridViewItemTemplateSettings = extern struct {
@@ -3311,7 +3311,7 @@ pub const IGridViewItemTemplateSettings = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_DragItemsCount(self: *const IGridViewItemTemplateSettings, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DragItemsCount"(self, result);
+        return self.vtable.get_DragItemsCount(self, result);
     }
 };
 pub const IInfoBarPanel = extern struct {
@@ -3333,16 +3333,16 @@ pub const IInfoBarPanel = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_HorizontalOrientationPadding(self: *const IInfoBarPanel, result: *@"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HorizontalOrientationPadding"(self, result);
+        return self.vtable.get_HorizontalOrientationPadding(self, result);
     }
     pub fn put_HorizontalOrientationPadding(self: *const IInfoBarPanel, p0: @"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_HorizontalOrientationPadding"(self, p0);
+        return self.vtable.put_HorizontalOrientationPadding(self, p0);
     }
     pub fn get_VerticalOrientationPadding(self: *const IInfoBarPanel, result: *@"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_VerticalOrientationPadding"(self, result);
+        return self.vtable.get_VerticalOrientationPadding(self, result);
     }
     pub fn put_VerticalOrientationPadding(self: *const IInfoBarPanel, p0: @"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_VerticalOrientationPadding"(self, p0);
+        return self.vtable.put_VerticalOrientationPadding(self, p0);
     }
 };
 pub const IInfoBarPanelFactory = extern struct {
@@ -3364,7 +3364,7 @@ pub const IInfoBarPanelFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IInfoBarPanelFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **InfoBarPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const IInfoBarPanelStatics = extern struct {
@@ -3386,28 +3386,28 @@ pub const IInfoBarPanelStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_HorizontalOrientationPaddingProperty(self: *const IInfoBarPanelStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HorizontalOrientationPaddingProperty"(self, result);
+        return self.vtable.get_HorizontalOrientationPaddingProperty(self, result);
     }
     pub fn get_VerticalOrientationPaddingProperty(self: *const IInfoBarPanelStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_VerticalOrientationPaddingProperty"(self, result);
+        return self.vtable.get_VerticalOrientationPaddingProperty(self, result);
     }
     pub fn SetHorizontalOrientationMargin(self: *const IInfoBarPanelStatics, p0: *@"Microsoft.UI.Xaml".DependencyObject, p1: @"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"SetHorizontalOrientationMargin"(self, p0, p1);
+        return self.vtable.SetHorizontalOrientationMargin(self, p0, p1);
     }
     pub fn GetHorizontalOrientationMargin(self: *const IInfoBarPanelStatics, p0: *@"Microsoft.UI.Xaml".DependencyObject, result: *@"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"GetHorizontalOrientationMargin"(self, p0, result);
+        return self.vtable.GetHorizontalOrientationMargin(self, p0, result);
     }
     pub fn get_HorizontalOrientationMarginProperty(self: *const IInfoBarPanelStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HorizontalOrientationMarginProperty"(self, result);
+        return self.vtable.get_HorizontalOrientationMarginProperty(self, result);
     }
     pub fn SetVerticalOrientationMargin(self: *const IInfoBarPanelStatics, p0: *@"Microsoft.UI.Xaml".DependencyObject, p1: @"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"SetVerticalOrientationMargin"(self, p0, p1);
+        return self.vtable.SetVerticalOrientationMargin(self, p0, p1);
     }
     pub fn GetVerticalOrientationMargin(self: *const IInfoBarPanelStatics, p0: *@"Microsoft.UI.Xaml".DependencyObject, result: *@"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"GetVerticalOrientationMargin"(self, p0, result);
+        return self.vtable.GetVerticalOrientationMargin(self, p0, result);
     }
     pub fn get_VerticalOrientationMarginProperty(self: *const IInfoBarPanelStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_VerticalOrientationMarginProperty"(self, result);
+        return self.vtable.get_VerticalOrientationMarginProperty(self, result);
     }
 };
 pub const IItemsChangedEventArgs = extern struct {
@@ -3429,19 +3429,19 @@ pub const IItemsChangedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Action(self: *const IItemsChangedEventArgs, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Action"(self, result);
+        return self.vtable.get_Action(self, result);
     }
     pub fn get_Position(self: *const IItemsChangedEventArgs, result: *GeneratorPosition) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Position"(self, result);
+        return self.vtable.get_Position(self, result);
     }
     pub fn get_OldPosition(self: *const IItemsChangedEventArgs, result: *GeneratorPosition) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_OldPosition"(self, result);
+        return self.vtable.get_OldPosition(self, result);
     }
     pub fn get_ItemCount(self: *const IItemsChangedEventArgs, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ItemCount"(self, result);
+        return self.vtable.get_ItemCount(self, result);
     }
     pub fn get_ItemUICount(self: *const IItemsChangedEventArgs, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ItemUICount"(self, result);
+        return self.vtable.get_ItemUICount(self, result);
     }
 };
 pub const IJumpListItemBackgroundConverter = extern struct {
@@ -3463,16 +3463,16 @@ pub const IJumpListItemBackgroundConverter = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Enabled(self: *const IJumpListItemBackgroundConverter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Enabled"(self, result);
+        return self.vtable.get_Enabled(self, result);
     }
     pub fn put_Enabled(self: *const IJumpListItemBackgroundConverter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Enabled"(self, p0);
+        return self.vtable.put_Enabled(self, p0);
     }
     pub fn get_Disabled(self: *const IJumpListItemBackgroundConverter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Disabled"(self, result);
+        return self.vtable.get_Disabled(self, result);
     }
     pub fn put_Disabled(self: *const IJumpListItemBackgroundConverter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Disabled"(self, p0);
+        return self.vtable.put_Disabled(self, p0);
     }
 };
 pub const IJumpListItemBackgroundConverterStatics = extern struct {
@@ -3494,10 +3494,10 @@ pub const IJumpListItemBackgroundConverterStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_EnabledProperty(self: *const IJumpListItemBackgroundConverterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_EnabledProperty"(self, result);
+        return self.vtable.get_EnabledProperty(self, result);
     }
     pub fn get_DisabledProperty(self: *const IJumpListItemBackgroundConverterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DisabledProperty"(self, result);
+        return self.vtable.get_DisabledProperty(self, result);
     }
 };
 pub const IJumpListItemForegroundConverter = extern struct {
@@ -3519,16 +3519,16 @@ pub const IJumpListItemForegroundConverter = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Enabled(self: *const IJumpListItemForegroundConverter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Enabled"(self, result);
+        return self.vtable.get_Enabled(self, result);
     }
     pub fn put_Enabled(self: *const IJumpListItemForegroundConverter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Enabled"(self, p0);
+        return self.vtable.put_Enabled(self, p0);
     }
     pub fn get_Disabled(self: *const IJumpListItemForegroundConverter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Disabled"(self, result);
+        return self.vtable.get_Disabled(self, result);
     }
     pub fn put_Disabled(self: *const IJumpListItemForegroundConverter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Disabled"(self, p0);
+        return self.vtable.put_Disabled(self, p0);
     }
 };
 pub const IJumpListItemForegroundConverterStatics = extern struct {
@@ -3550,10 +3550,10 @@ pub const IJumpListItemForegroundConverterStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_EnabledProperty(self: *const IJumpListItemForegroundConverterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_EnabledProperty"(self, result);
+        return self.vtable.get_EnabledProperty(self, result);
     }
     pub fn get_DisabledProperty(self: *const IJumpListItemForegroundConverterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DisabledProperty"(self, result);
+        return self.vtable.get_DisabledProperty(self, result);
     }
 };
 pub const ILayoutInformation = extern struct {
@@ -3594,13 +3594,13 @@ pub const ILayoutInformationStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn GetLayoutExceptionElement(self: *const ILayoutInformationStatics, p0: ?*const anyopaque, result: **@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.@"GetLayoutExceptionElement"(self, p0, result);
+        return self.vtable.GetLayoutExceptionElement(self, p0, result);
     }
     pub fn GetLayoutSlot(self: *const ILayoutInformationStatics, p0: *@"Microsoft.UI.Xaml".FrameworkElement, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT {
-        return self.vtable.@"GetLayoutSlot"(self, p0, result);
+        return self.vtable.GetLayoutSlot(self, p0, result);
     }
     pub fn GetAvailableSize(self: *const ILayoutInformationStatics, p0: *@"Microsoft.UI.Xaml".UIElement, result: *@"Windows.Foundation".Size) callconv(.winapi) HRESULT {
-        return self.vtable.@"GetAvailableSize"(self, p0, result);
+        return self.vtable.GetAvailableSize(self, p0, result);
     }
 };
 pub const IListViewItemPresenter = extern struct {
@@ -3622,358 +3622,358 @@ pub const IListViewItemPresenter = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_SelectionCheckMarkVisualEnabled(self: *const IListViewItemPresenter, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectionCheckMarkVisualEnabled"(self, result);
+        return self.vtable.get_SelectionCheckMarkVisualEnabled(self, result);
     }
     pub fn put_SelectionCheckMarkVisualEnabled(self: *const IListViewItemPresenter, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectionCheckMarkVisualEnabled"(self, p0);
+        return self.vtable.put_SelectionCheckMarkVisualEnabled(self, p0);
     }
     pub fn get_CheckHintBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckHintBrush"(self, result);
+        return self.vtable.get_CheckHintBrush(self, result);
     }
     pub fn put_CheckHintBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CheckHintBrush"(self, p0);
+        return self.vtable.put_CheckHintBrush(self, p0);
     }
     pub fn get_CheckSelectingBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckSelectingBrush"(self, result);
+        return self.vtable.get_CheckSelectingBrush(self, result);
     }
     pub fn put_CheckSelectingBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CheckSelectingBrush"(self, p0);
+        return self.vtable.put_CheckSelectingBrush(self, p0);
     }
     pub fn get_CheckBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBrush"(self, result);
+        return self.vtable.get_CheckBrush(self, result);
     }
     pub fn put_CheckBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CheckBrush"(self, p0);
+        return self.vtable.put_CheckBrush(self, p0);
     }
     pub fn get_DragBackground(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DragBackground"(self, result);
+        return self.vtable.get_DragBackground(self, result);
     }
     pub fn put_DragBackground(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_DragBackground"(self, p0);
+        return self.vtable.put_DragBackground(self, p0);
     }
     pub fn get_DragForeground(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DragForeground"(self, result);
+        return self.vtable.get_DragForeground(self, result);
     }
     pub fn put_DragForeground(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_DragForeground"(self, p0);
+        return self.vtable.put_DragForeground(self, p0);
     }
     pub fn get_FocusBorderBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_FocusBorderBrush"(self, result);
+        return self.vtable.get_FocusBorderBrush(self, result);
     }
     pub fn put_FocusBorderBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_FocusBorderBrush"(self, p0);
+        return self.vtable.put_FocusBorderBrush(self, p0);
     }
     pub fn get_PlaceholderBackground(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PlaceholderBackground"(self, result);
+        return self.vtable.get_PlaceholderBackground(self, result);
     }
     pub fn put_PlaceholderBackground(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_PlaceholderBackground"(self, p0);
+        return self.vtable.put_PlaceholderBackground(self, p0);
     }
     pub fn get_PointerOverBackground(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PointerOverBackground"(self, result);
+        return self.vtable.get_PointerOverBackground(self, result);
     }
     pub fn put_PointerOverBackground(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_PointerOverBackground"(self, p0);
+        return self.vtable.put_PointerOverBackground(self, p0);
     }
     pub fn get_SelectedBackground(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedBackground"(self, result);
+        return self.vtable.get_SelectedBackground(self, result);
     }
     pub fn put_SelectedBackground(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectedBackground"(self, p0);
+        return self.vtable.put_SelectedBackground(self, p0);
     }
     pub fn get_SelectedForeground(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedForeground"(self, result);
+        return self.vtable.get_SelectedForeground(self, result);
     }
     pub fn put_SelectedForeground(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectedForeground"(self, p0);
+        return self.vtable.put_SelectedForeground(self, p0);
     }
     pub fn get_SelectedPointerOverBackground(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedPointerOverBackground"(self, result);
+        return self.vtable.get_SelectedPointerOverBackground(self, result);
     }
     pub fn put_SelectedPointerOverBackground(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectedPointerOverBackground"(self, p0);
+        return self.vtable.put_SelectedPointerOverBackground(self, p0);
     }
     pub fn get_SelectedPointerOverBorderBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedPointerOverBorderBrush"(self, result);
+        return self.vtable.get_SelectedPointerOverBorderBrush(self, result);
     }
     pub fn put_SelectedPointerOverBorderBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectedPointerOverBorderBrush"(self, p0);
+        return self.vtable.put_SelectedPointerOverBorderBrush(self, p0);
     }
     pub fn get_SelectedBorderThickness(self: *const IListViewItemPresenter, result: *@"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedBorderThickness"(self, result);
+        return self.vtable.get_SelectedBorderThickness(self, result);
     }
     pub fn put_SelectedBorderThickness(self: *const IListViewItemPresenter, p0: @"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectedBorderThickness"(self, p0);
+        return self.vtable.put_SelectedBorderThickness(self, p0);
     }
     pub fn get_DisabledOpacity(self: *const IListViewItemPresenter, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DisabledOpacity"(self, result);
+        return self.vtable.get_DisabledOpacity(self, result);
     }
     pub fn put_DisabledOpacity(self: *const IListViewItemPresenter, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_DisabledOpacity"(self, p0);
+        return self.vtable.put_DisabledOpacity(self, p0);
     }
     pub fn get_DragOpacity(self: *const IListViewItemPresenter, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DragOpacity"(self, result);
+        return self.vtable.get_DragOpacity(self, result);
     }
     pub fn put_DragOpacity(self: *const IListViewItemPresenter, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_DragOpacity"(self, p0);
+        return self.vtable.put_DragOpacity(self, p0);
     }
     pub fn get_ReorderHintOffset(self: *const IListViewItemPresenter, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ReorderHintOffset"(self, result);
+        return self.vtable.get_ReorderHintOffset(self, result);
     }
     pub fn put_ReorderHintOffset(self: *const IListViewItemPresenter, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ReorderHintOffset"(self, p0);
+        return self.vtable.put_ReorderHintOffset(self, p0);
     }
     pub fn get_ListViewItemPresenterHorizontalContentAlignment(self: *const IListViewItemPresenter, result: *@"Microsoft.UI.Xaml".HorizontalAlignment) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ListViewItemPresenterHorizontalContentAlignment"(self, result);
+        return self.vtable.get_ListViewItemPresenterHorizontalContentAlignment(self, result);
     }
     pub fn put_ListViewItemPresenterHorizontalContentAlignment(self: *const IListViewItemPresenter, p0: @"Microsoft.UI.Xaml".HorizontalAlignment) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ListViewItemPresenterHorizontalContentAlignment"(self, p0);
+        return self.vtable.put_ListViewItemPresenterHorizontalContentAlignment(self, p0);
     }
     pub fn get_ListViewItemPresenterVerticalContentAlignment(self: *const IListViewItemPresenter, result: *@"Microsoft.UI.Xaml".VerticalAlignment) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ListViewItemPresenterVerticalContentAlignment"(self, result);
+        return self.vtable.get_ListViewItemPresenterVerticalContentAlignment(self, result);
     }
     pub fn put_ListViewItemPresenterVerticalContentAlignment(self: *const IListViewItemPresenter, p0: @"Microsoft.UI.Xaml".VerticalAlignment) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ListViewItemPresenterVerticalContentAlignment"(self, p0);
+        return self.vtable.put_ListViewItemPresenterVerticalContentAlignment(self, p0);
     }
     pub fn get_ListViewItemPresenterPadding(self: *const IListViewItemPresenter, result: *@"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ListViewItemPresenterPadding"(self, result);
+        return self.vtable.get_ListViewItemPresenterPadding(self, result);
     }
     pub fn put_ListViewItemPresenterPadding(self: *const IListViewItemPresenter, p0: @"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ListViewItemPresenterPadding"(self, p0);
+        return self.vtable.put_ListViewItemPresenterPadding(self, p0);
     }
     pub fn get_PointerOverBackgroundMargin(self: *const IListViewItemPresenter, result: *@"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PointerOverBackgroundMargin"(self, result);
+        return self.vtable.get_PointerOverBackgroundMargin(self, result);
     }
     pub fn put_PointerOverBackgroundMargin(self: *const IListViewItemPresenter, p0: @"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_PointerOverBackgroundMargin"(self, p0);
+        return self.vtable.put_PointerOverBackgroundMargin(self, p0);
     }
     pub fn get_ContentMargin(self: *const IListViewItemPresenter, result: *@"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ContentMargin"(self, result);
+        return self.vtable.get_ContentMargin(self, result);
     }
     pub fn put_ContentMargin(self: *const IListViewItemPresenter, p0: @"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ContentMargin"(self, p0);
+        return self.vtable.put_ContentMargin(self, p0);
     }
     pub fn get_SelectedPressedBackground(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedPressedBackground"(self, result);
+        return self.vtable.get_SelectedPressedBackground(self, result);
     }
     pub fn put_SelectedPressedBackground(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectedPressedBackground"(self, p0);
+        return self.vtable.put_SelectedPressedBackground(self, p0);
     }
     pub fn get_PressedBackground(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PressedBackground"(self, result);
+        return self.vtable.get_PressedBackground(self, result);
     }
     pub fn put_PressedBackground(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_PressedBackground"(self, p0);
+        return self.vtable.put_PressedBackground(self, p0);
     }
     pub fn get_CheckBoxBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxBrush"(self, result);
+        return self.vtable.get_CheckBoxBrush(self, result);
     }
     pub fn put_CheckBoxBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CheckBoxBrush"(self, p0);
+        return self.vtable.put_CheckBoxBrush(self, p0);
     }
     pub fn get_FocusSecondaryBorderBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_FocusSecondaryBorderBrush"(self, result);
+        return self.vtable.get_FocusSecondaryBorderBrush(self, result);
     }
     pub fn put_FocusSecondaryBorderBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_FocusSecondaryBorderBrush"(self, p0);
+        return self.vtable.put_FocusSecondaryBorderBrush(self, p0);
     }
     pub fn get_CheckMode(self: *const IListViewItemPresenter, result: *ListViewItemPresenterCheckMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckMode"(self, result);
+        return self.vtable.get_CheckMode(self, result);
     }
     pub fn put_CheckMode(self: *const IListViewItemPresenter, p0: ListViewItemPresenterCheckMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CheckMode"(self, p0);
+        return self.vtable.put_CheckMode(self, p0);
     }
     pub fn get_PointerOverForeground(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PointerOverForeground"(self, result);
+        return self.vtable.get_PointerOverForeground(self, result);
     }
     pub fn put_PointerOverForeground(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_PointerOverForeground"(self, p0);
+        return self.vtable.put_PointerOverForeground(self, p0);
     }
     pub fn get_RevealBackground(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_RevealBackground"(self, result);
+        return self.vtable.get_RevealBackground(self, result);
     }
     pub fn put_RevealBackground(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_RevealBackground"(self, p0);
+        return self.vtable.put_RevealBackground(self, p0);
     }
     pub fn get_RevealBorderBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_RevealBorderBrush"(self, result);
+        return self.vtable.get_RevealBorderBrush(self, result);
     }
     pub fn put_RevealBorderBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_RevealBorderBrush"(self, p0);
+        return self.vtable.put_RevealBorderBrush(self, p0);
     }
     pub fn get_RevealBorderThickness(self: *const IListViewItemPresenter, result: *@"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_RevealBorderThickness"(self, result);
+        return self.vtable.get_RevealBorderThickness(self, result);
     }
     pub fn put_RevealBorderThickness(self: *const IListViewItemPresenter, p0: @"Microsoft.UI.Xaml".Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_RevealBorderThickness"(self, p0);
+        return self.vtable.put_RevealBorderThickness(self, p0);
     }
     pub fn get_RevealBackgroundShowsAboveContent(self: *const IListViewItemPresenter, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_RevealBackgroundShowsAboveContent"(self, result);
+        return self.vtable.get_RevealBackgroundShowsAboveContent(self, result);
     }
     pub fn put_RevealBackgroundShowsAboveContent(self: *const IListViewItemPresenter, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_RevealBackgroundShowsAboveContent"(self, p0);
+        return self.vtable.put_RevealBackgroundShowsAboveContent(self, p0);
     }
     pub fn get_SelectedDisabledBackground(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedDisabledBackground"(self, result);
+        return self.vtable.get_SelectedDisabledBackground(self, result);
     }
     pub fn put_SelectedDisabledBackground(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectedDisabledBackground"(self, p0);
+        return self.vtable.put_SelectedDisabledBackground(self, p0);
     }
     pub fn get_CheckPressedBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckPressedBrush"(self, result);
+        return self.vtable.get_CheckPressedBrush(self, result);
     }
     pub fn put_CheckPressedBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CheckPressedBrush"(self, p0);
+        return self.vtable.put_CheckPressedBrush(self, p0);
     }
     pub fn get_CheckDisabledBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckDisabledBrush"(self, result);
+        return self.vtable.get_CheckDisabledBrush(self, result);
     }
     pub fn put_CheckDisabledBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CheckDisabledBrush"(self, p0);
+        return self.vtable.put_CheckDisabledBrush(self, p0);
     }
     pub fn get_CheckBoxPointerOverBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxPointerOverBrush"(self, result);
+        return self.vtable.get_CheckBoxPointerOverBrush(self, result);
     }
     pub fn put_CheckBoxPointerOverBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CheckBoxPointerOverBrush"(self, p0);
+        return self.vtable.put_CheckBoxPointerOverBrush(self, p0);
     }
     pub fn get_CheckBoxPressedBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxPressedBrush"(self, result);
+        return self.vtable.get_CheckBoxPressedBrush(self, result);
     }
     pub fn put_CheckBoxPressedBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CheckBoxPressedBrush"(self, p0);
+        return self.vtable.put_CheckBoxPressedBrush(self, p0);
     }
     pub fn get_CheckBoxDisabledBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxDisabledBrush"(self, result);
+        return self.vtable.get_CheckBoxDisabledBrush(self, result);
     }
     pub fn put_CheckBoxDisabledBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CheckBoxDisabledBrush"(self, p0);
+        return self.vtable.put_CheckBoxDisabledBrush(self, p0);
     }
     pub fn get_CheckBoxSelectedBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxSelectedBrush"(self, result);
+        return self.vtable.get_CheckBoxSelectedBrush(self, result);
     }
     pub fn put_CheckBoxSelectedBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CheckBoxSelectedBrush"(self, p0);
+        return self.vtable.put_CheckBoxSelectedBrush(self, p0);
     }
     pub fn get_CheckBoxSelectedPointerOverBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxSelectedPointerOverBrush"(self, result);
+        return self.vtable.get_CheckBoxSelectedPointerOverBrush(self, result);
     }
     pub fn put_CheckBoxSelectedPointerOverBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CheckBoxSelectedPointerOverBrush"(self, p0);
+        return self.vtable.put_CheckBoxSelectedPointerOverBrush(self, p0);
     }
     pub fn get_CheckBoxSelectedPressedBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxSelectedPressedBrush"(self, result);
+        return self.vtable.get_CheckBoxSelectedPressedBrush(self, result);
     }
     pub fn put_CheckBoxSelectedPressedBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CheckBoxSelectedPressedBrush"(self, p0);
+        return self.vtable.put_CheckBoxSelectedPressedBrush(self, p0);
     }
     pub fn get_CheckBoxSelectedDisabledBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxSelectedDisabledBrush"(self, result);
+        return self.vtable.get_CheckBoxSelectedDisabledBrush(self, result);
     }
     pub fn put_CheckBoxSelectedDisabledBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CheckBoxSelectedDisabledBrush"(self, p0);
+        return self.vtable.put_CheckBoxSelectedDisabledBrush(self, p0);
     }
     pub fn get_CheckBoxBorderBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxBorderBrush"(self, result);
+        return self.vtable.get_CheckBoxBorderBrush(self, result);
     }
     pub fn put_CheckBoxBorderBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CheckBoxBorderBrush"(self, p0);
+        return self.vtable.put_CheckBoxBorderBrush(self, p0);
     }
     pub fn get_CheckBoxPointerOverBorderBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxPointerOverBorderBrush"(self, result);
+        return self.vtable.get_CheckBoxPointerOverBorderBrush(self, result);
     }
     pub fn put_CheckBoxPointerOverBorderBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CheckBoxPointerOverBorderBrush"(self, p0);
+        return self.vtable.put_CheckBoxPointerOverBorderBrush(self, p0);
     }
     pub fn get_CheckBoxPressedBorderBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxPressedBorderBrush"(self, result);
+        return self.vtable.get_CheckBoxPressedBorderBrush(self, result);
     }
     pub fn put_CheckBoxPressedBorderBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CheckBoxPressedBorderBrush"(self, p0);
+        return self.vtable.put_CheckBoxPressedBorderBrush(self, p0);
     }
     pub fn get_CheckBoxDisabledBorderBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxDisabledBorderBrush"(self, result);
+        return self.vtable.get_CheckBoxDisabledBorderBrush(self, result);
     }
     pub fn put_CheckBoxDisabledBorderBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CheckBoxDisabledBorderBrush"(self, p0);
+        return self.vtable.put_CheckBoxDisabledBorderBrush(self, p0);
     }
     pub fn get_CheckBoxCornerRadius(self: *const IListViewItemPresenter, result: *@"Microsoft.UI.Xaml".CornerRadius) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxCornerRadius"(self, result);
+        return self.vtable.get_CheckBoxCornerRadius(self, result);
     }
     pub fn put_CheckBoxCornerRadius(self: *const IListViewItemPresenter, p0: @"Microsoft.UI.Xaml".CornerRadius) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CheckBoxCornerRadius"(self, p0);
+        return self.vtable.put_CheckBoxCornerRadius(self, p0);
     }
     pub fn get_SelectionIndicatorCornerRadius(self: *const IListViewItemPresenter, result: *@"Microsoft.UI.Xaml".CornerRadius) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectionIndicatorCornerRadius"(self, result);
+        return self.vtable.get_SelectionIndicatorCornerRadius(self, result);
     }
     pub fn put_SelectionIndicatorCornerRadius(self: *const IListViewItemPresenter, p0: @"Microsoft.UI.Xaml".CornerRadius) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectionIndicatorCornerRadius"(self, p0);
+        return self.vtable.put_SelectionIndicatorCornerRadius(self, p0);
     }
     pub fn get_SelectionIndicatorVisualEnabled(self: *const IListViewItemPresenter, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectionIndicatorVisualEnabled"(self, result);
+        return self.vtable.get_SelectionIndicatorVisualEnabled(self, result);
     }
     pub fn put_SelectionIndicatorVisualEnabled(self: *const IListViewItemPresenter, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectionIndicatorVisualEnabled"(self, p0);
+        return self.vtable.put_SelectionIndicatorVisualEnabled(self, p0);
     }
     pub fn get_SelectionIndicatorMode(self: *const IListViewItemPresenter, result: *ListViewItemPresenterSelectionIndicatorMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectionIndicatorMode"(self, result);
+        return self.vtable.get_SelectionIndicatorMode(self, result);
     }
     pub fn put_SelectionIndicatorMode(self: *const IListViewItemPresenter, p0: ListViewItemPresenterSelectionIndicatorMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectionIndicatorMode"(self, p0);
+        return self.vtable.put_SelectionIndicatorMode(self, p0);
     }
     pub fn get_SelectionIndicatorBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectionIndicatorBrush"(self, result);
+        return self.vtable.get_SelectionIndicatorBrush(self, result);
     }
     pub fn put_SelectionIndicatorBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectionIndicatorBrush"(self, p0);
+        return self.vtable.put_SelectionIndicatorBrush(self, p0);
     }
     pub fn get_SelectionIndicatorPointerOverBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectionIndicatorPointerOverBrush"(self, result);
+        return self.vtable.get_SelectionIndicatorPointerOverBrush(self, result);
     }
     pub fn put_SelectionIndicatorPointerOverBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectionIndicatorPointerOverBrush"(self, p0);
+        return self.vtable.put_SelectionIndicatorPointerOverBrush(self, p0);
     }
     pub fn get_SelectionIndicatorPressedBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectionIndicatorPressedBrush"(self, result);
+        return self.vtable.get_SelectionIndicatorPressedBrush(self, result);
     }
     pub fn put_SelectionIndicatorPressedBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectionIndicatorPressedBrush"(self, p0);
+        return self.vtable.put_SelectionIndicatorPressedBrush(self, p0);
     }
     pub fn get_SelectionIndicatorDisabledBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectionIndicatorDisabledBrush"(self, result);
+        return self.vtable.get_SelectionIndicatorDisabledBrush(self, result);
     }
     pub fn put_SelectionIndicatorDisabledBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectionIndicatorDisabledBrush"(self, p0);
+        return self.vtable.put_SelectionIndicatorDisabledBrush(self, p0);
     }
     pub fn get_SelectedBorderBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedBorderBrush"(self, result);
+        return self.vtable.get_SelectedBorderBrush(self, result);
     }
     pub fn put_SelectedBorderBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectedBorderBrush"(self, p0);
+        return self.vtable.put_SelectedBorderBrush(self, p0);
     }
     pub fn get_SelectedPressedBorderBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedPressedBorderBrush"(self, result);
+        return self.vtable.get_SelectedPressedBorderBrush(self, result);
     }
     pub fn put_SelectedPressedBorderBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectedPressedBorderBrush"(self, p0);
+        return self.vtable.put_SelectedPressedBorderBrush(self, p0);
     }
     pub fn get_SelectedDisabledBorderBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedDisabledBorderBrush"(self, result);
+        return self.vtable.get_SelectedDisabledBorderBrush(self, result);
     }
     pub fn put_SelectedDisabledBorderBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectedDisabledBorderBrush"(self, p0);
+        return self.vtable.put_SelectedDisabledBorderBrush(self, p0);
     }
     pub fn get_SelectedInnerBorderBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedInnerBorderBrush"(self, result);
+        return self.vtable.get_SelectedInnerBorderBrush(self, result);
     }
     pub fn put_SelectedInnerBorderBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectedInnerBorderBrush"(self, p0);
+        return self.vtable.put_SelectedInnerBorderBrush(self, p0);
     }
     pub fn get_PointerOverBorderBrush(self: *const IListViewItemPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PointerOverBorderBrush"(self, result);
+        return self.vtable.get_PointerOverBorderBrush(self, result);
     }
     pub fn put_PointerOverBorderBrush(self: *const IListViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_PointerOverBorderBrush"(self, p0);
+        return self.vtable.put_PointerOverBorderBrush(self, p0);
     }
 };
 pub const IListViewItemPresenterFactory = extern struct {
@@ -3995,7 +3995,7 @@ pub const IListViewItemPresenterFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IListViewItemPresenterFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **ListViewItemPresenter) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const IListViewItemPresenterStatics = extern struct {
@@ -4017,181 +4017,181 @@ pub const IListViewItemPresenterStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_SelectionCheckMarkVisualEnabledProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectionCheckMarkVisualEnabledProperty"(self, result);
+        return self.vtable.get_SelectionCheckMarkVisualEnabledProperty(self, result);
     }
     pub fn get_CheckHintBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckHintBrushProperty"(self, result);
+        return self.vtable.get_CheckHintBrushProperty(self, result);
     }
     pub fn get_CheckSelectingBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckSelectingBrushProperty"(self, result);
+        return self.vtable.get_CheckSelectingBrushProperty(self, result);
     }
     pub fn get_CheckBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBrushProperty"(self, result);
+        return self.vtable.get_CheckBrushProperty(self, result);
     }
     pub fn get_DragBackgroundProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DragBackgroundProperty"(self, result);
+        return self.vtable.get_DragBackgroundProperty(self, result);
     }
     pub fn get_DragForegroundProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DragForegroundProperty"(self, result);
+        return self.vtable.get_DragForegroundProperty(self, result);
     }
     pub fn get_FocusBorderBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_FocusBorderBrushProperty"(self, result);
+        return self.vtable.get_FocusBorderBrushProperty(self, result);
     }
     pub fn get_PlaceholderBackgroundProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PlaceholderBackgroundProperty"(self, result);
+        return self.vtable.get_PlaceholderBackgroundProperty(self, result);
     }
     pub fn get_PointerOverBackgroundProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PointerOverBackgroundProperty"(self, result);
+        return self.vtable.get_PointerOverBackgroundProperty(self, result);
     }
     pub fn get_SelectedBackgroundProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedBackgroundProperty"(self, result);
+        return self.vtable.get_SelectedBackgroundProperty(self, result);
     }
     pub fn get_SelectedForegroundProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedForegroundProperty"(self, result);
+        return self.vtable.get_SelectedForegroundProperty(self, result);
     }
     pub fn get_SelectedPointerOverBackgroundProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedPointerOverBackgroundProperty"(self, result);
+        return self.vtable.get_SelectedPointerOverBackgroundProperty(self, result);
     }
     pub fn get_SelectedPointerOverBorderBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedPointerOverBorderBrushProperty"(self, result);
+        return self.vtable.get_SelectedPointerOverBorderBrushProperty(self, result);
     }
     pub fn get_SelectedBorderThicknessProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedBorderThicknessProperty"(self, result);
+        return self.vtable.get_SelectedBorderThicknessProperty(self, result);
     }
     pub fn get_DisabledOpacityProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DisabledOpacityProperty"(self, result);
+        return self.vtable.get_DisabledOpacityProperty(self, result);
     }
     pub fn get_DragOpacityProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DragOpacityProperty"(self, result);
+        return self.vtable.get_DragOpacityProperty(self, result);
     }
     pub fn get_ReorderHintOffsetProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ReorderHintOffsetProperty"(self, result);
+        return self.vtable.get_ReorderHintOffsetProperty(self, result);
     }
     pub fn get_ListViewItemPresenterHorizontalContentAlignmentProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ListViewItemPresenterHorizontalContentAlignmentProperty"(self, result);
+        return self.vtable.get_ListViewItemPresenterHorizontalContentAlignmentProperty(self, result);
     }
     pub fn get_ListViewItemPresenterVerticalContentAlignmentProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ListViewItemPresenterVerticalContentAlignmentProperty"(self, result);
+        return self.vtable.get_ListViewItemPresenterVerticalContentAlignmentProperty(self, result);
     }
     pub fn get_ListViewItemPresenterPaddingProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ListViewItemPresenterPaddingProperty"(self, result);
+        return self.vtable.get_ListViewItemPresenterPaddingProperty(self, result);
     }
     pub fn get_PointerOverBackgroundMarginProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PointerOverBackgroundMarginProperty"(self, result);
+        return self.vtable.get_PointerOverBackgroundMarginProperty(self, result);
     }
     pub fn get_ContentMarginProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ContentMarginProperty"(self, result);
+        return self.vtable.get_ContentMarginProperty(self, result);
     }
     pub fn get_SelectedPressedBackgroundProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedPressedBackgroundProperty"(self, result);
+        return self.vtable.get_SelectedPressedBackgroundProperty(self, result);
     }
     pub fn get_PressedBackgroundProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PressedBackgroundProperty"(self, result);
+        return self.vtable.get_PressedBackgroundProperty(self, result);
     }
     pub fn get_CheckBoxBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxBrushProperty"(self, result);
+        return self.vtable.get_CheckBoxBrushProperty(self, result);
     }
     pub fn get_FocusSecondaryBorderBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_FocusSecondaryBorderBrushProperty"(self, result);
+        return self.vtable.get_FocusSecondaryBorderBrushProperty(self, result);
     }
     pub fn get_CheckModeProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckModeProperty"(self, result);
+        return self.vtable.get_CheckModeProperty(self, result);
     }
     pub fn get_PointerOverForegroundProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PointerOverForegroundProperty"(self, result);
+        return self.vtable.get_PointerOverForegroundProperty(self, result);
     }
     pub fn get_RevealBackgroundProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_RevealBackgroundProperty"(self, result);
+        return self.vtable.get_RevealBackgroundProperty(self, result);
     }
     pub fn get_RevealBorderBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_RevealBorderBrushProperty"(self, result);
+        return self.vtable.get_RevealBorderBrushProperty(self, result);
     }
     pub fn get_RevealBorderThicknessProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_RevealBorderThicknessProperty"(self, result);
+        return self.vtable.get_RevealBorderThicknessProperty(self, result);
     }
     pub fn get_RevealBackgroundShowsAboveContentProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_RevealBackgroundShowsAboveContentProperty"(self, result);
+        return self.vtable.get_RevealBackgroundShowsAboveContentProperty(self, result);
     }
     pub fn get_SelectedDisabledBackgroundProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedDisabledBackgroundProperty"(self, result);
+        return self.vtable.get_SelectedDisabledBackgroundProperty(self, result);
     }
     pub fn get_CheckPressedBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckPressedBrushProperty"(self, result);
+        return self.vtable.get_CheckPressedBrushProperty(self, result);
     }
     pub fn get_CheckDisabledBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckDisabledBrushProperty"(self, result);
+        return self.vtable.get_CheckDisabledBrushProperty(self, result);
     }
     pub fn get_CheckBoxPointerOverBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxPointerOverBrushProperty"(self, result);
+        return self.vtable.get_CheckBoxPointerOverBrushProperty(self, result);
     }
     pub fn get_CheckBoxPressedBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxPressedBrushProperty"(self, result);
+        return self.vtable.get_CheckBoxPressedBrushProperty(self, result);
     }
     pub fn get_CheckBoxDisabledBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxDisabledBrushProperty"(self, result);
+        return self.vtable.get_CheckBoxDisabledBrushProperty(self, result);
     }
     pub fn get_CheckBoxSelectedBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxSelectedBrushProperty"(self, result);
+        return self.vtable.get_CheckBoxSelectedBrushProperty(self, result);
     }
     pub fn get_CheckBoxSelectedPointerOverBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxSelectedPointerOverBrushProperty"(self, result);
+        return self.vtable.get_CheckBoxSelectedPointerOverBrushProperty(self, result);
     }
     pub fn get_CheckBoxSelectedPressedBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxSelectedPressedBrushProperty"(self, result);
+        return self.vtable.get_CheckBoxSelectedPressedBrushProperty(self, result);
     }
     pub fn get_CheckBoxSelectedDisabledBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxSelectedDisabledBrushProperty"(self, result);
+        return self.vtable.get_CheckBoxSelectedDisabledBrushProperty(self, result);
     }
     pub fn get_CheckBoxBorderBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxBorderBrushProperty"(self, result);
+        return self.vtable.get_CheckBoxBorderBrushProperty(self, result);
     }
     pub fn get_CheckBoxPointerOverBorderBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxPointerOverBorderBrushProperty"(self, result);
+        return self.vtable.get_CheckBoxPointerOverBorderBrushProperty(self, result);
     }
     pub fn get_CheckBoxPressedBorderBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxPressedBorderBrushProperty"(self, result);
+        return self.vtable.get_CheckBoxPressedBorderBrushProperty(self, result);
     }
     pub fn get_CheckBoxDisabledBorderBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxDisabledBorderBrushProperty"(self, result);
+        return self.vtable.get_CheckBoxDisabledBorderBrushProperty(self, result);
     }
     pub fn get_CheckBoxCornerRadiusProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CheckBoxCornerRadiusProperty"(self, result);
+        return self.vtable.get_CheckBoxCornerRadiusProperty(self, result);
     }
     pub fn get_SelectionIndicatorCornerRadiusProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectionIndicatorCornerRadiusProperty"(self, result);
+        return self.vtable.get_SelectionIndicatorCornerRadiusProperty(self, result);
     }
     pub fn get_SelectionIndicatorVisualEnabledProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectionIndicatorVisualEnabledProperty"(self, result);
+        return self.vtable.get_SelectionIndicatorVisualEnabledProperty(self, result);
     }
     pub fn get_SelectionIndicatorModeProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectionIndicatorModeProperty"(self, result);
+        return self.vtable.get_SelectionIndicatorModeProperty(self, result);
     }
     pub fn get_SelectionIndicatorBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectionIndicatorBrushProperty"(self, result);
+        return self.vtable.get_SelectionIndicatorBrushProperty(self, result);
     }
     pub fn get_SelectionIndicatorPointerOverBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectionIndicatorPointerOverBrushProperty"(self, result);
+        return self.vtable.get_SelectionIndicatorPointerOverBrushProperty(self, result);
     }
     pub fn get_SelectionIndicatorPressedBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectionIndicatorPressedBrushProperty"(self, result);
+        return self.vtable.get_SelectionIndicatorPressedBrushProperty(self, result);
     }
     pub fn get_SelectionIndicatorDisabledBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectionIndicatorDisabledBrushProperty"(self, result);
+        return self.vtable.get_SelectionIndicatorDisabledBrushProperty(self, result);
     }
     pub fn get_SelectedBorderBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedBorderBrushProperty"(self, result);
+        return self.vtable.get_SelectedBorderBrushProperty(self, result);
     }
     pub fn get_SelectedPressedBorderBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedPressedBorderBrushProperty"(self, result);
+        return self.vtable.get_SelectedPressedBorderBrushProperty(self, result);
     }
     pub fn get_SelectedDisabledBorderBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedDisabledBorderBrushProperty"(self, result);
+        return self.vtable.get_SelectedDisabledBorderBrushProperty(self, result);
     }
     pub fn get_SelectedInnerBorderBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedInnerBorderBrushProperty"(self, result);
+        return self.vtable.get_SelectedInnerBorderBrushProperty(self, result);
     }
     pub fn get_PointerOverBorderBrushProperty(self: *const IListViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PointerOverBorderBrushProperty"(self, result);
+        return self.vtable.get_PointerOverBorderBrushProperty(self, result);
     }
 };
 pub const IListViewItemTemplateSettings = extern struct {
@@ -4213,7 +4213,7 @@ pub const IListViewItemTemplateSettings = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_DragItemsCount(self: *const IListViewItemTemplateSettings, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DragItemsCount"(self, result);
+        return self.vtable.get_DragItemsCount(self, result);
     }
 };
 pub const ILoopingSelector = extern struct {
@@ -4235,52 +4235,52 @@ pub const ILoopingSelector = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_ShouldLoop(self: *const ILoopingSelector, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ShouldLoop"(self, result);
+        return self.vtable.get_ShouldLoop(self, result);
     }
     pub fn put_ShouldLoop(self: *const ILoopingSelector, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ShouldLoop"(self, p0);
+        return self.vtable.put_ShouldLoop(self, p0);
     }
     pub fn get_Items(self: *const ILoopingSelector, result: **@"Windows.Foundation.Collections".IVector__G1__object) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Items"(self, result);
+        return self.vtable.get_Items(self, result);
     }
     pub fn put_Items(self: *const ILoopingSelector, p0: *@"Windows.Foundation.Collections".IVector__G1__object) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Items"(self, p0);
+        return self.vtable.put_Items(self, p0);
     }
     pub fn get_SelectedIndex(self: *const ILoopingSelector, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedIndex"(self, result);
+        return self.vtable.get_SelectedIndex(self, result);
     }
     pub fn put_SelectedIndex(self: *const ILoopingSelector, p0: i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectedIndex"(self, p0);
+        return self.vtable.put_SelectedIndex(self, p0);
     }
     pub fn get_SelectedItem(self: *const ILoopingSelector, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedItem"(self, result);
+        return self.vtable.get_SelectedItem(self, result);
     }
     pub fn put_SelectedItem(self: *const ILoopingSelector, p0: ?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectedItem"(self, p0);
+        return self.vtable.put_SelectedItem(self, p0);
     }
     pub fn get_ItemWidth(self: *const ILoopingSelector, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ItemWidth"(self, result);
+        return self.vtable.get_ItemWidth(self, result);
     }
     pub fn put_ItemWidth(self: *const ILoopingSelector, p0: i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ItemWidth"(self, p0);
+        return self.vtable.put_ItemWidth(self, p0);
     }
     pub fn get_ItemHeight(self: *const ILoopingSelector, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ItemHeight"(self, result);
+        return self.vtable.get_ItemHeight(self, result);
     }
     pub fn put_ItemHeight(self: *const ILoopingSelector, p0: i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ItemHeight"(self, p0);
+        return self.vtable.put_ItemHeight(self, p0);
     }
     pub fn get_ItemTemplate(self: *const ILoopingSelector, result: **@"Microsoft.UI.Xaml".DataTemplate) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ItemTemplate"(self, result);
+        return self.vtable.get_ItemTemplate(self, result);
     }
     pub fn put_ItemTemplate(self: *const ILoopingSelector, p0: *@"Microsoft.UI.Xaml".DataTemplate) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ItemTemplate"(self, p0);
+        return self.vtable.put_ItemTemplate(self, p0);
     }
     pub fn add_SelectionChanged(self: *const ILoopingSelector, p0: *@"Microsoft.UI.Xaml.Controls".SelectionChangedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_SelectionChanged"(self, p0, result);
+        return self.vtable.add_SelectionChanged(self, p0, result);
     }
     pub fn remove_SelectionChanged(self: *const ILoopingSelector, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_SelectionChanged"(self, p0);
+        return self.vtable.remove_SelectionChanged(self, p0);
     }
 };
 pub const ILoopingSelectorItem = extern struct {
@@ -4340,25 +4340,25 @@ pub const ILoopingSelectorStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_ShouldLoopProperty(self: *const ILoopingSelectorStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ShouldLoopProperty"(self, result);
+        return self.vtable.get_ShouldLoopProperty(self, result);
     }
     pub fn get_ItemsProperty(self: *const ILoopingSelectorStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ItemsProperty"(self, result);
+        return self.vtable.get_ItemsProperty(self, result);
     }
     pub fn get_SelectedIndexProperty(self: *const ILoopingSelectorStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedIndexProperty"(self, result);
+        return self.vtable.get_SelectedIndexProperty(self, result);
     }
     pub fn get_SelectedItemProperty(self: *const ILoopingSelectorStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedItemProperty"(self, result);
+        return self.vtable.get_SelectedItemProperty(self, result);
     }
     pub fn get_ItemWidthProperty(self: *const ILoopingSelectorStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ItemWidthProperty"(self, result);
+        return self.vtable.get_ItemWidthProperty(self, result);
     }
     pub fn get_ItemHeightProperty(self: *const ILoopingSelectorStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ItemHeightProperty"(self, result);
+        return self.vtable.get_ItemHeightProperty(self, result);
     }
     pub fn get_ItemTemplateProperty(self: *const ILoopingSelectorStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ItemTemplateProperty"(self, result);
+        return self.vtable.get_ItemTemplateProperty(self, result);
     }
 };
 pub const IMenuFlyoutItemTemplateSettings = extern struct {
@@ -4380,7 +4380,7 @@ pub const IMenuFlyoutItemTemplateSettings = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_KeyboardAcceleratorTextMinWidth(self: *const IMenuFlyoutItemTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_KeyboardAcceleratorTextMinWidth"(self, result);
+        return self.vtable.get_KeyboardAcceleratorTextMinWidth(self, result);
     }
 };
 pub const IMenuFlyoutPresenterTemplateSettings = extern struct {
@@ -4402,7 +4402,7 @@ pub const IMenuFlyoutPresenterTemplateSettings = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_FlyoutContentMinWidth(self: *const IMenuFlyoutPresenterTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_FlyoutContentMinWidth"(self, result);
+        return self.vtable.get_FlyoutContentMinWidth(self, result);
     }
 };
 pub const IMonochromaticOverlayPresenter = extern struct {
@@ -4424,16 +4424,16 @@ pub const IMonochromaticOverlayPresenter = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_SourceElement(self: *const IMonochromaticOverlayPresenter, result: **@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SourceElement"(self, result);
+        return self.vtable.get_SourceElement(self, result);
     }
     pub fn put_SourceElement(self: *const IMonochromaticOverlayPresenter, p0: *@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SourceElement"(self, p0);
+        return self.vtable.put_SourceElement(self, p0);
     }
     pub fn get_ReplacementColor(self: *const IMonochromaticOverlayPresenter, result: *@"Windows.UI".Color) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ReplacementColor"(self, result);
+        return self.vtable.get_ReplacementColor(self, result);
     }
     pub fn put_ReplacementColor(self: *const IMonochromaticOverlayPresenter, p0: @"Windows.UI".Color) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ReplacementColor"(self, p0);
+        return self.vtable.put_ReplacementColor(self, p0);
     }
 };
 pub const IMonochromaticOverlayPresenterFactory = extern struct {
@@ -4455,7 +4455,7 @@ pub const IMonochromaticOverlayPresenterFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IMonochromaticOverlayPresenterFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **MonochromaticOverlayPresenter) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const IMonochromaticOverlayPresenterStatics = extern struct {
@@ -4477,10 +4477,10 @@ pub const IMonochromaticOverlayPresenterStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_SourceElementProperty(self: *const IMonochromaticOverlayPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SourceElementProperty"(self, result);
+        return self.vtable.get_SourceElementProperty(self, result);
     }
     pub fn get_ReplacementColorProperty(self: *const IMonochromaticOverlayPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ReplacementColorProperty"(self, result);
+        return self.vtable.get_ReplacementColorProperty(self, result);
     }
 };
 pub const INavigationViewItemPresenter = extern struct {
@@ -4502,13 +4502,13 @@ pub const INavigationViewItemPresenter = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Icon(self: *const INavigationViewItemPresenter, result: **@"Microsoft.UI.Xaml.Controls".IconElement) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Icon"(self, result);
+        return self.vtable.get_Icon(self, result);
     }
     pub fn put_Icon(self: *const INavigationViewItemPresenter, p0: *@"Microsoft.UI.Xaml.Controls".IconElement) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Icon"(self, p0);
+        return self.vtable.put_Icon(self, p0);
     }
     pub fn get_TemplateSettings(self: *const INavigationViewItemPresenter, result: **NavigationViewItemPresenterTemplateSettings) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_TemplateSettings"(self, result);
+        return self.vtable.get_TemplateSettings(self, result);
     }
 };
 pub const INavigationViewItemPresenter2 = extern struct {
@@ -4530,10 +4530,10 @@ pub const INavigationViewItemPresenter2 = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_InfoBadge(self: *const INavigationViewItemPresenter2, result: **@"Microsoft.UI.Xaml.Controls".InfoBadge) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_InfoBadge"(self, result);
+        return self.vtable.get_InfoBadge(self, result);
     }
     pub fn put_InfoBadge(self: *const INavigationViewItemPresenter2, p0: *@"Microsoft.UI.Xaml.Controls".InfoBadge) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_InfoBadge"(self, p0);
+        return self.vtable.put_InfoBadge(self, p0);
     }
 };
 pub const INavigationViewItemPresenterFactory = extern struct {
@@ -4555,7 +4555,7 @@ pub const INavigationViewItemPresenterFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const INavigationViewItemPresenterFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **NavigationViewItemPresenter) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const INavigationViewItemPresenterStatics = extern struct {
@@ -4577,10 +4577,10 @@ pub const INavigationViewItemPresenterStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_IconProperty(self: *const INavigationViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IconProperty"(self, result);
+        return self.vtable.get_IconProperty(self, result);
     }
     pub fn get_TemplateSettingsProperty(self: *const INavigationViewItemPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_TemplateSettingsProperty"(self, result);
+        return self.vtable.get_TemplateSettingsProperty(self, result);
     }
 };
 pub const INavigationViewItemPresenterStatics2 = extern struct {
@@ -4602,7 +4602,7 @@ pub const INavigationViewItemPresenterStatics2 = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_InfoBadgeProperty(self: *const INavigationViewItemPresenterStatics2, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_InfoBadgeProperty"(self, result);
+        return self.vtable.get_InfoBadgeProperty(self, result);
     }
 };
 pub const INavigationViewItemPresenterTemplateSettings = extern struct {
@@ -4624,10 +4624,10 @@ pub const INavigationViewItemPresenterTemplateSettings = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_IconWidth(self: *const INavigationViewItemPresenterTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IconWidth"(self, result);
+        return self.vtable.get_IconWidth(self, result);
     }
     pub fn get_SmallerIconWidth(self: *const INavigationViewItemPresenterTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SmallerIconWidth"(self, result);
+        return self.vtable.get_SmallerIconWidth(self, result);
     }
 };
 pub const INavigationViewItemPresenterTemplateSettingsFactory = extern struct {
@@ -4649,7 +4649,7 @@ pub const INavigationViewItemPresenterTemplateSettingsFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const INavigationViewItemPresenterTemplateSettingsFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **NavigationViewItemPresenterTemplateSettings) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const INavigationViewItemPresenterTemplateSettingsStatics = extern struct {
@@ -4671,10 +4671,10 @@ pub const INavigationViewItemPresenterTemplateSettingsStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_IconWidthProperty(self: *const INavigationViewItemPresenterTemplateSettingsStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IconWidthProperty"(self, result);
+        return self.vtable.get_IconWidthProperty(self, result);
     }
     pub fn get_SmallerIconWidthProperty(self: *const INavigationViewItemPresenterTemplateSettingsStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SmallerIconWidthProperty"(self, result);
+        return self.vtable.get_SmallerIconWidthProperty(self, result);
     }
 };
 pub const IOrientedVirtualizingPanel = extern struct {
@@ -4696,85 +4696,85 @@ pub const IOrientedVirtualizingPanel = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_CanVerticallyScroll(self: *const IOrientedVirtualizingPanel, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CanVerticallyScroll"(self, result);
+        return self.vtable.get_CanVerticallyScroll(self, result);
     }
     pub fn put_CanVerticallyScroll(self: *const IOrientedVirtualizingPanel, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CanVerticallyScroll"(self, p0);
+        return self.vtable.put_CanVerticallyScroll(self, p0);
     }
     pub fn get_CanHorizontallyScroll(self: *const IOrientedVirtualizingPanel, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CanHorizontallyScroll"(self, result);
+        return self.vtable.get_CanHorizontallyScroll(self, result);
     }
     pub fn put_CanHorizontallyScroll(self: *const IOrientedVirtualizingPanel, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CanHorizontallyScroll"(self, p0);
+        return self.vtable.put_CanHorizontallyScroll(self, p0);
     }
     pub fn get_ExtentWidth(self: *const IOrientedVirtualizingPanel, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ExtentWidth"(self, result);
+        return self.vtable.get_ExtentWidth(self, result);
     }
     pub fn get_ExtentHeight(self: *const IOrientedVirtualizingPanel, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ExtentHeight"(self, result);
+        return self.vtable.get_ExtentHeight(self, result);
     }
     pub fn get_ViewportWidth(self: *const IOrientedVirtualizingPanel, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ViewportWidth"(self, result);
+        return self.vtable.get_ViewportWidth(self, result);
     }
     pub fn get_ViewportHeight(self: *const IOrientedVirtualizingPanel, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ViewportHeight"(self, result);
+        return self.vtable.get_ViewportHeight(self, result);
     }
     pub fn get_HorizontalOffset(self: *const IOrientedVirtualizingPanel, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HorizontalOffset"(self, result);
+        return self.vtable.get_HorizontalOffset(self, result);
     }
     pub fn get_VerticalOffset(self: *const IOrientedVirtualizingPanel, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_VerticalOffset"(self, result);
+        return self.vtable.get_VerticalOffset(self, result);
     }
     pub fn get_ScrollOwner(self: *const IOrientedVirtualizingPanel, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ScrollOwner"(self, result);
+        return self.vtable.get_ScrollOwner(self, result);
     }
     pub fn put_ScrollOwner(self: *const IOrientedVirtualizingPanel, p0: ?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ScrollOwner"(self, p0);
+        return self.vtable.put_ScrollOwner(self, p0);
     }
     pub fn LineUp(self: *const IOrientedVirtualizingPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"LineUp"(self);
+        return self.vtable.LineUp(self);
     }
     pub fn LineDown(self: *const IOrientedVirtualizingPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"LineDown"(self);
+        return self.vtable.LineDown(self);
     }
     pub fn LineLeft(self: *const IOrientedVirtualizingPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"LineLeft"(self);
+        return self.vtable.LineLeft(self);
     }
     pub fn LineRight(self: *const IOrientedVirtualizingPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"LineRight"(self);
+        return self.vtable.LineRight(self);
     }
     pub fn PageUp(self: *const IOrientedVirtualizingPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"PageUp"(self);
+        return self.vtable.PageUp(self);
     }
     pub fn PageDown(self: *const IOrientedVirtualizingPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"PageDown"(self);
+        return self.vtable.PageDown(self);
     }
     pub fn PageLeft(self: *const IOrientedVirtualizingPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"PageLeft"(self);
+        return self.vtable.PageLeft(self);
     }
     pub fn PageRight(self: *const IOrientedVirtualizingPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"PageRight"(self);
+        return self.vtable.PageRight(self);
     }
     pub fn MouseWheelUp(self: *const IOrientedVirtualizingPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"MouseWheelUp"(self);
+        return self.vtable.MouseWheelUp(self);
     }
     pub fn MouseWheelDown(self: *const IOrientedVirtualizingPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"MouseWheelDown"(self);
+        return self.vtable.MouseWheelDown(self);
     }
     pub fn MouseWheelLeft(self: *const IOrientedVirtualizingPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"MouseWheelLeft"(self);
+        return self.vtable.MouseWheelLeft(self);
     }
     pub fn MouseWheelRight(self: *const IOrientedVirtualizingPanel) callconv(.winapi) HRESULT {
-        return self.vtable.@"MouseWheelRight"(self);
+        return self.vtable.MouseWheelRight(self);
     }
     pub fn SetHorizontalOffset(self: *const IOrientedVirtualizingPanel, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"SetHorizontalOffset"(self, p0);
+        return self.vtable.SetHorizontalOffset(self, p0);
     }
     pub fn SetVerticalOffset(self: *const IOrientedVirtualizingPanel, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"SetVerticalOffset"(self, p0);
+        return self.vtable.SetVerticalOffset(self, p0);
     }
     pub fn MakeVisible(self: *const IOrientedVirtualizingPanel, p0: *@"Microsoft.UI.Xaml".UIElement, p1: @"Windows.Foundation".Rect, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT {
-        return self.vtable.@"MakeVisible"(self, p0, p1, result);
+        return self.vtable.MakeVisible(self, p0, p1, result);
     }
 };
 pub const IOrientedVirtualizingPanelFactory = extern struct {
@@ -4834,7 +4834,7 @@ pub const IPickerFlyoutBaseFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IPickerFlyoutBaseFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **PickerFlyoutBase) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const IPickerFlyoutBaseOverrides = extern struct {
@@ -4856,10 +4856,10 @@ pub const IPickerFlyoutBaseOverrides = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn OnConfirmed(self: *const IPickerFlyoutBaseOverrides) callconv(.winapi) HRESULT {
-        return self.vtable.@"OnConfirmed"(self);
+        return self.vtable.OnConfirmed(self);
     }
     pub fn ShouldShowConfirmationButtons(self: *const IPickerFlyoutBaseOverrides, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"ShouldShowConfirmationButtons"(self, result);
+        return self.vtable.ShouldShowConfirmationButtons(self, result);
     }
 };
 pub const IPickerFlyoutBaseStatics = extern struct {
@@ -4881,23 +4881,23 @@ pub const IPickerFlyoutBaseStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_TitleProperty(self: *const IPickerFlyoutBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_TitleProperty"(self, result);
+        return self.vtable.get_TitleProperty(self, result);
     }
     pub fn GetTitle(self: *const IPickerFlyoutBaseStatics, p0: *@"Microsoft.UI.Xaml".DependencyObject, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.@"GetTitle"(self, p0, result);
+        return self.vtable.GetTitle(self, p0, result);
     }
     pub fn GetTitleOwned(self: *const IPickerFlyoutBaseStatics, p0: *@"Microsoft.UI.Xaml".DependencyObject) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.@"GetTitle"(self, p0, &r));
+        try win_core.hresult.ok(self.vtable.GetTitle(self, p0, &r));
         return win_core.Hstring.fromRaw(r);
     }
     pub fn SetTitle(self: *const IPickerFlyoutBaseStatics, p0: *@"Microsoft.UI.Xaml".DependencyObject, p1: HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.@"SetTitle"(self, p0, p1);
+        return self.vtable.SetTitle(self, p0, p1);
     }
     pub fn SetTitleFromUtf16(self: *const IPickerFlyoutBaseStatics, p0: *@"Microsoft.UI.Xaml".DependencyObject, p1: []const u16) HRESULT {
         var h1 = win_core.Hstring.create(p1) catch return win_core.hresult.E_OUTOFMEMORY;
         defer h1.deinit();
-        return self.vtable.@"SetTitle"(self, p0, h1.raw);
+        return self.vtable.SetTitle(self, p0, h1.raw);
     }
 };
 pub const IPivotHeaderItem = extern struct {
@@ -4938,7 +4938,7 @@ pub const IPivotHeaderItemFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IPivotHeaderItemFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **PivotHeaderItem) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const IPivotHeaderPanel = extern struct {
@@ -4998,67 +4998,67 @@ pub const IPopup = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Child(self: *const IPopup, result: **@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Child"(self, result);
+        return self.vtable.get_Child(self, result);
     }
     pub fn put_Child(self: *const IPopup, p0: *@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Child"(self, p0);
+        return self.vtable.put_Child(self, p0);
     }
     pub fn get_IsOpen(self: *const IPopup, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsOpen"(self, result);
+        return self.vtable.get_IsOpen(self, result);
     }
     pub fn put_IsOpen(self: *const IPopup, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_IsOpen"(self, p0);
+        return self.vtable.put_IsOpen(self, p0);
     }
     pub fn get_HorizontalOffset(self: *const IPopup, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HorizontalOffset"(self, result);
+        return self.vtable.get_HorizontalOffset(self, result);
     }
     pub fn put_HorizontalOffset(self: *const IPopup, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_HorizontalOffset"(self, p0);
+        return self.vtable.put_HorizontalOffset(self, p0);
     }
     pub fn get_VerticalOffset(self: *const IPopup, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_VerticalOffset"(self, result);
+        return self.vtable.get_VerticalOffset(self, result);
     }
     pub fn put_VerticalOffset(self: *const IPopup, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_VerticalOffset"(self, p0);
+        return self.vtable.put_VerticalOffset(self, p0);
     }
     pub fn get_ChildTransitions(self: *const IPopup, result: **@"Microsoft.UI.Xaml.Media.Animation".TransitionCollection) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ChildTransitions"(self, result);
+        return self.vtable.get_ChildTransitions(self, result);
     }
     pub fn put_ChildTransitions(self: *const IPopup, p0: *@"Microsoft.UI.Xaml.Media.Animation".TransitionCollection) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ChildTransitions"(self, p0);
+        return self.vtable.put_ChildTransitions(self, p0);
     }
     pub fn get_IsLightDismissEnabled(self: *const IPopup, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsLightDismissEnabled"(self, result);
+        return self.vtable.get_IsLightDismissEnabled(self, result);
     }
     pub fn put_IsLightDismissEnabled(self: *const IPopup, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_IsLightDismissEnabled"(self, p0);
+        return self.vtable.put_IsLightDismissEnabled(self, p0);
     }
     pub fn get_LightDismissOverlayMode(self: *const IPopup, result: *@"Microsoft.UI.Xaml.Controls".LightDismissOverlayMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_LightDismissOverlayMode"(self, result);
+        return self.vtable.get_LightDismissOverlayMode(self, result);
     }
     pub fn put_LightDismissOverlayMode(self: *const IPopup, p0: @"Microsoft.UI.Xaml.Controls".LightDismissOverlayMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_LightDismissOverlayMode"(self, p0);
+        return self.vtable.put_LightDismissOverlayMode(self, p0);
     }
     pub fn get_ShouldConstrainToRootBounds(self: *const IPopup, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ShouldConstrainToRootBounds"(self, result);
+        return self.vtable.get_ShouldConstrainToRootBounds(self, result);
     }
     pub fn put_ShouldConstrainToRootBounds(self: *const IPopup, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ShouldConstrainToRootBounds"(self, p0);
+        return self.vtable.put_ShouldConstrainToRootBounds(self, p0);
     }
     pub fn get_IsConstrainedToRootBounds(self: *const IPopup, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsConstrainedToRootBounds"(self, result);
+        return self.vtable.get_IsConstrainedToRootBounds(self, result);
     }
     pub fn add_Opened(self: *const IPopup, p0: *@"Windows.Foundation".EventHandler__G1__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_Opened"(self, p0, result);
+        return self.vtable.add_Opened(self, p0, result);
     }
     pub fn remove_Opened(self: *const IPopup, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_Opened"(self, p0);
+        return self.vtable.remove_Opened(self, p0);
     }
     pub fn add_Closed(self: *const IPopup, p0: *@"Windows.Foundation".EventHandler__G1__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_Closed"(self, p0, result);
+        return self.vtable.add_Closed(self, p0, result);
     }
     pub fn remove_Closed(self: *const IPopup, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_Closed"(self, p0);
+        return self.vtable.remove_Closed(self, p0);
     }
     pub fn addOpened(
         self: *const IPopup,
@@ -5112,25 +5112,25 @@ pub const IPopup2 = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_PlacementTarget(self: *const IPopup2, result: **@"Microsoft.UI.Xaml".FrameworkElement) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PlacementTarget"(self, result);
+        return self.vtable.get_PlacementTarget(self, result);
     }
     pub fn put_PlacementTarget(self: *const IPopup2, p0: *@"Microsoft.UI.Xaml".FrameworkElement) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_PlacementTarget"(self, p0);
+        return self.vtable.put_PlacementTarget(self, p0);
     }
     pub fn get_DesiredPlacement(self: *const IPopup2, result: *PopupPlacementMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DesiredPlacement"(self, result);
+        return self.vtable.get_DesiredPlacement(self, result);
     }
     pub fn put_DesiredPlacement(self: *const IPopup2, p0: PopupPlacementMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_DesiredPlacement"(self, p0);
+        return self.vtable.put_DesiredPlacement(self, p0);
     }
     pub fn get_ActualPlacement(self: *const IPopup2, result: *PopupPlacementMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ActualPlacement"(self, result);
+        return self.vtable.get_ActualPlacement(self, result);
     }
     pub fn add_ActualPlacementChanged(self: *const IPopup2, p0: *@"Windows.Foundation".EventHandler__G1__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_ActualPlacementChanged"(self, p0, result);
+        return self.vtable.add_ActualPlacementChanged(self, p0, result);
     }
     pub fn remove_ActualPlacementChanged(self: *const IPopup2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_ActualPlacementChanged"(self, p0);
+        return self.vtable.remove_ActualPlacementChanged(self, p0);
     }
     pub fn addActualPlacementChanged(
         self: *const IPopup2,
@@ -5168,10 +5168,10 @@ pub const IPopup3 = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_SystemBackdrop(self: *const IPopup3, result: **@"Microsoft.UI.Xaml.Media".SystemBackdrop) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SystemBackdrop"(self, result);
+        return self.vtable.get_SystemBackdrop(self, result);
     }
     pub fn put_SystemBackdrop(self: *const IPopup3, p0: *@"Microsoft.UI.Xaml.Media".SystemBackdrop) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SystemBackdrop"(self, p0);
+        return self.vtable.put_SystemBackdrop(self, p0);
     }
 };
 pub const IPopupStatics = extern struct {
@@ -5193,28 +5193,28 @@ pub const IPopupStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_ChildProperty(self: *const IPopupStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ChildProperty"(self, result);
+        return self.vtable.get_ChildProperty(self, result);
     }
     pub fn get_IsOpenProperty(self: *const IPopupStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsOpenProperty"(self, result);
+        return self.vtable.get_IsOpenProperty(self, result);
     }
     pub fn get_HorizontalOffsetProperty(self: *const IPopupStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HorizontalOffsetProperty"(self, result);
+        return self.vtable.get_HorizontalOffsetProperty(self, result);
     }
     pub fn get_VerticalOffsetProperty(self: *const IPopupStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_VerticalOffsetProperty"(self, result);
+        return self.vtable.get_VerticalOffsetProperty(self, result);
     }
     pub fn get_ChildTransitionsProperty(self: *const IPopupStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ChildTransitionsProperty"(self, result);
+        return self.vtable.get_ChildTransitionsProperty(self, result);
     }
     pub fn get_IsLightDismissEnabledProperty(self: *const IPopupStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsLightDismissEnabledProperty"(self, result);
+        return self.vtable.get_IsLightDismissEnabledProperty(self, result);
     }
     pub fn get_LightDismissOverlayModeProperty(self: *const IPopupStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_LightDismissOverlayModeProperty"(self, result);
+        return self.vtable.get_LightDismissOverlayModeProperty(self, result);
     }
     pub fn get_ShouldConstrainToRootBoundsProperty(self: *const IPopupStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ShouldConstrainToRootBoundsProperty"(self, result);
+        return self.vtable.get_ShouldConstrainToRootBoundsProperty(self, result);
     }
 };
 pub const IPopupStatics2 = extern struct {
@@ -5236,10 +5236,10 @@ pub const IPopupStatics2 = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_PlacementTargetProperty(self: *const IPopupStatics2, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PlacementTargetProperty"(self, result);
+        return self.vtable.get_PlacementTargetProperty(self, result);
     }
     pub fn get_DesiredPlacementProperty(self: *const IPopupStatics2, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DesiredPlacementProperty"(self, result);
+        return self.vtable.get_DesiredPlacementProperty(self, result);
     }
 };
 pub const IPopupStatics3 = extern struct {
@@ -5261,7 +5261,7 @@ pub const IPopupStatics3 = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_SystemBackdropProperty(self: *const IPopupStatics3, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SystemBackdropProperty"(self, result);
+        return self.vtable.get_SystemBackdropProperty(self, result);
     }
 };
 pub const IRangeBase = extern struct {
@@ -5283,40 +5283,40 @@ pub const IRangeBase = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Minimum(self: *const IRangeBase, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Minimum"(self, result);
+        return self.vtable.get_Minimum(self, result);
     }
     pub fn put_Minimum(self: *const IRangeBase, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Minimum"(self, p0);
+        return self.vtable.put_Minimum(self, p0);
     }
     pub fn get_Maximum(self: *const IRangeBase, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Maximum"(self, result);
+        return self.vtable.get_Maximum(self, result);
     }
     pub fn put_Maximum(self: *const IRangeBase, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Maximum"(self, p0);
+        return self.vtable.put_Maximum(self, p0);
     }
     pub fn get_SmallChange(self: *const IRangeBase, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SmallChange"(self, result);
+        return self.vtable.get_SmallChange(self, result);
     }
     pub fn put_SmallChange(self: *const IRangeBase, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SmallChange"(self, p0);
+        return self.vtable.put_SmallChange(self, p0);
     }
     pub fn get_LargeChange(self: *const IRangeBase, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_LargeChange"(self, result);
+        return self.vtable.get_LargeChange(self, result);
     }
     pub fn put_LargeChange(self: *const IRangeBase, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_LargeChange"(self, p0);
+        return self.vtable.put_LargeChange(self, p0);
     }
     pub fn get_Value(self: *const IRangeBase, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Value"(self, result);
+        return self.vtable.get_Value(self, result);
     }
     pub fn put_Value(self: *const IRangeBase, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Value"(self, p0);
+        return self.vtable.put_Value(self, p0);
     }
     pub fn add_ValueChanged(self: *const IRangeBase, p0: *RangeBaseValueChangedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_ValueChanged"(self, p0, result);
+        return self.vtable.add_ValueChanged(self, p0, result);
     }
     pub fn remove_ValueChanged(self: *const IRangeBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_ValueChanged"(self, p0);
+        return self.vtable.remove_ValueChanged(self, p0);
     }
 };
 pub const IRangeBaseFactory = extern struct {
@@ -5338,7 +5338,7 @@ pub const IRangeBaseFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IRangeBaseFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **RangeBase) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const IRangeBaseOverrides = extern struct {
@@ -5360,13 +5360,13 @@ pub const IRangeBaseOverrides = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn OnMinimumChanged(self: *const IRangeBaseOverrides, p0: f64, p1: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"OnMinimumChanged"(self, p0, p1);
+        return self.vtable.OnMinimumChanged(self, p0, p1);
     }
     pub fn OnMaximumChanged(self: *const IRangeBaseOverrides, p0: f64, p1: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"OnMaximumChanged"(self, p0, p1);
+        return self.vtable.OnMaximumChanged(self, p0, p1);
     }
     pub fn OnValueChanged(self: *const IRangeBaseOverrides, p0: f64, p1: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"OnValueChanged"(self, p0, p1);
+        return self.vtable.OnValueChanged(self, p0, p1);
     }
 };
 pub const IRangeBaseStatics = extern struct {
@@ -5388,19 +5388,19 @@ pub const IRangeBaseStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_MinimumProperty(self: *const IRangeBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MinimumProperty"(self, result);
+        return self.vtable.get_MinimumProperty(self, result);
     }
     pub fn get_MaximumProperty(self: *const IRangeBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MaximumProperty"(self, result);
+        return self.vtable.get_MaximumProperty(self, result);
     }
     pub fn get_SmallChangeProperty(self: *const IRangeBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SmallChangeProperty"(self, result);
+        return self.vtable.get_SmallChangeProperty(self, result);
     }
     pub fn get_LargeChangeProperty(self: *const IRangeBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_LargeChangeProperty"(self, result);
+        return self.vtable.get_LargeChangeProperty(self, result);
     }
     pub fn get_ValueProperty(self: *const IRangeBaseStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ValueProperty"(self, result);
+        return self.vtable.get_ValueProperty(self, result);
     }
 };
 pub const IRangeBaseValueChangedEventArgs = extern struct {
@@ -5422,10 +5422,10 @@ pub const IRangeBaseValueChangedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_OldValue(self: *const IRangeBaseValueChangedEventArgs, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_OldValue"(self, result);
+        return self.vtable.get_OldValue(self, result);
     }
     pub fn get_NewValue(self: *const IRangeBaseValueChangedEventArgs, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_NewValue"(self, result);
+        return self.vtable.get_NewValue(self, result);
     }
 };
 pub const IRepeatButton = extern struct {
@@ -5447,16 +5447,16 @@ pub const IRepeatButton = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Delay(self: *const IRepeatButton, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Delay"(self, result);
+        return self.vtable.get_Delay(self, result);
     }
     pub fn put_Delay(self: *const IRepeatButton, p0: i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Delay"(self, p0);
+        return self.vtable.put_Delay(self, p0);
     }
     pub fn get_Interval(self: *const IRepeatButton, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Interval"(self, result);
+        return self.vtable.get_Interval(self, result);
     }
     pub fn put_Interval(self: *const IRepeatButton, p0: i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Interval"(self, p0);
+        return self.vtable.put_Interval(self, p0);
     }
 };
 pub const IRepeatButtonStatics = extern struct {
@@ -5478,10 +5478,10 @@ pub const IRepeatButtonStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_DelayProperty(self: *const IRepeatButtonStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_DelayProperty"(self, result);
+        return self.vtable.get_DelayProperty(self, result);
     }
     pub fn get_IntervalProperty(self: *const IRepeatButtonStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IntervalProperty"(self, result);
+        return self.vtable.get_IntervalProperty(self, result);
     }
 };
 pub const IRepeatedScrollSnapPoint = extern struct {
@@ -5503,16 +5503,16 @@ pub const IRepeatedScrollSnapPoint = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Offset(self: *const IRepeatedScrollSnapPoint, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Offset"(self, result);
+        return self.vtable.get_Offset(self, result);
     }
     pub fn get_Interval(self: *const IRepeatedScrollSnapPoint, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Interval"(self, result);
+        return self.vtable.get_Interval(self, result);
     }
     pub fn get_Start(self: *const IRepeatedScrollSnapPoint, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Start"(self, result);
+        return self.vtable.get_Start(self, result);
     }
     pub fn get_End(self: *const IRepeatedScrollSnapPoint, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_End"(self, result);
+        return self.vtable.get_End(self, result);
     }
 };
 pub const IRepeatedScrollSnapPointFactory = extern struct {
@@ -5534,7 +5534,7 @@ pub const IRepeatedScrollSnapPointFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IRepeatedScrollSnapPointFactory, p0: f64, p1: f64, p2: f64, p3: f64, p4: ScrollSnapPointsAlignment, p5: ?*const anyopaque, p6: *?*const anyopaque, result: **RepeatedScrollSnapPoint) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, p2, p3, p4, p5, p6, result);
+        return self.vtable.CreateInstance(self, p0, p1, p2, p3, p4, p5, p6, result);
     }
 };
 pub const IRepeatedZoomSnapPoint = extern struct {
@@ -5556,16 +5556,16 @@ pub const IRepeatedZoomSnapPoint = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Offset(self: *const IRepeatedZoomSnapPoint, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Offset"(self, result);
+        return self.vtable.get_Offset(self, result);
     }
     pub fn get_Interval(self: *const IRepeatedZoomSnapPoint, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Interval"(self, result);
+        return self.vtable.get_Interval(self, result);
     }
     pub fn get_Start(self: *const IRepeatedZoomSnapPoint, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Start"(self, result);
+        return self.vtable.get_Start(self, result);
     }
     pub fn get_End(self: *const IRepeatedZoomSnapPoint, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_End"(self, result);
+        return self.vtable.get_End(self, result);
     }
 };
 pub const IRepeatedZoomSnapPointFactory = extern struct {
@@ -5587,7 +5587,7 @@ pub const IRepeatedZoomSnapPointFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IRepeatedZoomSnapPointFactory, p0: f64, p1: f64, p2: f64, p3: f64, p4: ?*const anyopaque, p5: *?*const anyopaque, result: **RepeatedZoomSnapPoint) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, p2, p3, p4, p5, result);
+        return self.vtable.CreateInstance(self, p0, p1, p2, p3, p4, p5, result);
     }
 };
 pub const IScrollBar = extern struct {
@@ -5609,28 +5609,28 @@ pub const IScrollBar = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Orientation(self: *const IScrollBar, result: *@"Microsoft.UI.Xaml.Controls".Orientation) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Orientation"(self, result);
+        return self.vtable.get_Orientation(self, result);
     }
     pub fn put_Orientation(self: *const IScrollBar, p0: @"Microsoft.UI.Xaml.Controls".Orientation) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Orientation"(self, p0);
+        return self.vtable.put_Orientation(self, p0);
     }
     pub fn get_ViewportSize(self: *const IScrollBar, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ViewportSize"(self, result);
+        return self.vtable.get_ViewportSize(self, result);
     }
     pub fn put_ViewportSize(self: *const IScrollBar, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ViewportSize"(self, p0);
+        return self.vtable.put_ViewportSize(self, p0);
     }
     pub fn get_IndicatorMode(self: *const IScrollBar, result: *ScrollingIndicatorMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IndicatorMode"(self, result);
+        return self.vtable.get_IndicatorMode(self, result);
     }
     pub fn put_IndicatorMode(self: *const IScrollBar, p0: ScrollingIndicatorMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_IndicatorMode"(self, p0);
+        return self.vtable.put_IndicatorMode(self, p0);
     }
     pub fn add_Scroll(self: *const IScrollBar, p0: *ScrollEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_Scroll"(self, p0, result);
+        return self.vtable.add_Scroll(self, p0, result);
     }
     pub fn remove_Scroll(self: *const IScrollBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_Scroll"(self, p0);
+        return self.vtable.remove_Scroll(self, p0);
     }
 };
 pub const IScrollBarStatics = extern struct {
@@ -5652,13 +5652,13 @@ pub const IScrollBarStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_OrientationProperty(self: *const IScrollBarStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_OrientationProperty"(self, result);
+        return self.vtable.get_OrientationProperty(self, result);
     }
     pub fn get_ViewportSizeProperty(self: *const IScrollBarStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ViewportSizeProperty"(self, result);
+        return self.vtable.get_ViewportSizeProperty(self, result);
     }
     pub fn get_IndicatorModeProperty(self: *const IScrollBarStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IndicatorModeProperty"(self, result);
+        return self.vtable.get_IndicatorModeProperty(self, result);
     }
 };
 pub const IScrollController = extern struct {
@@ -5680,55 +5680,55 @@ pub const IScrollController = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_PanningInfo(self: *const IScrollController, result: **IScrollControllerPanningInfo) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PanningInfo"(self, result);
+        return self.vtable.get_PanningInfo(self, result);
     }
     pub fn get_CanScroll(self: *const IScrollController, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CanScroll"(self, result);
+        return self.vtable.get_CanScroll(self, result);
     }
     pub fn get_IsScrollingWithMouse(self: *const IScrollController, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsScrollingWithMouse"(self, result);
+        return self.vtable.get_IsScrollingWithMouse(self, result);
     }
     pub fn SetIsScrollable(self: *const IScrollController, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"SetIsScrollable"(self, p0);
+        return self.vtable.SetIsScrollable(self, p0);
     }
     pub fn SetValues(self: *const IScrollController, p0: f64, p1: f64, p2: f64, p3: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"SetValues"(self, p0, p1, p2, p3);
+        return self.vtable.SetValues(self, p0, p1, p2, p3);
     }
     pub fn GetScrollAnimation(self: *const IScrollController, p0: i32, p1: @"Windows.Foundation.Numerics".Vector2, p2: @"Windows.Foundation.Numerics".Vector2, p3: *@"Microsoft.UI.Composition".CompositionAnimation, result: **@"Microsoft.UI.Composition".CompositionAnimation) callconv(.winapi) HRESULT {
-        return self.vtable.@"GetScrollAnimation"(self, p0, p1, p2, p3, result);
+        return self.vtable.GetScrollAnimation(self, p0, p1, p2, p3, result);
     }
     pub fn NotifyRequestedScrollCompleted(self: *const IScrollController, p0: i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"NotifyRequestedScrollCompleted"(self, p0);
+        return self.vtable.NotifyRequestedScrollCompleted(self, p0);
     }
     pub fn add_CanScrollChanged(self: *const IScrollController, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_IScrollController__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_CanScrollChanged"(self, p0, result);
+        return self.vtable.add_CanScrollChanged(self, p0, result);
     }
     pub fn remove_CanScrollChanged(self: *const IScrollController, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_CanScrollChanged"(self, p0);
+        return self.vtable.remove_CanScrollChanged(self, p0);
     }
     pub fn add_IsScrollingWithMouseChanged(self: *const IScrollController, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_IScrollController__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_IsScrollingWithMouseChanged"(self, p0, result);
+        return self.vtable.add_IsScrollingWithMouseChanged(self, p0, result);
     }
     pub fn remove_IsScrollingWithMouseChanged(self: *const IScrollController, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_IsScrollingWithMouseChanged"(self, p0);
+        return self.vtable.remove_IsScrollingWithMouseChanged(self, p0);
     }
     pub fn add_ScrollToRequested(self: *const IScrollController, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_IScrollController__Microsoft_UI_Xaml_Controls_Primitives_ScrollControllerScrollToRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_ScrollToRequested"(self, p0, result);
+        return self.vtable.add_ScrollToRequested(self, p0, result);
     }
     pub fn remove_ScrollToRequested(self: *const IScrollController, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_ScrollToRequested"(self, p0);
+        return self.vtable.remove_ScrollToRequested(self, p0);
     }
     pub fn add_ScrollByRequested(self: *const IScrollController, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_IScrollController__Microsoft_UI_Xaml_Controls_Primitives_ScrollControllerScrollByRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_ScrollByRequested"(self, p0, result);
+        return self.vtable.add_ScrollByRequested(self, p0, result);
     }
     pub fn remove_ScrollByRequested(self: *const IScrollController, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_ScrollByRequested"(self, p0);
+        return self.vtable.remove_ScrollByRequested(self, p0);
     }
     pub fn add_AddScrollVelocityRequested(self: *const IScrollController, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_IScrollController__Microsoft_UI_Xaml_Controls_Primitives_ScrollControllerAddScrollVelocityRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_AddScrollVelocityRequested"(self, p0, result);
+        return self.vtable.add_AddScrollVelocityRequested(self, p0, result);
     }
     pub fn remove_AddScrollVelocityRequested(self: *const IScrollController, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_AddScrollVelocityRequested"(self, p0);
+        return self.vtable.remove_AddScrollVelocityRequested(self, p0);
     }
     pub fn addAddScrollVelocityRequested(
         self: *const IScrollController,
@@ -5830,16 +5830,16 @@ pub const IScrollControllerAddScrollVelocityRequestedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_OffsetVelocity(self: *const IScrollControllerAddScrollVelocityRequestedEventArgs, result: *f32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_OffsetVelocity"(self, result);
+        return self.vtable.get_OffsetVelocity(self, result);
     }
     pub fn get_InertiaDecayRate(self: *const IScrollControllerAddScrollVelocityRequestedEventArgs, result: **@"Windows.Foundation".IReference__G1__f32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_InertiaDecayRate"(self, result);
+        return self.vtable.get_InertiaDecayRate(self, result);
     }
     pub fn get_CorrelationId(self: *const IScrollControllerAddScrollVelocityRequestedEventArgs, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CorrelationId"(self, result);
+        return self.vtable.get_CorrelationId(self, result);
     }
     pub fn put_CorrelationId(self: *const IScrollControllerAddScrollVelocityRequestedEventArgs, p0: i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CorrelationId"(self, p0);
+        return self.vtable.put_CorrelationId(self, p0);
     }
 };
 pub const IScrollControllerAddScrollVelocityRequestedEventArgsFactory = extern struct {
@@ -5861,7 +5861,7 @@ pub const IScrollControllerAddScrollVelocityRequestedEventArgsFactory = extern s
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IScrollControllerAddScrollVelocityRequestedEventArgsFactory, p0: f32, p1: *@"Windows.Foundation".IReference__G1__f32, result: **ScrollControllerAddScrollVelocityRequestedEventArgs) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const IScrollControllerPanRequestedEventArgs = extern struct {
@@ -5883,13 +5883,13 @@ pub const IScrollControllerPanRequestedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_PointerPoint(self: *const IScrollControllerPanRequestedEventArgs, result: **@"Microsoft.UI.Input".PointerPoint) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PointerPoint"(self, result);
+        return self.vtable.get_PointerPoint(self, result);
     }
     pub fn get_Handled(self: *const IScrollControllerPanRequestedEventArgs, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Handled"(self, result);
+        return self.vtable.get_Handled(self, result);
     }
     pub fn put_Handled(self: *const IScrollControllerPanRequestedEventArgs, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Handled"(self, p0);
+        return self.vtable.put_Handled(self, p0);
     }
 };
 pub const IScrollControllerPanRequestedEventArgsFactory = extern struct {
@@ -5911,7 +5911,7 @@ pub const IScrollControllerPanRequestedEventArgsFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IScrollControllerPanRequestedEventArgsFactory, p0: *@"Microsoft.UI.Input".PointerPoint, result: **ScrollControllerPanRequestedEventArgs) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, result);
+        return self.vtable.CreateInstance(self, p0, result);
     }
 };
 pub const IScrollControllerPanningInfo = extern struct {
@@ -5933,16 +5933,16 @@ pub const IScrollControllerPanningInfo = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_IsRailEnabled(self: *const IScrollControllerPanningInfo, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsRailEnabled"(self, result);
+        return self.vtable.get_IsRailEnabled(self, result);
     }
     pub fn get_PanOrientation(self: *const IScrollControllerPanningInfo, result: *@"Microsoft.UI.Xaml.Controls".Orientation) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PanOrientation"(self, result);
+        return self.vtable.get_PanOrientation(self, result);
     }
     pub fn get_PanningElementAncestor(self: *const IScrollControllerPanningInfo, result: **@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_PanningElementAncestor"(self, result);
+        return self.vtable.get_PanningElementAncestor(self, result);
     }
     pub fn SetPanningElementExpressionAnimationSources(self: *const IScrollControllerPanningInfo, p0: *@"Microsoft.UI.Composition".CompositionPropertySet, p1: HSTRING, p2: HSTRING, p3: HSTRING, p4: HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.@"SetPanningElementExpressionAnimationSources"(self, p0, p1, p2, p3, p4);
+        return self.vtable.SetPanningElementExpressionAnimationSources(self, p0, p1, p2, p3, p4);
     }
     pub fn SetPanningElementExpressionAnimationSourcesFromUtf16(self: *const IScrollControllerPanningInfo, p0: *@"Microsoft.UI.Composition".CompositionPropertySet, p1: []const u16, p2: []const u16, p3: []const u16, p4: []const u16) HRESULT {
         var h1 = win_core.Hstring.create(p1) catch return win_core.hresult.E_OUTOFMEMORY;
@@ -5953,19 +5953,19 @@ pub const IScrollControllerPanningInfo = extern struct {
         defer h3.deinit();
         var h4 = win_core.Hstring.create(p4) catch return win_core.hresult.E_OUTOFMEMORY;
         defer h4.deinit();
-        return self.vtable.@"SetPanningElementExpressionAnimationSources"(self, p0, h1.raw, h2.raw, h3.raw, h4.raw);
+        return self.vtable.SetPanningElementExpressionAnimationSources(self, p0, h1.raw, h2.raw, h3.raw, h4.raw);
     }
     pub fn add_Changed(self: *const IScrollControllerPanningInfo, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_IScrollControllerPanningInfo__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_Changed"(self, p0, result);
+        return self.vtable.add_Changed(self, p0, result);
     }
     pub fn remove_Changed(self: *const IScrollControllerPanningInfo, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_Changed"(self, p0);
+        return self.vtable.remove_Changed(self, p0);
     }
     pub fn add_PanRequested(self: *const IScrollControllerPanningInfo, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_IScrollControllerPanningInfo__Microsoft_UI_Xaml_Controls_Primitives_ScrollControllerPanRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_PanRequested"(self, p0, result);
+        return self.vtable.add_PanRequested(self, p0, result);
     }
     pub fn remove_PanRequested(self: *const IScrollControllerPanningInfo, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_PanRequested"(self, p0);
+        return self.vtable.remove_PanRequested(self, p0);
     }
     pub fn addChanged(
         self: *const IScrollControllerPanningInfo,
@@ -6019,16 +6019,16 @@ pub const IScrollControllerScrollByRequestedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_OffsetDelta(self: *const IScrollControllerScrollByRequestedEventArgs, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_OffsetDelta"(self, result);
+        return self.vtable.get_OffsetDelta(self, result);
     }
     pub fn get_Options(self: *const IScrollControllerScrollByRequestedEventArgs, result: **@"Microsoft.UI.Xaml.Controls".ScrollingScrollOptions) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Options"(self, result);
+        return self.vtable.get_Options(self, result);
     }
     pub fn get_CorrelationId(self: *const IScrollControllerScrollByRequestedEventArgs, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CorrelationId"(self, result);
+        return self.vtable.get_CorrelationId(self, result);
     }
     pub fn put_CorrelationId(self: *const IScrollControllerScrollByRequestedEventArgs, p0: i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CorrelationId"(self, p0);
+        return self.vtable.put_CorrelationId(self, p0);
     }
 };
 pub const IScrollControllerScrollByRequestedEventArgsFactory = extern struct {
@@ -6050,7 +6050,7 @@ pub const IScrollControllerScrollByRequestedEventArgsFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IScrollControllerScrollByRequestedEventArgsFactory, p0: f64, p1: *@"Microsoft.UI.Xaml.Controls".ScrollingScrollOptions, result: **ScrollControllerScrollByRequestedEventArgs) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const IScrollControllerScrollToRequestedEventArgs = extern struct {
@@ -6072,16 +6072,16 @@ pub const IScrollControllerScrollToRequestedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Offset(self: *const IScrollControllerScrollToRequestedEventArgs, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Offset"(self, result);
+        return self.vtable.get_Offset(self, result);
     }
     pub fn get_Options(self: *const IScrollControllerScrollToRequestedEventArgs, result: **@"Microsoft.UI.Xaml.Controls".ScrollingScrollOptions) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Options"(self, result);
+        return self.vtable.get_Options(self, result);
     }
     pub fn get_CorrelationId(self: *const IScrollControllerScrollToRequestedEventArgs, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CorrelationId"(self, result);
+        return self.vtable.get_CorrelationId(self, result);
     }
     pub fn put_CorrelationId(self: *const IScrollControllerScrollToRequestedEventArgs, p0: i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_CorrelationId"(self, p0);
+        return self.vtable.put_CorrelationId(self, p0);
     }
 };
 pub const IScrollControllerScrollToRequestedEventArgsFactory = extern struct {
@@ -6103,7 +6103,7 @@ pub const IScrollControllerScrollToRequestedEventArgsFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IScrollControllerScrollToRequestedEventArgsFactory, p0: f64, p1: *@"Microsoft.UI.Xaml.Controls".ScrollingScrollOptions, result: **ScrollControllerScrollToRequestedEventArgs) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const IScrollEventArgs = extern struct {
@@ -6125,10 +6125,10 @@ pub const IScrollEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_NewValue(self: *const IScrollEventArgs, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_NewValue"(self, result);
+        return self.vtable.get_NewValue(self, result);
     }
     pub fn get_ScrollEventType(self: *const IScrollEventArgs, result: *ScrollEventType) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ScrollEventType"(self, result);
+        return self.vtable.get_ScrollEventType(self, result);
     }
 };
 pub const IScrollPresenter = extern struct {
@@ -6150,244 +6150,244 @@ pub const IScrollPresenter = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Background(self: *const IScrollPresenter, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Background"(self, result);
+        return self.vtable.get_Background(self, result);
     }
     pub fn put_Background(self: *const IScrollPresenter, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Background"(self, p0);
+        return self.vtable.put_Background(self, p0);
     }
     pub fn get_Content(self: *const IScrollPresenter, result: **@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Content"(self, result);
+        return self.vtable.get_Content(self, result);
     }
     pub fn put_Content(self: *const IScrollPresenter, p0: *@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Content"(self, p0);
+        return self.vtable.put_Content(self, p0);
     }
     pub fn get_ExpressionAnimationSources(self: *const IScrollPresenter, result: **@"Microsoft.UI.Composition".CompositionPropertySet) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ExpressionAnimationSources"(self, result);
+        return self.vtable.get_ExpressionAnimationSources(self, result);
     }
     pub fn get_HorizontalOffset(self: *const IScrollPresenter, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HorizontalOffset"(self, result);
+        return self.vtable.get_HorizontalOffset(self, result);
     }
     pub fn get_VerticalOffset(self: *const IScrollPresenter, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_VerticalOffset"(self, result);
+        return self.vtable.get_VerticalOffset(self, result);
     }
     pub fn get_ZoomFactor(self: *const IScrollPresenter, result: *f32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ZoomFactor"(self, result);
+        return self.vtable.get_ZoomFactor(self, result);
     }
     pub fn get_ExtentWidth(self: *const IScrollPresenter, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ExtentWidth"(self, result);
+        return self.vtable.get_ExtentWidth(self, result);
     }
     pub fn get_ExtentHeight(self: *const IScrollPresenter, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ExtentHeight"(self, result);
+        return self.vtable.get_ExtentHeight(self, result);
     }
     pub fn get_ViewportWidth(self: *const IScrollPresenter, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ViewportWidth"(self, result);
+        return self.vtable.get_ViewportWidth(self, result);
     }
     pub fn get_ViewportHeight(self: *const IScrollPresenter, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ViewportHeight"(self, result);
+        return self.vtable.get_ViewportHeight(self, result);
     }
     pub fn get_ScrollableWidth(self: *const IScrollPresenter, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ScrollableWidth"(self, result);
+        return self.vtable.get_ScrollableWidth(self, result);
     }
     pub fn get_ScrollableHeight(self: *const IScrollPresenter, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ScrollableHeight"(self, result);
+        return self.vtable.get_ScrollableHeight(self, result);
     }
     pub fn get_ContentOrientation(self: *const IScrollPresenter, result: *@"Microsoft.UI.Xaml.Controls".ScrollingContentOrientation) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ContentOrientation"(self, result);
+        return self.vtable.get_ContentOrientation(self, result);
     }
     pub fn put_ContentOrientation(self: *const IScrollPresenter, p0: @"Microsoft.UI.Xaml.Controls".ScrollingContentOrientation) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ContentOrientation"(self, p0);
+        return self.vtable.put_ContentOrientation(self, p0);
     }
     pub fn get_HorizontalScrollChainMode(self: *const IScrollPresenter, result: *@"Microsoft.UI.Xaml.Controls".ScrollingChainMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HorizontalScrollChainMode"(self, result);
+        return self.vtable.get_HorizontalScrollChainMode(self, result);
     }
     pub fn put_HorizontalScrollChainMode(self: *const IScrollPresenter, p0: @"Microsoft.UI.Xaml.Controls".ScrollingChainMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_HorizontalScrollChainMode"(self, p0);
+        return self.vtable.put_HorizontalScrollChainMode(self, p0);
     }
     pub fn get_VerticalScrollChainMode(self: *const IScrollPresenter, result: *@"Microsoft.UI.Xaml.Controls".ScrollingChainMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_VerticalScrollChainMode"(self, result);
+        return self.vtable.get_VerticalScrollChainMode(self, result);
     }
     pub fn put_VerticalScrollChainMode(self: *const IScrollPresenter, p0: @"Microsoft.UI.Xaml.Controls".ScrollingChainMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_VerticalScrollChainMode"(self, p0);
+        return self.vtable.put_VerticalScrollChainMode(self, p0);
     }
     pub fn get_HorizontalScrollRailMode(self: *const IScrollPresenter, result: *@"Microsoft.UI.Xaml.Controls".ScrollingRailMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HorizontalScrollRailMode"(self, result);
+        return self.vtable.get_HorizontalScrollRailMode(self, result);
     }
     pub fn put_HorizontalScrollRailMode(self: *const IScrollPresenter, p0: @"Microsoft.UI.Xaml.Controls".ScrollingRailMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_HorizontalScrollRailMode"(self, p0);
+        return self.vtable.put_HorizontalScrollRailMode(self, p0);
     }
     pub fn get_VerticalScrollRailMode(self: *const IScrollPresenter, result: *@"Microsoft.UI.Xaml.Controls".ScrollingRailMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_VerticalScrollRailMode"(self, result);
+        return self.vtable.get_VerticalScrollRailMode(self, result);
     }
     pub fn put_VerticalScrollRailMode(self: *const IScrollPresenter, p0: @"Microsoft.UI.Xaml.Controls".ScrollingRailMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_VerticalScrollRailMode"(self, p0);
+        return self.vtable.put_VerticalScrollRailMode(self, p0);
     }
     pub fn get_HorizontalScrollMode(self: *const IScrollPresenter, result: *@"Microsoft.UI.Xaml.Controls".ScrollingScrollMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HorizontalScrollMode"(self, result);
+        return self.vtable.get_HorizontalScrollMode(self, result);
     }
     pub fn put_HorizontalScrollMode(self: *const IScrollPresenter, p0: @"Microsoft.UI.Xaml.Controls".ScrollingScrollMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_HorizontalScrollMode"(self, p0);
+        return self.vtable.put_HorizontalScrollMode(self, p0);
     }
     pub fn get_VerticalScrollMode(self: *const IScrollPresenter, result: *@"Microsoft.UI.Xaml.Controls".ScrollingScrollMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_VerticalScrollMode"(self, result);
+        return self.vtable.get_VerticalScrollMode(self, result);
     }
     pub fn put_VerticalScrollMode(self: *const IScrollPresenter, p0: @"Microsoft.UI.Xaml.Controls".ScrollingScrollMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_VerticalScrollMode"(self, p0);
+        return self.vtable.put_VerticalScrollMode(self, p0);
     }
     pub fn get_ComputedHorizontalScrollMode(self: *const IScrollPresenter, result: *@"Microsoft.UI.Xaml.Controls".ScrollingScrollMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ComputedHorizontalScrollMode"(self, result);
+        return self.vtable.get_ComputedHorizontalScrollMode(self, result);
     }
     pub fn get_ComputedVerticalScrollMode(self: *const IScrollPresenter, result: *@"Microsoft.UI.Xaml.Controls".ScrollingScrollMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ComputedVerticalScrollMode"(self, result);
+        return self.vtable.get_ComputedVerticalScrollMode(self, result);
     }
     pub fn get_ZoomChainMode(self: *const IScrollPresenter, result: *@"Microsoft.UI.Xaml.Controls".ScrollingChainMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ZoomChainMode"(self, result);
+        return self.vtable.get_ZoomChainMode(self, result);
     }
     pub fn put_ZoomChainMode(self: *const IScrollPresenter, p0: @"Microsoft.UI.Xaml.Controls".ScrollingChainMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ZoomChainMode"(self, p0);
+        return self.vtable.put_ZoomChainMode(self, p0);
     }
     pub fn get_ZoomMode(self: *const IScrollPresenter, result: *@"Microsoft.UI.Xaml.Controls".ScrollingZoomMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ZoomMode"(self, result);
+        return self.vtable.get_ZoomMode(self, result);
     }
     pub fn put_ZoomMode(self: *const IScrollPresenter, p0: @"Microsoft.UI.Xaml.Controls".ScrollingZoomMode) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_ZoomMode"(self, p0);
+        return self.vtable.put_ZoomMode(self, p0);
     }
     pub fn get_IgnoredInputKinds(self: *const IScrollPresenter, result: *@"Microsoft.UI.Xaml.Controls".ScrollingInputKinds) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IgnoredInputKinds"(self, result);
+        return self.vtable.get_IgnoredInputKinds(self, result);
     }
     pub fn put_IgnoredInputKinds(self: *const IScrollPresenter, p0: @"Microsoft.UI.Xaml.Controls".ScrollingInputKinds) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_IgnoredInputKinds"(self, p0);
+        return self.vtable.put_IgnoredInputKinds(self, p0);
     }
     pub fn get_MinZoomFactor(self: *const IScrollPresenter, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MinZoomFactor"(self, result);
+        return self.vtable.get_MinZoomFactor(self, result);
     }
     pub fn put_MinZoomFactor(self: *const IScrollPresenter, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_MinZoomFactor"(self, p0);
+        return self.vtable.put_MinZoomFactor(self, p0);
     }
     pub fn get_MaxZoomFactor(self: *const IScrollPresenter, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MaxZoomFactor"(self, result);
+        return self.vtable.get_MaxZoomFactor(self, result);
     }
     pub fn put_MaxZoomFactor(self: *const IScrollPresenter, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_MaxZoomFactor"(self, p0);
+        return self.vtable.put_MaxZoomFactor(self, p0);
     }
     pub fn get_State(self: *const IScrollPresenter, result: *@"Microsoft.UI.Xaml.Controls".ScrollingInteractionState) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_State"(self, result);
+        return self.vtable.get_State(self, result);
     }
     pub fn get_HorizontalScrollController(self: *const IScrollPresenter, result: **IScrollController) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HorizontalScrollController"(self, result);
+        return self.vtable.get_HorizontalScrollController(self, result);
     }
     pub fn put_HorizontalScrollController(self: *const IScrollPresenter, p0: *IScrollController) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_HorizontalScrollController"(self, p0);
+        return self.vtable.put_HorizontalScrollController(self, p0);
     }
     pub fn get_VerticalScrollController(self: *const IScrollPresenter, result: **IScrollController) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_VerticalScrollController"(self, result);
+        return self.vtable.get_VerticalScrollController(self, result);
     }
     pub fn put_VerticalScrollController(self: *const IScrollPresenter, p0: *IScrollController) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_VerticalScrollController"(self, p0);
+        return self.vtable.put_VerticalScrollController(self, p0);
     }
     pub fn get_HorizontalAnchorRatio(self: *const IScrollPresenter, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HorizontalAnchorRatio"(self, result);
+        return self.vtable.get_HorizontalAnchorRatio(self, result);
     }
     pub fn put_HorizontalAnchorRatio(self: *const IScrollPresenter, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_HorizontalAnchorRatio"(self, p0);
+        return self.vtable.put_HorizontalAnchorRatio(self, p0);
     }
     pub fn get_VerticalAnchorRatio(self: *const IScrollPresenter, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_VerticalAnchorRatio"(self, result);
+        return self.vtable.get_VerticalAnchorRatio(self, result);
     }
     pub fn put_VerticalAnchorRatio(self: *const IScrollPresenter, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_VerticalAnchorRatio"(self, p0);
+        return self.vtable.put_VerticalAnchorRatio(self, p0);
     }
     pub fn get_HorizontalSnapPoints(self: *const IScrollPresenter, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_Primitives_ScrollSnapPointBase) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HorizontalSnapPoints"(self, result);
+        return self.vtable.get_HorizontalSnapPoints(self, result);
     }
     pub fn get_VerticalSnapPoints(self: *const IScrollPresenter, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_Primitives_ScrollSnapPointBase) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_VerticalSnapPoints"(self, result);
+        return self.vtable.get_VerticalSnapPoints(self, result);
     }
     pub fn get_ZoomSnapPoints(self: *const IScrollPresenter, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_Primitives_ZoomSnapPointBase) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ZoomSnapPoints"(self, result);
+        return self.vtable.get_ZoomSnapPoints(self, result);
     }
     pub fn ScrollTo(self: *const IScrollPresenter, p0: f64, p1: f64, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"ScrollTo"(self, p0, p1, result);
+        return self.vtable.ScrollTo(self, p0, p1, result);
     }
     pub fn ScrollTo_2(self: *const IScrollPresenter, p0: f64, p1: f64, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingScrollOptions, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"ScrollTo_2"(self, p0, p1, p2, result);
+        return self.vtable.ScrollTo_2(self, p0, p1, p2, result);
     }
     pub fn ScrollBy(self: *const IScrollPresenter, p0: f64, p1: f64, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"ScrollBy"(self, p0, p1, result);
+        return self.vtable.ScrollBy(self, p0, p1, result);
     }
     pub fn ScrollBy_2(self: *const IScrollPresenter, p0: f64, p1: f64, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingScrollOptions, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"ScrollBy_2"(self, p0, p1, p2, result);
+        return self.vtable.ScrollBy_2(self, p0, p1, p2, result);
     }
     pub fn AddScrollVelocity(self: *const IScrollPresenter, p0: @"Windows.Foundation.Numerics".Vector2, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"AddScrollVelocity"(self, p0, p1, result);
+        return self.vtable.AddScrollVelocity(self, p0, p1, result);
     }
     pub fn ZoomTo(self: *const IScrollPresenter, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"ZoomTo"(self, p0, p1, result);
+        return self.vtable.ZoomTo(self, p0, p1, result);
     }
     pub fn ZoomTo_2(self: *const IScrollPresenter, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingZoomOptions, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"ZoomTo_2"(self, p0, p1, p2, result);
+        return self.vtable.ZoomTo_2(self, p0, p1, p2, result);
     }
     pub fn ZoomBy(self: *const IScrollPresenter, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"ZoomBy"(self, p0, p1, result);
+        return self.vtable.ZoomBy(self, p0, p1, result);
     }
     pub fn ZoomBy_2(self: *const IScrollPresenter, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingZoomOptions, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"ZoomBy_2"(self, p0, p1, p2, result);
+        return self.vtable.ZoomBy_2(self, p0, p1, p2, result);
     }
     pub fn AddZoomVelocity(self: *const IScrollPresenter, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, p2: *@"Windows.Foundation".IReference__G1__f32, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"AddZoomVelocity"(self, p0, p1, p2, result);
+        return self.vtable.AddZoomVelocity(self, p0, p1, p2, result);
     }
     pub fn add_ExtentChanged(self: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_ExtentChanged"(self, p0, result);
+        return self.vtable.add_ExtentChanged(self, p0, result);
     }
     pub fn remove_ExtentChanged(self: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_ExtentChanged"(self, p0);
+        return self.vtable.remove_ExtentChanged(self, p0);
     }
     pub fn add_StateChanged(self: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_StateChanged"(self, p0, result);
+        return self.vtable.add_StateChanged(self, p0, result);
     }
     pub fn remove_StateChanged(self: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_StateChanged"(self, p0);
+        return self.vtable.remove_StateChanged(self, p0);
     }
     pub fn add_ViewChanged(self: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_ViewChanged"(self, p0, result);
+        return self.vtable.add_ViewChanged(self, p0, result);
     }
     pub fn remove_ViewChanged(self: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_ViewChanged"(self, p0);
+        return self.vtable.remove_ViewChanged(self, p0);
     }
     pub fn add_ScrollAnimationStarting(self: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__Microsoft_UI_Xaml_Controls_ScrollingScrollAnimationStartingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_ScrollAnimationStarting"(self, p0, result);
+        return self.vtable.add_ScrollAnimationStarting(self, p0, result);
     }
     pub fn remove_ScrollAnimationStarting(self: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_ScrollAnimationStarting"(self, p0);
+        return self.vtable.remove_ScrollAnimationStarting(self, p0);
     }
     pub fn add_ZoomAnimationStarting(self: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__Microsoft_UI_Xaml_Controls_ScrollingZoomAnimationStartingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_ZoomAnimationStarting"(self, p0, result);
+        return self.vtable.add_ZoomAnimationStarting(self, p0, result);
     }
     pub fn remove_ZoomAnimationStarting(self: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_ZoomAnimationStarting"(self, p0);
+        return self.vtable.remove_ZoomAnimationStarting(self, p0);
     }
     pub fn add_ScrollCompleted(self: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__Microsoft_UI_Xaml_Controls_ScrollingScrollCompletedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_ScrollCompleted"(self, p0, result);
+        return self.vtable.add_ScrollCompleted(self, p0, result);
     }
     pub fn remove_ScrollCompleted(self: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_ScrollCompleted"(self, p0);
+        return self.vtable.remove_ScrollCompleted(self, p0);
     }
     pub fn add_ZoomCompleted(self: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__Microsoft_UI_Xaml_Controls_ScrollingZoomCompletedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_ZoomCompleted"(self, p0, result);
+        return self.vtable.add_ZoomCompleted(self, p0, result);
     }
     pub fn remove_ZoomCompleted(self: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_ZoomCompleted"(self, p0);
+        return self.vtable.remove_ZoomCompleted(self, p0);
     }
     pub fn add_BringingIntoView(self: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__Microsoft_UI_Xaml_Controls_ScrollingBringingIntoViewEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_BringingIntoView"(self, p0, result);
+        return self.vtable.add_BringingIntoView(self, p0, result);
     }
     pub fn remove_BringingIntoView(self: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_BringingIntoView"(self, p0);
+        return self.vtable.remove_BringingIntoView(self, p0);
     }
     pub fn add_AnchorRequested(self: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__Microsoft_UI_Xaml_Controls_ScrollingAnchorRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_AnchorRequested"(self, p0, result);
+        return self.vtable.add_AnchorRequested(self, p0, result);
     }
     pub fn remove_AnchorRequested(self: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_AnchorRequested"(self, p0);
+        return self.vtable.remove_AnchorRequested(self, p0);
     }
     pub fn addZoomAnimationStarting(
         self: *const IScrollPresenter,
@@ -6553,7 +6553,7 @@ pub const IScrollPresenterFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IScrollPresenterFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **ScrollPresenter) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const IScrollPresenterStatics = extern struct {
@@ -6575,58 +6575,58 @@ pub const IScrollPresenterStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_BackgroundProperty(self: *const IScrollPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_BackgroundProperty"(self, result);
+        return self.vtable.get_BackgroundProperty(self, result);
     }
     pub fn get_ContentProperty(self: *const IScrollPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ContentProperty"(self, result);
+        return self.vtable.get_ContentProperty(self, result);
     }
     pub fn get_ContentOrientationProperty(self: *const IScrollPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ContentOrientationProperty"(self, result);
+        return self.vtable.get_ContentOrientationProperty(self, result);
     }
     pub fn get_HorizontalScrollChainModeProperty(self: *const IScrollPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HorizontalScrollChainModeProperty"(self, result);
+        return self.vtable.get_HorizontalScrollChainModeProperty(self, result);
     }
     pub fn get_VerticalScrollChainModeProperty(self: *const IScrollPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_VerticalScrollChainModeProperty"(self, result);
+        return self.vtable.get_VerticalScrollChainModeProperty(self, result);
     }
     pub fn get_HorizontalScrollRailModeProperty(self: *const IScrollPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HorizontalScrollRailModeProperty"(self, result);
+        return self.vtable.get_HorizontalScrollRailModeProperty(self, result);
     }
     pub fn get_VerticalScrollRailModeProperty(self: *const IScrollPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_VerticalScrollRailModeProperty"(self, result);
+        return self.vtable.get_VerticalScrollRailModeProperty(self, result);
     }
     pub fn get_HorizontalScrollModeProperty(self: *const IScrollPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HorizontalScrollModeProperty"(self, result);
+        return self.vtable.get_HorizontalScrollModeProperty(self, result);
     }
     pub fn get_VerticalScrollModeProperty(self: *const IScrollPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_VerticalScrollModeProperty"(self, result);
+        return self.vtable.get_VerticalScrollModeProperty(self, result);
     }
     pub fn get_ComputedHorizontalScrollModeProperty(self: *const IScrollPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ComputedHorizontalScrollModeProperty"(self, result);
+        return self.vtable.get_ComputedHorizontalScrollModeProperty(self, result);
     }
     pub fn get_ComputedVerticalScrollModeProperty(self: *const IScrollPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ComputedVerticalScrollModeProperty"(self, result);
+        return self.vtable.get_ComputedVerticalScrollModeProperty(self, result);
     }
     pub fn get_ZoomChainModeProperty(self: *const IScrollPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ZoomChainModeProperty"(self, result);
+        return self.vtable.get_ZoomChainModeProperty(self, result);
     }
     pub fn get_ZoomModeProperty(self: *const IScrollPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_ZoomModeProperty"(self, result);
+        return self.vtable.get_ZoomModeProperty(self, result);
     }
     pub fn get_IgnoredInputKindsProperty(self: *const IScrollPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IgnoredInputKindsProperty"(self, result);
+        return self.vtable.get_IgnoredInputKindsProperty(self, result);
     }
     pub fn get_MinZoomFactorProperty(self: *const IScrollPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MinZoomFactorProperty"(self, result);
+        return self.vtable.get_MinZoomFactorProperty(self, result);
     }
     pub fn get_MaxZoomFactorProperty(self: *const IScrollPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_MaxZoomFactorProperty"(self, result);
+        return self.vtable.get_MaxZoomFactorProperty(self, result);
     }
     pub fn get_HorizontalAnchorRatioProperty(self: *const IScrollPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_HorizontalAnchorRatioProperty"(self, result);
+        return self.vtable.get_HorizontalAnchorRatioProperty(self, result);
     }
     pub fn get_VerticalAnchorRatioProperty(self: *const IScrollPresenterStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_VerticalAnchorRatioProperty"(self, result);
+        return self.vtable.get_VerticalAnchorRatioProperty(self, result);
     }
 };
 pub const IScrollSnapPoint = extern struct {
@@ -6648,7 +6648,7 @@ pub const IScrollSnapPoint = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Value(self: *const IScrollSnapPoint, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Value"(self, result);
+        return self.vtable.get_Value(self, result);
     }
 };
 pub const IScrollSnapPointBase = extern struct {
@@ -6670,7 +6670,7 @@ pub const IScrollSnapPointBase = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Alignment(self: *const IScrollSnapPointBase, result: *ScrollSnapPointsAlignment) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Alignment"(self, result);
+        return self.vtable.get_Alignment(self, result);
     }
 };
 pub const IScrollSnapPointBaseFactory = extern struct {
@@ -6711,7 +6711,7 @@ pub const IScrollSnapPointFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IScrollSnapPointFactory, p0: f64, p1: ScrollSnapPointsAlignment, p2: ?*const anyopaque, p3: *?*const anyopaque, result: **ScrollSnapPoint) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, p2, p3, result);
+        return self.vtable.CreateInstance(self, p0, p1, p2, p3, result);
     }
 };
 pub const IScrollSnapPointsInfo = extern struct {
@@ -6733,28 +6733,28 @@ pub const IScrollSnapPointsInfo = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_AreHorizontalSnapPointsRegular(self: *const IScrollSnapPointsInfo, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_AreHorizontalSnapPointsRegular"(self, result);
+        return self.vtable.get_AreHorizontalSnapPointsRegular(self, result);
     }
     pub fn get_AreVerticalSnapPointsRegular(self: *const IScrollSnapPointsInfo, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_AreVerticalSnapPointsRegular"(self, result);
+        return self.vtable.get_AreVerticalSnapPointsRegular(self, result);
     }
     pub fn add_HorizontalSnapPointsChanged(self: *const IScrollSnapPointsInfo, p0: *@"Windows.Foundation".EventHandler__G1__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_HorizontalSnapPointsChanged"(self, p0, result);
+        return self.vtable.add_HorizontalSnapPointsChanged(self, p0, result);
     }
     pub fn remove_HorizontalSnapPointsChanged(self: *const IScrollSnapPointsInfo, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_HorizontalSnapPointsChanged"(self, p0);
+        return self.vtable.remove_HorizontalSnapPointsChanged(self, p0);
     }
     pub fn add_VerticalSnapPointsChanged(self: *const IScrollSnapPointsInfo, p0: *@"Windows.Foundation".EventHandler__G1__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_VerticalSnapPointsChanged"(self, p0, result);
+        return self.vtable.add_VerticalSnapPointsChanged(self, p0, result);
     }
     pub fn remove_VerticalSnapPointsChanged(self: *const IScrollSnapPointsInfo, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_VerticalSnapPointsChanged"(self, p0);
+        return self.vtable.remove_VerticalSnapPointsChanged(self, p0);
     }
     pub fn GetIrregularSnapPoints(self: *const IScrollSnapPointsInfo, p0: @"Microsoft.UI.Xaml.Controls".Orientation, p1: SnapPointsAlignment, result: **@"Windows.Foundation.Collections".IVectorView__G1__f32) callconv(.winapi) HRESULT {
-        return self.vtable.@"GetIrregularSnapPoints"(self, p0, p1, result);
+        return self.vtable.GetIrregularSnapPoints(self, p0, p1, result);
     }
     pub fn GetRegularSnapPoints(self: *const IScrollSnapPointsInfo, p0: @"Microsoft.UI.Xaml.Controls".Orientation, p1: SnapPointsAlignment, p2: *f32, result: *f32) callconv(.winapi) HRESULT {
-        return self.vtable.@"GetRegularSnapPoints"(self, p0, p1, p2, result);
+        return self.vtable.GetRegularSnapPoints(self, p0, p1, p2, result);
     }
     pub fn addVerticalSnapPointsChanged(
         self: *const IScrollSnapPointsInfo,
@@ -6808,50 +6808,50 @@ pub const ISelector = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_SelectedIndex(self: *const ISelector, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedIndex"(self, result);
+        return self.vtable.get_SelectedIndex(self, result);
     }
     pub fn put_SelectedIndex(self: *const ISelector, p0: i32) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectedIndex"(self, p0);
+        return self.vtable.put_SelectedIndex(self, p0);
     }
     pub fn get_SelectedItem(self: *const ISelector, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedItem"(self, result);
+        return self.vtable.get_SelectedItem(self, result);
     }
     pub fn put_SelectedItem(self: *const ISelector, p0: ?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectedItem"(self, p0);
+        return self.vtable.put_SelectedItem(self, p0);
     }
     pub fn get_SelectedValue(self: *const ISelector, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedValue"(self, result);
+        return self.vtable.get_SelectedValue(self, result);
     }
     pub fn put_SelectedValue(self: *const ISelector, p0: ?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectedValue"(self, p0);
+        return self.vtable.put_SelectedValue(self, p0);
     }
     pub fn get_SelectedValuePath(self: *const ISelector, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedValuePath"(self, result);
+        return self.vtable.get_SelectedValuePath(self, result);
     }
     pub fn get_SelectedValuePathOwned(self: *const ISelector) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.@"get_SelectedValuePath"(self, &r));
+        try win_core.hresult.ok(self.vtable.get_SelectedValuePath(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
     pub fn put_SelectedValuePath(self: *const ISelector, p0: HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_SelectedValuePath"(self, p0);
+        return self.vtable.put_SelectedValuePath(self, p0);
     }
     pub fn put_SelectedValuePathFromUtf16(self: *const ISelector, p0: []const u16) HRESULT {
         var h0 = win_core.Hstring.create(p0) catch return win_core.hresult.E_OUTOFMEMORY;
         defer h0.deinit();
-        return self.vtable.@"put_SelectedValuePath"(self, h0.raw);
+        return self.vtable.put_SelectedValuePath(self, h0.raw);
     }
     pub fn get_IsSynchronizedWithCurrentItem(self: *const ISelector, result: **@"Windows.Foundation".IReference__G1__BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsSynchronizedWithCurrentItem"(self, result);
+        return self.vtable.get_IsSynchronizedWithCurrentItem(self, result);
     }
     pub fn put_IsSynchronizedWithCurrentItem(self: *const ISelector, p0: *@"Windows.Foundation".IReference__G1__BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_IsSynchronizedWithCurrentItem"(self, p0);
+        return self.vtable.put_IsSynchronizedWithCurrentItem(self, p0);
     }
     pub fn add_SelectionChanged(self: *const ISelector, p0: *@"Microsoft.UI.Xaml.Controls".SelectionChangedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_SelectionChanged"(self, p0, result);
+        return self.vtable.add_SelectionChanged(self, p0, result);
     }
     pub fn remove_SelectionChanged(self: *const ISelector, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_SelectionChanged"(self, p0);
+        return self.vtable.remove_SelectionChanged(self, p0);
     }
 };
 pub const ISelectorFactory = extern struct {
@@ -6892,10 +6892,10 @@ pub const ISelectorItem = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_IsSelected(self: *const ISelectorItem, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsSelected"(self, result);
+        return self.vtable.get_IsSelected(self, result);
     }
     pub fn put_IsSelected(self: *const ISelectorItem, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_IsSelected"(self, p0);
+        return self.vtable.put_IsSelected(self, p0);
     }
 };
 pub const ISelectorItemFactory = extern struct {
@@ -6917,7 +6917,7 @@ pub const ISelectorItemFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const ISelectorItemFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **SelectorItem) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const ISelectorItemStatics = extern struct {
@@ -6939,7 +6939,7 @@ pub const ISelectorItemStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_IsSelectedProperty(self: *const ISelectorItemStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsSelectedProperty"(self, result);
+        return self.vtable.get_IsSelectedProperty(self, result);
     }
 };
 pub const ISelectorStatics = extern struct {
@@ -6961,22 +6961,22 @@ pub const ISelectorStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_SelectedIndexProperty(self: *const ISelectorStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedIndexProperty"(self, result);
+        return self.vtable.get_SelectedIndexProperty(self, result);
     }
     pub fn get_SelectedItemProperty(self: *const ISelectorStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedItemProperty"(self, result);
+        return self.vtable.get_SelectedItemProperty(self, result);
     }
     pub fn get_SelectedValueProperty(self: *const ISelectorStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedValueProperty"(self, result);
+        return self.vtable.get_SelectedValueProperty(self, result);
     }
     pub fn get_SelectedValuePathProperty(self: *const ISelectorStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_SelectedValuePathProperty"(self, result);
+        return self.vtable.get_SelectedValuePathProperty(self, result);
     }
     pub fn get_IsSynchronizedWithCurrentItemProperty(self: *const ISelectorStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsSynchronizedWithCurrentItemProperty"(self, result);
+        return self.vtable.get_IsSynchronizedWithCurrentItemProperty(self, result);
     }
     pub fn GetIsSelectionActive(self: *const ISelectorStatics, p0: *@"Microsoft.UI.Xaml".DependencyObject, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"GetIsSelectionActive"(self, p0, result);
+        return self.vtable.GetIsSelectionActive(self, p0, result);
     }
 };
 pub const ISnapPointBase = extern struct {
@@ -7036,22 +7036,22 @@ pub const ISplitViewTemplateSettings = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_OpenPaneLength(self: *const ISplitViewTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_OpenPaneLength"(self, result);
+        return self.vtable.get_OpenPaneLength(self, result);
     }
     pub fn get_NegativeOpenPaneLength(self: *const ISplitViewTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_NegativeOpenPaneLength"(self, result);
+        return self.vtable.get_NegativeOpenPaneLength(self, result);
     }
     pub fn get_OpenPaneLengthMinusCompactLength(self: *const ISplitViewTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_OpenPaneLengthMinusCompactLength"(self, result);
+        return self.vtable.get_OpenPaneLengthMinusCompactLength(self, result);
     }
     pub fn get_NegativeOpenPaneLengthMinusCompactLength(self: *const ISplitViewTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_NegativeOpenPaneLengthMinusCompactLength"(self, result);
+        return self.vtable.get_NegativeOpenPaneLengthMinusCompactLength(self, result);
     }
     pub fn get_OpenPaneGridLength(self: *const ISplitViewTemplateSettings, result: *@"Microsoft.UI.Xaml".GridLength) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_OpenPaneGridLength"(self, result);
+        return self.vtable.get_OpenPaneGridLength(self, result);
     }
     pub fn get_CompactPaneGridLength(self: *const ISplitViewTemplateSettings, result: *@"Microsoft.UI.Xaml".GridLength) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CompactPaneGridLength"(self, result);
+        return self.vtable.get_CompactPaneGridLength(self, result);
     }
 };
 pub const ITabViewListView = extern struct {
@@ -7092,7 +7092,7 @@ pub const ITabViewListViewFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const ITabViewListViewFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **TabViewListView) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const IThumb = extern struct {
@@ -7114,28 +7114,28 @@ pub const IThumb = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_IsDragging(self: *const IThumb, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsDragging"(self, result);
+        return self.vtable.get_IsDragging(self, result);
     }
     pub fn add_DragStarted(self: *const IThumb, p0: *DragStartedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_DragStarted"(self, p0, result);
+        return self.vtable.add_DragStarted(self, p0, result);
     }
     pub fn remove_DragStarted(self: *const IThumb, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_DragStarted"(self, p0);
+        return self.vtable.remove_DragStarted(self, p0);
     }
     pub fn add_DragDelta(self: *const IThumb, p0: *DragDeltaEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_DragDelta"(self, p0, result);
+        return self.vtable.add_DragDelta(self, p0, result);
     }
     pub fn remove_DragDelta(self: *const IThumb, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_DragDelta"(self, p0);
+        return self.vtable.remove_DragDelta(self, p0);
     }
     pub fn add_DragCompleted(self: *const IThumb, p0: *DragCompletedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_DragCompleted"(self, p0, result);
+        return self.vtable.add_DragCompleted(self, p0, result);
     }
     pub fn remove_DragCompleted(self: *const IThumb, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_DragCompleted"(self, p0);
+        return self.vtable.remove_DragCompleted(self, p0);
     }
     pub fn CancelDrag(self: *const IThumb) callconv(.winapi) HRESULT {
-        return self.vtable.@"CancelDrag"(self);
+        return self.vtable.CancelDrag(self);
     }
 };
 pub const IThumbStatics = extern struct {
@@ -7157,7 +7157,7 @@ pub const IThumbStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_IsDraggingProperty(self: *const IThumbStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsDraggingProperty"(self, result);
+        return self.vtable.get_IsDraggingProperty(self, result);
     }
 };
 pub const ITickBar = extern struct {
@@ -7179,10 +7179,10 @@ pub const ITickBar = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Fill(self: *const ITickBar, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Fill"(self, result);
+        return self.vtable.get_Fill(self, result);
     }
     pub fn put_Fill(self: *const ITickBar, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_Fill"(self, p0);
+        return self.vtable.put_Fill(self, p0);
     }
 };
 pub const ITickBarStatics = extern struct {
@@ -7204,7 +7204,7 @@ pub const ITickBarStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_FillProperty(self: *const ITickBarStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_FillProperty"(self, result);
+        return self.vtable.get_FillProperty(self, result);
     }
 };
 pub const IToggleButton = extern struct {
@@ -7226,34 +7226,34 @@ pub const IToggleButton = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_IsChecked(self: *const IToggleButton, result: **@"Windows.Foundation".IReference__G1__BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsChecked"(self, result);
+        return self.vtable.get_IsChecked(self, result);
     }
     pub fn put_IsChecked(self: *const IToggleButton, p0: *@"Windows.Foundation".IReference__G1__BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_IsChecked"(self, p0);
+        return self.vtable.put_IsChecked(self, p0);
     }
     pub fn get_IsThreeState(self: *const IToggleButton, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsThreeState"(self, result);
+        return self.vtable.get_IsThreeState(self, result);
     }
     pub fn put_IsThreeState(self: *const IToggleButton, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.@"put_IsThreeState"(self, p0);
+        return self.vtable.put_IsThreeState(self, p0);
     }
     pub fn add_Checked(self: *const IToggleButton, p0: *@"Microsoft.UI.Xaml".RoutedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_Checked"(self, p0, result);
+        return self.vtable.add_Checked(self, p0, result);
     }
     pub fn remove_Checked(self: *const IToggleButton, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_Checked"(self, p0);
+        return self.vtable.remove_Checked(self, p0);
     }
     pub fn add_Unchecked(self: *const IToggleButton, p0: *@"Microsoft.UI.Xaml".RoutedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_Unchecked"(self, p0, result);
+        return self.vtable.add_Unchecked(self, p0, result);
     }
     pub fn remove_Unchecked(self: *const IToggleButton, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_Unchecked"(self, p0);
+        return self.vtable.remove_Unchecked(self, p0);
     }
     pub fn add_Indeterminate(self: *const IToggleButton, p0: *@"Microsoft.UI.Xaml".RoutedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"add_Indeterminate"(self, p0, result);
+        return self.vtable.add_Indeterminate(self, p0, result);
     }
     pub fn remove_Indeterminate(self: *const IToggleButton, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.@"remove_Indeterminate"(self, p0);
+        return self.vtable.remove_Indeterminate(self, p0);
     }
 };
 pub const IToggleButtonFactory = extern struct {
@@ -7275,7 +7275,7 @@ pub const IToggleButtonFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IToggleButtonFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **ToggleButton) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, result);
+        return self.vtable.CreateInstance(self, p0, p1, result);
     }
 };
 pub const IToggleButtonOverrides = extern struct {
@@ -7297,7 +7297,7 @@ pub const IToggleButtonOverrides = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn OnToggle(self: *const IToggleButtonOverrides) callconv(.winapi) HRESULT {
-        return self.vtable.@"OnToggle"(self);
+        return self.vtable.OnToggle(self);
     }
 };
 pub const IToggleButtonStatics = extern struct {
@@ -7319,10 +7319,10 @@ pub const IToggleButtonStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_IsCheckedProperty(self: *const IToggleButtonStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsCheckedProperty"(self, result);
+        return self.vtable.get_IsCheckedProperty(self, result);
     }
     pub fn get_IsThreeStateProperty(self: *const IToggleButtonStatics, result: **@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_IsThreeStateProperty"(self, result);
+        return self.vtable.get_IsThreeStateProperty(self, result);
     }
 };
 pub const IToggleSwitchTemplateSettings = extern struct {
@@ -7344,28 +7344,28 @@ pub const IToggleSwitchTemplateSettings = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_KnobCurrentToOnOffset(self: *const IToggleSwitchTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_KnobCurrentToOnOffset"(self, result);
+        return self.vtable.get_KnobCurrentToOnOffset(self, result);
     }
     pub fn get_KnobCurrentToOffOffset(self: *const IToggleSwitchTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_KnobCurrentToOffOffset"(self, result);
+        return self.vtable.get_KnobCurrentToOffOffset(self, result);
     }
     pub fn get_KnobOnToOffOffset(self: *const IToggleSwitchTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_KnobOnToOffOffset"(self, result);
+        return self.vtable.get_KnobOnToOffOffset(self, result);
     }
     pub fn get_KnobOffToOnOffset(self: *const IToggleSwitchTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_KnobOffToOnOffset"(self, result);
+        return self.vtable.get_KnobOffToOnOffset(self, result);
     }
     pub fn get_CurtainCurrentToOnOffset(self: *const IToggleSwitchTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CurtainCurrentToOnOffset"(self, result);
+        return self.vtable.get_CurtainCurrentToOnOffset(self, result);
     }
     pub fn get_CurtainCurrentToOffOffset(self: *const IToggleSwitchTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CurtainCurrentToOffOffset"(self, result);
+        return self.vtable.get_CurtainCurrentToOffOffset(self, result);
     }
     pub fn get_CurtainOnToOffOffset(self: *const IToggleSwitchTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CurtainOnToOffOffset"(self, result);
+        return self.vtable.get_CurtainOnToOffOffset(self, result);
     }
     pub fn get_CurtainOffToOnOffset(self: *const IToggleSwitchTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_CurtainOffToOnOffset"(self, result);
+        return self.vtable.get_CurtainOffToOnOffset(self, result);
     }
 };
 pub const IToolTipTemplateSettings = extern struct {
@@ -7387,10 +7387,10 @@ pub const IToolTipTemplateSettings = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_FromHorizontalOffset(self: *const IToolTipTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_FromHorizontalOffset"(self, result);
+        return self.vtable.get_FromHorizontalOffset(self, result);
     }
     pub fn get_FromVerticalOffset(self: *const IToolTipTemplateSettings, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_FromVerticalOffset"(self, result);
+        return self.vtable.get_FromVerticalOffset(self, result);
     }
 };
 pub const IZoomSnapPoint = extern struct {
@@ -7412,7 +7412,7 @@ pub const IZoomSnapPoint = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Value(self: *const IZoomSnapPoint, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.@"get_Value"(self, result);
+        return self.vtable.get_Value(self, result);
     }
 };
 pub const IZoomSnapPointBase = extern struct {
@@ -7472,7 +7472,7 @@ pub const IZoomSnapPointFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IZoomSnapPointFactory, p0: f64, p1: ?*const anyopaque, p2: *?*const anyopaque, result: **ZoomSnapPoint) callconv(.winapi) HRESULT {
-        return self.vtable.@"CreateInstance"(self, p0, p1, p2, result);
+        return self.vtable.CreateInstance(self, p0, p1, p2, result);
     }
 };
 pub const DragCompletedEventHandler = opaque {};
@@ -8553,7 +8553,7 @@ pub const IFlyoutBase_Vtbl = extern struct {
     add_Closing: *const fn (this: *const IFlyoutBase, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_FlyoutBase__Microsoft_UI_Xaml_Controls_Primitives_FlyoutBaseClosingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Closing: *const fn (this: *const IFlyoutBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     ShowAt: *const fn (this: *const IFlyoutBase, p0: *@"Microsoft.UI.Xaml".FrameworkElement) callconv(.winapi) HRESULT,
-    @"ShowAt_2": *const fn (this: *const IFlyoutBase, p0: *@"Microsoft.UI.Xaml".DependencyObject, p1: *FlyoutShowOptions) callconv(.winapi) HRESULT,
+    ShowAt_2: *const fn (this: *const IFlyoutBase, p0: *@"Microsoft.UI.Xaml".DependencyObject, p1: *FlyoutShowOptions) callconv(.winapi) HRESULT,
     Hide: *const fn (this: *const IFlyoutBase) callconv(.winapi) HRESULT,
     TryInvokeKeyboardAccelerator: *const fn (this: *const IFlyoutBase, p0: *@"Microsoft.UI.Xaml.Input".ProcessKeyboardAcceleratorEventArgs) callconv(.winapi) HRESULT,
 };
@@ -9398,14 +9398,14 @@ pub const IScrollPresenter_Vtbl = extern struct {
     get_VerticalSnapPoints: *const fn (this: *const IScrollPresenter, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_Primitives_ScrollSnapPointBase) callconv(.winapi) HRESULT,
     get_ZoomSnapPoints: *const fn (this: *const IScrollPresenter, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_Primitives_ZoomSnapPointBase) callconv(.winapi) HRESULT,
     ScrollTo: *const fn (this: *const IScrollPresenter, p0: f64, p1: f64, result: *i32) callconv(.winapi) HRESULT,
-    @"ScrollTo_2": *const fn (this: *const IScrollPresenter, p0: f64, p1: f64, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingScrollOptions, result: *i32) callconv(.winapi) HRESULT,
+    ScrollTo_2: *const fn (this: *const IScrollPresenter, p0: f64, p1: f64, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingScrollOptions, result: *i32) callconv(.winapi) HRESULT,
     ScrollBy: *const fn (this: *const IScrollPresenter, p0: f64, p1: f64, result: *i32) callconv(.winapi) HRESULT,
-    @"ScrollBy_2": *const fn (this: *const IScrollPresenter, p0: f64, p1: f64, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingScrollOptions, result: *i32) callconv(.winapi) HRESULT,
+    ScrollBy_2: *const fn (this: *const IScrollPresenter, p0: f64, p1: f64, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingScrollOptions, result: *i32) callconv(.winapi) HRESULT,
     AddScrollVelocity: *const fn (this: *const IScrollPresenter, p0: @"Windows.Foundation.Numerics".Vector2, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, result: *i32) callconv(.winapi) HRESULT,
     ZoomTo: *const fn (this: *const IScrollPresenter, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, result: *i32) callconv(.winapi) HRESULT,
-    @"ZoomTo_2": *const fn (this: *const IScrollPresenter, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingZoomOptions, result: *i32) callconv(.winapi) HRESULT,
+    ZoomTo_2: *const fn (this: *const IScrollPresenter, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingZoomOptions, result: *i32) callconv(.winapi) HRESULT,
     ZoomBy: *const fn (this: *const IScrollPresenter, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, result: *i32) callconv(.winapi) HRESULT,
-    @"ZoomBy_2": *const fn (this: *const IScrollPresenter, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingZoomOptions, result: *i32) callconv(.winapi) HRESULT,
+    ZoomBy_2: *const fn (this: *const IScrollPresenter, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingZoomOptions, result: *i32) callconv(.winapi) HRESULT,
     AddZoomVelocity: *const fn (this: *const IScrollPresenter, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, p2: *@"Windows.Foundation".IReference__G1__f32, result: *i32) callconv(.winapi) HRESULT,
     add_ExtentChanged: *const fn (this: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ExtentChanged: *const fn (this: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,

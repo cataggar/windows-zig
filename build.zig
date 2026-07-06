@@ -106,6 +106,9 @@ pub fn build(b: *std.Build) void {
     winbindgen_mod.addAnonymousImport("Windows.winmd", .{
         .root_source_file = b.path("vendor/winmd/Windows.winmd"),
     });
+    winbindgen_mod.addAnonymousImport("Microsoft.UI.Xaml.winmd", .{
+        .root_source_file = b.path("vendor/winmd/Microsoft.UI.Xaml.winmd"),
+    });
     winbindgen_mod.addAnonymousImport("Windows.Win32.winmd", .{
         .root_source_file = b.path("vendor/winmd/Windows.Win32.winmd"),
     });
