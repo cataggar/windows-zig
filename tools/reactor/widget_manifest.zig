@@ -56,12 +56,113 @@ pub const raw_widgets = .{
     },
 
     .@"Microsoft.UI.Xaml.Controls.TextBox" = .{
+        .props = .{
+            .Text = Prop{
+                .value = .string,
+            },
+        },
         .events = .{
             .TextChanged = Event{
                 .payload = .string,
                 .source = .{
                     .sender_property = "Text",
                 },
+            },
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.CheckBox" = .{
+        .props = .{
+            .Content = Prop{
+                .value = .string,
+                .setter = .text_block,
+            },
+            .IsChecked = Prop{
+                .value = .bool,
+                .setter = .boxed_reference,
+            },
+        },
+        .events = .{
+            .Checked = Event{
+                .payload = .unit,
+            },
+            .Unchecked = Event{
+                .payload = .unit,
+            },
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.Slider" = .{
+        .props = .{
+            .Value = Prop{
+                .value = .f64,
+            },
+            .Minimum = Prop{
+                .value = .f64,
+            },
+            .Maximum = Prop{
+                .value = .f64,
+            },
+        },
+        .events = .{
+            .ValueChanged = Event{
+                .payload = .f64,
+                .source = .{
+                    .args_property = "NewValue",
+                },
+            },
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.ComboBox" = .{
+        .props = .{
+            .ItemsSource = Prop{
+                .value = .string_list,
+            },
+            .SelectedIndex = Prop{
+                .value = .i32,
+            },
+        },
+        .events = .{
+            .SelectionChanged = Event{
+                .payload = .i32,
+                .source = .{
+                    .sender_property = "SelectedIndex",
+                },
+            },
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.ToggleSwitch" = .{
+        .props = .{
+            .IsOn = Prop{
+                .value = .bool,
+            },
+        },
+        .events = .{
+            .Toggled = Event{
+                .payload = .bool,
+                .source = .{
+                    .sender_property = "IsOn",
+                },
+            },
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.RadioButton" = .{
+        .props = .{
+            .Content = Prop{
+                .value = .string,
+                .setter = .text_block,
+            },
+            .IsChecked = Prop{
+                .value = .bool,
+                .setter = .boxed_reference,
+            },
+        },
+        .events = .{
+            .Checked = Event{
+                .payload = .unit,
             },
         },
     },

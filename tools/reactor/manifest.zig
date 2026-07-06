@@ -222,7 +222,7 @@ test "production manifest covers the initial widget set" {
     var manifest = try load(std.testing.allocator);
     defer manifest.deinit();
 
-    try std.testing.expectEqual(@as(usize, 6), manifest.widgets.len);
+    try std.testing.expectEqual(@as(usize, 11), manifest.widgets.len);
 
     const application = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Application") orelse return error.TestUnexpectedResult;
     try std.testing.expectEqual(@as(usize, 0), application.props.len);
@@ -241,7 +241,9 @@ test "production manifest covers the initial widget set" {
     try std.testing.expect(text.value.? == .string);
 
     const text_box = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.TextBox") orelse return error.TestUnexpectedResult;
-    try std.testing.expectEqual(@as(usize, 0), text_box.props.len);
+    const text_box_text = findProp(text_box, "Text") orelse return error.TestUnexpectedResult;
+    try std.testing.expectEqualStrings("text", text_box_text.field);
+    try std.testing.expect(text_box_text.value.? == .string);
     const text_changed = findEvent(text_box, "TextChanged") orelse return error.TestUnexpectedResult;
     try std.testing.expectEqualStrings("on_text_changed", text_changed.field);
     try std.testing.expect(text_changed.payload.? == .string);
@@ -268,6 +270,43 @@ test "production manifest covers the initial widget set" {
     try std.testing.expect(orientation.value.? == .enum_i32);
     const spacing = findProp(stack_panel, "Spacing") orelse return error.TestUnexpectedResult;
     try std.testing.expect(spacing.value.? == .f64);
+
+    const check_box = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.CheckBox") orelse return error.TestUnexpectedResult;
+    const is_checked = findProp(check_box, "IsChecked") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(is_checked.value.? == .bool);
+    try std.testing.expect(is_checked.setter.? == .boxed_reference);
+    const unchecked = findEvent(check_box, "Unchecked") orelse return error.TestUnexpectedResult;
+    try std.testing.expectEqualStrings("on_unchecked", unchecked.field);
+    try std.testing.expect(unchecked.payload.? == .unit);
+
+    const slider = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.Slider") orelse return error.TestUnexpectedResult;
+    const value = findProp(slider, "Value") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(value.value.? == .f64);
+    const value_changed = findEvent(slider, "ValueChanged") orelse return error.TestUnexpectedResult;
+    switch (value_changed.source) {
+        .args_property => |name| try std.testing.expectEqualStrings("NewValue", name),
+        else => return error.TestUnexpectedResult,
+    }
+
+    const combo_box = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.ComboBox") orelse return error.TestUnexpectedResult;
+    const items_source = findProp(combo_box, "ItemsSource") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(items_source.value.? == .string_list);
+    const selected_index = findProp(combo_box, "SelectedIndex") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(selected_index.value.? == .i32);
+
+    const toggle_switch = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.ToggleSwitch") orelse return error.TestUnexpectedResult;
+    const is_on = findProp(toggle_switch, "IsOn") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(is_on.value.? == .bool);
+    const toggled = findEvent(toggle_switch, "Toggled") orelse return error.TestUnexpectedResult;
+    switch (toggled.source) {
+        .sender_property => |name| try std.testing.expectEqualStrings("IsOn", name),
+        else => return error.TestUnexpectedResult,
+    }
+
+    const radio_button = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.RadioButton") orelse return error.TestUnexpectedResult;
+    const radio_checked = findProp(radio_button, "IsChecked") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(radio_checked.value.? == .bool);
+    try std.testing.expect(radio_checked.setter.? == .boxed_reference);
 }
 
 test "loader derives defaults and preserves advanced overrides" {

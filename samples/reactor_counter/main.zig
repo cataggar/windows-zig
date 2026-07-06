@@ -36,6 +36,58 @@ const ClickCapture = struct {
     }
 };
 
+const TextChangeCapture = struct {
+    count: i32 = 0,
+    setter: ?reactor.SetState(i32) = null,
+
+    fn onTextChanged(raw: ?*anyopaque) void {
+        const self: *@This() = @ptrCast(@alignCast(raw.?));
+        self.setter.?.call(self.count + 1);
+    }
+};
+
+const CheckCapture = struct {
+    setter: ?reactor.SetState(bool) = null,
+
+    fn onChecked(raw: ?*anyopaque) void {
+        const self: *@This() = @ptrCast(@alignCast(raw.?));
+        self.setter.?.call(true);
+    }
+
+    fn onUnchecked(raw: ?*anyopaque) void {
+        const self: *@This() = @ptrCast(@alignCast(raw.?));
+        self.setter.?.call(false);
+    }
+};
+
+const RotateTextCapture = struct {
+    index: usize = 0,
+    total: usize = 1,
+    setter: ?reactor.SetState(usize) = null,
+
+    fn onClick(raw: ?*anyopaque) void {
+        const self: *@This() = @ptrCast(@alignCast(raw.?));
+        self.setter.?.call((self.index + 1) % self.total);
+    }
+};
+
+const InputStatusLabel = struct {
+    buffers: [2][160]u8 = undefined,
+    active: usize = 0,
+    text: []const u8 = "",
+
+    fn update(self: *@This(), text_changed_count: i32, is_checked: bool, current_text: []const u8) []const u8 {
+        const next = (self.active + 1) % self.buffers.len;
+        self.text = std.fmt.bufPrint(
+            &self.buffers[next],
+            "TextChanged events: {d} | CheckBox: {s} | Preset: {s}",
+            .{ text_changed_count, if (is_checked) "checked" else "unchecked", current_text },
+        ) catch unreachable;
+        self.active = next;
+        return self.text;
+    }
+};
+
 pub fn main(init: std.process.Init) !void {
     const allocator = init.arena.allocator();
     var args = try std.process.Args.Iterator.initAllocator(init.minimal.args, allocator);
@@ -45,15 +97,35 @@ pub fn main(init: std.process.Init) !void {
 
     var app = reactor.App.init(allocator);
     app.exit_after_ms = options.exit_after_ms;
-    try app.render(renderRoot);
+    app.render(renderRoot) catch |err| {
+        std.log.err("reactor-counter failed: {s}", .{@errorName(err)});
+        return err;
+    };
 }
 
 fn renderRoot(cx: *reactor.RenderCx) reactor.ElementError!reactor.Element {
     const allocator = cx.getAllocator();
     const count = try cx.useState(i32, 0);
+    const text_index = try cx.useState(usize, 0);
+    const text_changed = try cx.useState(i32, 0);
+    const is_checked = try cx.useState(bool, false);
 
-    const label_state = try cx.useRef(CountLabel, .{});
-    const label_text = label_state.getMut().update(count.value.*);
+    const text_presets = [_][]const u8{
+        "Hello from win-reactor",
+        "Props updated this TextBox",
+        "TextBox + CheckBox sample",
+    };
+    const current_text = text_presets[text_index.value.*];
+
+    const count_label = try cx.useRef(CountLabel, .{});
+    const count_text = count_label.getMut().update(count.value.*);
+
+    const input_status = try cx.useRef(InputStatusLabel, .{});
+    const input_status_text = input_status.getMut().update(
+        text_changed.value.*,
+        is_checked.value.*,
+        current_text,
+    );
 
     const click_capture = try cx.useRef(ClickCapture, .{});
     click_capture.getMut().* = .{
@@ -61,22 +133,86 @@ fn renderRoot(cx: *reactor.RenderCx) reactor.ElementError!reactor.Element {
         .setter = count.set,
     };
 
-    var label = try reactor.text_block(allocator, label_text);
-    defer label.deinit(allocator);
+    const text_change_capture = try cx.useRef(TextChangeCapture, .{});
+    text_change_capture.getMut().* = .{
+        .count = text_changed.value.*,
+        .setter = text_changed.set,
+    };
+
+    const check_capture = try cx.useRef(CheckCapture, .{});
+    check_capture.getMut().* = .{
+        .setter = is_checked.set,
+    };
+
+    const rotate_capture = try cx.useRef(RotateTextCapture, .{});
+    rotate_capture.getMut().* = .{
+        .index = text_index.value.*,
+        .total = text_presets.len,
+        .setter = text_index.set,
+    };
+
+    var title = try reactor.text_block(allocator, "Counter + text input sample");
+    defer title.deinit(allocator);
+
+    var counter_text = try reactor.text_block(allocator, count_text);
+    defer counter_text.deinit(allocator);
 
     var increment = try reactor.button(
         allocator,
-        "+",
+        "Increment",
         reactor.EventCallback.init(@ptrCast(click_capture.getMut()), ClickCapture.onClick),
     );
     defer increment.deinit(allocator);
 
-    var content = try reactor.vstack(allocator, .{ &label, &increment });
+    var prompt = try reactor.text_block(allocator, "Edit or rotate the TextBox preset:");
+    defer prompt.deinit(allocator);
+
+    var text_input = try reactor.text_box(
+        allocator,
+        current_text,
+        reactor.EventCallback.init(
+            @ptrCast(text_change_capture.getMut()),
+            TextChangeCapture.onTextChanged,
+        ),
+    );
+    defer text_input.deinit(allocator);
+
+    var accepted = try reactor.check_box(
+        allocator,
+        "Check me",
+        is_checked.value.*,
+        reactor.EventCallback.init(@ptrCast(check_capture.getMut()), CheckCapture.onChecked),
+        reactor.EventCallback.init(@ptrCast(check_capture.getMut()), CheckCapture.onUnchecked),
+    );
+    defer accepted.deinit(allocator);
+
+    var rotate = try reactor.button(
+        allocator,
+        "Rotate Text",
+        reactor.EventCallback.init(@ptrCast(rotate_capture.getMut()), RotateTextCapture.onClick),
+    );
+    defer rotate.deinit(allocator);
+
+    var actions = try reactor.hstack(allocator, .{ &increment, &rotate });
+    defer actions.deinit(allocator);
+
+    var status = try reactor.text_block(allocator, input_status_text);
+    defer status.deinit(allocator);
+
+    var content = try reactor.vstack(allocator, .{
+        &title,
+        &counter_text,
+        &prompt,
+        &text_input,
+        &accepted,
+        &actions,
+        &status,
+    });
     defer content.deinit(allocator);
 
     var window_builder = reactor.window(allocator);
     defer window_builder.deinit();
-    _ = try window_builder.prop("Title", @as([]const u8, "windows-zig reactor counter"));
+    _ = try window_builder.prop("Title", @as([]const u8, "windows-zig reactor counter + inputs"));
     _ = try window_builder.child(&content);
     return window_builder.build();
 }

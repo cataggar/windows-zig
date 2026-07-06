@@ -21,12 +21,17 @@ pub const WidgetKind = enum {
     stack_panel,
     text_block,
     text_box,
+    check_box,
+    slider,
+    combo_box,
+    toggle_switch,
+    radio_button,
 };
 
 pub fn widgetKindAllowsChildren(kind: WidgetKind) bool {
     return switch (kind) {
         .container, .application, .window, .stack_panel => true,
-        .leaf, .button, .text_block, .text_box => false,
+        .leaf, .button, .text_block, .text_box, .check_box, .slider, .combo_box, .toggle_switch, .radio_button => false,
     };
 }
 
@@ -798,7 +803,7 @@ pub fn WidgetBuilder(comptime kind: WidgetKind) type {
         pub fn child(self: *@This(), value: anytype) Error!*@This() {
             comptime {
                 switch (kind) {
-                    .leaf, .button, .text_block, .text_box => {
+                    .leaf, .button, .text_block, .text_box, .check_box, .slider, .combo_box, .toggle_switch, .radio_button => {
                         @compileError("this widget builder cannot accept children");
                     },
                     else => {},
@@ -812,7 +817,7 @@ pub fn WidgetBuilder(comptime kind: WidgetKind) type {
         pub fn childrenFrom(self: *@This(), values: anytype) Error!*@This() {
             comptime {
                 switch (kind) {
-                    .leaf, .button, .text_block, .text_box => {
+                    .leaf, .button, .text_block, .text_box, .check_box, .slider, .combo_box, .toggle_switch, .radio_button => {
                         @compileError("this widget builder cannot accept children");
                     },
                     else => {},
@@ -890,6 +895,11 @@ pub const ButtonBuilder = WidgetBuilder(.button);
 pub const StackPanelBuilder = WidgetBuilder(.stack_panel);
 pub const TextBlockBuilder = WidgetBuilder(.text_block);
 pub const TextBoxBuilder = WidgetBuilder(.text_box);
+pub const CheckBoxBuilder = WidgetBuilder(.check_box);
+pub const SliderBuilder = WidgetBuilder(.slider);
+pub const ComboBoxBuilder = WidgetBuilder(.combo_box);
+pub const ToggleSwitchBuilder = WidgetBuilder(.toggle_switch);
+pub const RadioButtonBuilder = WidgetBuilder(.radio_button);
 
 pub fn leaf(allocator: Allocator) LeafBuilder {
     return LeafBuilder.init(allocator);
@@ -921,6 +931,26 @@ pub fn text_block(allocator: Allocator) TextBlockBuilder {
 
 pub fn text_box(allocator: Allocator) TextBoxBuilder {
     return TextBoxBuilder.init(allocator);
+}
+
+pub fn check_box(allocator: Allocator) CheckBoxBuilder {
+    return CheckBoxBuilder.init(allocator);
+}
+
+pub fn slider(allocator: Allocator) SliderBuilder {
+    return SliderBuilder.init(allocator);
+}
+
+pub fn combo_box(allocator: Allocator) ComboBoxBuilder {
+    return ComboBoxBuilder.init(allocator);
+}
+
+pub fn toggle_switch(allocator: Allocator) ToggleSwitchBuilder {
+    return ToggleSwitchBuilder.init(allocator);
+}
+
+pub fn radio_button(allocator: Allocator) RadioButtonBuilder {
+    return RadioButtonBuilder.init(allocator);
 }
 
 fn appendElementInputs(items: *std.ArrayListUnmanaged(Element), allocator: Allocator, values: anytype) Error!void {

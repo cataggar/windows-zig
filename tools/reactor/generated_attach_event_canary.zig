@@ -8,6 +8,18 @@ test "generated attach event glue compiles against a minimal WinUI slice" {
     _ = generated.entries.len;
     _ = generated.connectMicrosoftUIXamlControlsButtonClick;
     _ = generated.disconnectMicrosoftUIXamlControlsButtonClick;
+    _ = generated.connectMicrosoftUIXamlControlsCheckBoxChecked;
+    _ = generated.disconnectMicrosoftUIXamlControlsCheckBoxChecked;
+    _ = generated.connectMicrosoftUIXamlControlsCheckBoxUnchecked;
+    _ = generated.disconnectMicrosoftUIXamlControlsCheckBoxUnchecked;
+    _ = generated.connectMicrosoftUIXamlControlsComboBoxSelectionChanged;
+    _ = generated.disconnectMicrosoftUIXamlControlsComboBoxSelectionChanged;
+    _ = generated.connectMicrosoftUIXamlControlsRadioButtonChecked;
+    _ = generated.disconnectMicrosoftUIXamlControlsRadioButtonChecked;
+    _ = generated.connectMicrosoftUIXamlControlsSliderValueChanged;
+    _ = generated.disconnectMicrosoftUIXamlControlsSliderValueChanged;
     _ = generated.connectMicrosoftUIXamlControlsTextBoxTextChanged;
     _ = generated.disconnectMicrosoftUIXamlControlsTextBoxTextChanged;
+    _ = generated.connectMicrosoftUIXamlControlsToggleSwitchToggled;
+    _ = generated.disconnectMicrosoftUIXamlControlsToggleSwitchToggled;
 }

@@ -75,6 +75,181 @@ fn dispatchDisconnectMicrosoftUIXamlControlsButtonClick(widget: *anyopaque, conn
     try disconnectMicrosoftUIXamlControlsButtonClick(@ptrCast(@alignCast(widget)), connection);
 }
 
+pub fn connectMicrosoftUIXamlControlsCheckBoxChecked(widget: *@"Microsoft.UI.Xaml.Controls".CheckBox, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ICheckBox = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls.Primitives".IToggleButton) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0xdae23d85, .data2 = 0x69ca, .data3 = 0x5bdf, .data4 = .{ 0x80, 0x5b, 0x61, 0x61, 0xa3, 0xa2, 0x15, 0xcc } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml.Controls.Primitives".IToggleButton.add_Checked,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsCheckBoxChecked(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsCheckBoxChecked(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsCheckBoxChecked(widget: *@"Microsoft.UI.Xaml.Controls".CheckBox, connection: *EventConnection) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ICheckBox = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls.Primitives".IToggleButton) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml.Controls.Primitives".IToggleButton.remove_Checked,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsCheckBoxChecked(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsCheckBoxChecked(@ptrCast(@alignCast(widget)), connection);
+}
+
+pub fn connectMicrosoftUIXamlControlsCheckBoxUnchecked(widget: *@"Microsoft.UI.Xaml.Controls".CheckBox, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ICheckBox = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls.Primitives".IToggleButton) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0xdae23d85, .data2 = 0x69ca, .data3 = 0x5bdf, .data4 = .{ 0x80, 0x5b, 0x61, 0x61, 0xa3, 0xa2, 0x15, 0xcc } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml.Controls.Primitives".IToggleButton.add_Unchecked,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsCheckBoxUnchecked(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsCheckBoxUnchecked(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsCheckBoxUnchecked(widget: *@"Microsoft.UI.Xaml.Controls".CheckBox, connection: *EventConnection) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ICheckBox = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls.Primitives".IToggleButton) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml.Controls.Primitives".IToggleButton.remove_Unchecked,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsCheckBoxUnchecked(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsCheckBoxUnchecked(@ptrCast(@alignCast(widget)), connection);
+}
+
+pub fn connectMicrosoftUIXamlControlsComboBoxSelectionChanged(widget: *@"Microsoft.UI.Xaml.Controls".ComboBox, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IComboBox = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls.Primitives".ISelector) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0xa232390d, .data2 = 0x0e34, .data3 = 0x595e, .data4 = .{ 0x89, 0x31, 0xfa, 0x92, 0x8a, 0x99, 0x09, 0xf4 } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml.Controls.Primitives".ISelector.add_SelectionChanged,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsComboBoxSelectionChanged(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsComboBoxSelectionChanged(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsComboBoxSelectionChanged(widget: *@"Microsoft.UI.Xaml.Controls".ComboBox, connection: *EventConnection) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IComboBox = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls.Primitives".ISelector) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml.Controls.Primitives".ISelector.remove_SelectionChanged,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsComboBoxSelectionChanged(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsComboBoxSelectionChanged(@ptrCast(@alignCast(widget)), connection);
+}
+
+pub fn connectMicrosoftUIXamlControlsRadioButtonChecked(widget: *@"Microsoft.UI.Xaml.Controls".RadioButton, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IRadioButton = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls.Primitives".IToggleButton) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0xdae23d85, .data2 = 0x69ca, .data3 = 0x5bdf, .data4 = .{ 0x80, 0x5b, 0x61, 0x61, 0xa3, 0xa2, 0x15, 0xcc } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml.Controls.Primitives".IToggleButton.add_Checked,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsRadioButtonChecked(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsRadioButtonChecked(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsRadioButtonChecked(widget: *@"Microsoft.UI.Xaml.Controls".RadioButton, connection: *EventConnection) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IRadioButton = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls.Primitives".IToggleButton) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml.Controls.Primitives".IToggleButton.remove_Checked,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsRadioButtonChecked(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsRadioButtonChecked(@ptrCast(@alignCast(widget)), connection);
+}
+
+pub fn connectMicrosoftUIXamlControlsSliderValueChanged(widget: *@"Microsoft.UI.Xaml.Controls".Slider, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ISlider = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls.Primitives".IRangeBase) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0x23f0e209, .data2 = 0x9455, .data3 = 0x54cb, .data4 = .{ 0xb8, 0xbc, 0x0b, 0x49, 0x55, 0x3c, 0x7d, 0xcc } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml.Controls.Primitives".IRangeBase.add_ValueChanged,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsSliderValueChanged(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsSliderValueChanged(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsSliderValueChanged(widget: *@"Microsoft.UI.Xaml.Controls".Slider, connection: *EventConnection) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".ISlider = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls.Primitives".IRangeBase) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml.Controls.Primitives".IRangeBase.remove_ValueChanged,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsSliderValueChanged(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsSliderValueChanged(@ptrCast(@alignCast(widget)), connection);
+}
+
 pub fn connectMicrosoftUIXamlControlsTextBoxTextChanged(widget: *@"Microsoft.UI.Xaml.Controls".TextBox, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
     const target: *const @"Microsoft.UI.Xaml.Controls".ITextBox = @ptrCast(widget);
     return try reactor_event_runtime.connect(
@@ -106,6 +281,37 @@ fn dispatchDisconnectMicrosoftUIXamlControlsTextBoxTextChanged(widget: *anyopaqu
     try disconnectMicrosoftUIXamlControlsTextBoxTextChanged(@ptrCast(@alignCast(widget)), connection);
 }
 
+pub fn connectMicrosoftUIXamlControlsToggleSwitchToggled(widget: *@"Microsoft.UI.Xaml.Controls".ToggleSwitch, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const target: *const @"Microsoft.UI.Xaml.Controls".IToggleSwitch = @ptrCast(widget);
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0xdae23d85, .data2 = 0x69ca, .data3 = 0x5bdf, .data4 = .{ 0x80, 0x5b, 0x61, 0x61, 0xa3, 0xa2, 0x15, 0xcc } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml.Controls".IToggleSwitch.add_Toggled,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsToggleSwitchToggled(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsToggleSwitchToggled(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsToggleSwitchToggled(widget: *@"Microsoft.UI.Xaml.Controls".ToggleSwitch, connection: *EventConnection) Error!void {
+    const target: *const @"Microsoft.UI.Xaml.Controls".IToggleSwitch = @ptrCast(widget);
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml.Controls".IToggleSwitch.remove_Toggled,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsToggleSwitchToggled(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsToggleSwitchToggled(@ptrCast(@alignCast(widget)), connection);
+}
+
 pub const entries = [_]EventConnector{
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.Button",
@@ -119,6 +325,61 @@ pub const entries = [_]EventConnector{
         .disconnect = dispatchDisconnectMicrosoftUIXamlControlsButtonClick,
     },
     .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.CheckBox",
+        .widget_name = "CheckBox",
+        .handle_name = "CheckBox",
+        .event_name = "Checked",
+        .field_name = "on_checked",
+        .payload = .unit,
+        .source = .none,
+        .connect = dispatchConnectMicrosoftUIXamlControlsCheckBoxChecked,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsCheckBoxChecked,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.CheckBox",
+        .widget_name = "CheckBox",
+        .handle_name = "CheckBox",
+        .event_name = "Unchecked",
+        .field_name = "on_unchecked",
+        .payload = .unit,
+        .source = .none,
+        .connect = dispatchConnectMicrosoftUIXamlControlsCheckBoxUnchecked,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsCheckBoxUnchecked,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ComboBox",
+        .widget_name = "ComboBox",
+        .handle_name = "ComboBox",
+        .event_name = "SelectionChanged",
+        .field_name = "on_selection_changed",
+        .payload = .i32,
+        .source = .{ .sender_property = "SelectedIndex" },
+        .connect = dispatchConnectMicrosoftUIXamlControlsComboBoxSelectionChanged,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsComboBoxSelectionChanged,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.RadioButton",
+        .widget_name = "RadioButton",
+        .handle_name = "RadioButton",
+        .event_name = "Checked",
+        .field_name = "on_checked",
+        .payload = .unit,
+        .source = .none,
+        .connect = dispatchConnectMicrosoftUIXamlControlsRadioButtonChecked,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsRadioButtonChecked,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Slider",
+        .widget_name = "Slider",
+        .handle_name = "Slider",
+        .event_name = "ValueChanged",
+        .field_name = "on_value_changed",
+        .payload = .f64,
+        .source = .{ .args_property = "NewValue" },
+        .connect = dispatchConnectMicrosoftUIXamlControlsSliderValueChanged,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsSliderValueChanged,
+    },
+    .{
         .widget_class = "Microsoft.UI.Xaml.Controls.TextBox",
         .widget_name = "TextBox",
         .handle_name = "TextBox",
@@ -129,11 +390,28 @@ pub const entries = [_]EventConnector{
         .connect = dispatchConnectMicrosoftUIXamlControlsTextBoxTextChanged,
         .disconnect = dispatchDisconnectMicrosoftUIXamlControlsTextBoxTextChanged,
     },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ToggleSwitch",
+        .widget_name = "ToggleSwitch",
+        .handle_name = "ToggleSwitch",
+        .event_name = "Toggled",
+        .field_name = "on_toggled",
+        .payload = .bool,
+        .source = .{ .sender_property = "IsOn" },
+        .connect = dispatchConnectMicrosoftUIXamlControlsToggleSwitchToggled,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsToggleSwitchToggled,
+    },
 };
 
 pub const by_widget_event = std.StaticStringMap(usize).initComptime(.{
     .{ "Microsoft.UI.Xaml.Controls.Button#Click", 0 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#TextChanged", 1 },
+    .{ "Microsoft.UI.Xaml.Controls.CheckBox#Checked", 1 },
+    .{ "Microsoft.UI.Xaml.Controls.CheckBox#Unchecked", 2 },
+    .{ "Microsoft.UI.Xaml.Controls.ComboBox#SelectionChanged", 3 },
+    .{ "Microsoft.UI.Xaml.Controls.RadioButton#Checked", 4 },
+    .{ "Microsoft.UI.Xaml.Controls.Slider#ValueChanged", 5 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#TextChanged", 6 },
+    .{ "Microsoft.UI.Xaml.Controls.ToggleSwitch#Toggled", 7 },
 });
 
 pub fn find(widget_class: []const u8, event_name: []const u8) ?*const EventConnector {

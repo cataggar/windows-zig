@@ -197,6 +197,7 @@ pub fn build(b: *std.Build) void {
     reactor_winui_controls_primitives_mod.addImport("Microsoft.UI.Xaml", reactor_winui_xaml_mod);
     reactor_winui_controls_primitives_mod.addImport("Microsoft.UI.Xaml.Controls", reactor_winui_controls_mod);
     win_reactor_mod.addImport("win-core", win_core_mod);
+    win_reactor_mod.addImport("win-collections", win_collections_mod);
     win_reactor_mod.addImport("win-sys", win_sys_mod);
     win_reactor_mod.addImport("win", win_mod);
     win_reactor_mod.addImport("reactor-windows-system", reactor_windows_system_mod);
@@ -1066,6 +1067,7 @@ pub fn build(b: *std.Build) void {
     });
     win_reference_mod.addImport("win-core", win_core_mod);
     win_reference_mod.addImport("win", win_mod);
+    reactor_generated_set_prop_mod.addImport("win-reference", win_reference_mod);
     if (target.result.os.tag == .windows) {
         win_reference_mod.linkSystemLibrary("ole32", .{});
     }
