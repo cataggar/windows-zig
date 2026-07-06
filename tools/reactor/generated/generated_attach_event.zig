@@ -75,6 +75,41 @@ fn dispatchDisconnectMicrosoftUIXamlControlsButtonClick(widget: *anyopaque, conn
     try disconnectMicrosoftUIXamlControlsButtonClick(@ptrCast(@alignCast(widget)), connection);
 }
 
+pub fn connectMicrosoftUIXamlControlsListViewSelectionChanged(widget: *@"Microsoft.UI.Xaml.Controls".ListView, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IListView = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls.Primitives".ISelector) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0xa232390d, .data2 = 0x0e34, .data3 = 0x595e, .data4 = .{ 0x89, 0x31, 0xfa, 0x92, 0x8a, 0x99, 0x09, 0xf4 } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml.Controls.Primitives".ISelector.add_SelectionChanged,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsListViewSelectionChanged(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsListViewSelectionChanged(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsListViewSelectionChanged(widget: *@"Microsoft.UI.Xaml.Controls".ListView, connection: *EventConnection) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IListView = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls.Primitives".ISelector) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml.Controls.Primitives".ISelector.remove_SelectionChanged,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsListViewSelectionChanged(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsListViewSelectionChanged(@ptrCast(@alignCast(widget)), connection);
+}
+
 pub fn connectMicrosoftUIXamlControlsTextBoxTextChanged(widget: *@"Microsoft.UI.Xaml.Controls".TextBox, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
     const target: *const @"Microsoft.UI.Xaml.Controls".ITextBox = @ptrCast(widget);
     return try reactor_event_runtime.connect(
@@ -119,6 +154,17 @@ pub const entries = [_]EventConnector{
         .disconnect = dispatchDisconnectMicrosoftUIXamlControlsButtonClick,
     },
     .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ListView",
+        .widget_name = "ListView",
+        .handle_name = "ListView",
+        .event_name = "SelectionChanged",
+        .field_name = "on_selection_changed",
+        .payload = .unit,
+        .source = .none,
+        .connect = dispatchConnectMicrosoftUIXamlControlsListViewSelectionChanged,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsListViewSelectionChanged,
+    },
+    .{
         .widget_class = "Microsoft.UI.Xaml.Controls.TextBox",
         .widget_name = "TextBox",
         .handle_name = "TextBox",
@@ -133,7 +179,8 @@ pub const entries = [_]EventConnector{
 
 pub const by_widget_event = std.StaticStringMap(usize).initComptime(.{
     .{ "Microsoft.UI.Xaml.Controls.Button#Click", 0 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#TextChanged", 1 },
+    .{ "Microsoft.UI.Xaml.Controls.ListView#SelectionChanged", 1 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#TextChanged", 2 },
 });
 
 pub fn find(widget_class: []const u8, event_name: []const u8) ?*const EventConnector {

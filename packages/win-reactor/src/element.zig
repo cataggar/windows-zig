@@ -9,6 +9,7 @@ pub const Allocator = std.mem.Allocator;
 /// evaluating consumers, and a small amount of structural validation.
 pub const Error = Allocator.Error || render_cx.Error || error{
     LeafCannotHaveChildren,
+    ItemsSourceCannotHaveChildren,
     WindowCannotHaveMultipleChildren,
 };
 
@@ -21,11 +22,13 @@ pub const WidgetKind = enum {
     stack_panel,
     text_block,
     text_box,
+    list_view,
+    items_repeater,
 };
 
 pub fn widgetKindAllowsChildren(kind: WidgetKind) bool {
     return switch (kind) {
-        .container, .application, .window, .stack_panel => true,
+        .container, .application, .window, .stack_panel, .list_view, .items_repeater => true,
         .leaf, .button, .text_block, .text_box => false,
     };
 }
@@ -836,6 +839,9 @@ pub fn WidgetBuilder(comptime kind: WidgetKind) type {
             if (!widgetKindAllowsChildren(kind) and self.children.items.len != 0) {
                 return error.LeafCannotHaveChildren;
             }
+            if (isCollectionBoundListWidget(kind) and self.children.items.len != 0 and propertyListContains(self.props.items, "ItemsSource")) {
+                return error.ItemsSourceCannotHaveChildren;
+            }
             if (kind == .window and self.children.items.len > 1) {
                 return error.WindowCannotHaveMultipleChildren;
             }
@@ -890,6 +896,8 @@ pub const ButtonBuilder = WidgetBuilder(.button);
 pub const StackPanelBuilder = WidgetBuilder(.stack_panel);
 pub const TextBlockBuilder = WidgetBuilder(.text_block);
 pub const TextBoxBuilder = WidgetBuilder(.text_box);
+pub const ListViewBuilder = WidgetBuilder(.list_view);
+pub const ItemsRepeaterBuilder = WidgetBuilder(.items_repeater);
 
 pub fn leaf(allocator: Allocator) LeafBuilder {
     return LeafBuilder.init(allocator);
@@ -921,6 +929,28 @@ pub fn text_block(allocator: Allocator) TextBlockBuilder {
 
 pub fn text_box(allocator: Allocator) TextBoxBuilder {
     return TextBoxBuilder.init(allocator);
+}
+
+pub fn list_view(allocator: Allocator) ListViewBuilder {
+    return ListViewBuilder.init(allocator);
+}
+
+pub fn items_repeater(allocator: Allocator) ItemsRepeaterBuilder {
+    return ItemsRepeaterBuilder.init(allocator);
+}
+
+fn isCollectionBoundListWidget(kind: WidgetKind) bool {
+    return switch (kind) {
+        .list_view, .items_repeater => true,
+        else => false,
+    };
+}
+
+fn propertyListContains(properties: []const Property, name: []const u8) bool {
+    for (properties) |property| {
+        if (std.mem.eql(u8, property.name, name)) return true;
+    }
+    return false;
 }
 
 fn appendElementInputs(items: *std.ArrayListUnmanaged(Element), allocator: Allocator, values: anytype) Error!void {
@@ -1138,6 +1168,17 @@ test "widget builders convert into element trees with props, children, and handl
     try std.testing.expectEqualStrings("primary", button_el.widget.propertyValue([]const u8, "role").?);
     button_el.widget.event("click").?.invoke();
     try std.testing.expectEqual(@as(u32, 1), clicks);
+}
+
+test "list widgets reject ItemsSource when children are also present" {
+    var child_builder = leaf(std.testing.allocator);
+    defer child_builder.deinit();
+    _ = try child_builder.prop("text", @as([]const u8, "child"));
+
+    var list_builder = list_view(std.testing.allocator);
+    defer list_builder.deinit();
+    _ = try (try list_builder.prop("ItemsSource", @as(?*const anyopaque, null))).child(&child_builder);
+    try std.testing.expectError(error.ItemsSourceCannotHaveChildren, list_builder.build());
 }
 
 test "provide folds multiple context values into one provider node" {

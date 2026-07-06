@@ -14,6 +14,7 @@ pub const Error = win_core.hresult.Error || error{
 };
 pub const SetterValue = union(enum) {
     string: []const u16,
+    object: ?*const anyopaque,
     f64: f64,
     enum_i32: i32,
 };
@@ -47,6 +48,34 @@ fn applyMicrosoftUIXamlControlsButtonContent(widget: *anyopaque, value: SetterVa
         else => return error.ValueKindMismatch,
     };
     try setMicrosoftUIXamlControlsButtonContent(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsItemsRepeaterItemsSource(widget: *@"Microsoft.UI.Xaml.Controls".ItemsRepeater, value: ?*const anyopaque) Error!void {
+    const target: *const @"Microsoft.UI.Xaml.Controls".IItemsRepeater = @ptrCast(widget);
+    try win_core.hresult.ok(target.put_ItemsSource(value));
+}
+
+fn applyMicrosoftUIXamlControlsItemsRepeaterItemsSource(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .object => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsItemsRepeaterItemsSource(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsListViewItemsSource(widget: *@"Microsoft.UI.Xaml.Controls".ListView, value: ?*const anyopaque) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IListView = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls".IItemsControl) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try win_core.hresult.ok(target.put_ItemsSource(value));
+}
+
+fn applyMicrosoftUIXamlControlsListViewItemsSource(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .object => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsListViewItemsSource(@ptrCast(@alignCast(widget)), typed_value);
 }
 
 pub fn setMicrosoftUIXamlControlsStackPanelOrientation(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel, value: i32) Error!void {
@@ -113,6 +142,26 @@ pub const entries = [_]PropertySetter{
         .apply = applyMicrosoftUIXamlControlsButtonContent,
     },
     .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ItemsRepeater",
+        .widget_name = "ItemsRepeater",
+        .handle_name = "ItemsRepeater",
+        .property_name = "ItemsSource",
+        .field_name = "items_source",
+        .value_kind = .object,
+        .setter_kind = .direct,
+        .apply = applyMicrosoftUIXamlControlsItemsRepeaterItemsSource,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ListView",
+        .widget_name = "ListView",
+        .handle_name = "ListView",
+        .property_name = "ItemsSource",
+        .field_name = "items_source",
+        .value_kind = .object,
+        .setter_kind = .direct,
+        .apply = applyMicrosoftUIXamlControlsListViewItemsSource,
+    },
+    .{
         .widget_class = "Microsoft.UI.Xaml.Controls.StackPanel",
         .widget_name = "StackPanel",
         .handle_name = "StackPanel",
@@ -156,10 +205,12 @@ pub const entries = [_]PropertySetter{
 
 pub const by_widget_prop = std.StaticStringMap(usize).initComptime(.{
     .{ "Microsoft.UI.Xaml.Controls.Button#Content", 0 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Orientation", 1 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Spacing", 2 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Text", 3 },
-    .{ "Microsoft.UI.Xaml.Window#Title", 4 },
+    .{ "Microsoft.UI.Xaml.Controls.ItemsRepeater#ItemsSource", 1 },
+    .{ "Microsoft.UI.Xaml.Controls.ListView#ItemsSource", 2 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Orientation", 3 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Spacing", 4 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Text", 5 },
+    .{ "Microsoft.UI.Xaml.Window#Title", 6 },
 });
 
 pub fn find(widget_class: []const u8, property_name: []const u8) ?*const PropertySetter {

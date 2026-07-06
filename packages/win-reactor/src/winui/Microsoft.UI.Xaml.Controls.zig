@@ -512,3 +512,214 @@ pub const IUIElementCollection = extern struct {
         return self.vtable.Move(self, from, to);
     }
 };
+
+pub const SelectionChangedEventHandler = opaque {};
+
+pub const IListView_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+};
+
+pub const IListView = extern struct {
+    vtable: *const IListView_Vtbl,
+    pub const Vtbl = IListView_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0xF6015DB1,
+        .data2 = 0xDF63,
+        .data3 = 0x52FD,
+        .data4 = .{ 0xA1, 0x64, 0x0D, 0xF4, 0x47, 0x15, 0xEE, 0x0A },
+    };
+
+    pub fn QueryInterface(self: *const IListView, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.base.base.QueryInterface(@ptrCast(@constCast(self)), iid, interface);
+    }
+
+    pub fn AddRef(self: *const IListView) callconv(.winapi) u32 {
+        return self.vtable.base.base.AddRef(@ptrCast(@constCast(self)));
+    }
+
+    pub fn Release(self: *const IListView) callconv(.winapi) u32 {
+        return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn cast(self: *const IListView, comptime T: type) ?*const T {
+        var out: ?*anyopaque = null;
+        if (self.QueryInterface(&T.IID, &out) < 0) return null;
+        return @ptrCast(@alignCast(out));
+    }
+};
+
+pub const ListView = extern struct {
+    vtable: *const IListView_Vtbl,
+    pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.ListView";
+    pub const NAME_W = std.unicode.utf8ToUtf16LeStringLiteral(NAME).*;
+};
+
+pub const IItemsControl_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    get_ItemsSource: *const fn (this: *const IItemsControl, result: *?*const anyopaque) callconv(.winapi) HRESULT,
+    put_ItemsSource: *const fn (this: *const IItemsControl, p0: ?*const anyopaque) callconv(.winapi) HRESULT,
+};
+
+pub const IItemsControl = extern struct {
+    vtable: *const IItemsControl_Vtbl,
+    pub const Vtbl = IItemsControl_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0xBF1CCB54,
+        .data2 = 0x83E2,
+        .data3 = 0x5B98,
+        .data4 = .{ 0xAC, 0xBC, 0x73, 0x6F, 0x87, 0x6C, 0x3D, 0x35 },
+    };
+
+    pub fn QueryInterface(self: *const IItemsControl, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.base.base.QueryInterface(@ptrCast(@constCast(self)), iid, interface);
+    }
+
+    pub fn AddRef(self: *const IItemsControl) callconv(.winapi) u32 {
+        return self.vtable.base.base.AddRef(@ptrCast(@constCast(self)));
+    }
+
+    pub fn Release(self: *const IItemsControl) callconv(.winapi) u32 {
+        return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn cast(self: *const IItemsControl, comptime T: type) ?*const T {
+        var out: ?*anyopaque = null;
+        if (self.QueryInterface(&T.IID, &out) < 0) return null;
+        return @ptrCast(@alignCast(out));
+    }
+
+    pub fn put_ItemsSource(self: *const IItemsControl, value: ?*const anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.put_ItemsSource(self, value);
+    }
+};
+
+pub const IItemsRepeater_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    get_ItemsSource: *const fn (this: *const IItemsRepeater, result: *?*const anyopaque) callconv(.winapi) HRESULT,
+    put_ItemsSource: *const fn (this: *const IItemsRepeater, p0: ?*const anyopaque) callconv(.winapi) HRESULT,
+};
+
+pub const IItemsRepeater = extern struct {
+    vtable: *const IItemsRepeater_Vtbl,
+    pub const Vtbl = IItemsRepeater_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0x9DABAC84,
+        .data2 = 0xFE81,
+        .data3 = 0x53D1,
+        .data4 = .{ 0xA0, 0x41, 0x7A, 0x3B, 0xEF, 0xEA, 0x50, 0x5F },
+    };
+
+    pub fn QueryInterface(self: *const IItemsRepeater, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.base.base.QueryInterface(@ptrCast(@constCast(self)), iid, interface);
+    }
+
+    pub fn AddRef(self: *const IItemsRepeater) callconv(.winapi) u32 {
+        return self.vtable.base.base.AddRef(@ptrCast(@constCast(self)));
+    }
+
+    pub fn Release(self: *const IItemsRepeater) callconv(.winapi) u32 {
+        return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn cast(self: *const IItemsRepeater, comptime T: type) ?*const T {
+        var out: ?*anyopaque = null;
+        if (self.QueryInterface(&T.IID, &out) < 0) return null;
+        return @ptrCast(@alignCast(out));
+    }
+
+    pub fn put_ItemsSource(self: *const IItemsRepeater, value: ?*const anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.put_ItemsSource(self, value);
+    }
+};
+
+pub const ItemsRepeater = extern struct {
+    vtable: *const IItemsRepeater_Vtbl,
+    pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.ItemsRepeater";
+    pub const NAME_W = std.unicode.utf8ToUtf16LeStringLiteral(NAME).*;
+};
+
+pub const IItemsRepeaterFactory_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    CreateInstance: *const fn (
+        this: *const IItemsRepeaterFactory,
+        outer: ?*const anyopaque,
+        inner: *?*const anyopaque,
+        result: **ItemsRepeater,
+    ) callconv(.winapi) HRESULT,
+};
+
+pub const IItemsRepeaterFactory = extern struct {
+    vtable: *const IItemsRepeaterFactory_Vtbl,
+    pub const Vtbl = IItemsRepeaterFactory_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0xC3C1F244,
+        .data2 = 0x67A8,
+        .data3 = 0x568F,
+        .data4 = .{ 0xA6, 0xF7, 0x5D, 0xA8, 0xB0, 0xEA, 0xDD, 0x49 },
+    };
+
+    pub fn QueryInterface(self: *const IItemsRepeaterFactory, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.base.base.QueryInterface(@ptrCast(@constCast(self)), iid, interface);
+    }
+
+    pub fn AddRef(self: *const IItemsRepeaterFactory) callconv(.winapi) u32 {
+        return self.vtable.base.base.AddRef(@ptrCast(@constCast(self)));
+    }
+
+    pub fn Release(self: *const IItemsRepeaterFactory) callconv(.winapi) u32 {
+        return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn cast(self: *const IItemsRepeaterFactory, comptime T: type) ?*const T {
+        var out: ?*anyopaque = null;
+        if (self.QueryInterface(&T.IID, &out) < 0) return null;
+        return @ptrCast(@alignCast(out));
+    }
+
+    pub fn CreateInstance(self: *const IItemsRepeaterFactory, outer: ?*const anyopaque, inner: *?*const anyopaque, result: **ItemsRepeater) callconv(.winapi) HRESULT {
+        return self.vtable.CreateInstance(self, outer, inner, result);
+    }
+};
+
+pub const IListViewFactory_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    CreateInstance: *const fn (
+        this: *const IListViewFactory,
+        outer: ?*const anyopaque,
+        inner: *?*const anyopaque,
+        result: **ListView,
+    ) callconv(.winapi) HRESULT,
+};
+
+pub const IListViewFactory = extern struct {
+    vtable: *const IListViewFactory_Vtbl,
+    pub const Vtbl = IListViewFactory_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0x03EBEFB8,
+        .data2 = 0xF64A,
+        .data3 = 0x5BF9,
+        .data4 = .{ 0x95, 0x70, 0xCB, 0x09, 0xEE, 0xEA, 0x23, 0x35 },
+    };
+
+    pub fn QueryInterface(self: *const IListViewFactory, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.base.base.QueryInterface(@ptrCast(@constCast(self)), iid, interface);
+    }
+
+    pub fn AddRef(self: *const IListViewFactory) callconv(.winapi) u32 {
+        return self.vtable.base.base.AddRef(@ptrCast(@constCast(self)));
+    }
+
+    pub fn Release(self: *const IListViewFactory) callconv(.winapi) u32 {
+        return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn cast(self: *const IListViewFactory, comptime T: type) ?*const T {
+        var out: ?*anyopaque = null;
+        if (self.QueryInterface(&T.IID, &out) < 0) return null;
+        return @ptrCast(@alignCast(out));
+    }
+
+    pub fn CreateInstance(self: *const IListViewFactory, outer: ?*const anyopaque, inner: *?*const anyopaque, result: **ListView) callconv(.winapi) HRESULT {
+        return self.vtable.CreateInstance(self, outer, inner, result);
+    }
+};

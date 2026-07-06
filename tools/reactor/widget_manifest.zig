@@ -65,4 +65,25 @@ pub const raw_widgets = .{
             },
         },
     },
+
+    .@"Microsoft.UI.Xaml.Controls.ListView" = .{
+        .props = .{
+            .ItemsSource = Prop{
+                .value = .object,
+            },
+        },
+        .events = .{
+            .SelectionChanged = Event{
+                .payload = .unit,
+            },
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.ItemsRepeater" = .{
+        .props = .{
+            .ItemsSource = Prop{
+                .value = .object,
+            },
+        },
+    },
 };

@@ -222,7 +222,7 @@ test "production manifest covers the initial widget set" {
     var manifest = try load(std.testing.allocator);
     defer manifest.deinit();
 
-    try std.testing.expectEqual(@as(usize, 6), manifest.widgets.len);
+    try std.testing.expectEqual(@as(usize, 8), manifest.widgets.len);
 
     const application = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Application") orelse return error.TestUnexpectedResult;
     try std.testing.expectEqual(@as(usize, 0), application.props.len);
@@ -268,6 +268,17 @@ test "production manifest covers the initial widget set" {
     try std.testing.expect(orientation.value.? == .enum_i32);
     const spacing = findProp(stack_panel, "Spacing") orelse return error.TestUnexpectedResult;
     try std.testing.expect(spacing.value.? == .f64);
+
+    const list_view = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.ListView") orelse return error.TestUnexpectedResult;
+    const list_view_items_source = findProp(list_view, "ItemsSource") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(list_view_items_source.value.? == .object);
+    const selection_changed = findEvent(list_view, "SelectionChanged") orelse return error.TestUnexpectedResult;
+    try std.testing.expectEqualStrings("on_selection_changed", selection_changed.field);
+    try std.testing.expect(selection_changed.payload.? == .unit);
+
+    const items_repeater = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.ItemsRepeater") orelse return error.TestUnexpectedResult;
+    const items_repeater_items_source = findProp(items_repeater, "ItemsSource") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(items_repeater_items_source.value.? == .object);
 }
 
 test "loader derives defaults and preserves advanced overrides" {

@@ -58,3 +58,50 @@ pub const IButtonBase = extern struct {
         return self.vtable.remove_Click(self, token);
     }
 };
+
+pub const ISelector_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    get_SelectedIndex: *const fn (this: *const ISelector, result: *i32) callconv(.winapi) HRESULT,
+    put_SelectedIndex: *const fn (this: *const ISelector, p0: i32) callconv(.winapi) HRESULT,
+    get_SelectedItem: *const fn (this: *const ISelector, result: *?*const anyopaque) callconv(.winapi) HRESULT,
+    put_SelectedItem: *const fn (this: *const ISelector, p0: ?*const anyopaque) callconv(.winapi) HRESULT,
+    get_SelectedValue: *const fn (this: *const ISelector, result: *?*const anyopaque) callconv(.winapi) HRESULT,
+    put_SelectedValue: *const fn (this: *const ISelector, p0: ?*const anyopaque) callconv(.winapi) HRESULT,
+    get_SelectedValuePath: *const fn (this: *const ISelector, result: *win_core.HSTRING) callconv(.winapi) HRESULT,
+    put_SelectedValuePath: *const fn (this: *const ISelector, p0: win_core.HSTRING) callconv(.winapi) HRESULT,
+    get_IsSynchronizedWithCurrentItem: *const fn (this: *const ISelector, result: **anyopaque) callconv(.winapi) HRESULT,
+    put_IsSynchronizedWithCurrentItem: *const fn (this: *const ISelector, p0: *anyopaque) callconv(.winapi) HRESULT,
+    add_SelectionChanged: *const fn (this: *const ISelector, p0: *controls.SelectionChangedEventHandler, result: *foundation.EventRegistrationToken) callconv(.winapi) HRESULT,
+    remove_SelectionChanged: *const fn (this: *const ISelector, p0: foundation.EventRegistrationToken) callconv(.winapi) HRESULT,
+};
+
+pub const ISelector = extern struct {
+    vtable: *const ISelector_Vtbl,
+    pub const Vtbl = ISelector_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0x8F7E2159,
+        .data2 = 0xE61D,
+        .data3 = 0x576F,
+        .data4 = .{ 0x84, 0x76, 0xF8, 0x3F, 0xDE, 0x3D, 0x68, 0x9E },
+    };
+
+    pub fn QueryInterface(self: *const ISelector, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.base.base.QueryInterface(@ptrCast(@constCast(self)), iid, interface);
+    }
+
+    pub fn AddRef(self: *const ISelector) callconv(.winapi) u32 {
+        return self.vtable.base.base.AddRef(@ptrCast(@constCast(self)));
+    }
+
+    pub fn Release(self: *const ISelector) callconv(.winapi) u32 {
+        return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn add_SelectionChanged(self: *const ISelector, handler: *controls.SelectionChangedEventHandler, result: *foundation.EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.add_SelectionChanged(self, handler, result);
+    }
+
+    pub fn remove_SelectionChanged(self: *const ISelector, token: foundation.EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.remove_SelectionChanged(self, token);
+    }
+};

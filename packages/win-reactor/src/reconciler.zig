@@ -385,33 +385,31 @@ pub const Reconciler = struct {
         switch (mounted.*) {
             .widget => |*widget_state| {
                 std.debug.assert(old.* == .widget and new.* == .widget);
+                const reconcile_children_first = widgetTransitionsToExplicitItemsSource(&old.widget, &new.widget);
+                if (reconcile_children_first) {
+                    const next_children = try self.reconcileWidgetChildren(
+                        widget_state.id,
+                        old.widget.children,
+                        new.widget.children,
+                        widget_state.children,
+                    );
+                    if (widget_state.children.len > 0) self.allocator.free(widget_state.children);
+                    widget_state.children = next_children;
+                }
+
                 try self.diffProperties(widget_state.id, old.widget.props, new.widget.props);
                 try self.diffEvents(widget_state.id, old.widget.events, new.widget.events);
 
-                var child_order: std.ArrayListUnmanaged(WidgetId) = .empty;
-                defer child_order.deinit(self.allocator);
-                try collectMountedSliceRootIds(self.allocator, widget_state.children, &child_order);
-
-                var child_ctx = ParentContext{
-                    .parent = widget_state.id,
-                    .order = &child_order,
-                };
-                const next_children = try self.reconcileLiveChildren(
-                    &child_ctx,
-                    old.widget.children,
-                    new.widget.children,
-                    widget_state.children,
-                );
-
-                var desired: std.ArrayListUnmanaged(WidgetId) = .empty;
-                defer desired.deinit(self.allocator);
-                try collectMountedSliceRootIds(self.allocator, next_children, &desired);
-                if (!widgetIdSlicesEql(child_order.items, desired.items)) {
-                    try self.backend.reorderChildren(widget_state.id, desired.items);
+                if (!reconcile_children_first) {
+                    const next_children = try self.reconcileWidgetChildren(
+                        widget_state.id,
+                        old.widget.children,
+                        new.widget.children,
+                        widget_state.children,
+                    );
+                    if (widget_state.children.len > 0) self.allocator.free(widget_state.children);
+                    widget_state.children = next_children;
                 }
-
-                if (widget_state.children.len > 0) self.allocator.free(widget_state.children);
-                widget_state.children = next_children;
             },
             .component => |*component_state| {
                 std.debug.assert(old.* == .component and new.* == .component);
@@ -496,6 +494,38 @@ pub const Reconciler = struct {
                 std.debug.assert(old.* == .empty and new.* == .empty);
             },
         }
+    }
+
+    fn reconcileWidgetChildren(
+        self: *Reconciler,
+        parent_id: WidgetId,
+        old_children: []const Element,
+        new_children: []const Element,
+        mounted_children: []MountedElement,
+    ) anyerror![]MountedElement {
+        var child_order: std.ArrayListUnmanaged(WidgetId) = .empty;
+        defer child_order.deinit(self.allocator);
+        try collectMountedSliceRootIds(self.allocator, mounted_children, &child_order);
+
+        var child_ctx = ParentContext{
+            .parent = parent_id,
+            .order = &child_order,
+        };
+        const next_children = try self.reconcileLiveChildren(
+            &child_ctx,
+            old_children,
+            new_children,
+            mounted_children,
+        );
+
+        var desired: std.ArrayListUnmanaged(WidgetId) = .empty;
+        defer desired.deinit(self.allocator);
+        try collectMountedSliceRootIds(self.allocator, next_children, &desired);
+        if (!widgetIdSlicesEql(child_order.items, desired.items)) {
+            try self.backend.reorderChildren(parent_id, desired.items);
+        }
+
+        return next_children;
     }
 
     fn reconcileLiveChildren(
@@ -857,6 +887,27 @@ fn findEvent(events: []const element.EventHandler, name: []const u8) ?*const ele
     return null;
 }
 
+fn widgetTransitionsToExplicitItemsSource(
+    old_widget: *const element.WidgetElement,
+    new_widget: *const element.WidgetElement,
+) bool {
+    return isCollectionBoundListWidget(old_widget.kind) and
+        !widgetHasExplicitItemsSource(old_widget) and
+        widgetHasExplicitItemsSource(new_widget);
+}
+
+fn widgetHasExplicitItemsSource(widget: *const element.WidgetElement) bool {
+    if (!isCollectionBoundListWidget(widget.kind)) return false;
+    return findProperty(widget.props, "ItemsSource") != null;
+}
+
+fn isCollectionBoundListWidget(kind: element.WidgetKind) bool {
+    return switch (kind) {
+        .list_view, .items_repeater => true,
+        else => false,
+    };
+}
+
 fn canSkipUpdate(old: *const Element, new: *const Element) bool {
     return elementEql(old, new);
 }
@@ -1103,6 +1154,69 @@ const CountAction = union(enum) {
     reset,
 };
 
+const StrictListBackend = struct {
+    inner: RecordingBackend,
+
+    pub fn init(allocator: Allocator) StrictListBackend {
+        return .{ .inner = RecordingBackend.init(allocator) };
+    }
+
+    pub fn deinit(self: *StrictListBackend) void {
+        self.inner.deinit();
+    }
+
+    pub fn mountWidget(
+        self: *StrictListBackend,
+        parent: ?WidgetId,
+        index: usize,
+        kind: element.WidgetKind,
+    ) anyerror!WidgetId {
+        if (self.parentUsesExplicitItemsSource(parent)) {
+            return error.ItemsSourceManagedExternally;
+        }
+        return self.inner.mountWidget(parent, index, kind);
+    }
+
+    pub fn unmountWidget(self: *StrictListBackend, id: WidgetId) anyerror!void {
+        const widget = self.inner.widgetState(id) orelse return error.UnknownWidget;
+        if (self.parentUsesExplicitItemsSource(widget.parent)) {
+            return error.ItemsSourceManagedExternally;
+        }
+        return self.inner.unmountWidget(id);
+    }
+
+    pub fn reorderChildren(self: *StrictListBackend, parent: ?WidgetId, children: []const WidgetId) anyerror!void {
+        return self.inner.reorderChildren(parent, children);
+    }
+
+    pub fn setProperty(self: *StrictListBackend, id: WidgetId, property: *const element.Property) anyerror!void {
+        const widget = self.inner.widgetState(id) orelse return error.UnknownWidget;
+        if (std.mem.eql(u8, property.name, "ItemsSource") and isCollectionBoundListWidget(widget.kind) and widget.children.items.len != 0) {
+            return error.ItemsSourceManagedByChildren;
+        }
+        return self.inner.setProperty(id, property);
+    }
+
+    pub fn unsetProperty(self: *StrictListBackend, id: WidgetId, name: []const u8) anyerror!void {
+        return self.inner.unsetProperty(id, name);
+    }
+
+    pub fn attachEvent(self: *StrictListBackend, id: WidgetId, handler: *const element.EventHandler) anyerror!void {
+        return self.inner.attachEvent(id, handler);
+    }
+
+    pub fn detachEvent(self: *StrictListBackend, id: WidgetId, name: []const u8) anyerror!void {
+        return self.inner.detachEvent(id, name);
+    }
+
+    fn parentUsesExplicitItemsSource(self: *StrictListBackend, parent: ?WidgetId) bool {
+        const parent_id = parent orelse return false;
+        const widget = self.inner.widgetState(parent_id) orelse return false;
+        if (!isCollectionBoundListWidget(widget.kind)) return false;
+        return widget.property("ItemsSource") != null;
+    }
+};
+
 fn incrementReducer(state: *const i32) i32 {
     return state.* + 1;
 }
@@ -1346,6 +1460,100 @@ test "keyed child reorder emits reorder call without remounting" {
         &[_]WidgetId{ 4, 2, 3 },
         backend_state.calls.items[0].reorder_children.children,
     );
+}
+
+test "keyed list widget updates only changed item mounts" {
+    var backend_state = RecordingBackend.init(std.testing.allocator);
+    defer backend_state.deinit();
+    var reconciler = Reconciler.init(
+        std.testing.allocator,
+        Backend.from(&backend_state),
+        RequestRerender.none(),
+    );
+    defer reconciler.deinit();
+
+    var child_a = try buildLeaf(std.testing.allocator, "a", "text", @as([]const u8, "A"));
+    defer child_a.deinit(std.testing.allocator);
+    var child_b = try buildLeaf(std.testing.allocator, "b", "text", @as([]const u8, "B"));
+    defer child_b.deinit(std.testing.allocator);
+    var child_c = try buildLeaf(std.testing.allocator, "c", "text", @as([]const u8, "C"));
+    defer child_c.deinit(std.testing.allocator);
+
+    var builder = element.list_view(std.testing.allocator);
+    _ = try (try (try builder.child(&child_a)).child(&child_b)).child(&child_c);
+    defer builder.deinit();
+    var first = try builder.build();
+    defer first.deinit(std.testing.allocator);
+
+    var tree = try reconciler.mount(&first);
+    defer reconciler.unmountTree(&tree) catch unreachable;
+    backend_state.clearCalls();
+
+    var next_a = try buildLeaf(std.testing.allocator, "a", "text", @as([]const u8, "A"));
+    defer next_a.deinit(std.testing.allocator);
+    var next_c = try buildLeaf(std.testing.allocator, "c", "text", @as([]const u8, "C updated"));
+    defer next_c.deinit(std.testing.allocator);
+    var next_d = try buildLeaf(std.testing.allocator, "d", "text", @as([]const u8, "D"));
+    defer next_d.deinit(std.testing.allocator);
+
+    var next_builder = element.list_view(std.testing.allocator);
+    _ = try (try (try next_builder.child(&next_a)).child(&next_c)).child(&next_d);
+    defer next_builder.deinit();
+    var second = try next_builder.build();
+    defer second.deinit(std.testing.allocator);
+
+    try reconciler.update(&tree, &second);
+
+    try std.testing.expectEqual(@as(usize, 1), backend_state.callCountOf(.mount_widget));
+    try std.testing.expectEqual(@as(usize, 1), backend_state.callCountOf(.unmount_widget));
+    try std.testing.expectEqual(@as(usize, 2), backend_state.callCountOf(.set_property));
+    try std.testing.expectEqual(@as(usize, 0), backend_state.callCountOf(.reorder_children));
+    try std.testing.expectEqual(@as(usize, 4), backend_state.calls.items.len);
+    try std.testing.expectEqualStrings("text", backend_state.calls.items[0].set_property.property.name);
+    try std.testing.expectEqual(@as(WidgetId, 4), backend_state.calls.items[0].set_property.id);
+    try std.testing.expectEqual(element.WidgetKind.leaf, backend_state.calls.items[1].mount_widget.kind);
+    try std.testing.expectEqual(@as(?WidgetId, 1), backend_state.calls.items[1].mount_widget.parent);
+    try std.testing.expectEqualStrings("text", backend_state.calls.items[2].set_property.property.name);
+    try std.testing.expectEqual(@as(WidgetId, 5), backend_state.calls.items[2].set_property.id);
+    try std.testing.expectEqual(@as(WidgetId, 3), backend_state.calls.items[3].unmount_widget);
+}
+
+test "list widget can switch from children to explicit ItemsSource" {
+    var backend_state = StrictListBackend.init(std.testing.allocator);
+    defer backend_state.deinit();
+    var reconciler = Reconciler.init(
+        std.testing.allocator,
+        Backend.from(&backend_state),
+        RequestRerender.none(),
+    );
+    defer reconciler.deinit();
+
+    var child = try buildLeaf(std.testing.allocator, "a", "text", @as([]const u8, "A"));
+    defer child.deinit(std.testing.allocator);
+
+    var builder = element.list_view(std.testing.allocator);
+    _ = try builder.child(&child);
+    defer builder.deinit();
+    var first = try builder.build();
+    defer first.deinit(std.testing.allocator);
+
+    var tree = try reconciler.mount(&first);
+    defer reconciler.unmountTree(&tree) catch unreachable;
+    backend_state.inner.clearCalls();
+
+    var next_builder = element.list_view(std.testing.allocator);
+    _ = try next_builder.prop("ItemsSource", @as(?*const anyopaque, null));
+    defer next_builder.deinit();
+    var second = try next_builder.build();
+    defer second.deinit(std.testing.allocator);
+
+    try reconciler.update(&tree, &second);
+
+    try std.testing.expectEqual(@as(usize, 1), backend_state.inner.callCountOf(.unmount_widget));
+    try std.testing.expectEqual(@as(usize, 1), backend_state.inner.callCountOf(.set_property));
+    try std.testing.expectEqual(@as(usize, 0), backend_state.inner.childrenOf(1).len);
+    const list_widget = backend_state.inner.widgetState(1).?;
+    try std.testing.expect(list_widget.property("ItemsSource") != null);
 }
 
 test "provider changes force memoized consumers to rerender" {
