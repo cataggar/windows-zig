@@ -2,7 +2,7 @@
 
 ## Overview
 
-Fix the real WinUI `TextBox` crash by merging `Microsoft.UI.Xaml.Controls.XamlControlsResources` into `Application.Resources.MergedDictionaries` during `win-reactor` app bootstrap, before the first reactor tree mount. Then re-enable real `.text_box` creation and validate with the dedicated `reactor_notepad` sample, the existing `--exit-after-ms` smoke pattern, window-title detection, and an Application Event Log crash scan.
+Fix the real WinUI `TextBox` crash. The original approach (merge `Microsoft.UI.Xaml.Controls.XamlControlsResources` into `Application.Resources.MergedDictionaries` before the first reactor tree mount) turned out to be unreachable in the current bare-`Application` host — see "2026-07-06 investigation findings" and "follow-up research" below. The plan has been updated (2026-07-06, resumed) to build a reactor-local COM aggregation helper that gives `Application` a stub `IXamlMetadataProvider`, re-probe whether that unblocks `XamlControlsResources`, and fall back to vendoring `themeresources.xaml` directly if it doesn't. Then re-enable real `.text_box` creation and validate with the dedicated `reactor_notepad` sample, the existing `--exit-after-ms` smoke pattern, window-title detection, and an Application Event Log crash scan. See "Updated Plan (2026-07-06, resumed)" below for the current phase breakdown; the sections above it are the historical investigation record that motivated this update.
 
 ## Current State Analysis
 
@@ -87,11 +87,31 @@ Further research (public C++/WinRT unpackaged WinUI3 samples/docs) corroborates 
 
 Until one of those exists, `.text_box` should remain `error.NotYetSupported`.
 
+---
+
+## Updated Plan (2026-07-06, resumed)
+
+The sections below supersede the original Phase 1-3 plan that used to follow this point (that plan assumed `Application.Resources` could be populated before `mountInitial()`, which the investigation above disproved). Scope decisions confirmed with @cataggar for this update:
+
+- Pursue both fallback strategies from the investigation, as sequential phases with an explicit decision gate: try the COM-aggregation + stub `IXamlMetadataProvider` route first; only build the `themeresources.xaml`-vendoring fallback if that route fails to unblock `XamlControlsResources`.
+- Keep the COM aggregation helper in this same #74 plan/PR rather than splitting it into a separate issue — it's still new reusable infrastructure, but tracking it separately isn't worth the coordination overhead for this fix.
+
+### Additional Key Discoveries (this update)
+
+- `packages/win-core/src/root.zig` already has two precedents for hand-authoring COM/WinRT objects, and neither one currently supports COM aggregation:
+  - `Delegate(VtblInvokeFn, iid)` (`packages/win-core/src/root.zig:387-451`) — single-method callback objects (`IUnknown` + one IID + `IAgileObject`), used for WinRT event handlers.
+  - `MultiInterfaceObject(State, options, interfaces)` (`packages/win-core/src/root.zig:563-...`, documented in `docs/multi-method-authoring.md`) — multi-interface authored objects with their own identity/state, used for `IVector<T>`-style consumer wrappers. It always creates a **new independent object identity**; it has no notion of an "outer" controlling `IUnknown` or of delegating to a pre-existing WinRT-activated inner object. It is not a drop-in fit for aggregation, but its `qiFn`/refcount/`IInspectable` (`GetIids`/`GetRuntimeClassName`/`GetTrustLevel`) plumbing is a solid template to copy from.
+- `createComposable(RuntimeClass, Factory)` in `packages/win-reactor/src/app.zig:321-330` calls `factory_this.CreateInstance(null, &inner, &instance)` — the `outer` parameter is already part of the ABI (every composable WinRT factory's `CreateInstance(this, outer, inner, instance)` takes it), reactor just always passes `null` today. Real aggregation only requires passing a real outer `IUnknown`/`IInspectable` pointer here and capturing the `inner` non-delegating `IUnknown` that comes back.
+- `Microsoft.UI.Xaml.winmd` is already vendored in this worktree (`vendor/winmd/Microsoft.UI.Xaml.winmd`, fetched via `zig build fetch-winui-metadata`), so the exact `IXamlMetadataProvider` IID and method order (if the type is present in the metadata at all, even if `winbindgen` currently emits nothing for it) can be looked up directly from that file using the existing `winmd`/`tools/bindings` tooling instead of guessing from public C++/WinRT headers.
+- `microsoft/microsoft-ui-xaml` (the open-source WinUI/MUX repo, source of `themeresources.xaml`/`generic.xaml`) is MIT-licensed (confirmed via its GitHub `LICENSE` file). That means, unlike the proprietary WindowsAppSDK NuGet binaries in `vendor/winmd/README.md`'s "fetched-on-demand" table, a vendored copy of the actual XAML resource markup text from that repo could be **committed to git** under a new `vendor/` subdirectory with a README citing the exact source path/commit/license, following the same documented-provenance convention `vendor/winmd/README.md` already uses for its MIT-licensed rows — no build-time fetch/proprietary-license gitignore needed for this fallback path.
+- The vendored `Microsoft.UI.Xaml.winmd`/`Microsoft.UI.Text.winmd` pair is pinned at WinUI/WindowsAppSDK version `2.2.1` (`vendor/winmd/README.md`); if the fallback path is needed, the vendored `themeresources.xaml` source should come from the `microsoft-ui-xaml` tag/branch matching that same release so the resource keys line up with the binary `Microsoft.UI.Xaml.dll` actually loaded at runtime.
+
 ## Desired End State
 
-- `ReactorHost.start(...)` merges a `XamlControlsResources` instance into `Application.Resources.MergedDictionaries` before the first call to `mountInitial()`.
+- `win-core` gains a small COM-aggregation helper (name/shape decided during Phase 1) that reactor's `Application` creation uses to expose a stub `IXamlMetadataProvider` alongside the real `IApplication`/`IInspectable` faces.
+- `ReactorHost.start(...)` merges a working `XamlControlsResources`-equivalent resource dictionary into `Application.Resources.MergedDictionaries` at whatever point Phase 1's probes show is the earliest safe point relative to `mountInitial()`, using either the aggregation route (Phase 2) or the vendored-`themeresources.xaml` route (Phase 2-Fallback) — whichever Phase 1 determines actually works.
 - `.text_box` once again creates a real WinUI `Microsoft.UI.Xaml.Controls.TextBox` instead of returning `error.NotYetSupported`.
-- `samples/reactor_notepad` becomes the canonical in-tree TextBox validation sample and no longer documents the NotYetSupported stopgap.
+- `samples/reactor_notepad` becomes the canonical in-tree TextBox validation sample and no longer documents the `NotYetSupported` stopgap.
 - `reactor-selftest` includes the existing `--exit-after-ms 1500` smoke pattern for `reactor-notepad`, so TextBox stays covered by the same Windows-only smoke mechanism already used for `reactor-hello` and `reactor-counter`.
 - A manual run of `zig build run-reactor-notepad -- --exit-after-ms 1500`:
   - opens a visible window whose title starts with `windows-zig reactor notepad`,
@@ -100,128 +120,157 @@ Until one of those exists, `.text_box` should remain `error.NotYetSupported`.
 
 ### Key Discoveries
 
-- The missing piece is **not** “emit `XamlControlsResources` somewhere in the repo”; the symbol already exists in generated bindings. The missing piece is “make the reactor-local curated WinUI surface expose the tiny ABI subset bootstrap actually needs” (`build.zig:195-239`; `packages/win/src/generated/Microsoft.UI.Xaml.Controls.zig:39523-39531`).
-- The generated helper for `XamlControlsResources.activate()` is still affected by #54, so #74 should hand-author the local `activate()` helper instead of waiting on the emitter (`packages/win/src/generated/Microsoft.UI.Xaml.Controls.zig:39527-39528`; `docs/windows-reactor-port.md:85-88`).
-- #56 is relevant but not blocking: `MergedDictionaries` still falls back to `*anyopaque` in generated WinUI, but reactor already has established patterns for narrow raw collection consumers, so #74 can stay self-contained instead of taking #56 as a hard prerequisite (`docs/windows-reactor-port.md:89`; `packages/win-reactor/src/winui_backend.zig:123-145`).
-- The historical “reactor_counter TextBox repro” from the issue body should be translated into today’s repo state as “use `reactor_notepad` for the live TextBox repro,” because that is the sample that still mounts the public `text_box(...)` API (`samples/reactor_notepad/main.zig:105-118`; `build.zig:1849-1854`).
+- The missing piece is **not** "emit `XamlControlsResources` somewhere in the repo"; the symbol already exists in generated bindings. The missing piece is the app-model wiring (`IXamlMetadataProvider`) that WinUI's theme-resource loader silently depends on, which the XAML compiler normally generates for free and which reactor's bare `Application` never gets.
+- The generated helper for `XamlControlsResources.activate()` is still affected by #54, so this plan should hand-author any local `activate()`-style helper instead of waiting on the emitter (`packages/win/src/generated/Microsoft.UI.Xaml.Controls.zig:39527-39528`; `docs/windows-reactor-port.md:85-88`).
+- #56 is relevant but not blocking: `MergedDictionaries` still falls back to `*anyopaque` in generated WinUI, but reactor already has established patterns for narrow raw collection consumers (`packages/win-reactor/src/winui_backend.zig:123-145`), so this issue can stay self-contained instead of taking #56 as a hard prerequisite.
+- `reactor_notepad` is the correct live repro/validation target (translated from the issue body's older "reactor_counter TextBox repro" wording), because it's the sample that still mounts the public `text_box(...)` API (`samples/reactor_notepad/main.zig:105-118`; `build.zig:1849-1854`).
 
 ## What We're NOT Doing
 
 - We are **not** switching `win-reactor` wholesale from its curated WinUI surface to the full generated `packages/win/src/generated/` namespace files.
-- We are **not** fixing issues #52-#56 globally in this issue. #74 should borrow the ABI details it needs and stay narrowly focused on bootstrapping theme resources for `TextBox`.
+- We are **not** fixing issues #52-#56 globally in this issue. This issue should borrow the ABI details it needs and stay narrowly focused on unblocking `TextBox`.
 - We are **not** re-planning or implementing the broader emitter work for `Microsoft.UI.*` namespaces; sibling efforts already cover that.
 - We are **not** broadening scope to unrelated runtime/lifetime problems such as the shutdown leak/crash tracked in #60.
-- We are **not** adding permanent CI/Event-Viewer automation in this issue. Validation should follow the repo’s current split: build smoke in `build.zig`, plus manual `EnumWindows` / Application log checks.
+- We are **not** adding permanent CI/Event-Viewer automation in this issue. Validation should follow the repo's current split: build smoke in `build.zig`, plus manual `EnumWindows` / Application log checks.
 - We are **not** reintroducing a `TextBox` into `reactor_counter` just to match the old repro text. `reactor_notepad` is already the dedicated TextBox sample and should remain the validation target.
+- We are **not** building a fully general-purpose, reusable-for-any-runtime-class COM aggregation framework. Scope the helper to what `Application` needs (one stub extra interface); generalize later only if another issue actually needs it.
+- We are **not** splitting the COM aggregation helper into a separate issue/PR — per user decision, it stays Phase 1 of this same #74 plan.
+- We are **not** implementing `x:Bind` / custom XAML markup type support in the stub `IXamlMetadataProvider` — reactor doesn't use XAML markup files, so `GetXamlType`/`GetXamlUserType`/`GetXmlnsDefinitions` only need to exist and return "not found" style results, not actually resolve types.
 
 ## Implementation Approach
 
-Use the generated WinUI files as an ABI reference source only, then backport the minimum required declarations into the reactor-local curated WinUI surface that `win-reactor` actually imports. Keep the fix self-contained:
+1. **Build the minimum COM aggregation helper reactor needs, and validate it against the real blocker before writing any more code around it.** Phase 1 is a spike with a hard decision gate: it must end with a definitive answer to "does an aggregated `Application` with a stub `IXamlMetadataProvider` make `XamlControlsResources` activation (or an equivalent theme-resource load) succeed?" before Phase 2 work starts.
+2. **Do not assume the original bootstrap ordering still holds.** Because `Application.Resources` was only observed to become queryable after `mountInitial()` ran, Phase 1's probes must also pin down the earliest point after aggregated construction that `Resources`/`MergedDictionaries` become usable, and whether that's early enough relative to when the first `TextBox` widget would actually be constructed during the initial reactor mount.
+3. **Only build the `themeresources.xaml`-vendoring fallback if Phase 1 proves it's needed.** Don't speculatively implement both resource-loading strategies; Phase 1's findings pick exactly one of Phase 2 / Phase 2-Fallback to implement.
+4. **Re-enable `TextBox` only after a resource-loading strategy is confirmed working end-to-end**, i.e., after a real `TextBox` has been constructed and rendered without crashing in a throwaway probe, not just after `XamlControlsResources.ActivateInstance` stops returning `E_FAIL`.
+5. **Validate with the sample that still mounts TextBox today.** Make `reactor_notepad` the authoritative repro/smoke target, wire it into `reactor-selftest`, and keep the manual Event Viewer scan outside the build system (consistent with existing repo convention for `reactor-hello`/`reactor-counter`).
 
-1. **Fill the reactor-local binding gap**  
-   Add the missing `ResourceDictionary` / `MergedDictionaries` / `XamlControlsResources` declarations directly under `packages/win-reactor/src/winui/`, sourcing IIDs and method order from the generated files but keeping the implementation in the curated modules.
-
-2. **Avoid turning #56 into a prerequisite**  
-   Do not wait for the emitter to hand back a typed `IVector<ResourceDictionary>`. Instead, add a narrow reactor-local merged-dictionary vector consumer that mirrors the `IVector` slot order from issue #10 and the raw collection pattern already used in `winui_backend.zig`. This gives bootstrap exactly one operation it needs: `Append(...)`.
-
-3. **Run the resource merge before any widget mount**  
-   The helper must run immediately after `Application` creation and before `WinUIBackend.init(...)` / `mountInitial()`, because the first `TextBox` can be created during the initial reactor tree mount.
-
-4. **Re-enable TextBox only after bootstrap is in place**  
-   The backend already has the `ITextBoxFactory` plumbing and the public `text_box(...)` API. Once theme resources are present, the actual code change is just to stop returning `error.NotYetSupported` and restore real `TextBox` construction.
-
-5. **Validate with the sample that still mounts TextBox today**  
-   Make `reactor_notepad` the authoritative repro/smoke target, wire it into `reactor-selftest`, and keep the manual Event Viewer scan outside the build system.
-
-## Phase 1: Expand the reactor-local WinUI binding surface
+## Phase 1: COM aggregation helper + stub `IXamlMetadataProvider`, probe the real blocker
 
 ### Overview
 
-Backfill the small ABI surface missing from `packages/win-reactor/src/winui/` so app bootstrap can access `Application.Resources.MergedDictionaries` and construct `XamlControlsResources` without relying on the broken generated helper.
+Add a reactor-usable COM aggregation primitive, use it to give a real `Application` instance a stub `IXamlMetadataProvider`, and re-run the `Application.Resources`/`XamlControlsResources` probes from the investigation against that aggregated instance. This phase's deliverable is an answer, not a permanent feature — the temporary probe code added here can be thrown away once the answer is known (permanent wiring happens in Phase 2 or Phase 2-Fallback).
 
 ### Changes Required
 
-#### 1. Add `ResourceDictionary` collection access to the curated XAML surface
+#### 1. Look up `IXamlMetadataProvider`'s real ABI shape
 **Files**:
-- `packages/win-reactor/src/winui/Microsoft.UI.Xaml.zig`
-- reference source: `packages/win/src/generated/Microsoft.UI.Xaml.zig`
+- `vendor/winmd/Microsoft.UI.Xaml.winmd` (read-only source of truth)
+- `packages/winmd/src/` / `tools/bindings/src/` (existing tooling to query it)
 
 **Changes**:
-- Replace the current opaque `ResourceDictionary` placeholder with a minimal ABI-accurate definition:
-  - `IResourceDictionary_Vtbl`
-  - `IResourceDictionary`
-  - `ResourceDictionary`
-- Add a narrow merged-dictionary vector consumer that follows the `IVector` slot order from issue #10 but only exposes the operations bootstrap needs (`Append`, and the usual COM lifetime methods).
-- Declare `IResourceDictionary.get_MergedDictionaries(...)` to return that narrow vector type directly, so `app.zig` does not need to reason about a raw `**anyopaque`.
-- Keep the scope narrow: this is not a full projection of `ResourceDictionary`; it only needs to cover `QueryInterface`/`AddRef`/`Release` plus `MergedDictionaries`.
+- Use the existing `winmd` parsing package (the same one `winbindgen` uses) to check whether `Microsoft.UI.Xaml.Markup.IXamlMetadataProvider` (or wherever it actually lives in the metadata) is present, and if so, record its IID and exact method order/signatures (`GetXamlType` overloads, `GetXmlnsDefinitions`, etc.).
+- If the interface is genuinely absent from the metadata (as the earlier repo-wide source search suggested), fall back to the publicly documented C++/WinRT `IXamlMetadataProvider` ABI (3 methods: `GetXamlType(TypeName)`, `GetXamlType(hstring fullName)` or equivalent overload, `GetXmlnsDefinitions()`), and pin the IID from public Windows SDK headers (`xamlom.h`/`Windows.UI.Xaml.Markup.h`-equivalent for Microsoft.UI.Xaml).
+- Document whichever source was used (metadata vs. public header) directly in the code comment next to the new vtable, since this is exactly the kind of ABI fact future issues will want to cross-check.
 
-#### 2. Add a local `XamlControlsResources` activation surface
+#### 2. Add a reactor-local (or `win-core`) COM aggregation helper
 **Files**:
-- `packages/win-reactor/src/winui/Microsoft.UI.Xaml.Controls.zig`
-- reference source: `packages/win/src/generated/Microsoft.UI.Xaml.Controls.zig`
+- New file, e.g. `packages/win-reactor/src/com_aggregate.zig` (keep it reactor-local first; only promote to `win-core` later if a second consumer shows up — this matches the "we're not building a general framework" scope decision above)
 
 **Changes**:
-- Add `IXamlControlsResources_Vtbl`, `IXamlControlsResources`, and `XamlControlsResources`.
-- Hand-author `XamlControlsResources.activate()` using the same pattern already used for `TextBlock`, `ScrollViewer`, and `ToggleSwitch` in the curated controls file, so it calls `win_core.activateInstance(IXamlControlsResources, &NAME_W)` instead of depending on the known-broken generated helper.
-- Keep the local surface minimal: #74 only needs activation and an interface IID; it does not need the full statics/property set.
+- Model the object shape on `Delegate`/`MultiInterfaceObject`'s existing pattern in `packages/win-core/src/root.zig` (per-instance vtable-pointer-first struct, atomic refcount, allocator-aware teardown).
+- Implement the standard WinRT/COM aggregation contract:
+  - An "outer" object that owns the controlling `IUnknown`/`IInspectable` identity and answers `QueryInterface` first for its own authored interfaces (just `IXamlMetadataProvider` for now), then delegates anything else to the inner object's **non-delegating** `IUnknown` (obtained from the `inner` out-parameter of `CreateInstance(outer, &inner, &instance)`).
+  - The inner object's non-delegating `AddRef`/`Release`/`QueryInterface` must be reachable through that captured `inner` pointer distinctly from the identity `instance` pointer WinRT hands back — do not conflate the two.
+  - Stub `GetXamlType`/`GetXamlUserType`/`GetXmlnsDefinitions` implementations that return "not found"/empty results (`E_NOTIMPL` or empty array, whichever the real interface's contract expects for "no custom types") — reactor has no XAML markup files, so these never need to resolve anything real.
+- Provide a single entry point along the lines of `pub fn createAggregatedApplication(allocator) !*xaml.Application` that:
+  1. builds the outer aggregation object,
+  2. calls the `Application` factory's `CreateInstance` with that outer object as the `outer` parameter,
+  3. stores the captured inner non-delegating `IUnknown` on the outer object for later delegation,
+  4. returns the same `*xaml.Application` identity pointer `createComposable` returns today, so callers in `app.zig` don't need to change shape.
 
-#### 3. Sync the starter WinUI manifest comment/allowlist
-**File**: `tools/bindings/src/winui.txt`
+#### 3. Temporary probe wiring in `app.zig`
+**File**: `packages/win-reactor/src/app.zig`
 
 **Changes**:
-- Add `Microsoft.UI.Xaml.Controls.XamlControlsResources` to the starter allowlist so the file no longer misleads future issue-#74 readers into thinking the type was never emitted.
-- Treat this as a documentation-consistency update only. Do **not** make the functional fix depend on rerouting reactor to the generated WinUI bundle.
+- Swap the plain `createComposable(xaml.Application, xaml.IApplicationFactory)` call for the new aggregated constructor, gated behind a temporary flag/build option so this can be backed out cleanly if Phase 1 fails.
+- Re-run the exact probes from the investigation (`Application.Resources`/`put_Resources`, `get_MergedDictionaries`, `XamlControlsResources` activation, `ResourceDictionary.Source = ms-appx://...`) at each of: immediately after aggregated construction, after `mountInitial()`, after `activateWindows()`, and on a later dispatcher callback — using `zig build run-reactor-hello -- --exit-after-ms 1500` as the throwaway harness, same as the original investigation.
+- Record results directly in this plan document (a new "Phase 1 results" subsection) once probes are complete.
 
 ### Success Criteria
 
-- `win-reactor` can compile against local curated definitions for:
-  - `xaml.IResourceDictionary`
-  - the merged-dictionary vector consumer
-  - `controls.XamlControlsResources.activate()`
-- No code in `win-reactor` needs to import the full generated `Microsoft.UI.Xaml*` modules directly.
-- The new local helper surfaces are obviously sourced from the generated ABI, but they do not require #52-#56 to land first.
+- The aggregation helper compiles and a real `Application` instance can be constructed through it without crashing or hanging.
+- `QueryInterface` for `IID_IXamlMetadataProvider` against the aggregated `Application` instance succeeds (`S_OK`) — this alone proves the aggregation wiring itself is correct, independent of whether it fixes the resource-loading problem.
+- A definitive yes/no answer is recorded for: "does exposing `IXamlMetadataProvider` alone unblock `XamlControlsResources` activation / theme-resource loading?"
+- A definitive answer is recorded for: "what is the earliest point after aggregated `Application` construction that `Application.Resources`/`MergedDictionaries` are queryable, and is that early enough to run before the first `TextBox` widget would be constructed during `mountInitial()`?"
+
+**Implementation Note**: Pause here for manual confirmation of the probe results before proceeding — the answer determines whether Phase 2 or Phase 2-Fallback gets implemented.
 
 ---
 
-## Phase 2: Merge `XamlControlsResources` during app bootstrap
+## Phase 2: Wire aggregation permanently and merge theme resources (only if Phase 1 succeeds)
 
 ### Overview
 
-Insert a one-time bootstrap step that merges WinUI’s default control resources into the app-wide resource dictionary before the first reactor widget tree is mounted.
+If Phase 1 confirms that an aggregated `Application` with a stub `IXamlMetadataProvider` allows `XamlControlsResources` (or an equivalent resource dictionary) to activate successfully, make that wiring permanent and merge it into `Application.Resources.MergedDictionaries` at the timing Phase 1 determined is safe.
 
 ### Changes Required
 
-#### 1. Add a bootstrap helper in `app.zig`
+#### 1. Make aggregated `Application` construction permanent
 **File**: `packages/win-reactor/src/app.zig`
 
 **Changes**:
-- Import `Microsoft.UI.Xaml.Controls` alongside the existing `Microsoft.UI.Xaml` import.
-- Add a helper such as `ensureControlThemeResources(application: *xaml.Application) !void`.
-- Inside that helper:
-  1. reinterpret the runtime class pointer as `*const xaml.IApplication`,
-  2. call `get_Resources(...)` to obtain the app-wide `ResourceDictionary`,
-  3. call `get_MergedDictionaries(...)` to obtain the merged-dictionary vector,
-  4. activate one `controls.XamlControlsResources`,
-  5. append it to the vector,
-  6. release temporary interface refs after the append succeeds.
+- Replace the temporary probe-gated construction from Phase 1 with the aggregated constructor unconditionally.
+- Remove the throwaway probe code, keeping only the parts that are now load-bearing (the resource merge itself).
 
-#### 2. Invoke the helper in the only safe place
+#### 2. Merge `XamlControlsResources` at the confirmed-safe point
 **File**: `packages/win-reactor/src/app.zig`
 
 **Changes**:
-- Call `ensureControlThemeResources(application)` immediately after:
-  - `const application = try createComposable(xaml.Application, xaml.IApplicationFactory);`
-- Do this **before**:
-  - `self.backend_impl = winui_backend.WinUIBackend.init(...)`
-  - `try self.mountInitial();`
+- Add a bootstrap helper (e.g. `ensureControlThemeResources(application: *xaml.Application) !void`) that: obtains `Application.Resources`, obtains `MergedDictionaries`, activates one `XamlControlsResources` instance (hand-authored `activate()` per the #54 workaround already used elsewhere in the curated surface), appends it, and releases temporary refs.
+- Call it at the point Phase 1's probes showed is both valid (`S_OK`, not `E_UNEXPECTED`) and early enough relative to the first possible `TextBox` construction. If Phase 1 shows `Resources` genuinely isn't queryable early enough to run before `mountInitial()`, this phase must also change `ReactorHost.start(...)`'s sequencing (e.g., deferring real `TextBox` construction for widgets present in the very first mount to a follow-up dispatcher tick after the merge completes) rather than silently accepting a race.
 
-That ordering is the core correctness rule for #74: the first `TextBox` construction must see a resource dictionary whose `MergedDictionaries` already contains `XamlControlsResources`.
+#### 3. Backfill the reactor-local WinUI binding surface needed for the merge
+**Files**:
+- `packages/win-reactor/src/winui/Microsoft.UI.Xaml.zig`
+- `packages/win-reactor/src/winui/Microsoft.UI.Xaml.Controls.zig`
+
+**Changes**:
+- Add a minimal ABI-accurate `IResourceDictionary`/`ResourceDictionary` definition (`QueryInterface`/`AddRef`/`Release` + `get_MergedDictionaries`), sourcing IIDs/method order from `packages/win/src/generated/Microsoft.UI.Xaml.zig`.
+- Add a narrow merged-dictionary vector consumer exposing just `Append` (mirroring the `IVector` slot order already proven in `packages/win-collections/src/interfaces.zig:287-400`).
+- Add `IXamlControlsResources`/`XamlControlsResources` with a hand-authored `activate()` that calls `win_core.activateInstance(...)` directly (bypassing the known-broken generated helper, per #54).
 
 ### Success Criteria
 
-- The bootstrap path still follows the existing `RoInitialize` → `MddBootstrapInitialize2` → `Application.Start` sequence.
-- The new resource-merge helper runs exactly once per app start, before any reactor widget handle can be created.
-- Existing non-TextBox samples continue to use the same app bootstrap path and remain behaviorally unchanged.
+- `packages/win-reactor/src/app.zig` merges a working theme-resource dictionary into `Application.Resources.MergedDictionaries` before any `TextBox` can be constructed.
+- A throwaway `TextBox` construction + `Window.Content` assignment in a probe build renders without the `0xC000027B` crash.
+
+**Implementation Note**: Pause here for manual confirmation before proceeding to Phase 3.
+
+---
+
+## Phase 2-Fallback: Vendor `themeresources.xaml` and bypass `ms-appx://` (only if Phase 1 shows aggregation is insufficient)
+
+### Overview
+
+If Phase 1 shows that exposing `IXamlMetadataProvider` alone does not unblock the `E_FAIL`/`0x80004005` theme-resource load, bypass `ms-appx://` resolution entirely by vendoring the actual resource markup and loading it via `XamlReader.Load(...)`.
+
+### Changes Required
+
+#### 1. Vendor the MIT-licensed theme resource markup
+**Files**:
+- New `vendor/winui-resources/` directory + README (mirroring `vendor/winmd/README.md`'s documented-provenance style)
+
+**Changes**:
+- From the `microsoft/microsoft-ui-xaml` GitHub repo, at the tag/branch matching the vendored `Microsoft.UI.Xaml.winmd` version (`2.2.1`, per `vendor/winmd/README.md`), locate and copy `themeresources.xaml` (and any dictionaries it directly `<ResourceDictionary.MergedDictionaries>`-merges that `TextBox`'s default style actually needs — focus visuals, placeholder-text brushes, etc.; not necessarily the full control set).
+- Commit these files directly to git (MIT license permits it), with a README documenting the exact source repo path, commit/tag, and license, following the same table format `vendor/winmd/README.md` uses for its MIT-licensed rows.
+- Confirm via a text diff/scan that the vendored XAML doesn't reference any `ms-appx://` URIs itself that would reintroduce the same resolution failure one level down (some theme dictionaries merge sibling files by `ms-appx://` `Source` URI); if it does, either vendor those sibling files too and rewrite the merge to load them the same way, or point them at absolute file paths under the app's own install directory.
+
+#### 2. Embed or load the vendored XAML at runtime
+**Files**:
+- `packages/win-reactor/src/app.zig` (or a new `packages/win-reactor/src/theme_resources.zig`)
+
+**Changes**:
+- Embed the vendored XAML text via `@embedFile(...)` (avoids needing to ship/locate a loose file next to the installed exe).
+- Add the minimal `Microsoft.UI.Xaml.Markup.XamlReader` binding needed (`IXamlReaderStatics.Load(xamlText) -> IInspectable`) to the curated WinUI surface.
+- Call `XamlReader.Load(...)` with the embedded text, `cast` the result to `IResourceDictionary`, and append it to `Application.Resources.MergedDictionaries` using the same merged-dictionary vector consumer built in Phase 2 (item 3) / Phase 1's ABI lookup.
+
+### Success Criteria
+
+- The vendored resource dictionary loads via `XamlReader.Load(...)` without error, independent of `ms-appx://`/package-identity resolution.
+- A throwaway `TextBox` construction + `Window.Content` assignment in a probe build renders without the `0xC000027B` crash.
+
+**Implementation Note**: Pause here for manual confirmation before proceeding to Phase 3.
 
 ---
 
@@ -229,7 +278,7 @@ That ordering is the core correctness rule for #74: the first `TextBox` construc
 
 ### Overview
 
-Remove the backend descope, update the sample/docs that still describe the crash workaround, and make the dedicated TextBox sample part of the existing WinUI smoke pattern.
+Remove the backend descope, update the sample/docs that still describe the crash workaround, and make the dedicated TextBox sample part of the existing WinUI smoke pattern. This phase is identical regardless of whether Phase 2 or Phase 2-Fallback was the one actually implemented.
 
 ### Changes Required
 
@@ -237,29 +286,25 @@ Remove the backend descope, update the sample/docs that still describe the crash
 **File**: `packages/win-reactor/src/winui_backend.zig`
 
 **Changes**:
-- Replace:
-  - `.text_box => error.NotYetSupported,`
-- with the same construction path already used by other composable controls:
-  - `ownInspectable(try createComposable(controls.TextBox, controls.ITextBoxFactory))`
+- Replace `.text_box => error.NotYetSupported,` (line 590) with the same construction path already used by other composable controls: `.text_box => ownInspectable(try createComposable(controls.TextBox, controls.ITextBoxFactory)),`.
 
-No public API redesign is needed here; the `text_box(...)` builder and TextChanged wiring already exist.
+No public API redesign is needed here; the `text_box(...)` builder and `TextChanged` wiring already exist.
 
-#### 2. Remove stale NotYetSupported documentation
+#### 2. Remove stale `NotYetSupported` documentation
 **Files**:
-- `samples/reactor_notepad/main.zig`
-- `docs/windows-reactor.md`
+- `samples/reactor_notepad/main.zig` (header comment, lines 1-7)
+- `docs/windows-reactor.md` (lines 493-495, 636)
 
 **Changes**:
 - Remove the comments that still say the sample exits with `error.NotYetSupported`.
-- Update the sample header to advertise the same timed smoke form used elsewhere, e.g. `zig build run-reactor-notepad -- --exit-after-ms 1500`.
+- Update the sample header to advertise the same timed-smoke form used elsewhere, e.g. `zig build run-reactor-notepad -- --exit-after-ms 1500`.
 - Update the widget surface docs so `text_box` is no longer described as blocked by issue #74.
 
-#### 3. Extend the existing smoke target to include the real TextBox sample
-**File**: `build.zig`
+#### 3. Extend the existing smoke condition to include the real TextBox sample
+**File**: `build.zig:1985-1986`
 
 **Changes**:
-- Add `reactor-notepad` to the Windows-only `reactor-selftest` smoke condition that already runs `reactor-hello` and `reactor-counter` with `--exit-after-ms 1500`.
-- Keep the implementation pattern identical to the current smoke steps: run the installed executable, rely on `stage-winui-runtime`, and use the auto-exit timer to keep the check non-interactive.
+- Change the smoke condition from `std.mem.eql(u8, s.name, "reactor-hello") or std.mem.eql(u8, s.name, "reactor-counter")` to also include `or std.mem.eql(u8, s.name, "reactor-notepad")`, so `reactor-selftest` runs `zig build run-reactor-notepad -- --exit-after-ms 1500` the same way it already does for the other two samples.
 
 ### Success Criteria
 
@@ -270,9 +315,9 @@ No public API redesign is needed here; the `text_box(...)` builder and TextChang
 
 ## Success Criteria
 
-- `packages/win-reactor/src/app.zig` merges `XamlControlsResources` before `mountInitial()`.
+- `packages/win-reactor/src/app.zig` merges a working theme-resource dictionary before the first `TextBox` can be constructed (via whichever of Phase 2 / Phase 2-Fallback Phase 1 selected).
 - `packages/win-reactor/src/winui_backend.zig` constructs a real `TextBox` again.
-- `samples/reactor_notepad` and `docs/windows-reactor.md` no longer mention the NotYetSupported stopgap.
+- `samples/reactor_notepad` and `docs/windows-reactor.md` no longer mention the `NotYetSupported` stopgap.
 - `zig build reactor-selftest --summary all` passes with `reactor-notepad` included in the Windows-only smoke set.
 - A manual `zig build run-reactor-notepad -- --exit-after-ms 1500` run opens a visible notepad window and exits without a new `Microsoft.UI.Xaml.dll` / `0xc000027b` Application Error event.
 
@@ -280,11 +325,10 @@ No public API redesign is needed here; the `text_box(...)` builder and TextChang
 
 ### Targeted build/test commands
 
-- `zig build reactor-selftest --summary all`  
-  Targeted existing repo step that runs `win-reactor` tests, builds reactor samples, and smoke-tests selected WinUI apps (`build.zig:321-322`).
-
-- `zig build run-reactor-notepad -- --exit-after-ms 1500`  
-  Dedicated live TextBox repro/validation command once `.text_box` is re-enabled.
+- `zig build test --summary all` — full repository validation per repo convention, run at least once after Phase 1's `win-core`/reactor-local aggregation code lands.
+- `zig build reactor-selftest --summary all` — targeted existing repo step that runs `win-reactor` tests, builds reactor samples, and smoke-tests selected WinUI apps (`build.zig:321-322`).
+- `zig build run-reactor-hello -- --exit-after-ms 1500` — the throwaway probe harness for Phase 1's investigation.
+- `zig build run-reactor-notepad -- --exit-after-ms 1500` — dedicated live TextBox repro/validation command once `.text_box` is re-enabled (Phase 3).
 
 ### Manual validation steps
 
@@ -300,7 +344,7 @@ No public API redesign is needed here; the `text_box(...)` builder and TextChang
    zig build run-reactor-notepad -- --exit-after-ms 1500
    ```
 
-3. While the sample is running (or from a second shell), verify window creation with the repo’s existing `EnumWindows` sample:
+3. While the sample is running (or from a second shell), verify window creation with the repo's existing `EnumWindows` sample:
 
    ```powershell
    zig build enum-windows
@@ -332,42 +376,54 @@ No public API redesign is needed here; the `text_box(...)` builder and TextChang
 
 ### Dependency note on #52-#56
 
-- #74 should **not** wait for #52-#55. The local curated binding route avoids those broader generator/import blockers.
+- This issue should **not** wait for #52-#55. The local curated binding route avoids those broader generator/import blockers.
 - #56 is relevant because `MergedDictionaries` still degrades to `*anyopaque` in generated WinUI, but it should be handled here with a narrow reactor-local consumer shim rather than by making issue #56 a prerequisite.
 
 ## References
 
-- Issue #74 — Reactor: real TextBox crashes with `0xC000027B` in `Microsoft.UI.Xaml.dll` (unpackaged app resource gap)  
+- Issue #74 — Reactor: real TextBox crashes with `0xC000027B` in `Microsoft.UI.Xaml.dll` (unpackaged app resource gap)
   <https://github.com/cataggar/windows-zig/issues/74>
 
-- Issue #21 — Widget batch: text & basic input controls  
+- PR #80 — Plan: fix real TextBox crash via XamlControlsResources merge (#74) — draft, holds this document
+  <https://github.com/cataggar/windows-zig/pull/80>
+
+- Issue #21 — Widget batch: text & basic input controls
   <https://github.com/cataggar/windows-zig/issues/21>
 
-- PR #71 — Widget batch: text & basic input controls  
+- PR #71 — Widget batch: text & basic input controls
   <https://github.com/cataggar/windows-zig/pull/71>
 
-- Issue #10 — Port windows-collections -> win-collections package  
+- Issue #10 — Port windows-collections -> win-collections package
   <https://github.com/cataggar/windows-zig/issues/10>
 
-- Issue #52 — winbindgen bundle emits empty Microsoft.UI dependency namespaces  
+- Issue #52 — winbindgen bundle emits empty Microsoft.UI dependency namespaces
   <https://github.com/cataggar/windows-zig/issues/52>
 
-- Issue #53 — winbindgen emits undeclared IResourceManager/CoreWebView2 identifiers in WinUI namespaces  
+- Issue #53 — winbindgen emits undeclared IResourceManager/CoreWebView2 identifiers in WinUI namespaces
   <https://github.com/cataggar/windows-zig/issues/53>
 
-- Issue #54 — Generated WinRT `activate()` helper passes `_Vtbl` type to `win_core.activateInstance`  
+- Issue #54 — Generated WinRT `activate()` helper passes `_Vtbl` type to `win_core.activateInstance`
   <https://github.com/cataggar/windows-zig/issues/54>
 
-- Issue #55 — Composable WinUI runtime classes do not get `Factory/factory()` helpers  
+- Issue #55 — Composable WinUI runtime classes do not get `Factory/factory()` helpers
   <https://github.com/cataggar/windows-zig/issues/55>
 
-- Issue #56 — WinUI event and collection members still fall back to `*anyopaque`  
+- Issue #56 — WinUI event and collection members still fall back to `*anyopaque`
   <https://github.com/cataggar/windows-zig/issues/56>
+
+- Issue #60 — shutdown leak/crash (explicitly out of scope for this issue)
+  <https://github.com/cataggar/windows-zig/issues/60>
+
+- `docs/multi-method-authoring.md` — `win-core.MultiInterfaceObject` pattern this plan's aggregation helper borrows plumbing from.
+- `microsoft/microsoft-ui-xaml` (MIT-licensed) — source of `themeresources.xaml`/`generic.xaml` for the Phase 2-Fallback vendoring route.
+  <https://github.com/microsoft/microsoft-ui-xaml>
 
 - Reactor bootstrap and smoke references:
   - `packages/win-reactor/src/app.zig`
   - `packages/win-reactor/src/winui_backend.zig`
+  - `packages/win-core/src/root.zig` (`Delegate`, `MultiInterfaceObject`)
   - `samples/reactor_notepad/main.zig`
   - `build.zig`
   - `docs/windows-reactor-port.md`
   - `docs/windows-reactor.md`
+  - `vendor/winmd/README.md`
