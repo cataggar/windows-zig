@@ -1,6 +1,6 @@
 .{
     .name = .windows_zig,
-    .version = "0.0.0",
+    .version = "1.0.0",
     .fingerprint = 0x2926605c24e94799,
     .minimum_zig_version = "0.16.0",
 
@@ -9,6 +9,7 @@
     .paths = .{
         "build.zig",
         "build.zig.zon",
+        "docs",
         "packages",
         "tools",
         "tests",

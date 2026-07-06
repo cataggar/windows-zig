@@ -3,7 +3,9 @@
 A Zig 0.16 port of the [windows-rs](https://github.com/microsoft/windows-rs) stack,
 reusing the same ECMA-335 `.winmd` metadata to project the Windows API into Zig.
 
-> **Status:** early bring-up. This repo was split out of
+> **Status:** v1.0.0. The core projection stack and the first WinUI-backed
+> reactor port are in-tree; follow-up gaps are tracked as ordinary issues. This
+> repo was split out of
 > [windows-rs](https://github.com/microsoft/windows-rs)'s `zig/` directory
 > (history preserved) once the port outgrew living alongside the Rust crates.
 
@@ -15,13 +17,17 @@ build.zig.zon          # dependency manifest
 packages/
   winmd/               # ECMA-335 metadata reader
   win-core/            # GUID, HRESULT, BOOL, PCWSTR, COM vtable helpers
-  win-future/          # blocking WinRT async helpers + combinators
-  winbindgen/          # .winmd -> .zig codegen + comptime projection
-  win-sys/             # C-style Win32 (analogue of windows-sys)
+  win-numerics/        # Windows numerics math value types
   win-time/            # DateTime, TimeSpan WinRT value types
   win-threading/       # thread-pool wrappers over Windows.Win32.System.Threading
+  win-reference/       # IReference<T> / IPropertyValue boxing helpers
+  win-future/          # blocking WinRT async helpers + combinators
+  win-collections/     # authored WinRT collection helpers
+  winbindgen/          # .winmd -> .zig codegen + comptime projection
+  win-sys/             # C-style Win32 (analogue of windows-sys)
   win/                 # safer wrappers + COM/WinRT (analogue of windows)
     src/generated/     # WinUI bundle snapshots from `zig build bindings`
+  win-reactor/         # reconciler-driven WinUI 3 hook/runtime + backend
   win-targets/         # .def -> import lib build step
 tools/
   bindings/src/*.txt   # filter manifests, ported from windows-rs's
@@ -68,7 +74,14 @@ zig build bindings   # regenerate win-sys sidecars, WinUI snapshots,
 - [Parameterised IIDs for closed WinRT generics](docs/parameterised-iids.md)
 - [Generic delegates and add/remove-handler sugar](docs/generic-delegates.md)
 - [Async bridge — blocking wait for WinRT async contracts](docs/async-bridge.md)
-- [Windows reactor port findings](docs/windows-reactor-port.md)
+
+### Reactor documentation
+
+- [windows-reactor — getting started, hooks, widget catalog, and layout notes](docs/windows-reactor.md)
+- [windows-reactor setup — runtime staging and bootstrap asset discovery](docs/windows-reactor-setup.md)
+- [Windows reactor port findings (M1)](docs/windows-reactor-port.md)
+- [Reactor widget manifest (M4)](docs/reactor-widget-manifest.md)
+- [Multi-method COM / WinRT interface authoring (M2, used by reactor list/data helpers)](docs/multi-method-authoring.md)
 
 ## Two projection modes
 
