@@ -133,4 +133,40 @@ pub const raw_widgets = .{
             },
         },
     },
+
+    .@"Microsoft.UI.Xaml.Controls.Grid" = .{
+        .props = .{
+            .RowDefinitions = Prop{
+                .manual = true,
+            },
+            .ColumnDefinitions = Prop{
+                .manual = true,
+            },
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.ScrollViewer" = .{
+        .props = .{
+            .Content = Prop{
+                .value = .element,
+            },
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.Border" = .{
+        .props = .{
+            .Child = Prop{
+                .value = .element,
+            },
+            .BorderThickness = Prop{
+                .manual = true,
+            },
+            .CornerRadius = Prop{
+                .manual = true,
+            },
+            .Background = Prop{
+                .manual = true,
+            },
+        },
+    },
 };

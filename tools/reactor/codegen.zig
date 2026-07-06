@@ -89,6 +89,7 @@ pub fn emitSetProp(
 
     for (widgets) |*widget| {
         for (widget.props) |*prop| {
+            if (prop.manual) continue;
             try bindings.append(gpa, try resolveBinding(
                 sig_arena.allocator(),
                 gpa,
@@ -1523,6 +1524,10 @@ test "emitSetPropFromManifest covers the seeded widget props" {
     try std.testing.expect(std.mem.find(u8, source, "default_iface.cast(@\"Microsoft.UI.Xaml.Controls\".IContentControl) orelse return error.InterfaceCastFailed;") != null);
     try std.testing.expect(std.mem.find(u8, source, "text_block_iface.put_TextFromUtf16(value)") != null);
     try std.testing.expect(std.mem.find(u8, source, "target.put_Content(@as(?*const anyopaque, @ptrCast(text_block)))") != null);
+    try std.testing.expect(std.mem.find(u8, source, "pub fn setMicrosoftUIXamlControlsBorderChild(widget: *@\"Microsoft.UI.Xaml.Controls\".Border, value: *@\"Microsoft.UI.Xaml\".UIElement) Error!void {") != null);
+    try std.testing.expect(std.mem.find(u8, source, "target.put_Child(@ptrCast(value))") != null);
+    try std.testing.expect(std.mem.find(u8, source, "pub fn setMicrosoftUIXamlControlsScrollViewerContent(widget: *@\"Microsoft.UI.Xaml.Controls\".ScrollViewer, value: *@\"Microsoft.UI.Xaml\".UIElement) Error!void {") != null);
+    try std.testing.expect(std.mem.find(u8, source, "default_iface.cast(@\"Microsoft.UI.Xaml.Controls\".IContentControl) orelse return error.InterfaceCastFailed;") != null);
     try std.testing.expect(std.mem.find(u8, source, "pub const by_widget_prop = std.StaticStringMap(usize).initComptime(.{") != null);
 }
 

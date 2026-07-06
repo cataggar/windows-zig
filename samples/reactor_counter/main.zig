@@ -61,23 +61,80 @@ fn renderRoot(cx: *reactor.RenderCx) reactor.ElementError!reactor.Element {
         .setter = count.set,
     };
 
-    var label = try reactor.text_block(allocator, label_text);
+    const rows = reactor.GridTracks.init(.{
+        reactor.GridTrack.auto(),
+        reactor.GridTrack.auto(),
+        reactor.GridTrack.auto(),
+    });
+    const columns = reactor.GridTracks.init(.{
+        reactor.GridTrack.star(1),
+        reactor.GridTrack.auto(),
+    });
+
+    var title_builder = reactor.text_block_builder(allocator);
+    defer title_builder.deinit();
+    _ = try (try (try title_builder.prop("Text", @as([]const u8, "Nested layout counter")))
+        .prop("Grid.Row", @as(i32, 0)))
+        .prop("Grid.ColumnSpan", @as(i32, 2));
+    var title = try title_builder.build();
+    defer title.deinit(allocator);
+
+    var label_builder = reactor.text_block_builder(allocator);
+    defer label_builder.deinit();
+    _ = try (try (try label_builder.prop("Text", label_text))
+        .prop("Grid.Row", @as(i32, 1)))
+        .prop("Grid.Column", @as(i32, 0));
+    var label = try label_builder.build();
     defer label.deinit(allocator);
 
-    var increment = try reactor.button(
-        allocator,
-        "+",
+    var increment_builder = reactor.button_builder(allocator);
+    defer increment_builder.deinit();
+    _ = try (try (try increment_builder.prop("Content", @as([]const u8, "+")))
+        .prop("Grid.Row", @as(i32, 1)))
+        .prop("Grid.Column", @as(i32, 1));
+    _ = try increment_builder.on(
+        "Click",
         reactor.EventCallback.init(@ptrCast(click_capture.getMut()), ClickCapture.onClick),
     );
+    var increment = try increment_builder.build();
     defer increment.deinit(allocator);
 
-    var content = try reactor.vstack(allocator, .{ &label, &increment });
+    var detail_builder = reactor.text_block_builder(allocator);
+    defer detail_builder.deinit();
+    _ = try (try (try detail_builder.prop("Text", @as([]const u8, "ScrollViewer → Border → Grid")))
+        .prop("Grid.Row", @as(i32, 2)))
+        .prop("Grid.ColumnSpan", @as(i32, 2));
+    var detail = try detail_builder.build();
+    defer detail.deinit(allocator);
+
+    var content = try reactor.grid(
+        allocator,
+        .{
+            .row_definitions = rows,
+            .column_definitions = columns,
+        },
+        .{ &title, &label, &increment, &detail },
+    );
     defer content.deinit(allocator);
+
+    var chrome = try reactor.border(
+        allocator,
+        .{
+            .border_thickness = reactor.uniform_thickness(1),
+            .corner_radius = reactor.uniform_corner_radius(12),
+            .background = reactor.Color.rgb(0x24, 0x24, 0x24),
+        },
+        &content,
+    );
+    defer chrome.deinit(allocator);
+
+    var scroller = try reactor.scroll_viewer(allocator, &chrome);
+    defer scroller.deinit(allocator);
 
     var window_builder = reactor.window(allocator);
     defer window_builder.deinit();
-    _ = try window_builder.prop("Title", @as([]const u8, "windows-zig reactor counter"));
-    _ = try window_builder.child(&content);
+    _ = try window_builder.prop("Title", @as([]const u8, "windows-zig reactor layout counter"));
+    _ = try window_builder.child(&scroller);
     return window_builder.build();
 }
 

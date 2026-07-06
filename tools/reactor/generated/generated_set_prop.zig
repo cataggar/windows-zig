@@ -17,6 +17,7 @@ pub const SetterValue = union(enum) {
     f64: f64,
     i32: i32,
     enum_i32: i32,
+    element: *@"Microsoft.UI.Xaml".UIElement,
 };
 
 pub const SetterFn = *const fn (widget: *anyopaque, value: SetterValue) Error!void;
@@ -31,6 +32,19 @@ pub const PropertySetter = struct {
     setter_kind: SetterKind,
     apply: SetterFn,
 };
+pub fn setMicrosoftUIXamlControlsBorderChild(widget: *@"Microsoft.UI.Xaml.Controls".Border, value: *@"Microsoft.UI.Xaml".UIElement) Error!void {
+    const target: *const @"Microsoft.UI.Xaml.Controls".IBorder = @ptrCast(widget);
+    try win_core.hresult.ok(target.put_Child(@ptrCast(value)));
+}
+
+fn applyMicrosoftUIXamlControlsBorderChild(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .element => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsBorderChild(@ptrCast(@alignCast(widget)), typed_value);
+}
+
 pub fn setMicrosoftUIXamlControlsButtonContent(widget: *@"Microsoft.UI.Xaml.Controls".Button, value: []const u16) Error!void {
     const default_iface: *const @"Microsoft.UI.Xaml.Controls".IButton = @ptrCast(widget);
     const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls".IContentControl) orelse return error.InterfaceCastFailed;
@@ -162,6 +176,21 @@ fn applyMicrosoftUIXamlControlsCanvasZIndex(widget: *anyopaque, value: SetterVal
         else => return error.ValueKindMismatch,
     };
     try setMicrosoftUIXamlControlsCanvasZIndex(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsScrollViewerContent(widget: *@"Microsoft.UI.Xaml.Controls".ScrollViewer, value: *@"Microsoft.UI.Xaml".UIElement) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IScrollViewer = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls".IContentControl) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try win_core.hresult.ok(target.put_Content(@as(?*const anyopaque, @ptrCast(value))));
+}
+
+fn applyMicrosoftUIXamlControlsScrollViewerContent(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .element => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsScrollViewerContent(@ptrCast(@alignCast(widget)), typed_value);
 }
 
 pub fn setMicrosoftUIXamlControlsStackPanelLeft(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel, value: f64) Error!void {
@@ -389,6 +418,16 @@ fn applyMicrosoftUIXamlWindowTitle(widget: *anyopaque, value: SetterValue) Error
 
 pub const entries = [_]PropertySetter{
     .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Border",
+        .widget_name = "Border",
+        .handle_name = "Border",
+        .property_name = "Child",
+        .field_name = "child",
+        .value_kind = .element,
+        .setter_kind = .direct,
+        .apply = applyMicrosoftUIXamlControlsBorderChild,
+    },
+    .{
         .widget_class = "Microsoft.UI.Xaml.Controls.Button",
         .widget_name = "Button",
         .handle_name = "Button",
@@ -457,6 +496,16 @@ pub const entries = [_]PropertySetter{
         .value_kind = .i32,
         .setter_kind = .attached,
         .apply = applyMicrosoftUIXamlControlsCanvasZIndex,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ScrollViewer",
+        .widget_name = "ScrollViewer",
+        .handle_name = "ScrollViewer",
+        .property_name = "Content",
+        .field_name = "content",
+        .value_kind = .element,
+        .setter_kind = .direct,
+        .apply = applyMicrosoftUIXamlControlsScrollViewerContent,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.StackPanel",
@@ -591,26 +640,28 @@ pub const entries = [_]PropertySetter{
 };
 
 pub const by_widget_prop = std.StaticStringMap(usize).initComptime(.{
-    .{ "Microsoft.UI.Xaml.Controls.Button#Content", 0 },
-    .{ "Microsoft.UI.Xaml.Controls.Button#Left", 1 },
-    .{ "Microsoft.UI.Xaml.Controls.Button#Top", 2 },
-    .{ "Microsoft.UI.Xaml.Controls.Button#ZIndex", 3 },
-    .{ "Microsoft.UI.Xaml.Controls.Canvas#Left", 4 },
-    .{ "Microsoft.UI.Xaml.Controls.Canvas#Top", 5 },
-    .{ "Microsoft.UI.Xaml.Controls.Canvas#ZIndex", 6 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Left", 7 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Orientation", 8 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Spacing", 9 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Top", 10 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#ZIndex", 11 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Left", 12 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Text", 13 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Top", 14 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#ZIndex", 15 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#Left", 16 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#Top", 17 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#ZIndex", 18 },
-    .{ "Microsoft.UI.Xaml.Window#Title", 19 },
+    .{ "Microsoft.UI.Xaml.Controls.Border#Child", 0 },
+    .{ "Microsoft.UI.Xaml.Controls.Button#Content", 1 },
+    .{ "Microsoft.UI.Xaml.Controls.Button#Left", 2 },
+    .{ "Microsoft.UI.Xaml.Controls.Button#Top", 3 },
+    .{ "Microsoft.UI.Xaml.Controls.Button#ZIndex", 4 },
+    .{ "Microsoft.UI.Xaml.Controls.Canvas#Left", 5 },
+    .{ "Microsoft.UI.Xaml.Controls.Canvas#Top", 6 },
+    .{ "Microsoft.UI.Xaml.Controls.Canvas#ZIndex", 7 },
+    .{ "Microsoft.UI.Xaml.Controls.ScrollViewer#Content", 8 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Left", 9 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Orientation", 10 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Spacing", 11 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Top", 12 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#ZIndex", 13 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Left", 14 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Text", 15 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Top", 16 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#ZIndex", 17 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#Left", 18 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#Top", 19 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#ZIndex", 20 },
+    .{ "Microsoft.UI.Xaml.Window#Title", 21 },
 });
 
 pub fn find(widget_class: []const u8, property_name: []const u8) ?*const PropertySetter {
