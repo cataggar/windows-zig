@@ -318,6 +318,10 @@ pub fn build(b: *std.Build) void {
     // ------------------------------------------------------------------
 
     const test_step = b.step("test", "Run all package unit tests");
+    const reactor_selftest_step = b.step(
+        "reactor-selftest",
+        "Run win-reactor tests, build reactor samples, and smoke-test selected WinUI apps",
+    );
 
     const TestPkg = struct {
         name: []const u8,
@@ -333,7 +337,7 @@ pub fn build(b: *std.Build) void {
         .{ .name = "win-sys", .mod = win_sys_mod, .windows_only = true },
         .{ .name = "win-time", .mod = win_time_mod, .windows_only = true },
         .{ .name = "win-threading", .mod = win_threading_mod, .windows_only = true },
-        .{ .name = "win-reactor", .mod = win_reactor_mod },
+        .{ .name = "win-reactor", .mod = win_reactor_mod, .windows_only = true },
         // NOTE: `win` is intentionally omitted from test_pkgs while the
         // VARIANT emitter gap is pending. A test-harness rooted at
         // `win/root.zig` analyzes `Com`'s pub decls, some of which
@@ -352,8 +356,11 @@ pub fn build(b: *std.Build) void {
     for (test_pkgs) |p| {
         // win-sys / win-time / win-threading tests call `project()` which
         // emits `@extern(..., library_name="KERNEL32", ...)` — that cannot
-        // link against a native Linux target. Cross coverage for win-sys
-        // already happens via `compile-check-bundle-*` below.
+        // link against a native Linux target. win-reactor also reaches
+        // WinRT/COM externs from win-core that trigger the same Linux PIC
+        // limitation. Cross coverage for win-sys already happens via the
+        // `compile-check-bundle-*` loop below, and reactor coverage now has
+        // a dedicated Windows-only `reactor-selftest` step.
         if (p.windows_only and !native_windows_target) continue;
         const t = b.addTest(.{
             .name = b.fmt("test-{s}", .{p.name}),
@@ -361,6 +368,9 @@ pub fn build(b: *std.Build) void {
         });
         const run_t = b.addRunArtifact(t);
         test_step.dependOn(&run_t.step);
+        if (std.mem.eql(u8, p.name, "win-reactor")) {
+            reactor_selftest_step.dependOn(&run_t.step);
+        }
     }
 
     // ------------------------------------------------------------------
@@ -1954,6 +1964,9 @@ pub fn build(b: *std.Build) void {
         });
         const install_sample = b.addInstallArtifact(sample_exe, .{});
         samples_step.dependOn(&install_sample.step);
+        if (target.result.os.tag == .windows and s.needs_win_reactor) {
+            reactor_selftest_step.dependOn(&install_sample.step);
+        }
         const sample_run_step = b.step(
             b.fmt("run-{s}", .{s.name}),
             b.fmt("Build and run the `{s}` sample", .{s.name}),
@@ -1970,6 +1983,20 @@ pub fn build(b: *std.Build) void {
                 run_sample.step.dependOn(stage_winui_runtime_step);
             }
             sample_run_step.dependOn(&run_sample.step);
+            if (native_windows_target and
+                (std.mem.eql(u8, s.name, "reactor-hello") or std.mem.eql(u8, s.name, "reactor-counter")))
+            {
+                const smoke_sample = b.addSystemCommand(&.{
+                    installed_exe,
+                    "--exit-after-ms",
+                    "1500",
+                });
+                smoke_sample.step.dependOn(&install_sample.step);
+                if (s.needs_staged_winui_runtime) {
+                    smoke_sample.step.dependOn(stage_winui_runtime_step);
+                }
+                reactor_selftest_step.dependOn(&smoke_sample.step);
+            }
         } else {
             const run_sample = b.addRunArtifact(sample_exe);
             run_sample.step.dependOn(&install_sample.step);
