@@ -128,7 +128,6 @@ fn renderRoot(cx: *reactor.RenderCx) reactor.ElementError!reactor.Element {
         .count = count.value.*,
         .setter = count.set,
     };
-
     const dialog_ref = try cx.useRef(reactor.WidgetRef, .{});
     const dialog_handle = try reactor.useContentDialog(cx, dialog_ref.getMut());
 
@@ -138,24 +137,71 @@ fn renderRoot(cx: *reactor.RenderCx) reactor.ElementError!reactor.Element {
         .result_setter = dialog_result.set,
     };
 
-    var label = try reactor.text_block(allocator, label_text);
+    const rows = reactor.GridTracks.init(.{
+        reactor.GridTrack.auto(),
+        reactor.GridTrack.auto(),
+        reactor.GridTrack.auto(),
+        reactor.GridTrack.auto(),
+        reactor.GridTrack.auto(),
+    });
+    const columns = reactor.GridTracks.init(.{
+        reactor.GridTrack.star(1),
+        reactor.GridTrack.auto(),
+    });
+
+    var title_builder = reactor.text_block_builder(allocator);
+    defer title_builder.deinit();
+    _ = try (try (try title_builder.prop("Text", @as([]const u8, "Nested layout counter")))
+        .prop("Grid.Row", @as(i32, 0)))
+        .prop("Grid.ColumnSpan", @as(i32, 2));
+    var title = try title_builder.build();
+    defer title.deinit(allocator);
+
+    var label_builder = reactor.text_block_builder(allocator);
+    defer label_builder.deinit();
+    _ = try (try (try label_builder.prop("Text", label_text))
+        .prop("Grid.Row", @as(i32, 1)))
+        .prop("Grid.Column", @as(i32, 0));
+    var label = try label_builder.build();
     defer label.deinit(allocator);
 
-    var increment = try reactor.button(
-        allocator,
-        "+",
+    var increment_builder = reactor.button_builder(allocator);
+    defer increment_builder.deinit();
+    _ = try (try (try increment_builder.prop("Content", @as([]const u8, "+")))
+        .prop("Grid.Row", @as(i32, 1)))
+        .prop("Grid.Column", @as(i32, 1));
+    _ = try increment_builder.on(
+        "Click",
         reactor.EventCallback.init(@ptrCast(click_capture.getMut()), ClickCapture.onClick),
     );
+    var increment = try increment_builder.build();
     defer increment.deinit(allocator);
+    var detail_builder = reactor.text_block_builder(allocator);
+    defer detail_builder.deinit();
+    _ = try (try (try detail_builder.prop("Text", @as([]const u8, "ScrollViewer → Border → Grid + ContentDialog")))
+        .prop("Grid.Row", @as(i32, 2)))
+        .prop("Grid.ColumnSpan", @as(i32, 2));
+    var detail = try detail_builder.build();
+    defer detail.deinit(allocator);
 
-    var show_dialog = try reactor.button(
-        allocator,
-        "Show dialog",
+    var show_dialog_builder = reactor.button_builder(allocator);
+    defer show_dialog_builder.deinit();
+    _ = try (try (try show_dialog_builder.prop("Content", @as([]const u8, "Show dialog")))
+        .prop("Grid.Row", @as(i32, 3)))
+        .prop("Grid.ColumnSpan", @as(i32, 2));
+    _ = try show_dialog_builder.on(
+        "Click",
         reactor.EventCallback.init(@ptrCast(dialog_click_capture.getMut()), DialogClickCapture.onClick),
     );
+    var show_dialog = try show_dialog_builder.build();
     defer show_dialog.deinit(allocator);
 
-    var dialog_result_label = try reactor.text_block(allocator, dialog_label_text);
+    var dialog_result_label_builder = reactor.text_block_builder(allocator);
+    defer dialog_result_label_builder.deinit();
+    _ = try (try (try dialog_result_label_builder.prop("Text", dialog_label_text))
+        .prop("Grid.Row", @as(i32, 4)))
+        .prop("Grid.ColumnSpan", @as(i32, 2));
+    var dialog_result_label = try dialog_result_label_builder.build();
     defer dialog_result_label.deinit(allocator);
 
     var dialog_body = try reactor.text_block(
@@ -177,16 +223,34 @@ fn renderRoot(cx: *reactor.RenderCx) reactor.ElementError!reactor.Element {
     );
     defer dialog.deinit(allocator);
 
-    var content = try reactor.vstack(
+    var content = try reactor.grid(
         allocator,
-        .{ &label, &increment, &show_dialog, &dialog_result_label, &dialog },
+        .{
+            .row_definitions = rows,
+            .column_definitions = columns,
+        },
+        .{ &title, &label, &increment, &detail, &show_dialog, &dialog_result_label, &dialog },
     );
     defer content.deinit(allocator);
 
+    var chrome = try reactor.border(
+        allocator,
+        .{
+            .border_thickness = reactor.uniform_thickness(1),
+            .corner_radius = reactor.uniform_corner_radius(12),
+            .background = reactor.Color.rgb(0x24, 0x24, 0x24),
+        },
+        &content,
+    );
+    defer chrome.deinit(allocator);
+
+    var scroller = try reactor.scroll_viewer(allocator, &chrome);
+    defer scroller.deinit(allocator);
+
     var window_builder = reactor.window(allocator);
     defer window_builder.deinit();
-    _ = try window_builder.prop("Title", @as([]const u8, "windows-zig reactor counter"));
-    _ = try window_builder.child(&content);
+    _ = try window_builder.prop("Title", @as([]const u8, "windows-zig reactor layout counter"));
+    _ = try window_builder.child(&scroller);
     return window_builder.build();
 }
 

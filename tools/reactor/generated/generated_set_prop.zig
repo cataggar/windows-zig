@@ -31,6 +31,19 @@ pub const PropertySetter = struct {
     setter_kind: SetterKind,
     apply: SetterFn,
 };
+pub fn setMicrosoftUIXamlControlsBorderChild(widget: *@"Microsoft.UI.Xaml.Controls".Border, value: *@"Microsoft.UI.Xaml".UIElement) Error!void {
+    const target: *const @"Microsoft.UI.Xaml.Controls".IBorder = @ptrCast(widget);
+    try win_core.hresult.ok(target.put_Child(@ptrCast(value)));
+}
+
+fn applyMicrosoftUIXamlControlsBorderChild(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .element => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsBorderChild(@ptrCast(@alignCast(widget)), typed_value);
+}
+
 pub fn setMicrosoftUIXamlControlsButtonContent(widget: *@"Microsoft.UI.Xaml.Controls".Button, value: []const u16) Error!void {
     const default_iface: *const @"Microsoft.UI.Xaml.Controls".IButton = @ptrCast(widget);
     const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls".IContentControl) orelse return error.InterfaceCastFailed;
@@ -181,6 +194,21 @@ fn applyMicrosoftUIXamlControlsNavigationViewItemContent(widget: *anyopaque, val
     try setMicrosoftUIXamlControlsNavigationViewItemContent(@ptrCast(@alignCast(widget)), typed_value);
 }
 
+pub fn setMicrosoftUIXamlControlsScrollViewerContent(widget: *@"Microsoft.UI.Xaml.Controls".ScrollViewer, value: *@"Microsoft.UI.Xaml".UIElement) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IScrollViewer = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls".IContentControl) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try win_core.hresult.ok(target.put_Content(@as(?*const anyopaque, @ptrCast(value))));
+}
+
+fn applyMicrosoftUIXamlControlsScrollViewerContent(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .element => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsScrollViewerContent(@ptrCast(@alignCast(widget)), typed_value);
+}
+
 pub fn setMicrosoftUIXamlControlsStackPanelOrientation(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel, value: i32) Error!void {
     const target: *const @"Microsoft.UI.Xaml.Controls".IStackPanel = @ptrCast(widget);
     try win_core.hresult.ok(target.put_Orientation(@as(@"Microsoft.UI.Xaml.Controls".Orientation, @enumFromInt(value))));
@@ -234,6 +262,16 @@ fn applyMicrosoftUIXamlWindowTitle(widget: *anyopaque, value: SetterValue) Error
 }
 
 pub const entries = [_]PropertySetter{
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Border",
+        .widget_name = "Border",
+        .handle_name = "Border",
+        .property_name = "Child",
+        .field_name = "child",
+        .value_kind = .element,
+        .setter_kind = .direct,
+        .apply = applyMicrosoftUIXamlControlsBorderChild,
+    },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.Button",
         .widget_name = "Button",
@@ -335,6 +373,16 @@ pub const entries = [_]PropertySetter{
         .apply = applyMicrosoftUIXamlControlsNavigationViewItemContent,
     },
     .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ScrollViewer",
+        .widget_name = "ScrollViewer",
+        .handle_name = "ScrollViewer",
+        .property_name = "Content",
+        .field_name = "content",
+        .value_kind = .element,
+        .setter_kind = .direct,
+        .apply = applyMicrosoftUIXamlControlsScrollViewerContent,
+    },
+    .{
         .widget_class = "Microsoft.UI.Xaml.Controls.StackPanel",
         .widget_name = "StackPanel",
         .handle_name = "StackPanel",
@@ -377,20 +425,22 @@ pub const entries = [_]PropertySetter{
 };
 
 pub const by_widget_prop = std.StaticStringMap(usize).initComptime(.{
-    .{ "Microsoft.UI.Xaml.Controls.Button#Content", 0 },
-    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#CloseButtonText", 1 },
-    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#Content", 2 },
-    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#PrimaryButtonText", 3 },
-    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#SecondaryButtonText", 4 },
-    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#Title", 5 },
-    .{ "Microsoft.UI.Xaml.Controls.Flyout#Content", 6 },
-    .{ "Microsoft.UI.Xaml.Controls.MenuBarItem#Title", 7 },
-    .{ "Microsoft.UI.Xaml.Controls.NavigationView#Content", 8 },
-    .{ "Microsoft.UI.Xaml.Controls.NavigationViewItem#Content", 9 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Orientation", 10 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Spacing", 11 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Text", 12 },
-    .{ "Microsoft.UI.Xaml.Window#Title", 13 },
+    .{ "Microsoft.UI.Xaml.Controls.Border#Child", 0 },
+    .{ "Microsoft.UI.Xaml.Controls.Button#Content", 1 },
+    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#CloseButtonText", 2 },
+    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#Content", 3 },
+    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#PrimaryButtonText", 4 },
+    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#SecondaryButtonText", 5 },
+    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#Title", 6 },
+    .{ "Microsoft.UI.Xaml.Controls.Flyout#Content", 7 },
+    .{ "Microsoft.UI.Xaml.Controls.MenuBarItem#Title", 8 },
+    .{ "Microsoft.UI.Xaml.Controls.NavigationView#Content", 9 },
+    .{ "Microsoft.UI.Xaml.Controls.NavigationViewItem#Content", 10 },
+    .{ "Microsoft.UI.Xaml.Controls.ScrollViewer#Content", 11 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Orientation", 12 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Spacing", 13 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Text", 14 },
+    .{ "Microsoft.UI.Xaml.Window#Title", 15 },
 });
 
 pub fn find(widget_class: []const u8, property_name: []const u8) ?*const PropertySetter {

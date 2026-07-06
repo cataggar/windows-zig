@@ -10,6 +10,7 @@ pub const Allocator = std.mem.Allocator;
 pub const Error = Allocator.Error || render_cx.Error || error{
     LeafCannotHaveChildren,
     WindowCannotHaveMultipleChildren,
+    SingleChildWidgetCannotHaveMultipleChildren,
 };
 
 pub const WidgetRefPropertyName = "__reactor_ref";
@@ -29,6 +30,9 @@ pub const WidgetKind = enum {
     window,
     button,
     stack_panel,
+    grid,
+    scroll_viewer,
+    border,
     text_block,
     text_box,
     content_dialog,
@@ -45,6 +49,9 @@ pub fn widgetKindAllowsChildren(kind: WidgetKind) bool {
         .application,
         .window,
         .stack_panel,
+        .grid,
+        .scroll_viewer,
+        .border,
         .content_dialog,
         .flyout,
         .navigation_view,
@@ -869,6 +876,9 @@ pub fn WidgetBuilder(comptime kind: WidgetKind) type {
             if (kind == .window and self.children.items.len > 1) {
                 return error.WindowCannotHaveMultipleChildren;
             }
+            if ((kind == .scroll_viewer or kind == .border) and self.children.items.len > 1) {
+                return error.SingleChildWidgetCannotHaveMultipleChildren;
+            }
 
             const allocator = self.allocator;
             const key = self.key;
@@ -918,6 +928,9 @@ pub const ApplicationBuilder = WidgetBuilder(.application);
 pub const WindowBuilder = WidgetBuilder(.window);
 pub const ButtonBuilder = WidgetBuilder(.button);
 pub const StackPanelBuilder = WidgetBuilder(.stack_panel);
+pub const GridBuilder = WidgetBuilder(.grid);
+pub const ScrollViewerBuilder = WidgetBuilder(.scroll_viewer);
+pub const BorderBuilder = WidgetBuilder(.border);
 pub const TextBlockBuilder = WidgetBuilder(.text_block);
 pub const TextBoxBuilder = WidgetBuilder(.text_box);
 pub const ContentDialogBuilder = WidgetBuilder(.content_dialog);
@@ -949,6 +962,18 @@ pub fn button(allocator: Allocator) ButtonBuilder {
 
 pub fn stack_panel(allocator: Allocator) StackPanelBuilder {
     return StackPanelBuilder.init(allocator);
+}
+
+pub fn grid(allocator: Allocator) GridBuilder {
+    return GridBuilder.init(allocator);
+}
+
+pub fn scroll_viewer(allocator: Allocator) ScrollViewerBuilder {
+    return ScrollViewerBuilder.init(allocator);
+}
+
+pub fn border(allocator: Allocator) BorderBuilder {
+    return BorderBuilder.init(allocator);
 }
 
 pub fn text_block(allocator: Allocator) TextBlockBuilder {

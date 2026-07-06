@@ -124,6 +124,7 @@ fn loadProps(allocator: std.mem.Allocator, comptime raw: anytype) ![]Property {
                 init.setter,
             .winrt_type = init.winrt_type,
             .attached = init.attached,
+            .manual = init.manual,
         };
     }
 
@@ -218,11 +219,11 @@ fn eventFieldNameAlloc(allocator: std.mem.Allocator, name: []const u8) ![]const 
     return buf[0..out_len];
 }
 
-test "production manifest covers the initial widget set" {
+test "production manifest covers the committed widget set" {
     var manifest = try load(std.testing.allocator);
     defer manifest.deinit();
 
-    try std.testing.expectEqual(@as(usize, 12), manifest.widgets.len);
+    try std.testing.expectEqual(@as(usize, 15), manifest.widgets.len);
 
     const application = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Application") orelse return error.TestUnexpectedResult;
     try std.testing.expectEqual(@as(usize, 0), application.props.len);
@@ -269,6 +270,23 @@ test "production manifest covers the initial widget set" {
     const spacing = findProp(stack_panel, "Spacing") orelse return error.TestUnexpectedResult;
     try std.testing.expect(spacing.value.? == .f64);
 
+    const grid = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.Grid") orelse return error.TestUnexpectedResult;
+    const row_definitions = findProp(grid, "RowDefinitions") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(row_definitions.manual);
+    const column_definitions = findProp(grid, "ColumnDefinitions") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(column_definitions.manual);
+
+    const scroll_viewer = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.ScrollViewer") orelse return error.TestUnexpectedResult;
+    const content_prop = findProp(scroll_viewer, "Content") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(content_prop.value.? == .element);
+
+    const border = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.Border") orelse return error.TestUnexpectedResult;
+    const child = findProp(border, "Child") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(child.value.? == .element);
+    try std.testing.expect((findProp(border, "BorderThickness") orelse return error.TestUnexpectedResult).manual);
+    try std.testing.expect((findProp(border, "CornerRadius") orelse return error.TestUnexpectedResult).manual);
+    try std.testing.expect((findProp(border, "Background") orelse return error.TestUnexpectedResult).manual);
+
     const content_dialog = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.ContentDialog") orelse return error.TestUnexpectedResult;
     const title_prop = findProp(content_dialog, "Title") orelse return error.TestUnexpectedResult;
     try std.testing.expect(title_prop.value.? == .string);
@@ -310,6 +328,7 @@ test "loader derives defaults and preserves advanced overrides" {
                         .owner = "Microsoft.UI.Xaml.Controls.Grid",
                         .setter = "SetRow",
                     },
+                    .manual = true,
                 },
             },
             .events = .{
@@ -347,6 +366,7 @@ test "loader derives defaults and preserves advanced overrides" {
     try std.testing.expect(row.setter.? == .attached);
     try std.testing.expectEqualStrings("Microsoft.UI.Xaml.Controls.Grid", row.attached.?.owner);
     try std.testing.expectEqualStrings("SetRow", row.attached.?.setter);
+    try std.testing.expect(row.manual);
 
     const toggled = &widget.events[0];
     try std.testing.expectEqualStrings("on_toggled", toggled.field);
