@@ -36,16 +36,6 @@ const ClickCapture = struct {
     }
 };
 
-const TextChangeCapture = struct {
-    count: i32 = 0,
-    setter: ?reactor.SetState(i32) = null,
-
-    fn onTextChanged(raw: ?*anyopaque) void {
-        const self: *@This() = @ptrCast(@alignCast(raw.?));
-        self.setter.?.call(self.count + 1);
-    }
-};
-
 const CheckCapture = struct {
     setter: ?reactor.SetState(bool) = null,
 
@@ -76,12 +66,12 @@ const InputStatusLabel = struct {
     active: usize = 0,
     text: []const u8 = "",
 
-    fn update(self: *@This(), text_changed_count: i32, is_checked: bool, current_text: []const u8) []const u8 {
+    fn update(self: *@This(), is_checked: bool, current_text: []const u8) []const u8 {
         const next = (self.active + 1) % self.buffers.len;
         self.text = std.fmt.bufPrint(
             &self.buffers[next],
-            "TextChanged events: {d} | CheckBox: {s} | Preset: {s}",
-            .{ text_changed_count, if (is_checked) "checked" else "unchecked", current_text },
+            "CheckBox: {s} | Active preset: {s}",
+            .{ if (is_checked) "checked" else "unchecked", current_text },
         ) catch unreachable;
         self.active = next;
         return self.text;
@@ -107,7 +97,6 @@ fn renderRoot(cx: *reactor.RenderCx) reactor.ElementError!reactor.Element {
     const allocator = cx.getAllocator();
     const count = try cx.useState(i32, 0);
     const text_index = try cx.useState(usize, 0);
-    const text_changed = try cx.useState(i32, 0);
     const is_checked = try cx.useState(bool, false);
 
     const text_presets = [_][]const u8{
@@ -121,22 +110,12 @@ fn renderRoot(cx: *reactor.RenderCx) reactor.ElementError!reactor.Element {
     const count_text = count_label.getMut().update(count.value.*);
 
     const input_status = try cx.useRef(InputStatusLabel, .{});
-    const input_status_text = input_status.getMut().update(
-        text_changed.value.*,
-        is_checked.value.*,
-        current_text,
-    );
+    const input_status_text = input_status.getMut().update(is_checked.value.*, current_text);
 
     const click_capture = try cx.useRef(ClickCapture, .{});
     click_capture.getMut().* = .{
         .count = count.value.*,
         .setter = count.set,
-    };
-
-    const text_change_capture = try cx.useRef(TextChangeCapture, .{});
-    text_change_capture.getMut().* = .{
-        .count = text_changed.value.*,
-        .setter = text_changed.set,
     };
 
     const check_capture = try cx.useRef(CheckCapture, .{});
@@ -151,7 +130,7 @@ fn renderRoot(cx: *reactor.RenderCx) reactor.ElementError!reactor.Element {
         .setter = text_index.set,
     };
 
-    var title = try reactor.text_block(allocator, "Counter + text input sample");
+    var title = try reactor.text_block(allocator, "Counter + basic input sample");
     defer title.deinit(allocator);
 
     var counter_text = try reactor.text_block(allocator, count_text);
@@ -164,18 +143,11 @@ fn renderRoot(cx: *reactor.RenderCx) reactor.ElementError!reactor.Element {
     );
     defer increment.deinit(allocator);
 
-    var prompt = try reactor.text_block(allocator, "Edit or rotate the TextBox preset:");
+    var prompt = try reactor.text_block(allocator, "Rotate the preset and toggle the CheckBox:");
     defer prompt.deinit(allocator);
 
-    var text_input = try reactor.text_box(
-        allocator,
-        current_text,
-        reactor.EventCallback.init(
-            @ptrCast(text_change_capture.getMut()),
-            TextChangeCapture.onTextChanged,
-        ),
-    );
-    defer text_input.deinit(allocator);
+    var preset = try reactor.text_block(allocator, current_text);
+    defer preset.deinit(allocator);
 
     var accepted = try reactor.check_box(
         allocator,
@@ -203,7 +175,7 @@ fn renderRoot(cx: *reactor.RenderCx) reactor.ElementError!reactor.Element {
         &title,
         &counter_text,
         &prompt,
-        &text_input,
+        &preset,
         &accepted,
         &actions,
         &status,
