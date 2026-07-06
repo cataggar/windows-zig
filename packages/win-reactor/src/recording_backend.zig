@@ -274,9 +274,18 @@ pub const RecordingBackend = struct {
         id: WidgetId,
         name: []const u8,
     ) error{ UnknownWidget, UnknownEvent }!void {
+        return self.fireEventValue(id, name, .{ .unit = {} });
+    }
+
+    pub fn fireEventValue(
+        self: *const RecordingBackend,
+        id: WidgetId,
+        name: []const u8,
+        value: element.EventValue,
+    ) error{ UnknownWidget, UnknownEvent }!void {
         const widget = self.widgetConst(id) orelse return error.UnknownWidget;
         const handler = widget.event(name) orelse return error.UnknownEvent;
-        handler.invoke();
+        handler.invokeValue(value);
     }
 
     pub fn mountWidget(

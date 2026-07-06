@@ -5,6 +5,7 @@ pub const GUID = win_core.GUID;
 pub const HRESULT = win_core.HRESULT;
 pub const BOOL = win_core.BOOL;
 pub const IInspectable_Vtbl = win_core.IInspectable_Vtbl;
+pub const VirtualKeyModifiers = u32;
 
 pub const DispatcherQueuePriority = enum(i32) {
     Low = -10,

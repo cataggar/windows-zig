@@ -29,6 +29,8 @@ const ResolvedSetter = struct {
     interface_name: []const u8,
     method_name: []const u8,
     param_ty: winmd.Ty,
+    owner_namespace: ?[]const u8 = null,
+    owner_name: ?[]const u8 = null,
 };
 
 const EventBinding = struct {
@@ -287,6 +289,12 @@ fn emitTypedSetter(writer: *std.Io.Writer, binding: Binding) !void {
     try writer.writeAll(", value: ");
     try writeValueType(writer, binding.value_kind);
     try writer.writeAll(") Error!void {\n");
+
+    if (binding.setter_kind == .attached) {
+        try emitAttachedSetterCall(writer, binding);
+        try writer.writeAll("}\n\n");
+        return;
+    }
 
     if (bindingUsesQueryInterface(binding)) {
         try writer.writeAll("    const default_iface: *const ");
@@ -691,6 +699,50 @@ fn emitEnumSetterCall(writer: *std.Io.Writer, binding: Binding, target_name: []c
     try writer.writeAll(", @enumFromInt(value))));\n");
 }
 
+fn emitAttachedSetterCall(writer: *std.Io.Writer, binding: Binding) !void {
+    const owner_namespace = binding.setter.owner_namespace orelse return error.UnsupportedSetterStrategy;
+    const owner_name = binding.setter.owner_name orelse return error.UnsupportedSetterStrategy;
+
+    try writer.writeAll(
+        \\    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+        \\    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
+        \\    defer target.deinit();
+        \\    const target_iface: *@"Microsoft.UI.Xaml".UIElement = @ptrCast(@alignCast(target.ptr));
+    );
+    try writer.writeByte('\n');
+    try writer.writeAll("    var statics = try ");
+    try writer.print("@\"{s}\".{s}.statics();\n", .{ owner_namespace, owner_name });
+    try writer.writeAll("    defer statics.deinit();\n");
+    try writer.writeAll("    const owner: *const ");
+    try writeQualifiedType(writer, .{
+        .namespace = binding.setter.interface_namespace,
+        .name = binding.setter.interface_name,
+    });
+    try writer.writeAll(" = @ptrCast(@alignCast(statics.ptr));\n");
+    try writer.writeAll("    try win_core.hresult.ok(owner.");
+    try writer.writeAll(binding.setter.method_name);
+    try writer.writeAll("(target_iface, ");
+
+    switch (binding.value_kind) {
+        .bool => {
+            switch (binding.setter.param_ty) {
+                .bool => try writer.writeAll("win_core.boolToWin32(value)"),
+                else => return error.UnsupportedSetterStrategy,
+            }
+        },
+        .f64, .i32, .u32, .color, .date_time, .time_span => try writer.writeAll("value"),
+        .enum_i32 => {
+            const enum_type = try resolveEnumType(binding);
+            try writer.writeAll("@as(");
+            try writeQualifiedType(writer, enum_type);
+            try writer.writeAll(", @enumFromInt(value))");
+        },
+        .string, .element => return error.UnsupportedSetterStrategy,
+    }
+
+    try writer.writeAll("));\n");
+}
+
 fn emitTextBlockSetterCall(writer: *std.Io.Writer, binding: Binding, target_name: []const u8) !void {
     if (binding.value_kind != .string) return error.UnsupportedSetterStrategy;
 
@@ -1077,12 +1129,16 @@ fn resolveBinding(
     widget: *const Widget,
     prop: *const Property,
 ) !Binding {
-    const setter = try resolveInstanceSetter(sig_alloc, gpa, file, type_index, widget.class_name, prop.winrt_name);
+    const setter = if (prop.attached) |attached|
+        try resolveAttachedSetter(sig_alloc, file, type_index, attached.owner, attached.setter)
+    else
+        try resolveInstanceSetter(sig_alloc, gpa, file, type_index, widget.class_name, prop.winrt_name);
     const value_kind = try resolveValueKind(prop, setter.param_ty);
     const setter_kind = resolveSetterKind(prop, value_kind);
 
     switch (setter_kind) {
-        .optional, .attached => return error.UnsupportedSetterStrategy,
+        .optional => return error.UnsupportedSetterStrategy,
+        .attached => {},
         .text_block => if (value_kind != .string) return error.UnsupportedSetterStrategy,
         .boxed_reference => switch (value_kind) {
             .bool, .f64, .i32, .u32, .enum_i32 => {},
@@ -1115,6 +1171,12 @@ fn collectImports(
         else => {},
     }
 
+    if (binding.setter_kind == .attached) {
+        try imports.put(gpa, "Microsoft.UI.Xaml", {});
+        if (binding.setter.owner_namespace) |owner_namespace| {
+            try imports.put(gpa, owner_namespace, {});
+        }
+    }
     if (binding.setter_kind == .text_block) {
         try imports.put(gpa, "Microsoft.UI.Xaml.Controls", {});
     }
@@ -1161,6 +1223,49 @@ fn resolveInstanceSetter(
         class_row,
         method_name,
     ) orelse error.PropertySetterNotFound;
+}
+
+fn resolveAttachedSetter(
+    sig_alloc: std.mem.Allocator,
+    file: *const winmd.File,
+    type_index: *const winmd.TypeIndex,
+    owner_class_name: []const u8,
+    setter_name: []const u8,
+) anyerror!ResolvedSetter {
+    const owner = try splitQualifiedName(owner_class_name);
+    const statics_interface_name = try std.fmt.allocPrint(sig_alloc, "I{s}Statics", .{trimTick(owner.name)});
+    const statics_full_name = try std.fmt.allocPrint(
+        sig_alloc,
+        "{s}.{s}",
+        .{ owner.namespace, statics_interface_name },
+    );
+    const interface_row = findTypeRowByFullName(type_index, file, statics_full_name) orelse
+        return error.WidgetTypeNotFound;
+    const method_row = findMethodRow(file, interface_row, setter_name) orelse
+        return error.PropertySetterNotFound;
+    const sig = try winmd.readMethodSignature(sig_alloc, file, file.blob(.method_def, method_row, 4));
+    if (sig.params.len != 2) return error.UnsupportedPropertySignature;
+
+    switch (sig.params[0]) {
+        .class_name => |type_name| {
+            if (!std.mem.eql(u8, type_name.namespace, "Microsoft.UI.Xaml") or
+                !std.mem.eql(u8, trimTick(type_name.name), "UIElement"))
+            {
+                return error.UnsupportedSetterStrategy;
+            }
+        },
+        .object => {},
+        else => return error.UnsupportedSetterStrategy,
+    }
+
+    return .{
+        .interface_namespace = owner.namespace,
+        .interface_name = file.str(.type_def, interface_row, 1),
+        .method_name = file.str(.method_def, method_row, 3),
+        .param_ty = sig.params[1],
+        .owner_namespace = owner.namespace,
+        .owner_name = owner.name,
+    };
 }
 
 fn findSetterInClassHierarchy(
@@ -1477,11 +1582,16 @@ test "emitAttachEventFromManifest covers the seeded widget events" {
     try std.testing.expect(std.mem.find(u8, source, "default_iface.cast(@\"Microsoft.UI.Xaml.Controls.Primitives\".IButtonBase) orelse return error.InterfaceCastFailed;") != null);
     try std.testing.expect(std.mem.find(u8, source, "@\"Microsoft.UI.Xaml.Controls.Primitives\".IButtonBase.add_Click") != null);
     try std.testing.expect(std.mem.find(u8, source, "pub fn disconnectMicrosoftUIXamlControlsButtonClick(widget: *@\"Microsoft.UI.Xaml.Controls\".Button, connection: *EventConnection) Error!void {") != null);
+    try std.testing.expect(std.mem.find(u8, source, "pub fn connectMicrosoftUIXamlControlsButtonPointerPressed(widget: *@\"Microsoft.UI.Xaml.Controls\".Button, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {") != null);
+    try std.testing.expect(std.mem.find(u8, source, "default_iface.cast(@\"Microsoft.UI.Xaml\".IUIElement) orelse return error.InterfaceCastFailed;") != null);
+    try std.testing.expect(std.mem.find(u8, source, "@\"Microsoft.UI.Xaml\".IUIElement.add_PointerPressed") != null);
     try std.testing.expect(std.mem.find(u8, source, "pub fn connectMicrosoftUIXamlControlsTextBoxTextChanged(widget: *@\"Microsoft.UI.Xaml.Controls\".TextBox, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {") != null);
     try std.testing.expect(std.mem.find(u8, source, "@\"Microsoft.UI.Xaml.Controls\".ITextBox.add_TextChanged") != null);
-    try std.testing.expect(std.mem.find(u8, source, ".{ \"Microsoft.UI.Xaml.Controls.Button#Click\", 0 },") != null);
-    try std.testing.expect(std.mem.find(u8, source, ".{ \"Microsoft.UI.Xaml.Controls.TextBox#TextChanged\", 1 },") != null);
+    try std.testing.expect(std.mem.find(u8, source, ".{ \"Microsoft.UI.Xaml.Controls.Button#Click\",") != null);
+    try std.testing.expect(std.mem.find(u8, source, ".{ \"Microsoft.UI.Xaml.Controls.Button#PointerPressed\",") != null);
+    try std.testing.expect(std.mem.find(u8, source, ".{ \"Microsoft.UI.Xaml.Controls.TextBox#TextChanged\",") != null);
     try std.testing.expect(std.mem.find(u8, source, ".source = .{ .sender_property = \"Text\" },") != null);
+    try std.testing.expect(std.mem.find(u8, source, ".payload = .pointer,") != null);
     try std.testing.expect(std.mem.find(u8, source, "if (connection.token != null) return error.ConnectionStillActive;") != null);
 }
 

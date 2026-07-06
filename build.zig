@@ -174,12 +174,31 @@ pub fn build(b: *std.Build) void {
     });
     reactor_windows_system_mod.addImport("win-core", win_core_mod);
 
+    const reactor_ui_input_mod = b.addModule("reactor-ui-input", .{
+        .root_source_file = b.path("packages/win-reactor/src/winui/Microsoft.UI.Input.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    reactor_ui_input_mod.addImport("win-core", win_core_mod);
+    reactor_ui_input_mod.addImport("Windows.Foundation", reactor_winui_foundation_mod);
+
+    const reactor_winui_xaml_input_mod = b.addModule("reactor-winui-xaml-input", .{
+        .root_source_file = b.path("packages/win-reactor/src/winui/Microsoft.UI.Xaml.Input.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    reactor_winui_xaml_input_mod.addImport("win-core", win_core_mod);
+    reactor_winui_xaml_input_mod.addImport("Microsoft.UI.Input", reactor_ui_input_mod);
+    reactor_winui_xaml_input_mod.addImport("Windows.System", reactor_windows_system_mod);
+
     const reactor_winui_xaml_mod = b.addModule("reactor-winui-xaml", .{
         .root_source_file = b.path("packages/win-reactor/src/winui/Microsoft.UI.Xaml.zig"),
         .target = target,
         .optimize = optimize,
     });
     reactor_winui_xaml_mod.addImport("win-core", win_core_mod);
+    reactor_winui_xaml_mod.addImport("Windows.Foundation", reactor_winui_foundation_mod);
+    reactor_winui_xaml_mod.addImport("Microsoft.UI.Xaml.Input", reactor_winui_xaml_input_mod);
 
     const reactor_winui_media_mod = b.addModule("reactor-winui-media", .{
         .root_source_file = b.path("packages/win-reactor/src/winui/Microsoft.UI.Xaml.Media.zig"),
@@ -211,7 +230,9 @@ pub fn build(b: *std.Build) void {
     win_reactor_mod.addImport("win", win_mod);
     win_reactor_mod.addImport("reactor-windows-system", reactor_windows_system_mod);
     win_reactor_mod.addImport("Windows.Foundation", reactor_winui_foundation_mod);
+    win_reactor_mod.addImport("Microsoft.UI.Input", reactor_ui_input_mod);
     win_reactor_mod.addImport("Microsoft.UI.Xaml", reactor_winui_xaml_mod);
+    win_reactor_mod.addImport("Microsoft.UI.Xaml.Input", reactor_winui_xaml_input_mod);
     win_reactor_mod.addImport("Microsoft.UI.Xaml.Media", reactor_winui_media_mod);
     win_reactor_mod.addImport("Microsoft.UI.Xaml.Controls", reactor_winui_controls_mod);
     win_reactor_mod.addImport("Microsoft.UI.Xaml.Controls.Primitives", reactor_winui_controls_primitives_mod);
@@ -262,32 +283,10 @@ pub fn build(b: *std.Build) void {
     reactor_generated_attach_event_mod.addImport("reactor-schema", reactor_schema_mod);
     reactor_generated_attach_event_mod.addImport("reactor-event-runtime", reactor_event_runtime_mod);
     reactor_generated_attach_event_mod.addImport("Windows.Foundation", reactor_winui_foundation_mod);
+    reactor_generated_attach_event_mod.addImport("Microsoft.UI.Xaml", reactor_winui_xaml_mod);
     reactor_generated_attach_event_mod.addImport("Microsoft.UI.Xaml.Controls", reactor_winui_controls_mod);
     reactor_generated_attach_event_mod.addImport("Microsoft.UI.Xaml.Controls.Primitives", reactor_winui_controls_primitives_mod);
     win_reactor_mod.addImport("reactor-generated-attach-event", reactor_generated_attach_event_mod);
-
-    const reactor_foundation_stub_mod = b.addModule("reactor-foundation-stub", .{
-        .root_source_file = b.path("tools/reactor/testdeps/foundation_stub.zig"),
-        .target = target,
-        .optimize = optimize,
-    });
-    reactor_foundation_stub_mod.addImport("win-core", win_core_mod);
-
-    const reactor_controls_primitives_stub_mod = b.addModule("reactor-controls-primitives-stub", .{
-        .root_source_file = b.path("tools/reactor/testdeps/microsoft_ui_xaml_controls_primitives_stub.zig"),
-        .target = target,
-        .optimize = optimize,
-    });
-    reactor_controls_primitives_stub_mod.addImport("win-core", win_core_mod);
-    reactor_controls_primitives_stub_mod.addImport("Windows.Foundation", reactor_foundation_stub_mod);
-
-    const reactor_controls_stub_mod = b.addModule("reactor-controls-stub", .{
-        .root_source_file = b.path("tools/reactor/testdeps/microsoft_ui_xaml_controls_stub.zig"),
-        .target = target,
-        .optimize = optimize,
-    });
-    reactor_controls_stub_mod.addImport("win-core", win_core_mod);
-    reactor_controls_stub_mod.addImport("Windows.Foundation", reactor_foundation_stub_mod);
 
     const reactor_codegen_mod = b.addModule("reactor-codegen", .{
         .root_source_file = b.path("tools/reactor/codegen.zig"),
@@ -304,9 +303,13 @@ pub fn build(b: *std.Build) void {
     reactor_generated_attach_canary_mod.addImport("win-core", win_core_mod);
     reactor_generated_attach_canary_mod.addImport("reactor-schema", reactor_schema_mod);
     reactor_generated_attach_canary_mod.addImport("reactor-event-runtime", reactor_event_runtime_mod);
-    reactor_generated_attach_canary_mod.addImport("Windows.Foundation", reactor_foundation_stub_mod);
-    reactor_generated_attach_canary_mod.addImport("Microsoft.UI.Xaml.Controls", reactor_controls_stub_mod);
-    reactor_generated_attach_canary_mod.addImport("Microsoft.UI.Xaml.Controls.Primitives", reactor_controls_primitives_stub_mod);
+    reactor_generated_attach_canary_mod.addImport("Windows.Foundation", reactor_winui_foundation_mod);
+    reactor_generated_attach_canary_mod.addImport("Microsoft.UI.Input", reactor_ui_input_mod);
+    reactor_generated_attach_canary_mod.addImport("Microsoft.UI.Xaml", reactor_winui_xaml_mod);
+    reactor_generated_attach_canary_mod.addImport("Microsoft.UI.Xaml.Input", reactor_winui_xaml_input_mod);
+    reactor_generated_attach_canary_mod.addImport("Microsoft.UI.Xaml.Controls", reactor_winui_controls_mod);
+    reactor_generated_attach_canary_mod.addImport("Microsoft.UI.Xaml.Controls.Primitives", reactor_winui_controls_primitives_mod);
+    reactor_generated_attach_canary_mod.addImport("Windows.System", reactor_windows_system_mod);
 
     // ------------------------------------------------------------------
     // Unit tests
@@ -1825,6 +1828,13 @@ pub fn build(b: *std.Build) void {
         .{
             .name = "reactor-counter",
             .root = "samples/reactor_counter/main.zig",
+            .run_installed = true,
+            .needs_staged_winui_runtime = true,
+            .needs_win_reactor = true,
+        },
+        .{
+            .name = "reactor-canvas-drag",
+            .root = "samples/reactor_canvas_drag/main.zig",
             .run_installed = true,
             .needs_staged_winui_runtime = true,
             .needs_win_reactor = true,

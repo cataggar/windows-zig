@@ -41,6 +41,7 @@ pub const WidgetKind = enum {
     navigation_view_item,
     menu_bar,
     menu_bar_item,
+    canvas,
 };
 
 pub fn widgetKindAllowsChildren(kind: WidgetKind) bool {
@@ -56,6 +57,7 @@ pub fn widgetKindAllowsChildren(kind: WidgetKind) bool {
         .flyout,
         .navigation_view,
         .menu_bar,
+        .canvas,
         => true,
         .leaf,
         .button,
@@ -67,12 +69,67 @@ pub fn widgetKindAllowsChildren(kind: WidgetKind) bool {
     };
 }
 
-/// Zero-argument event callback. Concrete WinUI event payloads arrive later;
-/// for now the tree only needs stable callback identity plus an invocation
-/// hook that tests can exercise.
+pub const PointerEventInfo = struct {
+    x: f64 = 0,
+    y: f64 = 0,
+    is_left_button_pressed: bool = false,
+    is_right_button_pressed: bool = false,
+    is_middle_button_pressed: bool = false,
+};
+
+pub const EventValue = union(enum) {
+    unit: void,
+    bool: bool,
+    string: []const u8,
+    f64: f64,
+    i32: i32,
+    pointer: PointerEventInfo,
+
+    pub fn get(self: EventValue, comptime T: type) ?T {
+        if (T == void) {
+            return switch (self) {
+                .unit => {},
+                else => null,
+            };
+        }
+        if (T == bool) {
+            return switch (self) {
+                .bool => |value| value,
+                else => null,
+            };
+        }
+        if (T == []const u8) {
+            return switch (self) {
+                .string => |value| value,
+                else => null,
+            };
+        }
+        if (T == f64) {
+            return switch (self) {
+                .f64 => |value| value,
+                else => null,
+            };
+        }
+        if (T == i32) {
+            return switch (self) {
+                .i32 => |value| value,
+                else => null,
+            };
+        }
+        if (T == PointerEventInfo) {
+            return switch (self) {
+                .pointer => |value| value,
+                else => null,
+            };
+        }
+        @compileError("unsupported EventValue payload type: " ++ @typeName(T));
+    }
+};
+
 pub const EventCallback = struct {
     userdata: ?*anyopaque = null,
     invoke_fn: *const fn (?*anyopaque) void = noop,
+    invoke_value_fn: ?*const fn (?*anyopaque, EventValue) void = null,
 
     pub fn init(userdata: ?*anyopaque, invoke_fn: *const fn (?*anyopaque) void) EventCallback {
         return .{
@@ -91,12 +148,52 @@ pub const EventCallback = struct {
         };
     }
 
+    pub fn initTyped(
+        comptime T: type,
+        userdata: ?*anyopaque,
+        comptime invoke_value_fn: *const fn (?*anyopaque, T) void,
+    ) EventCallback {
+        return .{
+            .userdata = userdata,
+            .invoke_value_fn = &struct {
+                fn call(raw: ?*anyopaque, value: EventValue) void {
+                    const typed = value.get(T) orelse return;
+                    invoke_value_fn(raw, typed);
+                }
+            }.call,
+        };
+    }
+
+    pub fn fromTypedFunction(
+        comptime T: type,
+        comptime invoke_value_fn: *const fn (T) void,
+    ) EventCallback {
+        return .{
+            .invoke_value_fn = &struct {
+                fn call(_: ?*anyopaque, value: EventValue) void {
+                    const typed = value.get(T) orelse return;
+                    invoke_value_fn(typed);
+                }
+            }.call,
+        };
+    }
+
     pub fn invoke(self: *const EventCallback) void {
+        self.invokeValue(.{ .unit = {} });
+    }
+
+    pub fn invokeValue(self: *const EventCallback, value: EventValue) void {
+        if (self.invoke_value_fn) |invoke_value_fn| {
+            invoke_value_fn(self.userdata, value);
+            return;
+        }
         self.invoke_fn(self.userdata);
     }
 
     pub fn eql(self: *const EventCallback, other: *const EventCallback) bool {
-        return self.userdata == other.userdata and functionPtrEql(self.invoke_fn, other.invoke_fn);
+        return self.userdata == other.userdata and
+            functionPtrEql(self.invoke_fn, other.invoke_fn) and
+            optionalFunctionPtrEql(self.invoke_value_fn, other.invoke_value_fn);
     }
 
     fn noop(_: ?*anyopaque) void {}
@@ -127,6 +224,10 @@ pub const EventHandler = struct {
 
     pub fn invoke(self: *const EventHandler) void {
         self.callback.invoke();
+    }
+
+    pub fn invokeValue(self: *const EventHandler, value: EventValue) void {
+        self.callback.invokeValue(value);
     }
 
     pub fn eql(self: *const EventHandler, other: *const EventHandler) bool {
@@ -939,6 +1040,7 @@ pub const NavigationViewBuilder = WidgetBuilder(.navigation_view);
 pub const NavigationViewItemBuilder = WidgetBuilder(.navigation_view_item);
 pub const MenuBarBuilder = WidgetBuilder(.menu_bar);
 pub const MenuBarItemBuilder = WidgetBuilder(.menu_bar_item);
+pub const CanvasBuilder = WidgetBuilder(.canvas);
 
 pub fn leaf(allocator: Allocator) LeafBuilder {
     return LeafBuilder.init(allocator);
@@ -1006,6 +1108,10 @@ pub fn menu_bar(allocator: Allocator) MenuBarBuilder {
 
 pub fn menu_bar_item(allocator: Allocator) MenuBarItemBuilder {
     return MenuBarItemBuilder.init(allocator);
+}
+
+pub fn canvas(allocator: Allocator) CanvasBuilder {
+    return CanvasBuilder.init(allocator);
 }
 
 fn appendElementInputs(items: *std.ArrayListUnmanaged(Element), allocator: Allocator, values: anytype) Error!void {
@@ -1179,6 +1285,49 @@ fn optionalStringEql(lhs: ?[]const u8, rhs: ?[]const u8) bool {
 
 fn functionPtrEql(lhs: anytype, rhs: @TypeOf(lhs)) bool {
     return @intFromPtr(lhs) == @intFromPtr(rhs);
+}
+
+fn optionalFunctionPtrEql(lhs: anytype, rhs: @TypeOf(lhs)) bool {
+    if (lhs) |lhs_value| {
+        if (rhs) |rhs_value| {
+            return functionPtrEql(lhs_value, rhs_value);
+        }
+        return false;
+    }
+    return rhs == null;
+}
+
+test "typed event callbacks receive payloads" {
+    const Capture = struct {
+        pressed: bool = false,
+        position: PointerEventInfo = .{},
+
+        fn onPointer(raw: ?*anyopaque, info: PointerEventInfo) void {
+            const self: *@This() = @ptrCast(@alignCast(raw.?));
+            self.pressed = true;
+            self.position = info;
+        }
+    };
+
+    var capture: Capture = .{};
+    const callback = EventCallback.initTyped(
+        PointerEventInfo,
+        @ptrCast(&capture),
+        Capture.onPointer,
+    );
+
+    callback.invokeValue(.{
+        .pointer = .{
+            .x = 42,
+            .y = 18,
+            .is_left_button_pressed = true,
+        },
+    });
+
+    try std.testing.expect(capture.pressed);
+    try std.testing.expectEqual(@as(f64, 42), capture.position.x);
+    try std.testing.expectEqual(@as(f64, 18), capture.position.y);
+    try std.testing.expect(capture.position.is_left_button_pressed);
 }
 
 test "widget builders convert into element trees with props, children, and handlers" {
