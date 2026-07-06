@@ -4928,10 +4928,12 @@ pub fn emitRuntimeClasses(
 /// vtable before dropping the pointer.
 ///
 /// The `default_iface_name` is the bare type name of the default
-/// interface (e.g. `"IJsonObject"`), used to name its `_Vtbl` symbol.
-/// It must live in the same projectable namespace as the class — the
-/// caller has already checked `same_ns and !is_generic` before invoking
-/// this helper, so cross-namespace defaults are not handled here.
+/// interface handle (e.g. `"IJsonObject"`). `activateInstance`
+/// queries `Iface.IID`, so this helper must emit the handle type
+/// itself rather than its `_Vtbl` symbol. It must live in the same
+/// projectable namespace as the class — the caller has already
+/// checked `same_ns and !is_generic` before invoking this helper,
+/// so cross-namespace defaults are not handled here.
 fn writeActivateMethod(
     writer: *std.Io.Writer,
     arena: std.mem.Allocator,
@@ -4943,7 +4945,7 @@ fn writeActivateMethod(
     if (!hasParameterlessActivation(arena, file, class_row)) return;
     try writer.print(
         \\    pub fn activate() !*{s} {{
-        \\        const raw = try win_core.activateInstance({s}_Vtbl, &NAME_W);
+        \\        const raw = try win_core.activateInstance({s}, &NAME_W);
         \\        return @ptrCast(raw);
         \\    }}
         \\
@@ -5303,10 +5305,11 @@ test "emitRuntimeClasses emits activate() on parameterless WinRT classes" {
     // `win_core.activateInstance`.
     try std.testing.expect(std.mem.find(u8, out, "pub const JsonObject = extern struct {") != null);
     try std.testing.expect(std.mem.find(u8, out, "pub fn activate() !*JsonObject {") != null);
-    try std.testing.expect(std.mem.find(u8, out, "        const raw = try win_core.activateInstance(IJsonObject_Vtbl, &NAME_W);") != null);
+    try std.testing.expect(std.mem.find(u8, out, "        const raw = try win_core.activateInstance(IJsonObject, &NAME_W);") != null);
 
     try std.testing.expect(std.mem.find(u8, out, "pub const JsonArray = extern struct {") != null);
     try std.testing.expect(std.mem.find(u8, out, "pub fn activate() !*JsonArray {") != null);
+    try std.testing.expect(std.mem.find(u8, out, "        const raw = try win_core.activateInstance(IJsonArray, &NAME_W);") != null);
 
     // `JsonValue` has only `[Static(...)]` attributes — no activation
     // at all, not even typed — so no `activate()` should be emitted

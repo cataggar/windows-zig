@@ -7568,7 +7568,7 @@ pub const CalendarPanel = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.Primitives.CalendarPanel";
     pub const NAME_W: [51]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 80, 114, 105, 109, 105, 116, 105, 118, 101, 115, 46, 67, 97, 108, 101, 110, 100, 97, 114, 80, 97, 110, 101, 108 };
     pub fn activate() !*CalendarPanel {
-        const raw = try win_core.activateInstance(ICalendarPanel_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(ICalendarPanel, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -7665,7 +7665,7 @@ pub const CornerRadiusFilterConverter = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.Primitives.CornerRadiusFilterConverter";
     pub const NAME_W: [65]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 80, 114, 105, 109, 105, 116, 105, 118, 101, 115, 46, 67, 111, 114, 110, 101, 114, 82, 97, 100, 105, 117, 115, 70, 105, 108, 116, 101, 114, 67, 111, 110, 118, 101, 114, 116, 101, 114 };
     pub fn activate() !*CornerRadiusFilterConverter {
-        const raw = try win_core.activateInstance(ICornerRadiusFilterConverter_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(ICornerRadiusFilterConverter, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = ICornerRadiusFilterConverterStatics;
@@ -7678,7 +7678,7 @@ pub const CornerRadiusToThicknessConverter = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.Primitives.CornerRadiusToThicknessConverter";
     pub const NAME_W: [70]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 80, 114, 105, 109, 105, 116, 105, 118, 101, 115, 46, 67, 111, 114, 110, 101, 114, 82, 97, 100, 105, 117, 115, 84, 111, 84, 104, 105, 99, 107, 110, 101, 115, 115, 67, 111, 110, 118, 101, 114, 116, 101, 114 };
     pub fn activate() !*CornerRadiusToThicknessConverter {
-        const raw = try win_core.activateInstance(ICornerRadiusToThicknessConverter_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(ICornerRadiusToThicknessConverter, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = ICornerRadiusToThicknessConverterStatics;
@@ -7753,7 +7753,7 @@ pub const JumpListItemBackgroundConverter = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.Primitives.JumpListItemBackgroundConverter";
     pub const NAME_W: [69]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 80, 114, 105, 109, 105, 116, 105, 118, 101, 115, 46, 74, 117, 109, 112, 76, 105, 115, 116, 73, 116, 101, 109, 66, 97, 99, 107, 103, 114, 111, 117, 110, 100, 67, 111, 110, 118, 101, 114, 116, 101, 114 };
     pub fn activate() !*JumpListItemBackgroundConverter {
-        const raw = try win_core.activateInstance(IJumpListItemBackgroundConverter_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IJumpListItemBackgroundConverter, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IJumpListItemBackgroundConverterStatics;
@@ -7766,7 +7766,7 @@ pub const JumpListItemForegroundConverter = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.Primitives.JumpListItemForegroundConverter";
     pub const NAME_W: [69]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 80, 114, 105, 109, 105, 116, 105, 118, 101, 115, 46, 74, 117, 109, 112, 76, 105, 115, 116, 73, 116, 101, 109, 70, 111, 114, 101, 103, 114, 111, 117, 110, 100, 67, 111, 110, 118, 101, 114, 116, 101, 114 };
     pub fn activate() !*JumpListItemForegroundConverter {
-        const raw = try win_core.activateInstance(IJumpListItemForegroundConverter_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IJumpListItemForegroundConverter, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IJumpListItemForegroundConverterStatics;
@@ -7872,7 +7872,7 @@ pub const PivotHeaderPanel = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.Primitives.PivotHeaderPanel";
     pub const NAME_W: [54]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 80, 114, 105, 109, 105, 116, 105, 118, 101, 115, 46, 80, 105, 118, 111, 116, 72, 101, 97, 100, 101, 114, 80, 97, 110, 101, 108 };
     pub fn activate() !*PivotHeaderPanel {
-        const raw = try win_core.activateInstance(IPivotHeaderPanel_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IPivotHeaderPanel, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -7881,7 +7881,7 @@ pub const PivotPanel = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.Primitives.PivotPanel";
     pub const NAME_W: [48]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 80, 114, 105, 109, 105, 116, 105, 118, 101, 115, 46, 80, 105, 118, 111, 116, 80, 97, 110, 101, 108 };
     pub fn activate() !*PivotPanel {
-        const raw = try win_core.activateInstance(IPivotPanel_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IPivotPanel, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -7890,7 +7890,7 @@ pub const Popup = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.Primitives.Popup";
     pub const NAME_W: [43]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 80, 114, 105, 109, 105, 116, 105, 118, 101, 115, 46, 80, 111, 112, 117, 112 };
     pub fn activate() !*Popup {
-        const raw = try win_core.activateInstance(IPopup_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IPopup, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IPopupStatics;
@@ -7916,7 +7916,7 @@ pub const RepeatButton = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.Primitives.RepeatButton";
     pub const NAME_W: [50]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 80, 114, 105, 109, 105, 116, 105, 118, 101, 115, 46, 82, 101, 112, 101, 97, 116, 66, 117, 116, 116, 111, 110 };
     pub fn activate() !*RepeatButton {
-        const raw = try win_core.activateInstance(IRepeatButton_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IRepeatButton, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IRepeatButtonStatics;
@@ -7954,7 +7954,7 @@ pub const ScrollBar = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.Primitives.ScrollBar";
     pub const NAME_W: [47]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 80, 114, 105, 109, 105, 116, 105, 118, 101, 115, 46, 83, 99, 114, 111, 108, 108, 66, 97, 114 };
     pub fn activate() !*ScrollBar {
-        const raw = try win_core.activateInstance(IScrollBar_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IScrollBar, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IScrollBarStatics;
@@ -8003,7 +8003,7 @@ pub const ScrollEventArgs = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.Primitives.ScrollEventArgs";
     pub const NAME_W: [53]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 80, 114, 105, 109, 105, 116, 105, 118, 101, 115, 46, 83, 99, 114, 111, 108, 108, 69, 118, 101, 110, 116, 65, 114, 103, 115 };
     pub fn activate() !*ScrollEventArgs {
-        const raw = try win_core.activateInstance(IScrollEventArgs_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IScrollEventArgs, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -8036,7 +8036,7 @@ pub const Thumb = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.Primitives.Thumb";
     pub const NAME_W: [43]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 80, 114, 105, 109, 105, 116, 105, 118, 101, 115, 46, 84, 104, 117, 109, 98 };
     pub fn activate() !*Thumb {
-        const raw = try win_core.activateInstance(IThumb_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IThumb, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IThumbStatics;
@@ -8049,7 +8049,7 @@ pub const TickBar = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.Primitives.TickBar";
     pub const NAME_W: [45]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 80, 114, 105, 109, 105, 116, 105, 118, 101, 115, 46, 84, 105, 99, 107, 66, 97, 114 };
     pub fn activate() !*TickBar {
-        const raw = try win_core.activateInstance(ITickBar_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(ITickBar, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = ITickBarStatics;
