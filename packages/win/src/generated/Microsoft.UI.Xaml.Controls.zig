@@ -37129,7 +37129,7 @@ pub const AutoSuggestBox = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.AutoSuggestBox";
     pub const NAME_W: [41]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 65, 117, 116, 111, 83, 117, 103, 103, 101, 115, 116, 66, 111, 120 };
     pub fn activate() !*AutoSuggestBox {
-        const raw = try win_core.activateInstance(IAutoSuggestBox_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IAutoSuggestBox, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IAutoSuggestBoxStatics;
@@ -37142,7 +37142,7 @@ pub const AutoSuggestBoxQuerySubmittedEventArgs = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.AutoSuggestBoxQuerySubmittedEventArgs";
     pub const NAME_W: [64]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 65, 117, 116, 111, 83, 117, 103, 103, 101, 115, 116, 66, 111, 120, 81, 117, 101, 114, 121, 83, 117, 98, 109, 105, 116, 116, 101, 100, 69, 118, 101, 110, 116, 65, 114, 103, 115 };
     pub fn activate() !*AutoSuggestBoxQuerySubmittedEventArgs {
-        const raw = try win_core.activateInstance(IAutoSuggestBoxQuerySubmittedEventArgs_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IAutoSuggestBoxQuerySubmittedEventArgs, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -37151,7 +37151,7 @@ pub const AutoSuggestBoxSuggestionChosenEventArgs = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.AutoSuggestBoxSuggestionChosenEventArgs";
     pub const NAME_W: [66]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 65, 117, 116, 111, 83, 117, 103, 103, 101, 115, 116, 66, 111, 120, 83, 117, 103, 103, 101, 115, 116, 105, 111, 110, 67, 104, 111, 115, 101, 110, 69, 118, 101, 110, 116, 65, 114, 103, 115 };
     pub fn activate() !*AutoSuggestBoxSuggestionChosenEventArgs {
-        const raw = try win_core.activateInstance(IAutoSuggestBoxSuggestionChosenEventArgs_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IAutoSuggestBoxSuggestionChosenEventArgs, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -37160,7 +37160,7 @@ pub const AutoSuggestBoxTextChangedEventArgs = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.AutoSuggestBoxTextChangedEventArgs";
     pub const NAME_W: [61]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 65, 117, 116, 111, 83, 117, 103, 103, 101, 115, 116, 66, 111, 120, 84, 101, 120, 116, 67, 104, 97, 110, 103, 101, 100, 69, 118, 101, 110, 116, 65, 114, 103, 115 };
     pub fn activate() !*AutoSuggestBoxTextChangedEventArgs {
-        const raw = try win_core.activateInstance(IAutoSuggestBoxTextChangedEventArgs_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IAutoSuggestBoxTextChangedEventArgs, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IAutoSuggestBoxTextChangedEventArgsStatics;
@@ -37191,7 +37191,7 @@ pub const Border = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.Border";
     pub const NAME_W: [33]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 66, 111, 114, 100, 101, 114 };
     pub fn activate() !*Border {
-        const raw = try win_core.activateInstance(IBorder_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IBorder, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IBorderStatics;
@@ -37293,7 +37293,7 @@ pub const ChoosingGroupHeaderContainerEventArgs = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.ChoosingGroupHeaderContainerEventArgs";
     pub const NAME_W: [64]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 67, 104, 111, 111, 115, 105, 110, 103, 71, 114, 111, 117, 112, 72, 101, 97, 100, 101, 114, 67, 111, 110, 116, 97, 105, 110, 101, 114, 69, 118, 101, 110, 116, 65, 114, 103, 115 };
     pub fn activate() !*ChoosingGroupHeaderContainerEventArgs {
-        const raw = try win_core.activateInstance(IChoosingGroupHeaderContainerEventArgs_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IChoosingGroupHeaderContainerEventArgs, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -37302,7 +37302,7 @@ pub const ChoosingItemContainerEventArgs = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.ChoosingItemContainerEventArgs";
     pub const NAME_W: [57]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 67, 104, 111, 111, 115, 105, 110, 103, 73, 116, 101, 109, 67, 111, 110, 116, 97, 105, 110, 101, 114, 69, 118, 101, 110, 116, 65, 114, 103, 115 };
     pub fn activate() !*ChoosingItemContainerEventArgs {
-        const raw = try win_core.activateInstance(IChoosingItemContainerEventArgs_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IChoosingItemContainerEventArgs, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -37334,7 +37334,7 @@ pub const ColumnDefinition = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.ColumnDefinition";
     pub const NAME_W: [43]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 67, 111, 108, 117, 109, 110, 68, 101, 102, 105, 110, 105, 116, 105, 111, 110 };
     pub fn activate() !*ColumnDefinition {
-        const raw = try win_core.activateInstance(IColumnDefinition_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IColumnDefinition, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IColumnDefinitionStatics;
@@ -37390,7 +37390,7 @@ pub const ContainerContentChangingEventArgs = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.ContainerContentChangingEventArgs";
     pub const NAME_W: [60]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 67, 111, 110, 116, 97, 105, 110, 101, 114, 67, 111, 110, 116, 101, 110, 116, 67, 104, 97, 110, 103, 105, 110, 103, 69, 118, 101, 110, 116, 65, 114, 103, 115 };
     pub fn activate() !*ContainerContentChangingEventArgs {
-        const raw = try win_core.activateInstance(IContainerContentChangingEventArgs_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IContainerContentChangingEventArgs, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -37452,7 +37452,7 @@ pub const ControlTemplate = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.ControlTemplate";
     pub const NAME_W: [42]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 67, 111, 110, 116, 114, 111, 108, 84, 101, 109, 112, 108, 97, 116, 101 };
     pub fn activate() !*ControlTemplate {
-        const raw = try win_core.activateInstance(IControlTemplate_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IControlTemplate, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -37471,7 +37471,7 @@ pub const DatePickedEventArgs = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.DatePickedEventArgs";
     pub const NAME_W: [46]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 68, 97, 116, 101, 80, 105, 99, 107, 101, 100, 69, 118, 101, 110, 116, 65, 114, 103, 115 };
     pub fn activate() !*DatePickedEventArgs {
-        const raw = try win_core.activateInstance(IDatePickedEventArgs_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IDatePickedEventArgs, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -37489,7 +37489,7 @@ pub const DatePickerFlyout = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.DatePickerFlyout";
     pub const NAME_W: [43]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 68, 97, 116, 101, 80, 105, 99, 107, 101, 114, 70, 108, 121, 111, 117, 116 };
     pub fn activate() !*DatePickerFlyout {
-        const raw = try win_core.activateInstance(IDatePickerFlyout_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IDatePickerFlyout, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IDatePickerFlyoutStatics;
@@ -37535,7 +37535,7 @@ pub const DragItemsStartingEventArgs = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.DragItemsStartingEventArgs";
     pub const NAME_W: [53]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 68, 114, 97, 103, 73, 116, 101, 109, 115, 83, 116, 97, 114, 116, 105, 110, 103, 69, 118, 101, 110, 116, 65, 114, 103, 115 };
     pub fn activate() !*DragItemsStartingEventArgs {
-        const raw = try win_core.activateInstance(IDragItemsStartingEventArgs_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IDragItemsStartingEventArgs, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -37549,7 +37549,7 @@ pub const DynamicOverflowItemsChangingEventArgs = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.DynamicOverflowItemsChangingEventArgs";
     pub const NAME_W: [64]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 68, 121, 110, 97, 109, 105, 99, 79, 118, 101, 114, 102, 108, 111, 119, 73, 116, 101, 109, 115, 67, 104, 97, 110, 103, 105, 110, 103, 69, 118, 101, 110, 116, 65, 114, 103, 115 };
     pub fn activate() !*DynamicOverflowItemsChangingEventArgs {
-        const raw = try win_core.activateInstance(IDynamicOverflowItemsChangingEventArgs_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IDynamicOverflowItemsChangingEventArgs, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -37732,7 +37732,7 @@ pub const HubSectionHeaderClickEventArgs = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.HubSectionHeaderClickEventArgs";
     pub const NAME_W: [57]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 72, 117, 98, 83, 101, 99, 116, 105, 111, 110, 72, 101, 97, 100, 101, 114, 67, 108, 105, 99, 107, 69, 118, 101, 110, 116, 65, 114, 103, 115 };
     pub fn activate() !*HubSectionHeaderClickEventArgs {
-        const raw = try win_core.activateInstance(IHubSectionHeaderClickEventArgs_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IHubSectionHeaderClickEventArgs, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -37759,7 +37759,7 @@ pub const Image = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.Image";
     pub const NAME_W: [32]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 73, 109, 97, 103, 101 };
     pub fn activate() !*Image {
-        const raw = try win_core.activateInstance(IImage_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IImage, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IImageStatics;
@@ -37841,7 +37841,7 @@ pub const ItemClickEventArgs = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.ItemClickEventArgs";
     pub const NAME_W: [45]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 73, 116, 101, 109, 67, 108, 105, 99, 107, 69, 118, 101, 110, 116, 65, 114, 103, 115 };
     pub fn activate() !*ItemClickEventArgs {
-        const raw = try win_core.activateInstance(IItemClickEventArgs_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IItemClickEventArgs, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -37889,7 +37889,7 @@ pub const ItemsPanelTemplate = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.ItemsPanelTemplate";
     pub const NAME_W: [45]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 73, 116, 101, 109, 115, 80, 97, 110, 101, 108, 84, 101, 109, 112, 108, 97, 116, 101 };
     pub fn activate() !*ItemsPanelTemplate {
-        const raw = try win_core.activateInstance(IItemsPanelTemplate_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IItemsPanelTemplate, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -37898,7 +37898,7 @@ pub const ItemsPickedEventArgs = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.ItemsPickedEventArgs";
     pub const NAME_W: [47]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 73, 116, 101, 109, 115, 80, 105, 99, 107, 101, 100, 69, 118, 101, 110, 116, 65, 114, 103, 115 };
     pub fn activate() !*ItemsPickedEventArgs {
-        const raw = try win_core.activateInstance(IItemsPickedEventArgs_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IItemsPickedEventArgs, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -37907,7 +37907,7 @@ pub const ItemsPresenter = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.ItemsPresenter";
     pub const NAME_W: [41]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 73, 116, 101, 109, 115, 80, 114, 101, 115, 101, 110, 116, 101, 114 };
     pub fn activate() !*ItemsPresenter {
-        const raw = try win_core.activateInstance(IItemsPresenter_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IItemsPresenter, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IItemsPresenterStatics;
@@ -37948,7 +37948,7 @@ pub const ItemsRepeaterScrollHost = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.ItemsRepeaterScrollHost";
     pub const NAME_W: [50]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 73, 116, 101, 109, 115, 82, 101, 112, 101, 97, 116, 101, 114, 83, 99, 114, 111, 108, 108, 72, 111, 115, 116 };
     pub fn activate() !*ItemsRepeaterScrollHost {
-        const raw = try win_core.activateInstance(IItemsRepeaterScrollHost_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IItemsRepeaterScrollHost, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -37962,7 +37962,7 @@ pub const ItemsStackPanel = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.ItemsStackPanel";
     pub const NAME_W: [42]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 73, 116, 101, 109, 115, 83, 116, 97, 99, 107, 80, 97, 110, 101, 108 };
     pub fn activate() !*ItemsStackPanel {
-        const raw = try win_core.activateInstance(IItemsStackPanel_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IItemsStackPanel, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IItemsStackPanelStatics;
@@ -38051,7 +38051,7 @@ pub const ListPickerFlyout = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.ListPickerFlyout";
     pub const NAME_W: [43]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 76, 105, 115, 116, 80, 105, 99, 107, 101, 114, 70, 108, 121, 111, 117, 116 };
     pub fn activate() !*ListPickerFlyout {
-        const raw = try win_core.activateInstance(IListPickerFlyout_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IListPickerFlyout, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IListPickerFlyoutStatics;
@@ -38240,7 +38240,7 @@ pub const MenuFlyoutSubItem = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.MenuFlyoutSubItem";
     pub const NAME_W: [44]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 77, 101, 110, 117, 70, 108, 121, 111, 117, 116, 83, 117, 98, 73, 116, 101, 109 };
     pub fn activate() !*MenuFlyoutSubItem {
-        const raw = try win_core.activateInstance(IMenuFlyoutSubItem_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IMenuFlyoutSubItem, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IMenuFlyoutSubItemStatics;
@@ -38317,7 +38317,7 @@ pub const NavigationViewItemInvokedEventArgs = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.NavigationViewItemInvokedEventArgs";
     pub const NAME_W: [61]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 78, 97, 118, 105, 103, 97, 116, 105, 111, 110, 86, 105, 101, 119, 73, 116, 101, 109, 73, 110, 118, 111, 107, 101, 100, 69, 118, 101, 110, 116, 65, 114, 103, 115 };
     pub fn activate() !*NavigationViewItemInvokedEventArgs {
-        const raw = try win_core.activateInstance(INavigationViewItemInvokedEventArgs_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(INavigationViewItemInvokedEventArgs, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -38405,7 +38405,7 @@ pub const PasswordBox = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.PasswordBox";
     pub const NAME_W: [38]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 80, 97, 115, 115, 119, 111, 114, 100, 66, 111, 120 };
     pub fn activate() !*PasswordBox {
-        const raw = try win_core.activateInstance(IPasswordBox_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IPasswordBox, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IPasswordBoxStatics;
@@ -38455,7 +38455,7 @@ pub const PickerConfirmedEventArgs = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.PickerConfirmedEventArgs";
     pub const NAME_W: [51]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 80, 105, 99, 107, 101, 114, 67, 111, 110, 102, 105, 114, 109, 101, 100, 69, 118, 101, 110, 116, 65, 114, 103, 115 };
     pub fn activate() !*PickerConfirmedEventArgs {
-        const raw = try win_core.activateInstance(IPickerConfirmedEventArgs_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IPickerConfirmedEventArgs, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -38464,7 +38464,7 @@ pub const PickerFlyout = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.PickerFlyout";
     pub const NAME_W: [39]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 80, 105, 99, 107, 101, 114, 70, 108, 121, 111, 117, 116 };
     pub fn activate() !*PickerFlyout {
-        const raw = try win_core.activateInstance(IPickerFlyout_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IPickerFlyout, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IPickerFlyoutStatics;
@@ -38523,7 +38523,7 @@ pub const PivotItemEventArgs = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.PivotItemEventArgs";
     pub const NAME_W: [45]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 80, 105, 118, 111, 116, 73, 116, 101, 109, 69, 118, 101, 110, 116, 65, 114, 103, 115 };
     pub fn activate() !*PivotItemEventArgs {
-        const raw = try win_core.activateInstance(IPivotItemEventArgs_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IPivotItemEventArgs, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -38703,7 +38703,7 @@ pub const RichTextBlock = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.RichTextBlock";
     pub const NAME_W: [40]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 82, 105, 99, 104, 84, 101, 120, 116, 66, 108, 111, 99, 107 };
     pub fn activate() !*RichTextBlock {
-        const raw = try win_core.activateInstance(IRichTextBlock_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IRichTextBlock, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IRichTextBlockStatics;
@@ -38716,7 +38716,7 @@ pub const RichTextBlockOverflow = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.RichTextBlockOverflow";
     pub const NAME_W: [48]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 82, 105, 99, 104, 84, 101, 120, 116, 66, 108, 111, 99, 107, 79, 118, 101, 114, 102, 108, 111, 119 };
     pub fn activate() !*RichTextBlockOverflow {
-        const raw = try win_core.activateInstance(IRichTextBlockOverflow_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IRichTextBlockOverflow, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IRichTextBlockOverflowStatics;
@@ -38729,7 +38729,7 @@ pub const RowDefinition = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.RowDefinition";
     pub const NAME_W: [40]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 82, 111, 119, 68, 101, 102, 105, 110, 105, 116, 105, 111, 110 };
     pub fn activate() !*RowDefinition {
-        const raw = try win_core.activateInstance(IRowDefinition_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IRowDefinition, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IRowDefinitionStatics;
@@ -38747,7 +38747,7 @@ pub const ScrollContentPresenter = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.ScrollContentPresenter";
     pub const NAME_W: [49]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 83, 99, 114, 111, 108, 108, 67, 111, 110, 116, 101, 110, 116, 80, 114, 101, 115, 101, 110, 116, 101, 114 };
     pub fn activate() !*ScrollContentPresenter {
-        const raw = try win_core.activateInstance(IScrollContentPresenter_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IScrollContentPresenter, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IScrollContentPresenterStatics;
@@ -38769,7 +38769,7 @@ pub const ScrollViewer = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.ScrollViewer";
     pub const NAME_W: [39]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 83, 99, 114, 111, 108, 108, 86, 105, 101, 119, 101, 114 };
     pub fn activate() !*ScrollViewer {
-        const raw = try win_core.activateInstance(IScrollViewer_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IScrollViewer, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IScrollViewerStatics;
@@ -38787,7 +38787,7 @@ pub const ScrollViewerViewChangedEventArgs = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.ScrollViewerViewChangedEventArgs";
     pub const NAME_W: [59]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 83, 99, 114, 111, 108, 108, 86, 105, 101, 119, 101, 114, 86, 105, 101, 119, 67, 104, 97, 110, 103, 101, 100, 69, 118, 101, 110, 116, 65, 114, 103, 115 };
     pub fn activate() !*ScrollViewerViewChangedEventArgs {
-        const raw = try win_core.activateInstance(IScrollViewerViewChangedEventArgs_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IScrollViewerViewChangedEventArgs, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -38874,7 +38874,7 @@ pub const SemanticZoom = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.SemanticZoom";
     pub const NAME_W: [39]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 83, 101, 109, 97, 110, 116, 105, 99, 90, 111, 111, 109 };
     pub fn activate() !*SemanticZoom {
-        const raw = try win_core.activateInstance(ISemanticZoom_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(ISemanticZoom, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = ISemanticZoomStatics;
@@ -38887,7 +38887,7 @@ pub const SemanticZoomLocation = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.SemanticZoomLocation";
     pub const NAME_W: [47]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 83, 101, 109, 97, 110, 116, 105, 99, 90, 111, 111, 109, 76, 111, 99, 97, 116, 105, 111, 110 };
     pub fn activate() !*SemanticZoomLocation {
-        const raw = try win_core.activateInstance(ISemanticZoomLocation_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(ISemanticZoomLocation, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -38896,7 +38896,7 @@ pub const SemanticZoomViewChangedEventArgs = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.SemanticZoomViewChangedEventArgs";
     pub const NAME_W: [59]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 83, 101, 109, 97, 110, 116, 105, 99, 90, 111, 111, 109, 86, 105, 101, 119, 67, 104, 97, 110, 103, 101, 100, 69, 118, 101, 110, 116, 65, 114, 103, 115 };
     pub fn activate() !*SemanticZoomViewChangedEventArgs {
-        const raw = try win_core.activateInstance(ISemanticZoomViewChangedEventArgs_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(ISemanticZoomViewChangedEventArgs, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -39011,7 +39011,7 @@ pub const SymbolIcon = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.SymbolIcon";
     pub const NAME_W: [37]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 83, 121, 109, 98, 111, 108, 73, 99, 111, 110 };
     pub fn activate() !*SymbolIcon {
-        const raw = try win_core.activateInstance(ISymbolIcon_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(ISymbolIcon, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Factory = ISymbolIconFactory;
@@ -39149,7 +39149,7 @@ pub const TextBlock = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.TextBlock";
     pub const NAME_W: [36]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 84, 101, 120, 116, 66, 108, 111, 99, 107 };
     pub fn activate() !*TextBlock {
-        const raw = try win_core.activateInstance(ITextBlock_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(ITextBlock, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = ITextBlockStatics;
@@ -39226,7 +39226,7 @@ pub const TimePickedEventArgs = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.TimePickedEventArgs";
     pub const NAME_W: [46]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 84, 105, 109, 101, 80, 105, 99, 107, 101, 100, 69, 118, 101, 110, 116, 65, 114, 103, 115 };
     pub fn activate() !*TimePickedEventArgs {
-        const raw = try win_core.activateInstance(ITimePickedEventArgs_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(ITimePickedEventArgs, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -39244,7 +39244,7 @@ pub const TimePickerFlyout = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.TimePickerFlyout";
     pub const NAME_W: [43]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 84, 105, 109, 101, 80, 105, 99, 107, 101, 114, 70, 108, 121, 111, 117, 116 };
     pub fn activate() !*TimePickerFlyout {
-        const raw = try win_core.activateInstance(ITimePickerFlyout_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(ITimePickerFlyout, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = ITimePickerFlyoutStatics;
@@ -39326,7 +39326,7 @@ pub const ToggleSwitch = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.ToggleSwitch";
     pub const NAME_W: [39]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 84, 111, 103, 103, 108, 101, 83, 119, 105, 116, 99, 104 };
     pub fn activate() !*ToggleSwitch {
-        const raw = try win_core.activateInstance(IToggleSwitch_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IToggleSwitch, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IToggleSwitchStatics;
@@ -39459,7 +39459,7 @@ pub const VariableSizedWrapGrid = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.VariableSizedWrapGrid";
     pub const NAME_W: [48]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 86, 97, 114, 105, 97, 98, 108, 101, 83, 105, 122, 101, 100, 87, 114, 97, 112, 71, 114, 105, 100 };
     pub fn activate() !*VariableSizedWrapGrid {
-        const raw = try win_core.activateInstance(IVariableSizedWrapGrid_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IVariableSizedWrapGrid, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IVariableSizedWrapGridStatics;
@@ -39472,7 +39472,7 @@ pub const Viewbox = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.Viewbox";
     pub const NAME_W: [34]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 86, 105, 101, 119, 98, 111, 120 };
     pub fn activate() !*Viewbox {
-        const raw = try win_core.activateInstance(IViewbox_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IViewbox, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IViewboxStatics;
@@ -39490,7 +39490,7 @@ pub const VirtualizingStackPanel = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.VirtualizingStackPanel";
     pub const NAME_W: [49]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 86, 105, 114, 116, 117, 97, 108, 105, 122, 105, 110, 103, 83, 116, 97, 99, 107, 80, 97, 110, 101, 108 };
     pub fn activate() !*VirtualizingStackPanel {
-        const raw = try win_core.activateInstance(IVirtualizingStackPanel_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IVirtualizingStackPanel, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IVirtualizingStackPanelStatics;
@@ -39512,7 +39512,7 @@ pub const WrapGrid = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.WrapGrid";
     pub const NAME_W: [35]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 87, 114, 97, 112, 71, 114, 105, 100 };
     pub fn activate() !*WrapGrid {
-        const raw = try win_core.activateInstance(IWrapGrid_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IWrapGrid, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IWrapGridStatics;
@@ -39525,7 +39525,7 @@ pub const XamlControlsResources = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.XamlControlsResources";
     pub const NAME_W: [48]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 110, 116, 114, 111, 108, 115, 46, 88, 97, 109, 108, 67, 111, 110, 116, 114, 111, 108, 115, 82, 101, 115, 111, 117, 114, 99, 101, 115 };
     pub fn activate() !*XamlControlsResources {
-        const raw = try win_core.activateInstance(IXamlControlsResources_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IXamlControlsResources, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IXamlControlsResourcesStatics;

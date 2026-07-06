@@ -7199,7 +7199,7 @@ pub const BringIntoViewOptions = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.BringIntoViewOptions";
     pub const NAME_W: [38]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 66, 114, 105, 110, 103, 73, 110, 116, 111, 86, 105, 101, 119, 79, 112, 116, 105, 111, 110, 115 };
     pub fn activate() !*BringIntoViewOptions {
-        const raw = try win_core.activateInstance(IBringIntoViewOptions_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IBringIntoViewOptions, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -7381,7 +7381,7 @@ pub const EventTrigger = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.EventTrigger";
     pub const NAME_W: [30]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 69, 118, 101, 110, 116, 84, 114, 105, 103, 103, 101, 114 };
     pub fn activate() !*EventTrigger {
-        const raw = try win_core.activateInstance(IEventTrigger_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IEventTrigger, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -7395,7 +7395,7 @@ pub const FrameworkView = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.FrameworkView";
     pub const NAME_W: [31]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 70, 114, 97, 109, 101, 119, 111, 114, 107, 86, 105, 101, 119 };
     pub fn activate() !*FrameworkView {
-        const raw = try win_core.activateInstance(IFrameworkView_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IFrameworkView, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -7404,7 +7404,7 @@ pub const FrameworkViewSource = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.FrameworkViewSource";
     pub const NAME_W: [37]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 70, 114, 97, 109, 101, 119, 111, 114, 107, 86, 105, 101, 119, 83, 111, 117, 114, 99, 101 };
     pub fn activate() !*FrameworkViewSource {
-        const raw = try win_core.activateInstance(IFrameworkViewSource_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IFrameworkViewSource, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -7493,7 +7493,7 @@ pub const Setter = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Setter";
     pub const NAME_W: [24]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 83, 101, 116, 116, 101, 114 };
     pub fn activate() !*Setter {
-        const raw = try win_core.activateInstance(ISetter_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(ISetter, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Factory = ISetterFactory;
@@ -7510,7 +7510,7 @@ pub const SetterBaseCollection = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.SetterBaseCollection";
     pub const NAME_W: [38]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 83, 101, 116, 116, 101, 114, 66, 97, 115, 101, 67, 111, 108, 108, 101, 99, 116, 105, 111, 110 };
     pub fn activate() !*SetterBaseCollection {
-        const raw = try win_core.activateInstance(ISetterBaseCollection_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(ISetterBaseCollection, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -7533,7 +7533,7 @@ pub const StateTrigger = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.StateTrigger";
     pub const NAME_W: [30]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 83, 116, 97, 116, 101, 84, 114, 105, 103, 103, 101, 114 };
     pub fn activate() !*StateTrigger {
-        const raw = try win_core.activateInstance(IStateTrigger_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IStateTrigger, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Statics = IStateTriggerStatics;
@@ -7546,7 +7546,7 @@ pub const Style = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Style";
     pub const NAME_W: [23]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 83, 116, 121, 108, 101 };
     pub fn activate() !*Style {
-        const raw = try win_core.activateInstance(IStyle_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IStyle, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Factory = IStyleFactory;
@@ -7559,7 +7559,7 @@ pub const TargetPropertyPath = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.TargetPropertyPath";
     pub const NAME_W: [36]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 84, 97, 114, 103, 101, 116, 80, 114, 111, 112, 101, 114, 116, 121, 80, 97, 116, 104 };
     pub fn activate() !*TargetPropertyPath {
-        const raw = try win_core.activateInstance(ITargetPropertyPath_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(ITargetPropertyPath, &NAME_W);
         return @ptrCast(raw);
     }
     pub const Factory = ITargetPropertyPathFactory;
@@ -7606,7 +7606,7 @@ pub const VisualState = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.VisualState";
     pub const NAME_W: [29]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 86, 105, 115, 117, 97, 108, 83, 116, 97, 116, 101 };
     pub fn activate() !*VisualState {
-        const raw = try win_core.activateInstance(IVisualState_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IVisualState, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -7615,7 +7615,7 @@ pub const VisualStateChangedEventArgs = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.VisualStateChangedEventArgs";
     pub const NAME_W: [45]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 86, 105, 115, 117, 97, 108, 83, 116, 97, 116, 101, 67, 104, 97, 110, 103, 101, 100, 69, 118, 101, 110, 116, 65, 114, 103, 115 };
     pub fn activate() !*VisualStateChangedEventArgs {
-        const raw = try win_core.activateInstance(IVisualStateChangedEventArgs_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IVisualStateChangedEventArgs, &NAME_W);
         return @ptrCast(raw);
     }
 };
@@ -7624,7 +7624,7 @@ pub const VisualStateGroup = extern struct {
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.VisualStateGroup";
     pub const NAME_W: [34]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 86, 105, 115, 117, 97, 108, 83, 116, 97, 116, 101, 71, 114, 111, 117, 112 };
     pub fn activate() !*VisualStateGroup {
-        const raw = try win_core.activateInstance(IVisualStateGroup_Vtbl, &NAME_W);
+        const raw = try win_core.activateInstance(IVisualStateGroup, &NAME_W);
         return @ptrCast(raw);
     }
 };
