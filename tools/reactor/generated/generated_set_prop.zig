@@ -14,6 +14,7 @@ pub const Error = win_core.hresult.Error || error{
 };
 pub const SetterValue = union(enum) {
     string: []const u16,
+    object: ?*const anyopaque,
     f64: f64,
     i32: i32,
     enum_i32: i32,
@@ -260,6 +261,34 @@ fn applyMicrosoftUIXamlControlsFlyoutContent(widget: *anyopaque, value: SetterVa
         else => return error.ValueKindMismatch,
     };
     try setMicrosoftUIXamlControlsFlyoutContent(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsItemsRepeaterItemsSource(widget: *@"Microsoft.UI.Xaml.Controls".ItemsRepeater, value: ?*const anyopaque) Error!void {
+    const target: *const @"Microsoft.UI.Xaml.Controls".IItemsRepeater = @ptrCast(widget);
+    try win_core.hresult.ok(target.put_ItemsSource(value));
+}
+
+fn applyMicrosoftUIXamlControlsItemsRepeaterItemsSource(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .object => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsItemsRepeaterItemsSource(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsListViewItemsSource(widget: *@"Microsoft.UI.Xaml.Controls".ListView, value: ?*const anyopaque) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IListView = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls".IItemsControl) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try win_core.hresult.ok(target.put_ItemsSource(value));
+}
+
+fn applyMicrosoftUIXamlControlsListViewItemsSource(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .object => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsListViewItemsSource(@ptrCast(@alignCast(widget)), typed_value);
 }
 
 pub fn setMicrosoftUIXamlControlsMenuBarItemTitle(widget: *@"Microsoft.UI.Xaml.Controls".MenuBarItem, value: []const u16) Error!void {
@@ -689,6 +718,26 @@ pub const entries = [_]PropertySetter{
         .apply = applyMicrosoftUIXamlControlsFlyoutContent,
     },
     .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ItemsRepeater",
+        .widget_name = "ItemsRepeater",
+        .handle_name = "ItemsRepeater",
+        .property_name = "ItemsSource",
+        .field_name = "items_source",
+        .value_kind = .object,
+        .setter_kind = .direct,
+        .apply = applyMicrosoftUIXamlControlsItemsRepeaterItemsSource,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ListView",
+        .widget_name = "ListView",
+        .handle_name = "ListView",
+        .property_name = "ItemsSource",
+        .field_name = "items_source",
+        .value_kind = .object,
+        .setter_kind = .direct,
+        .apply = applyMicrosoftUIXamlControlsListViewItemsSource,
+    },
+    .{
         .widget_class = "Microsoft.UI.Xaml.Controls.MenuBarItem",
         .widget_name = "MenuBarItem",
         .handle_name = "MenuBarItem",
@@ -875,23 +924,25 @@ pub const by_widget_prop = std.StaticStringMap(usize).initComptime(.{
     .{ "Microsoft.UI.Xaml.Controls.ContentDialog#SecondaryButtonText", 11 },
     .{ "Microsoft.UI.Xaml.Controls.ContentDialog#Title", 12 },
     .{ "Microsoft.UI.Xaml.Controls.Flyout#Content", 13 },
-    .{ "Microsoft.UI.Xaml.Controls.MenuBarItem#Title", 14 },
-    .{ "Microsoft.UI.Xaml.Controls.NavigationView#Content", 15 },
-    .{ "Microsoft.UI.Xaml.Controls.NavigationViewItem#Content", 16 },
-    .{ "Microsoft.UI.Xaml.Controls.ScrollViewer#Content", 17 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Left", 18 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Orientation", 19 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Spacing", 20 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Top", 21 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#ZIndex", 22 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Left", 23 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Text", 24 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Top", 25 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#ZIndex", 26 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#Left", 27 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#Top", 28 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#ZIndex", 29 },
-    .{ "Microsoft.UI.Xaml.Window#Title", 30 },
+    .{ "Microsoft.UI.Xaml.Controls.ItemsRepeater#ItemsSource", 14 },
+    .{ "Microsoft.UI.Xaml.Controls.ListView#ItemsSource", 15 },
+    .{ "Microsoft.UI.Xaml.Controls.MenuBarItem#Title", 16 },
+    .{ "Microsoft.UI.Xaml.Controls.NavigationView#Content", 17 },
+    .{ "Microsoft.UI.Xaml.Controls.NavigationViewItem#Content", 18 },
+    .{ "Microsoft.UI.Xaml.Controls.ScrollViewer#Content", 19 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Left", 20 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Orientation", 21 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Spacing", 22 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Top", 23 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#ZIndex", 24 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Left", 25 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Text", 26 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Top", 27 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#ZIndex", 28 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#Left", 29 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#Top", 30 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#ZIndex", 31 },
+    .{ "Microsoft.UI.Xaml.Window#Title", 32 },
 });
 
 pub fn find(widget_class: []const u8, property_name: []const u8) ?*const PropertySetter {

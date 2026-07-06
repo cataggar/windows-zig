@@ -286,6 +286,41 @@ fn dispatchDisconnectMicrosoftUIXamlControlsCanvasPointerReleased(widget: *anyop
     try disconnectMicrosoftUIXamlControlsCanvasPointerReleased(@ptrCast(@alignCast(widget)), connection);
 }
 
+pub fn connectMicrosoftUIXamlControlsListViewSelectionChanged(widget: *@"Microsoft.UI.Xaml.Controls".ListView, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IListView = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls.Primitives".ISelector) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    return try reactor_event_runtime.connect(
+        EventRegistrationToken,
+        .{ .data1 = 0xa232390d, .data2 = 0x0e34, .data3 = 0x595e, .data4 = .{ 0x89, 0x31, 0xfa, 0x92, 0x8a, 0x99, 0x09, 0xf4 } },
+        target,
+        allocator,
+        invoke,
+        user_data,
+        @"Microsoft.UI.Xaml.Controls.Primitives".ISelector.add_SelectionChanged,
+    );
+}
+
+fn dispatchConnectMicrosoftUIXamlControlsListViewSelectionChanged(widget: *anyopaque, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
+    return try connectMicrosoftUIXamlControlsListViewSelectionChanged(@ptrCast(@alignCast(widget)), allocator, invoke, user_data);
+}
+
+pub fn disconnectMicrosoftUIXamlControlsListViewSelectionChanged(widget: *@"Microsoft.UI.Xaml.Controls".ListView, connection: *EventConnection) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IListView = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls.Primitives".ISelector) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try reactor_event_runtime.disconnect(
+        EventRegistrationToken,
+        target,
+        connection,
+        @"Microsoft.UI.Xaml.Controls.Primitives".ISelector.remove_SelectionChanged,
+    );
+}
+
+fn dispatchDisconnectMicrosoftUIXamlControlsListViewSelectionChanged(widget: *anyopaque, connection: *EventConnection) Error!void {
+    try disconnectMicrosoftUIXamlControlsListViewSelectionChanged(@ptrCast(@alignCast(widget)), connection);
+}
+
 pub fn connectMicrosoftUIXamlControlsStackPanelPointerMoved(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {
     const default_iface: *const @"Microsoft.UI.Xaml.Controls".IStackPanel = @ptrCast(widget);
     const target = default_iface.cast(@"Microsoft.UI.Xaml".IUIElement) orelse return error.InterfaceCastFailed;
@@ -711,6 +746,17 @@ pub const entries = [_]EventConnector{
         .disconnect = dispatchDisconnectMicrosoftUIXamlControlsCanvasPointerReleased,
     },
     .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ListView",
+        .widget_name = "ListView",
+        .handle_name = "ListView",
+        .event_name = "SelectionChanged",
+        .field_name = "on_selection_changed",
+        .payload = .unit,
+        .source = .none,
+        .connect = dispatchConnectMicrosoftUIXamlControlsListViewSelectionChanged,
+        .disconnect = dispatchDisconnectMicrosoftUIXamlControlsListViewSelectionChanged,
+    },
+    .{
         .widget_class = "Microsoft.UI.Xaml.Controls.StackPanel",
         .widget_name = "StackPanel",
         .handle_name = "StackPanel",
@@ -830,16 +876,17 @@ pub const by_widget_event = std.StaticStringMap(usize).initComptime(.{
     .{ "Microsoft.UI.Xaml.Controls.Canvas#PointerMoved", 4 },
     .{ "Microsoft.UI.Xaml.Controls.Canvas#PointerPressed", 5 },
     .{ "Microsoft.UI.Xaml.Controls.Canvas#PointerReleased", 6 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#PointerMoved", 7 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#PointerPressed", 8 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#PointerReleased", 9 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#PointerMoved", 10 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#PointerPressed", 11 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#PointerReleased", 12 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#PointerMoved", 13 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#PointerPressed", 14 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#PointerReleased", 15 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#TextChanged", 16 },
+    .{ "Microsoft.UI.Xaml.Controls.ListView#SelectionChanged", 7 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#PointerMoved", 8 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#PointerPressed", 9 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#PointerReleased", 10 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#PointerMoved", 11 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#PointerPressed", 12 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#PointerReleased", 13 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#PointerMoved", 14 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#PointerPressed", 15 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#PointerReleased", 16 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#TextChanged", 17 },
 });
 
 pub fn find(widget_class: []const u8, event_name: []const u8) ?*const EventConnector {

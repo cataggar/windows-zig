@@ -1,5 +1,6 @@
 const std = @import("std");
 const win = @import("win");
+const win_collections = @import("win-collections");
 
 const backend = @import("backend.zig");
 const element = @import("element.zig");
@@ -18,18 +19,52 @@ const win_core = win.core;
 
 const WidgetId = backend.WidgetId;
 const Allocator = std.mem.Allocator;
+const ObservableObjectVector = win_collections.IObservableVector(?*const anyopaque);
 
 /// Real WinUI backend surface for the current reactor widget catalog:
 /// Application, Window, Button, StackPanel, Grid, ScrollViewer, Border,
-/// TextBlock, TextBox, and navigation/dialog widgets, with generated
-/// property/event dispatch wired for manifest-covered members plus manual
-/// fallbacks for current attached-property / collection-property gaps.
+/// TextBlock, TextBox, Canvas, list, and navigation/dialog widgets, with
+/// generated property/event dispatch wired for manifest-covered members plus
+/// manual fallbacks for current attached-property / collection-property gaps.
 pub const WinUIBackend = struct {
     allocator: Allocator,
     application: win_core.IInspectable,
     next_id: WidgetId = 1,
     nodes: std.AutoHashMapUnmanaged(WidgetId, Node) = .empty,
     root_order: std.ArrayListUnmanaged(WidgetId) = .empty,
+
+    const ManagedItemsSource = struct {
+        vector: *ObservableObjectVector,
+
+        fn init(allocator: Allocator) !ManagedItemsSource {
+            return .{
+                .vector = try win_collections.createObservableVector(?*const anyopaque, allocator, &[_]?*const anyopaque{}),
+            };
+        }
+
+        fn deinit(self: *ManagedItemsSource) void {
+            self.vector.deinit();
+            self.* = undefined;
+        }
+
+        fn object(self: *const ManagedItemsSource) ?*const anyopaque {
+            return @ptrCast(self.vector);
+        }
+
+        fn insert(self: *ManagedItemsSource, index: usize, value: ?*const anyopaque) !void {
+            const size: usize = @intCast(try self.vector.Size());
+            if (index > size) return error.InvalidChildIndex;
+            if (index == size) {
+                try self.vector.Append(value);
+                return;
+            }
+            try self.vector.InsertAt(@intCast(index), value);
+        }
+
+        fn removeAt(self: *ManagedItemsSource, index: usize) !void {
+            try self.vector.RemoveAt(@intCast(index));
+        }
+    };
 
     const Node = struct {
         kind: element.WidgetKind,
@@ -38,9 +73,14 @@ pub const WinUIBackend = struct {
         ref: ?*element.WidgetRef = null,
         children: std.ArrayListUnmanaged(WidgetId) = .empty,
         events: std.ArrayListUnmanaged(*EventEntry) = .empty,
+        managed_items_source: ?ManagedItemsSource = null,
+        uses_explicit_items_source: bool = false,
 
         fn deinit(self: *Node, allocator: Allocator) void {
             if (self.ref) |widget_ref| widget_ref.clear();
+            if (self.managed_items_source) |*managed_items_source| {
+                managed_items_source.deinit();
+            }
             for (self.events.items) |entry| {
                 entry.deinit(allocator);
                 allocator.destroy(entry);
@@ -231,6 +271,10 @@ pub const WinUIBackend = struct {
             owned.deinit(self.allocator);
         }
 
+        if (isManagedListWidget(kind)) {
+            try self.initializeManagedItemsSource(id);
+        }
+
         try self.insertChildRecord(parent, index, id);
         errdefer self.removeChildRecord(parent, id);
 
@@ -310,6 +354,27 @@ pub const WinUIBackend = struct {
                     try replaceChildList(&parent_node.children, self.allocator, child_ids);
                     try self.refreshMenuBar(parent_node);
                 },
+                .list_view, .items_repeater => {
+                    if (parent_node.uses_explicit_items_source) return error.ItemsSourceManagedExternally;
+                    const managed_items_source = if (parent_node.managed_items_source) |*managed_items_source|
+                        managed_items_source
+                    else
+                        return error.ManagedItemsSourceUnavailable;
+                    const current = try self.allocator.dupe(WidgetId, parent_node.children.items);
+                    defer self.allocator.free(current);
+
+                    for (child_ids, 0..) |desired_id, desired_index| {
+                        if (desired_index < current.len and current[desired_index] == desired_id) continue;
+
+                        const current_index = indexOfChild(current, desired_id) orelse return error.UnknownWidget;
+                        try managed_items_source.removeAt(current_index);
+                        const child = self.nodes.get(desired_id) orelse return error.UnknownWidget;
+                        try managed_items_source.insert(desired_index, inspectableAsObject(child.handle));
+                        moveInPlace(current, current_index, desired_index);
+                    }
+
+                    try replaceChildList(&parent_node.children, self.allocator, child_ids);
+                },
                 else => return error.UnsupportedParentChild,
             }
             return;
@@ -320,7 +385,6 @@ pub const WinUIBackend = struct {
 
     pub fn setProperty(self: *WinUIBackend, id: WidgetId, property: *const element.Property) !void {
         const node = self.nodes.getPtr(id) orelse return error.UnknownWidget;
-
         if (std.mem.eql(u8, property.name, element.WidgetRefPropertyName)) {
             const widget_ref = property.get(*element.WidgetRef) orelse return error.UnsupportedPropertyValue;
             if (node.ref) |existing| {
@@ -330,6 +394,14 @@ pub const WinUIBackend = struct {
             widget_ref.id = id;
             return;
         }
+
+        const prior_explicit = node.uses_explicit_items_source;
+        if (isItemsSourceProperty(node.kind, property.name)) {
+            if (node.children.items.len != 0) return error.ItemsSourceManagedByChildren;
+            node.uses_explicit_items_source = true;
+        }
+        errdefer node.uses_explicit_items_source = prior_explicit;
+
         if (try self.setManualProperty(id, property)) return;
         const widget_class = widgetClassName(node.kind) orelse return error.UnsupportedWidgetKind;
         var setter_value = try self.propertyToSetterValue(node.kind, property);
@@ -349,6 +421,13 @@ pub const WinUIBackend = struct {
         if (std.mem.eql(u8, name, element.WidgetRefPropertyName)) {
             if (node.ref) |widget_ref| widget_ref.clear();
             node.ref = null;
+            return;
+        }
+        if (isItemsSourceProperty(node.kind, name)) {
+            const prior_explicit = node.uses_explicit_items_source;
+            node.uses_explicit_items_source = false;
+            errdefer node.uses_explicit_items_source = prior_explicit;
+            try self.applyManagedItemsSource(node);
             return;
         }
         if (try self.unsetManualProperty(node.kind, node.handle, name)) return;
@@ -395,7 +474,7 @@ pub const WinUIBackend = struct {
                 OwnedSetterValue{ .value = .{ .f64 = 0.0 } }
             else
                 return error.UnsupportedProperty,
-            .grid, .scroll_viewer, .border => return error.UnsupportedProperty,
+            .grid, .scroll_viewer, .border, .list_view, .items_repeater => return error.UnsupportedProperty,
             else => return error.UnsupportedProperty,
         };
         defer value.deinit(self.allocator);
@@ -482,6 +561,8 @@ pub const WinUIBackend = struct {
             .navigation_view_item => ownInspectable(try createComposable(controls.NavigationViewItem, controls.INavigationViewItemFactory)),
             .menu_bar => ownInspectable(try createComposable(controls.MenuBar, controls.IMenuBarFactory)),
             .menu_bar_item => ownInspectable(try createComposable(controls.MenuBarItem, controls.IMenuBarItemFactory)),
+            .list_view => ownInspectable(try createComposable(controls.ListView, controls.IListViewFactory)),
+            .items_repeater => ownInspectable(try createComposable(controls.ItemsRepeater, controls.IItemsRepeaterFactory)),
             else => error.UnsupportedWidgetKind,
         };
     }
@@ -582,6 +663,14 @@ pub const WinUIBackend = struct {
                 if (child_node.kind != .menu_bar_item) return error.UnsupportedParentChild;
                 try self.refreshMenuBar(parent_node);
             },
+            .list_view, .items_repeater => {
+                if (parent_node.uses_explicit_items_source) return error.ItemsSourceManagedExternally;
+                if (parent_node.managed_items_source) |*managed_items_source| {
+                    try managed_items_source.insert(index, inspectableAsObject(child_node.handle));
+                } else {
+                    return error.ManagedItemsSourceUnavailable;
+                }
+            },
             else => return error.UnsupportedParentChild,
         }
     }
@@ -614,6 +703,14 @@ pub const WinUIBackend = struct {
             .flyout => {},
             .navigation_view => {},
             .menu_bar => {},
+            .list_view, .items_repeater => {
+                if (parent_node.uses_explicit_items_source) return error.ItemsSourceManagedExternally;
+                if (parent_node.managed_items_source) |*managed_items_source| {
+                    try managed_items_source.removeAt(child_index);
+                } else {
+                    return error.ManagedItemsSourceUnavailable;
+                }
+            },
             else => return error.UnsupportedParentChild,
         }
 
@@ -704,11 +801,44 @@ pub const WinUIBackend = struct {
         try win_core.hresult.ok(iface.put_Child(value));
     }
 
+    fn initializeManagedItemsSource(self: *WinUIBackend, id: WidgetId) !void {
+        const node = self.nodes.getPtr(id) orelse return error.UnknownWidget;
+        if (!isManagedListWidget(node.kind) or node.managed_items_source != null) return;
+
+        node.managed_items_source = try ManagedItemsSource.init(self.allocator);
+        errdefer {
+            if (node.managed_items_source) |*managed_items_source| {
+                managed_items_source.deinit();
+            }
+            node.managed_items_source = null;
+        }
+        try self.applyManagedItemsSource(node);
+    }
+
+    fn applyManagedItemsSource(self: *WinUIBackend, node: *Node) !void {
+        if (!isManagedListWidget(node.kind)) return;
+        if (node.uses_explicit_items_source) return;
+        const managed_items_source = node.managed_items_source orelse return error.ManagedItemsSourceUnavailable;
+        try self.applyItemsSourceObject(node, managed_items_source.object());
+    }
+
+    fn applyItemsSourceObject(self: *WinUIBackend, node: *Node, value: ?*const anyopaque) !void {
+        const widget_class = widgetClassName(node.kind) orelse return error.UnsupportedWidgetKind;
+        const applied = try generated_set_prop.dispatch(
+            widget_class,
+            "ItemsSource",
+            node.handle.ptr,
+            .{ .object = value },
+        );
+        _ = self;
+        if (!applied) return error.UnsupportedProperty;
+    }
+
     fn setManualProperty(self: *WinUIBackend, id: WidgetId, property: *const element.Property) !bool {
         const node = self.nodes.get(id) orelse return error.UnknownWidget;
 
         switch (node.kind) {
-            .button, .stack_panel, .grid, .scroll_viewer, .border, .text_block, .text_box, .canvas => {
+            .button, .stack_panel, .grid, .scroll_viewer, .border, .text_block, .text_box, .canvas, .list_view, .items_repeater => {
                 if (try self.setGridAttachedProperty(node.handle, property)) return true;
             },
             else => {},
@@ -758,7 +888,7 @@ pub const WinUIBackend = struct {
 
     fn unsetManualProperty(self: *WinUIBackend, kind: element.WidgetKind, handle: win_core.IInspectable, name: []const u8) !bool {
         switch (kind) {
-            .button, .stack_panel, .grid, .scroll_viewer, .border, .text_block, .text_box, .canvas => {
+            .button, .stack_panel, .grid, .scroll_viewer, .border, .text_block, .text_box, .canvas, .list_view, .items_repeater => {
                 if (try self.clearGridAttachedProperty(handle, name)) return true;
             },
             else => {},
@@ -871,6 +1001,11 @@ pub const WinUIBackend = struct {
                 }
 
                 return error.UnsupportedProperty;
+            },
+            .list_view, .items_repeater => {
+                if (!std.mem.eql(u8, property.name, "ItemsSource")) return error.UnsupportedProperty;
+                const source = property.get(?*const anyopaque) orelse return error.UnsupportedPropertyValue;
+                return .{ .value = .{ .object = source } };
             },
             .grid, .scroll_viewer, .border => return error.UnsupportedProperty,
             else => return error.UnsupportedProperty,
@@ -1207,8 +1342,25 @@ fn widgetClassName(kind: element.WidgetKind) ?[]const u8 {
         .navigation_view_item => "Microsoft.UI.Xaml.Controls.NavigationViewItem",
         .menu_bar => "Microsoft.UI.Xaml.Controls.MenuBar",
         .menu_bar_item => "Microsoft.UI.Xaml.Controls.MenuBarItem",
+        .list_view => "Microsoft.UI.Xaml.Controls.ListView",
+        .items_repeater => "Microsoft.UI.Xaml.Controls.ItemsRepeater",
         else => null,
     };
+}
+
+fn isManagedListWidget(kind: element.WidgetKind) bool {
+    return switch (kind) {
+        .list_view, .items_repeater => true,
+        else => false,
+    };
+}
+
+fn isItemsSourceProperty(kind: element.WidgetKind, name: []const u8) bool {
+    return isManagedListWidget(kind) and std.mem.eql(u8, name, "ItemsSource");
+}
+
+fn inspectableAsObject(handle: win_core.IInspectable) ?*const anyopaque {
+    return @ptrCast(handle.ptr);
 }
 
 fn isGridAttachedProperty(name: []const u8) bool {
@@ -1250,6 +1402,42 @@ fn visualIndexOfPanelChild(self: *const WinUIBackend, parent_node: *const WinUIB
         if (isPanelVisualChild(child.kind)) visual_index += 1;
     }
     return null;
+}
+
+fn expectObjectVectorEqual(
+    vector: *ObservableObjectVector,
+    expected: []const ?*const anyopaque,
+) !void {
+    try std.testing.expectEqual(@as(u32, @intCast(expected.len)), try vector.Size());
+    for (expected, 0..) |expected_item, index| {
+        var actual = try vector.GetAt(@intCast(index));
+        defer win_collections.releaseValue(?*const anyopaque, &actual);
+        try std.testing.expectEqual(expected_item, actual);
+    }
+}
+
+test "managed items source mirrors incremental insertions and removals" {
+    var source = try WinUIBackend.ManagedItemsSource.init(std.testing.allocator);
+    defer source.deinit();
+
+    const item_a = try win_collections.createVector(i32, std.testing.allocator, &[_]i32{1});
+    defer item_a.deinit();
+    const item_b = try win_collections.createVector(i32, std.testing.allocator, &[_]i32{2});
+    defer item_b.deinit();
+    const item_c = try win_collections.createVector(i32, std.testing.allocator, &[_]i32{3});
+    defer item_c.deinit();
+
+    const object_a = @as(?*const anyopaque, @ptrCast(item_a));
+    const object_b = @as(?*const anyopaque, @ptrCast(item_b));
+    const object_c = @as(?*const anyopaque, @ptrCast(item_c));
+
+    try source.insert(0, object_a);
+    try source.insert(1, object_b);
+    try source.insert(1, object_c);
+    try expectObjectVectorEqual(source.vector, &[_]?*const anyopaque{ object_a, object_c, object_b });
+
+    try source.removeAt(1);
+    try expectObjectVectorEqual(source.vector, &[_]?*const anyopaque{ object_a, object_b });
 }
 
 fn onEventInvoked(user_data: ?*anyopaque, sender: ?*const anyopaque, args: ?*const anyopaque) callconv(.winapi) win_core.HRESULT {

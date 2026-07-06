@@ -11,6 +11,7 @@ pub const WidgetMetaInit = struct {
 /// Reactor-facing value kinds used by generated property setters.
 pub const ValueKind = enum {
     string,
+    object,
     bool,
     f64,
     i32,

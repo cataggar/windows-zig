@@ -12,6 +12,8 @@ test "generated attach event glue compiles against a minimal WinUI slice" {
     _ = generated.disconnectMicrosoftUIXamlControlsButtonPointerPressed;
     _ = generated.connectMicrosoftUIXamlControlsCanvasPointerReleased;
     _ = generated.disconnectMicrosoftUIXamlControlsCanvasPointerReleased;
+    _ = generated.connectMicrosoftUIXamlControlsListViewSelectionChanged;
+    _ = generated.disconnectMicrosoftUIXamlControlsListViewSelectionChanged;
     _ = generated.connectMicrosoftUIXamlControlsTextBoxTextChanged;
     _ = generated.disconnectMicrosoftUIXamlControlsTextBoxTextChanged;
 }

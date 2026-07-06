@@ -4,6 +4,7 @@ const win_core = @import("win-core");
 pub const GUID = win_core.GUID;
 pub const HRESULT = win_core.HRESULT;
 pub const IInspectable_Vtbl = win_core.IInspectable_Vtbl;
+pub const SelectionChangedEventHandler = opaque {};
 pub const TextChangedEventHandler = opaque {};
 
 pub const Button = extern struct {
@@ -12,6 +13,10 @@ pub const Button = extern struct {
 
 pub const TextBox = extern struct {
     vtable: *const ITextBox_Vtbl,
+};
+
+pub const ListView = extern struct {
+    vtable: *const IListView_Vtbl,
 };
 
 pub const IButton = extern struct {
@@ -74,6 +79,35 @@ pub const ITextBox = extern struct {
     }
 };
 
+pub const IListView = extern struct {
+    vtable: *const IListView_Vtbl,
+    pub const Vtbl = IListView_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0xf6015db1,
+        .data2 = 0xdf63,
+        .data3 = 0x52fd,
+        .data4 = .{ 0xa1, 0x64, 0x0d, 0xf4, 0x47, 0x15, 0xee, 0x0a },
+    };
+
+    pub fn QueryInterface(self: *const IListView, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.base.base.QueryInterface(@ptrCast(@constCast(self)), iid, interface);
+    }
+
+    pub fn AddRef(self: *const IListView) callconv(.winapi) u32 {
+        return self.vtable.base.base.AddRef(@ptrCast(@constCast(self)));
+    }
+
+    pub fn Release(self: *const IListView) callconv(.winapi) u32 {
+        return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn cast(self: *const IListView, comptime T: type) ?*const T {
+        var out: ?*anyopaque = null;
+        if (self.QueryInterface(&T.IID, &out) < 0) return null;
+        return @ptrCast(@alignCast(out));
+    }
+};
+
 pub const IButton_Vtbl = extern struct {
     base: IInspectable_Vtbl,
 };
@@ -82,4 +116,8 @@ pub const ITextBox_Vtbl = extern struct {
     base: IInspectable_Vtbl,
     add_TextChanged: *const fn (this: *const ITextBox, p0: *TextChangedEventHandler, result: *foundation.EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_TextChanged: *const fn (this: *const ITextBox, p0: foundation.EventRegistrationToken) callconv(.winapi) HRESULT,
+};
+
+pub const IListView_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
 };

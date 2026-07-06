@@ -223,7 +223,7 @@ test "production manifest covers the committed widget set" {
     var manifest = try load(std.testing.allocator);
     defer manifest.deinit();
 
-    try std.testing.expectEqual(@as(usize, 16), manifest.widgets.len);
+    try std.testing.expectEqual(@as(usize, 18), manifest.widgets.len);
 
     const application = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Application") orelse return error.TestUnexpectedResult;
     try std.testing.expectEqual(@as(usize, 0), application.props.len);
@@ -326,6 +326,16 @@ test "production manifest covers the committed widget set" {
     const menu_bar_item = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.MenuBarItem") orelse return error.TestUnexpectedResult;
     const menu_bar_title = findProp(menu_bar_item, "Title") orelse return error.TestUnexpectedResult;
     try std.testing.expect(menu_bar_title.value.? == .string);
+
+    const list_view = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.ListView") orelse return error.TestUnexpectedResult;
+    const list_view_items_source = findProp(list_view, "ItemsSource") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(list_view_items_source.value.? == .object);
+    const selection_changed = findEvent(list_view, "SelectionChanged") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(selection_changed.payload.? == .unit);
+
+    const items_repeater = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.ItemsRepeater") orelse return error.TestUnexpectedResult;
+    const repeater_items_source = findProp(items_repeater, "ItemsSource") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(repeater_items_source.value.? == .object);
 }
 
 test "loader derives defaults and preserves advanced overrides" {

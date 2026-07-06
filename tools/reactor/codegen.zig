@@ -668,6 +668,13 @@ fn emitDirectSetterCall(writer: *std.Io.Writer, binding: Binding, target_name: [
 
     try writer.print("{s}(", .{binding.setter.method_name});
     switch (binding.value_kind) {
+        .object => {
+            switch (binding.setter.param_ty) {
+                .object => {},
+                else => return error.UnsupportedSetterStrategy,
+            }
+            try writer.writeAll("value");
+        },
         .bool => {
             switch (binding.setter.param_ty) {
                 .bool => {},
@@ -737,7 +744,7 @@ fn emitAttachedSetterCall(writer: *std.Io.Writer, binding: Binding) !void {
             try writeQualifiedType(writer, enum_type);
             try writer.writeAll(", @enumFromInt(value))");
         },
-        .string, .element => return error.UnsupportedSetterStrategy,
+        .object, .string, .element => return error.UnsupportedSetterStrategy,
     }
 
     try writer.writeAll("));\n");
@@ -1348,6 +1355,7 @@ fn resolveValueKind(prop: *const Property, param_ty: winmd.Ty) !ValueKind {
     if (prop.value) |value_kind| return value_kind;
 
     return switch (param_ty) {
+        .object => .object,
         .string => .string,
         .bool => .bool,
         .f64 => .f64,
@@ -1479,6 +1487,7 @@ fn writeDefaultInterfaceType(writer: *std.Io.Writer, widget: *const Widget) !voi
 fn writeValueType(writer: *std.Io.Writer, kind: ValueKind) !void {
     switch (kind) {
         .string => try writer.writeAll("[]const u16"),
+        .object => try writer.writeAll("?*const anyopaque"),
         .bool => try writer.writeAll("bool"),
         .f64 => try writer.writeAll("f64"),
         .i32 => try writer.writeAll("i32"),
@@ -1528,6 +1537,10 @@ test "emitSetPropFromManifest covers the seeded widget props" {
     try std.testing.expect(std.mem.find(u8, source, "target.put_Child(@ptrCast(value))") != null);
     try std.testing.expect(std.mem.find(u8, source, "pub fn setMicrosoftUIXamlControlsScrollViewerContent(widget: *@\"Microsoft.UI.Xaml.Controls\".ScrollViewer, value: *@\"Microsoft.UI.Xaml\".UIElement) Error!void {") != null);
     try std.testing.expect(std.mem.find(u8, source, "default_iface.cast(@\"Microsoft.UI.Xaml.Controls\".IContentControl) orelse return error.InterfaceCastFailed;") != null);
+    try std.testing.expect(std.mem.find(u8, source, "pub fn setMicrosoftUIXamlControlsListViewItemsSource(widget: *@\"Microsoft.UI.Xaml.Controls\".ListView, value: ?*const anyopaque) Error!void {") != null);
+    try std.testing.expect(std.mem.find(u8, source, "default_iface.cast(@\"Microsoft.UI.Xaml.Controls\".IItemsControl) orelse return error.InterfaceCastFailed;") != null);
+    try std.testing.expect(std.mem.find(u8, source, "pub fn setMicrosoftUIXamlControlsItemsRepeaterItemsSource(widget: *@\"Microsoft.UI.Xaml.Controls\".ItemsRepeater, value: ?*const anyopaque) Error!void {") != null);
+    try std.testing.expect(std.mem.find(u8, source, "target.put_ItemsSource(value)") != null);
     try std.testing.expect(std.mem.find(u8, source, "pub const by_widget_prop = std.StaticStringMap(usize).initComptime(.{") != null);
 }
 
@@ -1585,10 +1598,14 @@ test "emitAttachEventFromManifest covers the seeded widget events" {
     try std.testing.expect(std.mem.find(u8, source, "pub fn connectMicrosoftUIXamlControlsButtonPointerPressed(widget: *@\"Microsoft.UI.Xaml.Controls\".Button, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {") != null);
     try std.testing.expect(std.mem.find(u8, source, "default_iface.cast(@\"Microsoft.UI.Xaml\".IUIElement) orelse return error.InterfaceCastFailed;") != null);
     try std.testing.expect(std.mem.find(u8, source, "@\"Microsoft.UI.Xaml\".IUIElement.add_PointerPressed") != null);
+    try std.testing.expect(std.mem.find(u8, source, "pub fn connectMicrosoftUIXamlControlsListViewSelectionChanged(widget: *@\"Microsoft.UI.Xaml.Controls\".ListView, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {") != null);
+    try std.testing.expect(std.mem.find(u8, source, "default_iface.cast(@\"Microsoft.UI.Xaml.Controls.Primitives\".ISelector) orelse return error.InterfaceCastFailed;") != null);
+    try std.testing.expect(std.mem.find(u8, source, "@\"Microsoft.UI.Xaml.Controls.Primitives\".ISelector.add_SelectionChanged") != null);
     try std.testing.expect(std.mem.find(u8, source, "pub fn connectMicrosoftUIXamlControlsTextBoxTextChanged(widget: *@\"Microsoft.UI.Xaml.Controls\".TextBox, allocator: std.mem.Allocator, invoke: InvokeFn, user_data: ?*anyopaque) Error!EventConnection {") != null);
     try std.testing.expect(std.mem.find(u8, source, "@\"Microsoft.UI.Xaml.Controls\".ITextBox.add_TextChanged") != null);
     try std.testing.expect(std.mem.find(u8, source, ".{ \"Microsoft.UI.Xaml.Controls.Button#Click\",") != null);
     try std.testing.expect(std.mem.find(u8, source, ".{ \"Microsoft.UI.Xaml.Controls.Button#PointerPressed\",") != null);
+    try std.testing.expect(std.mem.find(u8, source, ".{ \"Microsoft.UI.Xaml.Controls.ListView#SelectionChanged\",") != null);
     try std.testing.expect(std.mem.find(u8, source, ".{ \"Microsoft.UI.Xaml.Controls.TextBox#TextChanged\",") != null);
     try std.testing.expect(std.mem.find(u8, source, ".source = .{ .sender_property = \"Text\" },") != null);
     try std.testing.expect(std.mem.find(u8, source, ".payload = .pointer,") != null);

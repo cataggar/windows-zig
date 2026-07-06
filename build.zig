@@ -228,6 +228,7 @@ pub fn build(b: *std.Build) void {
     win_reactor_mod.addImport("win-core", win_core_mod);
     win_reactor_mod.addImport("win-sys", win_sys_mod);
     win_reactor_mod.addImport("win", win_mod);
+    win_reactor_mod.addImport("win-collections", win_collections_mod);
     win_reactor_mod.addImport("reactor-windows-system", reactor_windows_system_mod);
     win_reactor_mod.addImport("Windows.Foundation", reactor_winui_foundation_mod);
     win_reactor_mod.addImport("Microsoft.UI.Input", reactor_ui_input_mod);
