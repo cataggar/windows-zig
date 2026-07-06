@@ -223,7 +223,7 @@ test "production manifest covers the committed widget set" {
     var manifest = try load(std.testing.allocator);
     defer manifest.deinit();
 
-    try std.testing.expectEqual(@as(usize, 10), manifest.widgets.len);
+    try std.testing.expectEqual(@as(usize, 16), manifest.widgets.len);
 
     const application = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Application") orelse return error.TestUnexpectedResult;
     try std.testing.expectEqual(@as(usize, 0), application.props.len);
@@ -302,6 +302,30 @@ test "production manifest covers the committed widget set" {
     try std.testing.expect((findProp(border, "BorderThickness") orelse return error.TestUnexpectedResult).manual);
     try std.testing.expect((findProp(border, "CornerRadius") orelse return error.TestUnexpectedResult).manual);
     try std.testing.expect((findProp(border, "Background") orelse return error.TestUnexpectedResult).manual);
+
+    const content_dialog = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.ContentDialog") orelse return error.TestUnexpectedResult;
+    const title_prop = findProp(content_dialog, "Title") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(title_prop.value.? == .string);
+    try std.testing.expect(title_prop.setter.? == .text_block);
+    const primary_button_text = findProp(content_dialog, "PrimaryButtonText") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(primary_button_text.value.? == .string);
+
+    const flyout = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.Flyout") orelse return error.TestUnexpectedResult;
+    const flyout_content = findProp(flyout, "Content") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(flyout_content.value.? == .element);
+
+    const navigation_view = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.NavigationView") orelse return error.TestUnexpectedResult;
+    const navigation_view_content = findProp(navigation_view, "Content") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(navigation_view_content.value.? == .element);
+
+    const navigation_view_item = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.NavigationViewItem") orelse return error.TestUnexpectedResult;
+    const navigation_item_content = findProp(navigation_view_item, "Content") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(navigation_item_content.value.? == .string);
+    try std.testing.expect(navigation_item_content.setter.? == .text_block);
+
+    const menu_bar_item = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.MenuBarItem") orelse return error.TestUnexpectedResult;
+    const menu_bar_title = findProp(menu_bar_item, "Title") orelse return error.TestUnexpectedResult;
+    try std.testing.expect(menu_bar_title.value.? == .string);
 }
 
 test "loader derives defaults and preserves advanced overrides" {

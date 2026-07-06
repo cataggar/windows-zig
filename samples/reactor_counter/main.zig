@@ -26,6 +26,28 @@ const CountLabel = struct {
     }
 };
 
+const DialogResultLabel = struct {
+    buffers: [2][48]u8 = undefined,
+    active: usize = 0,
+    text: []const u8 = "",
+
+    fn update(self: *@This(), result: ?reactor.ContentDialogResult) []const u8 {
+        const next = (self.active + 1) % self.buffers.len;
+        const value = result orelse {
+            self.text = "Last dialog result: <none>";
+            return self.text;
+        };
+
+        self.text = std.fmt.bufPrint(
+            &self.buffers[next],
+            "Last dialog result: {s}",
+            .{@tagName(value)},
+        ) catch unreachable;
+        self.active = next;
+        return self.text;
+    }
+};
+
 const ClickCapture = struct {
     count: i32 = 0,
     setter: ?reactor.SetState(i32) = null,
@@ -35,6 +57,48 @@ const ClickCapture = struct {
         self.setter.?.call(self.count + 1);
     }
 };
+
+const DialogWorker = struct {
+    future: reactor.ContentDialogFuture,
+    result_setter: reactor.AsyncSetState(?reactor.ContentDialogResult),
+};
+
+const DialogClickCapture = struct {
+    dialog: ?reactor.ContentDialogHandle = null,
+    result_setter: ?reactor.AsyncSetState(?reactor.ContentDialogResult) = null,
+
+    fn onClick(raw: ?*anyopaque) void {
+        const self: *@This() = @ptrCast(@alignCast(raw.?));
+        var future = self.dialog.?.showAsync() catch return;
+
+        const worker = std.heap.page_allocator.create(DialogWorker) catch {
+            future.deinit();
+            return;
+        };
+        worker.* = .{
+            .future = future,
+            .result_setter = self.result_setter.?,
+        };
+
+        const thread = std.Thread.spawn(.{}, waitForDialogResult, .{worker}) catch {
+            worker.future.deinit();
+            std.heap.page_allocator.destroy(worker);
+            return;
+        };
+        thread.detach();
+    }
+};
+
+fn waitForDialogResult(worker: *DialogWorker) void {
+    defer std.heap.page_allocator.destroy(worker);
+
+    const hr = reactor.Win.core.winrt.RoInitialize(.multi_threaded);
+    const should_uninitialize = hr >= 0;
+    defer if (should_uninitialize) reactor.Win.core.winrt.RoUninitialize();
+
+    const result = worker.future.wait(std.heap.page_allocator) catch return;
+    worker.result_setter.call(result);
+}
 
 pub fn main(init: std.process.Init) !void {
     const allocator = init.arena.allocator();
@@ -51,17 +115,31 @@ pub fn main(init: std.process.Init) !void {
 fn renderRoot(cx: *reactor.RenderCx) reactor.ElementError!reactor.Element {
     const allocator = cx.getAllocator();
     const count = try cx.useState(i32, 0);
+    const dialog_result = try cx.useAsyncState(?reactor.ContentDialogResult, null);
 
     const label_state = try cx.useRef(CountLabel, .{});
     const label_text = label_state.getMut().update(count.value.*);
+
+    const dialog_label_state = try cx.useRef(DialogResultLabel, .{});
+    const dialog_label_text = dialog_label_state.getMut().update(dialog_result.value);
 
     const click_capture = try cx.useRef(ClickCapture, .{});
     click_capture.getMut().* = .{
         .count = count.value.*,
         .setter = count.set,
     };
+    const dialog_ref = try cx.useRef(reactor.WidgetRef, .{});
+    const dialog_handle = try reactor.useContentDialog(cx, dialog_ref.getMut());
+
+    const dialog_click_capture = try cx.useRef(DialogClickCapture, .{});
+    dialog_click_capture.getMut().* = .{
+        .dialog = dialog_handle,
+        .result_setter = dialog_result.set,
+    };
 
     const rows = reactor.GridTracks.init(.{
+        reactor.GridTrack.auto(),
+        reactor.GridTrack.auto(),
         reactor.GridTrack.auto(),
         reactor.GridTrack.auto(),
         reactor.GridTrack.auto(),
@@ -98,14 +176,52 @@ fn renderRoot(cx: *reactor.RenderCx) reactor.ElementError!reactor.Element {
     );
     var increment = try increment_builder.build();
     defer increment.deinit(allocator);
-
     var detail_builder = reactor.text_block_builder(allocator);
     defer detail_builder.deinit();
-    _ = try (try (try detail_builder.prop("Text", @as([]const u8, "ScrollViewer → Border → Grid")))
+    _ = try (try (try detail_builder.prop("Text", @as([]const u8, "ScrollViewer → Border → Grid + ContentDialog")))
         .prop("Grid.Row", @as(i32, 2)))
         .prop("Grid.ColumnSpan", @as(i32, 2));
     var detail = try detail_builder.build();
     defer detail.deinit(allocator);
+
+    var show_dialog_builder = reactor.button_builder(allocator);
+    defer show_dialog_builder.deinit();
+    _ = try (try (try show_dialog_builder.prop("Content", @as([]const u8, "Show dialog")))
+        .prop("Grid.Row", @as(i32, 3)))
+        .prop("Grid.ColumnSpan", @as(i32, 2));
+    _ = try show_dialog_builder.on(
+        "Click",
+        reactor.EventCallback.init(@ptrCast(dialog_click_capture.getMut()), DialogClickCapture.onClick),
+    );
+    var show_dialog = try show_dialog_builder.build();
+    defer show_dialog.deinit(allocator);
+
+    var dialog_result_label_builder = reactor.text_block_builder(allocator);
+    defer dialog_result_label_builder.deinit();
+    _ = try (try (try dialog_result_label_builder.prop("Text", dialog_label_text))
+        .prop("Grid.Row", @as(i32, 4)))
+        .prop("Grid.ColumnSpan", @as(i32, 2));
+    var dialog_result_label = try dialog_result_label_builder.build();
+    defer dialog_result_label.deinit(allocator);
+
+    var dialog_body = try reactor.text_block(
+        allocator,
+        "Dismiss the ContentDialog to round-trip a ContentDialogResult through win-future.",
+    );
+    defer dialog_body.deinit(allocator);
+
+    var dialog = try reactor.content_dialog(
+        allocator,
+        .{
+            .title = "Reactor dialog sample",
+            .primary_button_text = "Primary",
+            .secondary_button_text = "Secondary",
+            .close_button_text = "Close",
+            .ref = dialog_ref.getMut(),
+        },
+        &dialog_body,
+    );
+    defer dialog.deinit(allocator);
 
     var content = try reactor.grid(
         allocator,
@@ -113,7 +229,7 @@ fn renderRoot(cx: *reactor.RenderCx) reactor.ElementError!reactor.Element {
             .row_definitions = rows,
             .column_definitions = columns,
         },
-        .{ &title, &label, &increment, &detail },
+        .{ &title, &label, &increment, &detail, &show_dialog, &dialog_result_label, &dialog },
     );
     defer content.deinit(allocator);
 

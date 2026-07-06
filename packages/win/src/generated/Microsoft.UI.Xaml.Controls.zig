@@ -5886,6 +5886,38 @@ pub const IAnnotatedScrollBar = extern struct {
     pub fn remove_DetailLabelRequested(self: *const IAnnotatedScrollBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_DetailLabelRequested(self, p0);
     }
+    pub fn addDetailLabelRequested(
+        self: *const IAnnotatedScrollBar,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_AnnotatedScrollBar__Microsoft_UI_Xaml_Controls_AnnotatedScrollBarDetailLabelRequestedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_AnnotatedScrollBar__Microsoft_UI_Xaml_Controls_AnnotatedScrollBarDetailLabelRequestedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_DetailLabelRequested(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeDetailLabelRequested(self: *const IAnnotatedScrollBar, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_DetailLabelRequested(token));
+    }
+    pub fn addScrolling(
+        self: *const IAnnotatedScrollBar,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_AnnotatedScrollBar__Microsoft_UI_Xaml_Controls_AnnotatedScrollBarScrollingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_AnnotatedScrollBar__Microsoft_UI_Xaml_Controls_AnnotatedScrollBarScrollingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Scrolling(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeScrolling(self: *const IAnnotatedScrollBar, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Scrolling(token));
+    }
 };
 pub const IAnnotatedScrollBarDetailLabelRequestedEventArgs = extern struct {
     vtable: *const IAnnotatedScrollBarDetailLabelRequestedEventArgs_Vtbl,
@@ -6114,6 +6146,70 @@ pub const IAppBar = extern struct {
     }
     pub fn remove_Closed(self: *const IAppBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_Closed(self, p0);
+    }
+    pub fn addOpening(
+        self: *const IAppBar,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".EventHandler__G1__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".EventHandler__G1__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Opening(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeOpening(self: *const IAppBar, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Opening(token));
+    }
+    pub fn addOpened(
+        self: *const IAppBar,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".EventHandler__G1__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".EventHandler__G1__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Opened(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeOpened(self: *const IAppBar, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Opened(token));
+    }
+    pub fn addClosed(
+        self: *const IAppBar,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".EventHandler__G1__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".EventHandler__G1__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Closed(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeClosed(self: *const IAppBar, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Closed(token));
+    }
+    pub fn addClosing(
+        self: *const IAppBar,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".EventHandler__G1__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".EventHandler__G1__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Closing(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeClosing(self: *const IAppBar, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Closing(token));
     }
 };
 pub const IAppBarButton = extern struct {
@@ -6732,6 +6828,54 @@ pub const IAutoSuggestBox = extern struct {
     pub fn remove_QuerySubmitted(self: *const IAutoSuggestBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_QuerySubmitted(self, p0);
     }
+    pub fn addQuerySubmitted(
+        self: *const IAutoSuggestBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_AutoSuggestBox__Microsoft_UI_Xaml_Controls_AutoSuggestBoxQuerySubmittedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_AutoSuggestBox__Microsoft_UI_Xaml_Controls_AutoSuggestBoxQuerySubmittedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_QuerySubmitted(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeQuerySubmitted(self: *const IAutoSuggestBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_QuerySubmitted(token));
+    }
+    pub fn addSuggestionChosen(
+        self: *const IAutoSuggestBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_AutoSuggestBox__Microsoft_UI_Xaml_Controls_AutoSuggestBoxSuggestionChosenEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_AutoSuggestBox__Microsoft_UI_Xaml_Controls_AutoSuggestBoxSuggestionChosenEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_SuggestionChosen(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeSuggestionChosen(self: *const IAutoSuggestBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_SuggestionChosen(token));
+    }
+    pub fn addTextChanged(
+        self: *const IAutoSuggestBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_AutoSuggestBox__Microsoft_UI_Xaml_Controls_AutoSuggestBoxTextChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_AutoSuggestBox__Microsoft_UI_Xaml_Controls_AutoSuggestBoxTextChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_TextChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeTextChanged(self: *const IAutoSuggestBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_TextChanged(token));
+    }
 };
 pub const IAutoSuggestBoxQuerySubmittedEventArgs = extern struct {
     vtable: *const IAutoSuggestBoxQuerySubmittedEventArgs_Vtbl,
@@ -7195,6 +7339,22 @@ pub const IBreadcrumbBar = extern struct {
     pub fn remove_ItemClicked(self: *const IBreadcrumbBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ItemClicked(self, p0);
     }
+    pub fn addItemClicked(
+        self: *const IBreadcrumbBar,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_BreadcrumbBar__Microsoft_UI_Xaml_Controls_BreadcrumbBarItemClickedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_BreadcrumbBar__Microsoft_UI_Xaml_Controls_BreadcrumbBarItemClickedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ItemClicked(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeItemClicked(self: *const IBreadcrumbBar, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ItemClicked(token));
+    }
 };
 pub const IBreadcrumbBarFactory = extern struct {
     vtable: *const IBreadcrumbBarFactory_Vtbl,
@@ -7573,6 +7733,54 @@ pub const ICalendarDatePicker = extern struct {
     }
     pub fn SetYearDecadeDisplayDimensions(self: *const ICalendarDatePicker, p0: i32, p1: i32) callconv(.winapi) HRESULT {
         return self.vtable.SetYearDecadeDisplayDimensions(self, p0, p1);
+    }
+    pub fn addOpened(
+        self: *const ICalendarDatePicker,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".EventHandler__G1__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".EventHandler__G1__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Opened(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeOpened(self: *const ICalendarDatePicker, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Opened(token));
+    }
+    pub fn addClosed(
+        self: *const ICalendarDatePicker,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".EventHandler__G1__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".EventHandler__G1__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Closed(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeClosed(self: *const ICalendarDatePicker, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Closed(token));
+    }
+    pub fn addDateChanged(
+        self: *const ICalendarDatePicker,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_CalendarDatePicker__Microsoft_UI_Xaml_Controls_CalendarDatePickerDateChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_CalendarDatePicker__Microsoft_UI_Xaml_Controls_CalendarDatePickerDateChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_DateChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeDateChanged(self: *const ICalendarDatePicker, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_DateChanged(token));
     }
 };
 pub const ICalendarDatePickerDateChangedEventArgs = extern struct {
@@ -8194,6 +8402,38 @@ pub const ICalendarView = extern struct {
     }
     pub fn SetYearDecadeDisplayDimensions(self: *const ICalendarView, p0: i32, p1: i32) callconv(.winapi) HRESULT {
         return self.vtable.SetYearDecadeDisplayDimensions(self, p0, p1);
+    }
+    pub fn addCalendarViewDayItemChanging(
+        self: *const ICalendarView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_CalendarView__Microsoft_UI_Xaml_Controls_CalendarViewDayItemChangingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_CalendarView__Microsoft_UI_Xaml_Controls_CalendarViewDayItemChangingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_CalendarViewDayItemChanging(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeCalendarViewDayItemChanging(self: *const ICalendarView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_CalendarViewDayItemChanging(token));
+    }
+    pub fn addSelectedDatesChanged(
+        self: *const ICalendarView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_CalendarView__Microsoft_UI_Xaml_Controls_CalendarViewSelectedDatesChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_CalendarView__Microsoft_UI_Xaml_Controls_CalendarViewSelectedDatesChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_SelectedDatesChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeSelectedDatesChanged(self: *const ICalendarView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_SelectedDatesChanged(token));
     }
 };
 pub const ICalendarViewDayItem = extern struct {
@@ -9011,6 +9251,22 @@ pub const IColorPicker = extern struct {
     pub fn remove_ColorChanged(self: *const IColorPicker, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ColorChanged(self, p0);
     }
+    pub fn addColorChanged(
+        self: *const IColorPicker,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ColorPicker__Microsoft_UI_Xaml_Controls_ColorChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ColorPicker__Microsoft_UI_Xaml_Controls_ColorChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ColorChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeColorChanged(self: *const IColorPicker, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ColorChanged(token));
+    }
 };
 pub const IColorPicker2 = extern struct {
     vtable: *const IColorPicker2_Vtbl,
@@ -9371,6 +9627,54 @@ pub const IComboBox = extern struct {
     pub fn remove_TextSubmitted(self: *const IComboBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_TextSubmitted(self, p0);
     }
+    pub fn addDropDownOpened(
+        self: *const IComboBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".EventHandler__G1__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".EventHandler__G1__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_DropDownOpened(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeDropDownOpened(self: *const IComboBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_DropDownOpened(token));
+    }
+    pub fn addTextSubmitted(
+        self: *const IComboBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ComboBox__Microsoft_UI_Xaml_Controls_ComboBoxTextSubmittedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ComboBox__Microsoft_UI_Xaml_Controls_ComboBoxTextSubmittedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_TextSubmitted(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeTextSubmitted(self: *const IComboBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_TextSubmitted(token));
+    }
+    pub fn addDropDownClosed(
+        self: *const IComboBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".EventHandler__G1__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".EventHandler__G1__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_DropDownClosed(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeDropDownClosed(self: *const IComboBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_DropDownClosed(token));
+    }
 };
 pub const IComboBoxFactory = extern struct {
     vtable: *const IComboBoxFactory_Vtbl,
@@ -9607,6 +9911,22 @@ pub const ICommandBar = extern struct {
     }
     pub fn remove_DynamicOverflowItemsChanging(self: *const ICommandBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_DynamicOverflowItemsChanging(self, p0);
+    }
+    pub fn addDynamicOverflowItemsChanging(
+        self: *const ICommandBar,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_CommandBar__Microsoft_UI_Xaml_Controls_DynamicOverflowItemsChangingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_CommandBar__Microsoft_UI_Xaml_Controls_DynamicOverflowItemsChangingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_DynamicOverflowItemsChanging(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeDynamicOverflowItemsChanging(self: *const ICommandBar, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_DynamicOverflowItemsChanging(token));
     }
 };
 pub const ICommandBarElement = extern struct {
@@ -10188,6 +10508,102 @@ pub const IContentDialog = extern struct {
     }
     pub fn ShowAsync_2(self: *const IContentDialog, p0: ContentDialogPlacement, result: **anyopaque) callconv(.winapi) HRESULT {
         return self.vtable.ShowAsync_2(self, p0, result);
+    }
+    pub fn addPrimaryButtonClick(
+        self: *const IContentDialog,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogButtonClickEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogButtonClickEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_PrimaryButtonClick(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removePrimaryButtonClick(self: *const IContentDialog, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_PrimaryButtonClick(token));
+    }
+    pub fn addCloseButtonClick(
+        self: *const IContentDialog,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogButtonClickEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogButtonClickEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_CloseButtonClick(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeCloseButtonClick(self: *const IContentDialog, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_CloseButtonClick(token));
+    }
+    pub fn addOpened(
+        self: *const IContentDialog,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogOpenedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogOpenedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Opened(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeOpened(self: *const IContentDialog, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Opened(token));
+    }
+    pub fn addClosed(
+        self: *const IContentDialog,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogClosedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogClosedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Closed(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeClosed(self: *const IContentDialog, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Closed(token));
+    }
+    pub fn addClosing(
+        self: *const IContentDialog,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogClosingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogClosingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Closing(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeClosing(self: *const IContentDialog, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Closing(token));
+    }
+    pub fn addSecondaryButtonClick(
+        self: *const IContentDialog,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogButtonClickEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogButtonClickEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_SecondaryButtonClick(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeSecondaryButtonClick(self: *const IContentDialog, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_SecondaryButtonClick(token));
     }
 };
 pub const IContentDialogButtonClickDeferral = extern struct {
@@ -10971,6 +11387,38 @@ pub const IControl = extern struct {
     pub fn ApplyTemplate(self: *const IControl, result: *BOOL) callconv(.winapi) HRESULT {
         return self.vtable.ApplyTemplate(self, result);
     }
+    pub fn addFocusEngaged(
+        self: *const IControl,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Control__Microsoft_UI_Xaml_Controls_FocusEngagedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Control__Microsoft_UI_Xaml_Controls_FocusEngagedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_FocusEngaged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeFocusEngaged(self: *const IControl, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_FocusEngaged(token));
+    }
+    pub fn addFocusDisengaged(
+        self: *const IControl,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Control__Microsoft_UI_Xaml_Controls_FocusDisengagedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Control__Microsoft_UI_Xaml_Controls_FocusDisengagedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_FocusDisengaged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeFocusDisengaged(self: *const IControl, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_FocusDisengaged(token));
+    }
 };
 pub const IControlFactory = extern struct {
     vtable: *const IControlFactory_Vtbl,
@@ -11546,6 +11994,38 @@ pub const IDatePicker = extern struct {
     pub fn remove_SelectedDateChanged(self: *const IDatePicker, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_SelectedDateChanged(self, p0);
     }
+    pub fn addDateChanged(
+        self: *const IDatePicker,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".EventHandler__G1__Microsoft_UI_Xaml_Controls_DatePickerValueChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".EventHandler__G1__Microsoft_UI_Xaml_Controls_DatePickerValueChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_DateChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeDateChanged(self: *const IDatePicker, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_DateChanged(token));
+    }
+    pub fn addSelectedDateChanged(
+        self: *const IDatePicker,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_DatePicker__Microsoft_UI_Xaml_Controls_DatePickerSelectedValueChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_DatePicker__Microsoft_UI_Xaml_Controls_DatePickerSelectedValueChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_SelectedDateChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeSelectedDateChanged(self: *const IDatePicker, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_SelectedDateChanged(token));
+    }
 };
 pub const IDatePickerFactory = extern struct {
     vtable: *const IDatePickerFactory_Vtbl,
@@ -11695,6 +12175,22 @@ pub const IDatePickerFlyout = extern struct {
     }
     pub fn ShowAtAsync(self: *const IDatePickerFlyout, p0: *@"Microsoft.UI.Xaml".FrameworkElement, result: **anyopaque) callconv(.winapi) HRESULT {
         return self.vtable.ShowAtAsync(self, p0, result);
+    }
+    pub fn addDatePicked(
+        self: *const IDatePickerFlyout,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_DatePickerFlyout__Microsoft_UI_Xaml_Controls_DatePickedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_DatePickerFlyout__Microsoft_UI_Xaml_Controls_DatePickedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_DatePicked(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeDatePicked(self: *const IDatePickerFlyout, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_DatePicked(token));
     }
 };
 pub const IDatePickerFlyoutItem = extern struct {
@@ -12104,6 +12600,22 @@ pub const IDynamicAnimatedVisualSource = extern struct {
     pub fn remove_AnimatedVisualInvalidated(self: *const IDynamicAnimatedVisualSource, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_AnimatedVisualInvalidated(self, p0);
     }
+    pub fn addAnimatedVisualInvalidated(
+        self: *const IDynamicAnimatedVisualSource,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_IDynamicAnimatedVisualSource__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_IDynamicAnimatedVisualSource__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_AnimatedVisualInvalidated(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeAnimatedVisualInvalidated(self: *const IDynamicAnimatedVisualSource, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_AnimatedVisualInvalidated(token));
+    }
 };
 pub const IDynamicOverflowItemsChangingEventArgs = extern struct {
     vtable: *const IDynamicOverflowItemsChangingEventArgs_Vtbl,
@@ -12189,6 +12701,38 @@ pub const IExpander = extern struct {
     }
     pub fn get_TemplateSettings(self: *const IExpander, result: **ExpanderTemplateSettings) callconv(.winapi) HRESULT {
         return self.vtable.get_TemplateSettings(self, result);
+    }
+    pub fn addExpanding(
+        self: *const IExpander,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Expander__Microsoft_UI_Xaml_Controls_ExpanderExpandingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Expander__Microsoft_UI_Xaml_Controls_ExpanderExpandingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Expanding(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeExpanding(self: *const IExpander, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Expanding(token));
+    }
+    pub fn addCollapsed(
+        self: *const IExpander,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Expander__Microsoft_UI_Xaml_Controls_ExpanderCollapsedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Expander__Microsoft_UI_Xaml_Controls_ExpanderCollapsedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Collapsed(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeCollapsed(self: *const IExpander, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Collapsed(token));
     }
 };
 pub const IExpanderCollapsedEventArgs = extern struct {
@@ -14634,6 +15178,54 @@ pub const IInfoBar = extern struct {
     pub fn remove_Closed(self: *const IInfoBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_Closed(self, p0);
     }
+    pub fn addCloseButtonClick(
+        self: *const IInfoBar,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_InfoBar__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_InfoBar__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_CloseButtonClick(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeCloseButtonClick(self: *const IInfoBar, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_CloseButtonClick(token));
+    }
+    pub fn addClosed(
+        self: *const IInfoBar,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_InfoBar__Microsoft_UI_Xaml_Controls_InfoBarClosedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_InfoBar__Microsoft_UI_Xaml_Controls_InfoBarClosedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Closed(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeClosed(self: *const IInfoBar, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Closed(token));
+    }
+    pub fn addClosing(
+        self: *const IInfoBar,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_InfoBar__Microsoft_UI_Xaml_Controls_InfoBarClosingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_InfoBar__Microsoft_UI_Xaml_Controls_InfoBarClosingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Closing(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeClosing(self: *const IInfoBar, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Closing(token));
+    }
 };
 pub const IInfoBarClosedEventArgs = extern struct {
     vtable: *const IInfoBarClosedEventArgs_Vtbl,
@@ -15057,6 +15649,22 @@ pub const IItemCollectionTransitionProvider = extern struct {
     }
     pub fn remove_TransitionCompleted(self: *const IItemCollectionTransitionProvider, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_TransitionCompleted(self, p0);
+    }
+    pub fn addTransitionCompleted(
+        self: *const IItemCollectionTransitionProvider,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemCollectionTransitionProvider__Microsoft_UI_Xaml_Controls_ItemCollectionTransitionCompletedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemCollectionTransitionProvider__Microsoft_UI_Xaml_Controls_ItemCollectionTransitionCompletedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_TransitionCompleted(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeTransitionCompleted(self: *const IItemCollectionTransitionProvider, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_TransitionCompleted(token));
     }
 };
 pub const IItemCollectionTransitionProviderFactory = extern struct {
@@ -15738,6 +16346,54 @@ pub const IItemsRepeater = extern struct {
     pub fn remove_ElementIndexChanged(self: *const IItemsRepeater, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ElementIndexChanged(self, p0);
     }
+    pub fn addElementPrepared(
+        self: *const IItemsRepeater,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemsRepeater__Microsoft_UI_Xaml_Controls_ItemsRepeaterElementPreparedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemsRepeater__Microsoft_UI_Xaml_Controls_ItemsRepeaterElementPreparedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ElementPrepared(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeElementPrepared(self: *const IItemsRepeater, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ElementPrepared(token));
+    }
+    pub fn addElementIndexChanged(
+        self: *const IItemsRepeater,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemsRepeater__Microsoft_UI_Xaml_Controls_ItemsRepeaterElementIndexChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemsRepeater__Microsoft_UI_Xaml_Controls_ItemsRepeaterElementIndexChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ElementIndexChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeElementIndexChanged(self: *const IItemsRepeater, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ElementIndexChanged(token));
+    }
+    pub fn addElementClearing(
+        self: *const IItemsRepeater,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemsRepeater__Microsoft_UI_Xaml_Controls_ItemsRepeaterElementClearingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemsRepeater__Microsoft_UI_Xaml_Controls_ItemsRepeaterElementClearingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ElementClearing(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeElementClearing(self: *const IItemsRepeater, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ElementClearing(token));
+    }
 };
 pub const IItemsRepeater2 = extern struct {
     vtable: *const IItemsRepeater2_Vtbl,
@@ -16241,6 +16897,38 @@ pub const IItemsView = extern struct {
     pub fn remove_SelectionChanged(self: *const IItemsView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_SelectionChanged(self, p0);
     }
+    pub fn addItemInvoked(
+        self: *const IItemsView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemsView__Microsoft_UI_Xaml_Controls_ItemsViewItemInvokedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemsView__Microsoft_UI_Xaml_Controls_ItemsViewItemInvokedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ItemInvoked(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeItemInvoked(self: *const IItemsView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ItemInvoked(token));
+    }
+    pub fn addSelectionChanged(
+        self: *const IItemsView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemsView__Microsoft_UI_Xaml_Controls_ItemsViewSelectionChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemsView__Microsoft_UI_Xaml_Controls_ItemsViewSelectionChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_SelectionChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeSelectionChanged(self: *const IItemsView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_SelectionChanged(token));
+    }
 };
 pub const IItemsViewFactory = extern struct {
     vtable: *const IItemsViewFactory_Vtbl,
@@ -16578,6 +17266,38 @@ pub const ILayout = extern struct {
     pub fn remove_ArrangeInvalidated(self: *const ILayout, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ArrangeInvalidated(self, p0);
     }
+    pub fn addArrangeInvalidated(
+        self: *const ILayout,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Layout__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Layout__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ArrangeInvalidated(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeArrangeInvalidated(self: *const ILayout, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ArrangeInvalidated(token));
+    }
+    pub fn addMeasureInvalidated(
+        self: *const ILayout,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Layout__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Layout__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_MeasureInvalidated(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeMeasureInvalidated(self: *const ILayout, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_MeasureInvalidated(token));
+    }
 };
 pub const ILayout2 = extern struct {
     vtable: *const ILayout2_Vtbl,
@@ -16832,6 +17552,38 @@ pub const ILinedFlowLayout = extern struct {
     }
     pub fn LockItemToLine(self: *const ILinedFlowLayout, p0: i32, result: *i32) callconv(.winapi) HRESULT {
         return self.vtable.LockItemToLine(self, p0, result);
+    }
+    pub fn addItemsInfoRequested(
+        self: *const ILinedFlowLayout,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_LinedFlowLayout__Microsoft_UI_Xaml_Controls_LinedFlowLayoutItemsInfoRequestedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_LinedFlowLayout__Microsoft_UI_Xaml_Controls_LinedFlowLayoutItemsInfoRequestedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ItemsInfoRequested(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeItemsInfoRequested(self: *const ILinedFlowLayout, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ItemsInfoRequested(token));
+    }
+    pub fn addItemsUnlocked(
+        self: *const ILinedFlowLayout,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_LinedFlowLayout__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_LinedFlowLayout__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ItemsUnlocked(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeItemsUnlocked(self: *const ILinedFlowLayout, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ItemsUnlocked(token));
     }
 };
 pub const ILinedFlowLayoutFactory = extern struct {
@@ -17209,6 +17961,22 @@ pub const IListPickerFlyout = extern struct {
     pub fn ShowAtAsync(self: *const IListPickerFlyout, p0: *@"Microsoft.UI.Xaml".FrameworkElement, result: **anyopaque) callconv(.winapi) HRESULT {
         return self.vtable.ShowAtAsync(self, p0, result);
     }
+    pub fn addItemsPicked(
+        self: *const IListPickerFlyout,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListPickerFlyout__Microsoft_UI_Xaml_Controls_ItemsPickedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListPickerFlyout__Microsoft_UI_Xaml_Controls_ItemsPickedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ItemsPicked(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeItemsPicked(self: *const IListPickerFlyout, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ItemsPicked(token));
+    }
 };
 pub const IListPickerFlyoutPresenter = extern struct {
     vtable: *const IListPickerFlyoutPresenter_Vtbl,
@@ -17500,6 +18268,70 @@ pub const IListViewBase = extern struct {
     }
     pub fn put_FooterTransitions(self: *const IListViewBase, p0: *@"Microsoft.UI.Xaml.Media.Animation".TransitionCollection) callconv(.winapi) HRESULT {
         return self.vtable.put_FooterTransitions(self, p0);
+    }
+    pub fn addChoosingGroupHeaderContainer(
+        self: *const IListViewBase,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListViewBase__Microsoft_UI_Xaml_Controls_ChoosingGroupHeaderContainerEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListViewBase__Microsoft_UI_Xaml_Controls_ChoosingGroupHeaderContainerEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ChoosingGroupHeaderContainer(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeChoosingGroupHeaderContainer(self: *const IListViewBase, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ChoosingGroupHeaderContainer(token));
+    }
+    pub fn addContainerContentChanging(
+        self: *const IListViewBase,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListViewBase__Microsoft_UI_Xaml_Controls_ContainerContentChangingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListViewBase__Microsoft_UI_Xaml_Controls_ContainerContentChangingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ContainerContentChanging(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeContainerContentChanging(self: *const IListViewBase, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ContainerContentChanging(token));
+    }
+    pub fn addChoosingItemContainer(
+        self: *const IListViewBase,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListViewBase__Microsoft_UI_Xaml_Controls_ChoosingItemContainerEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListViewBase__Microsoft_UI_Xaml_Controls_ChoosingItemContainerEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ChoosingItemContainer(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeChoosingItemContainer(self: *const IListViewBase, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ChoosingItemContainer(token));
+    }
+    pub fn addDragItemsCompleted(
+        self: *const IListViewBase,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListViewBase__Microsoft_UI_Xaml_Controls_DragItemsCompletedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListViewBase__Microsoft_UI_Xaml_Controls_DragItemsCompletedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_DragItemsCompleted(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeDragItemsCompleted(self: *const IListViewBase, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_DragItemsCompleted(token));
     }
 };
 pub const IListViewBaseFactory = extern struct {
@@ -17875,6 +18707,38 @@ pub const IMapControl = extern struct {
     pub fn remove_MapServiceErrorOccurred(self: *const IMapControl, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_MapServiceErrorOccurred(self, p0);
     }
+    pub fn addMapElementClick(
+        self: *const IMapControl,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_MapControl__Microsoft_UI_Xaml_Controls_MapElementClickEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_MapControl__Microsoft_UI_Xaml_Controls_MapElementClickEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_MapElementClick(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeMapElementClick(self: *const IMapControl, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_MapElementClick(token));
+    }
+    pub fn addMapServiceErrorOccurred(
+        self: *const IMapControl,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_MapControl__Microsoft_UI_Xaml_Controls_MapControlMapServiceErrorOccurredEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_MapControl__Microsoft_UI_Xaml_Controls_MapControlMapServiceErrorOccurredEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_MapServiceErrorOccurred(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeMapServiceErrorOccurred(self: *const IMapControl, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_MapServiceErrorOccurred(token));
+    }
 };
 pub const IMapControlFactory = extern struct {
     vtable: *const IMapControlFactory_Vtbl,
@@ -18051,6 +18915,22 @@ pub const IMapElementsLayer = extern struct {
     }
     pub fn remove_MapElementClick(self: *const IMapElementsLayer, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_MapElementClick(self, p0);
+    }
+    pub fn addMapElementClick(
+        self: *const IMapElementsLayer,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_MapElementsLayer__Microsoft_UI_Xaml_Controls_MapElementClickEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_MapElementsLayer__Microsoft_UI_Xaml_Controls_MapElementClickEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_MapElementClick(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeMapElementClick(self: *const IMapElementsLayer, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_MapElementClick(token));
     }
 };
 pub const IMapElementsLayerFactory = extern struct {
@@ -18599,6 +19479,22 @@ pub const IMediaTransportControls = extern struct {
     }
     pub fn Hide(self: *const IMediaTransportControls) callconv(.winapi) HRESULT {
         return self.vtable.Hide(self);
+    }
+    pub fn addThumbnailRequested(
+        self: *const IMediaTransportControls,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_MediaTransportControls__Microsoft_UI_Xaml_Media_MediaTransportControlsThumbnailRequestedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_MediaTransportControls__Microsoft_UI_Xaml_Media_MediaTransportControlsThumbnailRequestedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ThumbnailRequested(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeThumbnailRequested(self: *const IMediaTransportControls, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ThumbnailRequested(token));
     }
 };
 pub const IMediaTransportControlsFactory = extern struct {
@@ -19634,6 +20530,54 @@ pub const INavigationView = extern struct {
     pub fn put_IsTitleBarAutoPaddingEnabled(self: *const INavigationView, p0: BOOL) callconv(.winapi) HRESULT {
         return self.vtable.put_IsTitleBarAutoPaddingEnabled(self, p0);
     }
+    pub fn addDisplayModeChanged(
+        self: *const INavigationView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewDisplayModeChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewDisplayModeChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_DisplayModeChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeDisplayModeChanged(self: *const INavigationView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_DisplayModeChanged(token));
+    }
+    pub fn addSelectionChanged(
+        self: *const INavigationView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewSelectionChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewSelectionChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_SelectionChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeSelectionChanged(self: *const INavigationView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_SelectionChanged(token));
+    }
+    pub fn addItemInvoked(
+        self: *const INavigationView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewItemInvokedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewItemInvokedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ItemInvoked(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeItemInvoked(self: *const INavigationView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ItemInvoked(token));
+    }
 };
 pub const INavigationView2 = extern struct {
     vtable: *const INavigationView2_Vtbl,
@@ -19779,6 +20723,118 @@ pub const INavigationView2 = extern struct {
     }
     pub fn Collapse(self: *const INavigationView2, p0: *NavigationViewItem) callconv(.winapi) HRESULT {
         return self.vtable.Collapse(self, p0);
+    }
+    pub fn addPaneClosing(
+        self: *const INavigationView2,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewPaneClosingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewPaneClosingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_PaneClosing(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removePaneClosing(self: *const INavigationView2, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_PaneClosing(token));
+    }
+    pub fn addPaneOpening(
+        self: *const INavigationView2,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_PaneOpening(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removePaneOpening(self: *const INavigationView2, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_PaneOpening(token));
+    }
+    pub fn addPaneClosed(
+        self: *const INavigationView2,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_PaneClosed(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removePaneClosed(self: *const INavigationView2, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_PaneClosed(token));
+    }
+    pub fn addCollapsed(
+        self: *const INavigationView2,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewItemCollapsedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewItemCollapsedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Collapsed(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeCollapsed(self: *const INavigationView2, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Collapsed(token));
+    }
+    pub fn addBackRequested(
+        self: *const INavigationView2,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewBackRequestedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewBackRequestedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_BackRequested(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeBackRequested(self: *const INavigationView2, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_BackRequested(token));
+    }
+    pub fn addExpanding(
+        self: *const INavigationView2,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewItemExpandingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewItemExpandingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Expanding(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeExpanding(self: *const INavigationView2, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Expanding(token));
+    }
+    pub fn addPaneOpened(
+        self: *const INavigationView2,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_PaneOpened(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removePaneOpened(self: *const INavigationView2, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_PaneOpened(token));
     }
 };
 pub const INavigationViewBackRequestedEventArgs = extern struct {
@@ -21000,6 +22056,22 @@ pub const INumberBox = extern struct {
     pub fn remove_ValueChanged(self: *const INumberBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ValueChanged(self, p0);
     }
+    pub fn addValueChanged(
+        self: *const INumberBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NumberBox__Microsoft_UI_Xaml_Controls_NumberBoxValueChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NumberBox__Microsoft_UI_Xaml_Controls_NumberBoxValueChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ValueChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeValueChanged(self: *const INumberBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ValueChanged(token));
+    }
 };
 pub const INumberBoxFactory = extern struct {
     vtable: *const INumberBoxFactory_Vtbl,
@@ -21692,6 +22764,22 @@ pub const IPasswordBox = extern struct {
     pub fn PasteFromClipboard(self: *const IPasswordBox) callconv(.winapi) HRESULT {
         return self.vtable.PasteFromClipboard(self);
     }
+    pub fn addPasswordChanging(
+        self: *const IPasswordBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_PasswordBox__Microsoft_UI_Xaml_Controls_PasswordBoxPasswordChangingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_PasswordBox__Microsoft_UI_Xaml_Controls_PasswordBoxPasswordChangingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_PasswordChanging(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removePasswordChanging(self: *const IPasswordBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_PasswordChanging(token));
+    }
 };
 pub const IPasswordBoxPasswordChangingEventArgs = extern struct {
     vtable: *const IPasswordBoxPasswordChangingEventArgs_Vtbl,
@@ -22198,6 +23286,22 @@ pub const IPickerFlyout = extern struct {
     pub fn ShowAtAsync(self: *const IPickerFlyout, p0: *@"Microsoft.UI.Xaml".FrameworkElement, result: **@"Windows.Foundation".IAsyncOperation__G1__BOOL) callconv(.winapi) HRESULT {
         return self.vtable.ShowAtAsync(self, p0, result);
     }
+    pub fn addConfirmed(
+        self: *const IPickerFlyout,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_PickerFlyout__Microsoft_UI_Xaml_Controls_PickerConfirmedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_PickerFlyout__Microsoft_UI_Xaml_Controls_PickerConfirmedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Confirmed(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeConfirmed(self: *const IPickerFlyout, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Confirmed(token));
+    }
 };
 pub const IPickerFlyoutPresenter = extern struct {
     vtable: *const IPickerFlyoutPresenter_Vtbl,
@@ -22329,6 +23433,22 @@ pub const IPipsPager = extern struct {
     }
     pub fn get_TemplateSettings(self: *const IPipsPager, result: **PipsPagerTemplateSettings) callconv(.winapi) HRESULT {
         return self.vtable.get_TemplateSettings(self, result);
+    }
+    pub fn addSelectedIndexChanged(
+        self: *const IPipsPager,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_PipsPager__Microsoft_UI_Xaml_Controls_PipsPagerSelectedIndexChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_PipsPager__Microsoft_UI_Xaml_Controls_PipsPagerSelectedIndexChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_SelectedIndexChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeSelectedIndexChanged(self: *const IPipsPager, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_SelectedIndexChanged(token));
     }
 };
 pub const IPipsPager2 = extern struct {
@@ -22609,6 +23729,70 @@ pub const IPivot = extern struct {
     }
     pub fn remove_PivotItemUnloaded(self: *const IPivot, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_PivotItemUnloaded(self, p0);
+    }
+    pub fn addPivotItemUnloading(
+        self: *const IPivot,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Pivot__Microsoft_UI_Xaml_Controls_PivotItemEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Pivot__Microsoft_UI_Xaml_Controls_PivotItemEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_PivotItemUnloading(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removePivotItemUnloading(self: *const IPivot, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_PivotItemUnloading(token));
+    }
+    pub fn addPivotItemLoaded(
+        self: *const IPivot,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Pivot__Microsoft_UI_Xaml_Controls_PivotItemEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Pivot__Microsoft_UI_Xaml_Controls_PivotItemEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_PivotItemLoaded(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removePivotItemLoaded(self: *const IPivot, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_PivotItemLoaded(token));
+    }
+    pub fn addPivotItemUnloaded(
+        self: *const IPivot,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Pivot__Microsoft_UI_Xaml_Controls_PivotItemEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Pivot__Microsoft_UI_Xaml_Controls_PivotItemEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_PivotItemUnloaded(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removePivotItemUnloaded(self: *const IPivot, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_PivotItemUnloaded(token));
+    }
+    pub fn addPivotItemLoading(
+        self: *const IPivot,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Pivot__Microsoft_UI_Xaml_Controls_PivotItemEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Pivot__Microsoft_UI_Xaml_Controls_PivotItemEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_PivotItemLoading(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removePivotItemLoading(self: *const IPivot, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_PivotItemLoading(token));
     }
 };
 pub const IPivotFactory = extern struct {
@@ -23484,6 +24668,22 @@ pub const IRatingControl = extern struct {
     pub fn remove_ValueChanged(self: *const IRatingControl, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ValueChanged(self, p0);
     }
+    pub fn addValueChanged(
+        self: *const IRatingControl,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RatingControl__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RatingControl__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ValueChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeValueChanged(self: *const IRatingControl, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ValueChanged(token));
+    }
 };
 pub const IRatingControlFactory = extern struct {
     vtable: *const IRatingControlFactory_Vtbl,
@@ -23918,6 +25118,22 @@ pub const IRefreshContainer = extern struct {
     pub fn RequestRefresh(self: *const IRefreshContainer) callconv(.winapi) HRESULT {
         return self.vtable.RequestRefresh(self);
     }
+    pub fn addRefreshRequested(
+        self: *const IRefreshContainer,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RefreshContainer__Microsoft_UI_Xaml_Controls_RefreshRequestedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RefreshContainer__Microsoft_UI_Xaml_Controls_RefreshRequestedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_RefreshRequested(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeRefreshRequested(self: *const IRefreshContainer, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_RefreshRequested(token));
+    }
 };
 pub const IRefreshContainerFactory = extern struct {
     vtable: *const IRefreshContainerFactory_Vtbl,
@@ -24082,6 +25298,38 @@ pub const IRefreshVisualizer = extern struct {
     }
     pub fn remove_RefreshStateChanged(self: *const IRefreshVisualizer, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_RefreshStateChanged(self, p0);
+    }
+    pub fn addRefreshStateChanged(
+        self: *const IRefreshVisualizer,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RefreshVisualizer__Microsoft_UI_Xaml_Controls_RefreshStateChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RefreshVisualizer__Microsoft_UI_Xaml_Controls_RefreshStateChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_RefreshStateChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeRefreshStateChanged(self: *const IRefreshVisualizer, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_RefreshStateChanged(token));
+    }
+    pub fn addRefreshRequested(
+        self: *const IRefreshVisualizer,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RefreshVisualizer__Microsoft_UI_Xaml_Controls_RefreshRequestedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RefreshVisualizer__Microsoft_UI_Xaml_Controls_RefreshRequestedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_RefreshRequested(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeRefreshRequested(self: *const IRefreshVisualizer, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_RefreshRequested(token));
     }
 };
 pub const IRefreshVisualizerFactory = extern struct {
@@ -24677,6 +25925,134 @@ pub const IRichEditBox = extern struct {
     pub fn remove_TextChanging(self: *const IRichEditBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_TextChanging(self, p0);
     }
+    pub fn addTextCompositionEnded(
+        self: *const IRichEditBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_TextCompositionEndedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_TextCompositionEndedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_TextCompositionEnded(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeTextCompositionEnded(self: *const IRichEditBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_TextCompositionEnded(token));
+    }
+    pub fn addSelectionChanging(
+        self: *const IRichEditBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_RichEditBoxSelectionChangingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_RichEditBoxSelectionChangingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_SelectionChanging(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeSelectionChanging(self: *const IRichEditBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_SelectionChanging(token));
+    }
+    pub fn addTextChanging(
+        self: *const IRichEditBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_RichEditBoxTextChangingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_RichEditBoxTextChangingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_TextChanging(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeTextChanging(self: *const IRichEditBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_TextChanging(token));
+    }
+    pub fn addCandidateWindowBoundsChanged(
+        self: *const IRichEditBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_CandidateWindowBoundsChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_CandidateWindowBoundsChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_CandidateWindowBoundsChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeCandidateWindowBoundsChanged(self: *const IRichEditBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_CandidateWindowBoundsChanged(token));
+    }
+    pub fn addCopyingToClipboard(
+        self: *const IRichEditBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_TextControlCopyingToClipboardEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_TextControlCopyingToClipboardEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_CopyingToClipboard(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeCopyingToClipboard(self: *const IRichEditBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_CopyingToClipboard(token));
+    }
+    pub fn addTextCompositionChanged(
+        self: *const IRichEditBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_TextCompositionChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_TextCompositionChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_TextCompositionChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeTextCompositionChanged(self: *const IRichEditBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_TextCompositionChanged(token));
+    }
+    pub fn addCuttingToClipboard(
+        self: *const IRichEditBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_TextControlCuttingToClipboardEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_TextControlCuttingToClipboardEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_CuttingToClipboard(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeCuttingToClipboard(self: *const IRichEditBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_CuttingToClipboard(token));
+    }
+    pub fn addTextCompositionStarted(
+        self: *const IRichEditBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_TextCompositionStartedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_TextCompositionStartedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_TextCompositionStarted(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeTextCompositionStarted(self: *const IRichEditBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_TextCompositionStarted(token));
+    }
 };
 pub const IRichEditBoxFactory = extern struct {
     vtable: *const IRichEditBoxFactory_Vtbl,
@@ -25083,6 +26459,22 @@ pub const IRichTextBlock = extern struct {
     pub fn put_TextIndent(self: *const IRichTextBlock, p0: f64) callconv(.winapi) HRESULT {
         return self.vtable.put_TextIndent(self, p0);
     }
+    pub fn addIsTextTrimmedChanged(
+        self: *const IRichTextBlock,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichTextBlock__Microsoft_UI_Xaml_Controls_IsTextTrimmedChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichTextBlock__Microsoft_UI_Xaml_Controls_IsTextTrimmedChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_IsTextTrimmedChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeIsTextTrimmedChanged(self: *const IRichTextBlock, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_IsTextTrimmedChanged(token));
+    }
 };
 pub const IRichTextBlockOverflow = extern struct {
     vtable: *const IRichTextBlockOverflow_Vtbl,
@@ -25146,6 +26538,22 @@ pub const IRichTextBlockOverflow = extern struct {
     }
     pub fn GetPositionFromPoint(self: *const IRichTextBlockOverflow, p0: @"Windows.Foundation".Point, result: **@"Microsoft.UI.Xaml.Documents".TextPointer) callconv(.winapi) HRESULT {
         return self.vtable.GetPositionFromPoint(self, p0, result);
+    }
+    pub fn addIsTextTrimmedChanged(
+        self: *const IRichTextBlockOverflow,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichTextBlockOverflow__Microsoft_UI_Xaml_Controls_IsTextTrimmedChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichTextBlockOverflow__Microsoft_UI_Xaml_Controls_IsTextTrimmedChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_IsTextTrimmedChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeIsTextTrimmedChanged(self: *const IRichTextBlockOverflow, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_IsTextTrimmedChanged(token));
     }
 };
 pub const IRichTextBlockOverflowStatics = extern struct {
@@ -25782,6 +27190,150 @@ pub const IScrollView = extern struct {
     pub fn remove_AnchorRequested(self: *const IScrollView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_AnchorRequested(self, p0);
     }
+    pub fn addZoomAnimationStarting(
+        self: *const IScrollView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingZoomAnimationStartingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingZoomAnimationStartingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ZoomAnimationStarting(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeZoomAnimationStarting(self: *const IScrollView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ZoomAnimationStarting(token));
+    }
+    pub fn addBringingIntoView(
+        self: *const IScrollView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingBringingIntoViewEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingBringingIntoViewEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_BringingIntoView(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeBringingIntoView(self: *const IScrollView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_BringingIntoView(token));
+    }
+    pub fn addExtentChanged(
+        self: *const IScrollView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ExtentChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeExtentChanged(self: *const IScrollView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ExtentChanged(token));
+    }
+    pub fn addScrollCompleted(
+        self: *const IScrollView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingScrollCompletedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingScrollCompletedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ScrollCompleted(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeScrollCompleted(self: *const IScrollView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ScrollCompleted(token));
+    }
+    pub fn addZoomCompleted(
+        self: *const IScrollView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingZoomCompletedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingZoomCompletedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ZoomCompleted(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeZoomCompleted(self: *const IScrollView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ZoomCompleted(token));
+    }
+    pub fn addViewChanged(
+        self: *const IScrollView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ViewChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeViewChanged(self: *const IScrollView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ViewChanged(token));
+    }
+    pub fn addStateChanged(
+        self: *const IScrollView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_StateChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeStateChanged(self: *const IScrollView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_StateChanged(token));
+    }
+    pub fn addAnchorRequested(
+        self: *const IScrollView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingAnchorRequestedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingAnchorRequestedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_AnchorRequested(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeAnchorRequested(self: *const IScrollView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_AnchorRequested(token));
+    }
+    pub fn addScrollAnimationStarting(
+        self: *const IScrollView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingScrollAnimationStartingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingScrollAnimationStartingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ScrollAnimationStarting(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeScrollAnimationStarting(self: *const IScrollView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ScrollAnimationStarting(token));
+    }
 };
 pub const IScrollViewFactory = extern struct {
     vtable: *const IScrollViewFactory_Vtbl,
@@ -26159,6 +27711,86 @@ pub const IScrollViewer = extern struct {
     }
     pub fn put_BringIntoViewOnFocusChange(self: *const IScrollViewer, p0: BOOL) callconv(.winapi) HRESULT {
         return self.vtable.put_BringIntoViewOnFocusChange(self, p0);
+    }
+    pub fn addDirectManipulationCompleted(
+        self: *const IScrollViewer,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".EventHandler__G1__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".EventHandler__G1__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_DirectManipulationCompleted(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeDirectManipulationCompleted(self: *const IScrollViewer, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_DirectManipulationCompleted(token));
+    }
+    pub fn addViewChanged(
+        self: *const IScrollViewer,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".EventHandler__G1__Microsoft_UI_Xaml_Controls_ScrollViewerViewChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".EventHandler__G1__Microsoft_UI_Xaml_Controls_ScrollViewerViewChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ViewChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeViewChanged(self: *const IScrollViewer, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ViewChanged(token));
+    }
+    pub fn addAnchorRequested(
+        self: *const IScrollViewer,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollViewer__Microsoft_UI_Xaml_Controls_AnchorRequestedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollViewer__Microsoft_UI_Xaml_Controls_AnchorRequestedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_AnchorRequested(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeAnchorRequested(self: *const IScrollViewer, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_AnchorRequested(token));
+    }
+    pub fn addViewChanging(
+        self: *const IScrollViewer,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".EventHandler__G1__Microsoft_UI_Xaml_Controls_ScrollViewerViewChangingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".EventHandler__G1__Microsoft_UI_Xaml_Controls_ScrollViewerViewChangingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ViewChanging(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeViewChanging(self: *const IScrollViewer, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ViewChanging(token));
+    }
+    pub fn addDirectManipulationStarted(
+        self: *const IScrollViewer,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".EventHandler__G1__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".EventHandler__G1__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_DirectManipulationStarted(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeDirectManipulationStarted(self: *const IScrollViewer, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_DirectManipulationStarted(token));
     }
 };
 pub const IScrollViewerStatics = extern struct {
@@ -26890,6 +28522,22 @@ pub const ISelectorBar = extern struct {
     pub fn remove_SelectionChanged(self: *const ISelectorBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_SelectionChanged(self, p0);
     }
+    pub fn addSelectionChanged(
+        self: *const ISelectorBar,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SelectorBar__Microsoft_UI_Xaml_Controls_SelectorBarSelectionChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SelectorBar__Microsoft_UI_Xaml_Controls_SelectorBarSelectionChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_SelectionChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeSelectionChanged(self: *const ISelectorBar, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_SelectionChanged(token));
+    }
 };
 pub const ISelectorBarFactory = extern struct {
     vtable: *const ISelectorBarFactory_Vtbl,
@@ -27470,6 +29118,22 @@ pub const ISplitButton = extern struct {
     pub fn remove_Click(self: *const ISplitButton, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_Click(self, p0);
     }
+    pub fn addClick(
+        self: *const ISplitButton,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SplitButton__Microsoft_UI_Xaml_Controls_SplitButtonClickEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SplitButton__Microsoft_UI_Xaml_Controls_SplitButtonClickEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Click(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeClick(self: *const ISplitButton, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Click(token));
+    }
 };
 pub const ISplitButtonClickEventArgs = extern struct {
     vtable: *const ISplitButtonClickEventArgs_Vtbl,
@@ -27719,6 +29383,70 @@ pub const ISplitView = extern struct {
     }
     pub fn remove_PaneOpened(self: *const ISplitView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_PaneOpened(self, p0);
+    }
+    pub fn addPaneOpened(
+        self: *const ISplitView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SplitView__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SplitView__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_PaneOpened(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removePaneOpened(self: *const ISplitView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_PaneOpened(token));
+    }
+    pub fn addPaneOpening(
+        self: *const ISplitView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SplitView__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SplitView__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_PaneOpening(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removePaneOpening(self: *const ISplitView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_PaneOpening(token));
+    }
+    pub fn addPaneClosed(
+        self: *const ISplitView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SplitView__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SplitView__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_PaneClosed(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removePaneClosed(self: *const ISplitView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_PaneClosed(token));
+    }
+    pub fn addPaneClosing(
+        self: *const ISplitView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SplitView__Microsoft_UI_Xaml_Controls_SplitViewPaneClosingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SplitView__Microsoft_UI_Xaml_Controls_SplitViewPaneClosingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_PaneClosing(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removePaneClosing(self: *const ISplitView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_PaneClosing(token));
     }
 };
 pub const ISplitViewFactory = extern struct {
@@ -28167,6 +29895,22 @@ pub const ISwapChainPanel = extern struct {
     pub fn CreateCoreIndependentInputSource(self: *const ISwapChainPanel, p0: @"Microsoft.UI.Input".InputPointerSourceDeviceKinds, result: **@"Microsoft.UI.Input".InputPointerSource) callconv(.winapi) HRESULT {
         return self.vtable.CreateCoreIndependentInputSource(self, p0, result);
     }
+    pub fn addCompositionScaleChanged(
+        self: *const ISwapChainPanel,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SwapChainPanel__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SwapChainPanel__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_CompositionScaleChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeCompositionScaleChanged(self: *const ISwapChainPanel, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_CompositionScaleChanged(token));
+    }
 };
 pub const ISwapChainPanelFactory = extern struct {
     vtable: *const ISwapChainPanelFactory_Vtbl,
@@ -28389,6 +30133,22 @@ pub const ISwipeItem = extern struct {
     }
     pub fn remove_Invoked(self: *const ISwipeItem, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_Invoked(self, p0);
+    }
+    pub fn addInvoked(
+        self: *const ISwipeItem,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SwipeItem__Microsoft_UI_Xaml_Controls_SwipeItemInvokedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SwipeItem__Microsoft_UI_Xaml_Controls_SwipeItemInvokedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Invoked(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeInvoked(self: *const ISwipeItem, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Invoked(token));
     }
 };
 pub const ISwipeItemFactory = extern struct {
@@ -28943,6 +30703,102 @@ pub const ITabView = extern struct {
     pub fn remove_TabStripDrop(self: *const ITabView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_TabStripDrop(self, p0);
     }
+    pub fn addAddTabButtonClick(
+        self: *const ITabView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_AddTabButtonClick(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeAddTabButtonClick(self: *const ITabView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_AddTabButtonClick(token));
+    }
+    pub fn addTabDroppedOutside(
+        self: *const ITabView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabDroppedOutsideEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabDroppedOutsideEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_TabDroppedOutside(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeTabDroppedOutside(self: *const ITabView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_TabDroppedOutside(token));
+    }
+    pub fn addTabItemsChanged(
+        self: *const ITabView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Windows_Foundation_Collections_IVectorChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Windows_Foundation_Collections_IVectorChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_TabItemsChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeTabItemsChanged(self: *const ITabView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_TabItemsChanged(token));
+    }
+    pub fn addTabDragStarting(
+        self: *const ITabView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabDragStartingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabDragStartingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_TabDragStarting(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeTabDragStarting(self: *const ITabView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_TabDragStarting(token));
+    }
+    pub fn addTabCloseRequested(
+        self: *const ITabView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabCloseRequestedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabCloseRequestedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_TabCloseRequested(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeTabCloseRequested(self: *const ITabView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_TabCloseRequested(token));
+    }
+    pub fn addTabDragCompleted(
+        self: *const ITabView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabDragCompletedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabDragCompletedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_TabDragCompleted(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeTabDragCompleted(self: *const ITabView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_TabDragCompleted(token));
+    }
 };
 pub const ITabView2 = extern struct {
     vtable: *const ITabView2_Vtbl,
@@ -28991,6 +30847,70 @@ pub const ITabView2 = extern struct {
     }
     pub fn remove_ExternalTornOutTabsDropped(self: *const ITabView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ExternalTornOutTabsDropped(self, p0);
+    }
+    pub fn addExternalTornOutTabsDropped(
+        self: *const ITabView2,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewExternalTornOutTabsDroppedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewExternalTornOutTabsDroppedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ExternalTornOutTabsDropped(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeExternalTornOutTabsDropped(self: *const ITabView2, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ExternalTornOutTabsDropped(token));
+    }
+    pub fn addTabTearOutWindowRequested(
+        self: *const ITabView2,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabTearOutWindowRequestedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabTearOutWindowRequestedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_TabTearOutWindowRequested(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeTabTearOutWindowRequested(self: *const ITabView2, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_TabTearOutWindowRequested(token));
+    }
+    pub fn addExternalTornOutTabsDropping(
+        self: *const ITabView2,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewExternalTornOutTabsDroppingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewExternalTornOutTabsDroppingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ExternalTornOutTabsDropping(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeExternalTornOutTabsDropping(self: *const ITabView2, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ExternalTornOutTabsDropping(token));
+    }
+    pub fn addTabTearOutRequested(
+        self: *const ITabView2,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabTearOutRequestedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabTearOutRequestedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_TabTearOutRequested(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeTabTearOutRequested(self: *const ITabView2, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_TabTearOutRequested(token));
     }
 };
 pub const ITabViewExternalTornOutTabsDroppedEventArgs = extern struct {
@@ -29127,6 +31047,22 @@ pub const ITabViewItem = extern struct {
     }
     pub fn remove_CloseRequested(self: *const ITabViewItem, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_CloseRequested(self, p0);
+    }
+    pub fn addCloseRequested(
+        self: *const ITabViewItem,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabViewItem__Microsoft_UI_Xaml_Controls_TabViewTabCloseRequestedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabViewItem__Microsoft_UI_Xaml_Controls_TabViewTabCloseRequestedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_CloseRequested(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeCloseRequested(self: *const ITabViewItem, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_CloseRequested(token));
     }
 };
 pub const ITabViewItemFactory = extern struct {
@@ -29752,6 +31688,70 @@ pub const ITeachingTip = extern struct {
     pub fn remove_Closed(self: *const ITeachingTip, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_Closed(self, p0);
     }
+    pub fn addCloseButtonClick(
+        self: *const ITeachingTip,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TeachingTip__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TeachingTip__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_CloseButtonClick(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeCloseButtonClick(self: *const ITeachingTip, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_CloseButtonClick(token));
+    }
+    pub fn addClosed(
+        self: *const ITeachingTip,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TeachingTip__Microsoft_UI_Xaml_Controls_TeachingTipClosedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TeachingTip__Microsoft_UI_Xaml_Controls_TeachingTipClosedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Closed(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeClosed(self: *const ITeachingTip, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Closed(token));
+    }
+    pub fn addActionButtonClick(
+        self: *const ITeachingTip,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TeachingTip__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TeachingTip__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ActionButtonClick(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeActionButtonClick(self: *const ITeachingTip, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ActionButtonClick(token));
+    }
+    pub fn addClosing(
+        self: *const ITeachingTip,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TeachingTip__Microsoft_UI_Xaml_Controls_TeachingTipClosingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TeachingTip__Microsoft_UI_Xaml_Controls_TeachingTipClosingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Closing(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeClosing(self: *const ITeachingTip, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Closing(token));
+    }
 };
 pub const ITeachingTipClosedEventArgs = extern struct {
     vtable: *const ITeachingTipClosedEventArgs_Vtbl,
@@ -30237,6 +32237,22 @@ pub const ITextBlock = extern struct {
     pub fn CopySelectionToClipboard(self: *const ITextBlock) callconv(.winapi) HRESULT {
         return self.vtable.CopySelectionToClipboard(self);
     }
+    pub fn addIsTextTrimmedChanged(
+        self: *const ITextBlock,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBlock__Microsoft_UI_Xaml_Controls_IsTextTrimmedChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBlock__Microsoft_UI_Xaml_Controls_IsTextTrimmedChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_IsTextTrimmedChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeIsTextTrimmedChanged(self: *const ITextBlock, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_IsTextTrimmedChanged(token));
+    }
 };
 pub const ITextBlockStatics = extern struct {
     vtable: *const ITextBlockStatics_Vtbl,
@@ -30661,6 +32677,150 @@ pub const ITextBox = extern struct {
     }
     pub fn remove_TextChanging(self: *const ITextBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_TextChanging(self, p0);
+    }
+    pub fn addTextChanging(
+        self: *const ITextBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextBoxTextChangingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextBoxTextChangingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_TextChanging(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeTextChanging(self: *const ITextBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_TextChanging(token));
+    }
+    pub fn addCandidateWindowBoundsChanged(
+        self: *const ITextBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_CandidateWindowBoundsChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_CandidateWindowBoundsChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_CandidateWindowBoundsChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeCandidateWindowBoundsChanged(self: *const ITextBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_CandidateWindowBoundsChanged(token));
+    }
+    pub fn addCopyingToClipboard(
+        self: *const ITextBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextControlCopyingToClipboardEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextControlCopyingToClipboardEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_CopyingToClipboard(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeCopyingToClipboard(self: *const ITextBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_CopyingToClipboard(token));
+    }
+    pub fn addTextCompositionStarted(
+        self: *const ITextBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextCompositionStartedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextCompositionStartedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_TextCompositionStarted(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeTextCompositionStarted(self: *const ITextBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_TextCompositionStarted(token));
+    }
+    pub fn addTextCompositionEnded(
+        self: *const ITextBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextCompositionEndedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextCompositionEndedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_TextCompositionEnded(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeTextCompositionEnded(self: *const ITextBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_TextCompositionEnded(token));
+    }
+    pub fn addSelectionChanging(
+        self: *const ITextBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextBoxSelectionChangingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextBoxSelectionChangingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_SelectionChanging(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeSelectionChanging(self: *const ITextBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_SelectionChanging(token));
+    }
+    pub fn addBeforeTextChanging(
+        self: *const ITextBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextBoxBeforeTextChangingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextBoxBeforeTextChangingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_BeforeTextChanging(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeBeforeTextChanging(self: *const ITextBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_BeforeTextChanging(token));
+    }
+    pub fn addCuttingToClipboard(
+        self: *const ITextBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextControlCuttingToClipboardEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextControlCuttingToClipboardEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_CuttingToClipboard(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeCuttingToClipboard(self: *const ITextBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_CuttingToClipboard(token));
+    }
+    pub fn addTextCompositionChanged(
+        self: *const ITextBox,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextCompositionChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextCompositionChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_TextCompositionChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeTextCompositionChanged(self: *const ITextBox, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_TextCompositionChanged(token));
     }
 };
 pub const ITextBoxBeforeTextChangingEventArgs = extern struct {
@@ -31188,6 +33348,38 @@ pub const ITimePicker = extern struct {
     pub fn remove_SelectedTimeChanged(self: *const ITimePicker, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_SelectedTimeChanged(self, p0);
     }
+    pub fn addSelectedTimeChanged(
+        self: *const ITimePicker,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TimePicker__Microsoft_UI_Xaml_Controls_TimePickerSelectedValueChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TimePicker__Microsoft_UI_Xaml_Controls_TimePickerSelectedValueChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_SelectedTimeChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeSelectedTimeChanged(self: *const ITimePicker, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_SelectedTimeChanged(token));
+    }
+    pub fn addTimeChanged(
+        self: *const ITimePicker,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".EventHandler__G1__Microsoft_UI_Xaml_Controls_TimePickerValueChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".EventHandler__G1__Microsoft_UI_Xaml_Controls_TimePickerValueChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_TimeChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeTimeChanged(self: *const ITimePicker, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_TimeChanged(token));
+    }
 };
 pub const ITimePickerFactory = extern struct {
     vtable: *const ITimePickerFactory_Vtbl,
@@ -31265,6 +33457,22 @@ pub const ITimePickerFlyout = extern struct {
     }
     pub fn ShowAtAsync(self: *const ITimePickerFlyout, p0: *@"Microsoft.UI.Xaml".FrameworkElement, result: **anyopaque) callconv(.winapi) HRESULT {
         return self.vtable.ShowAtAsync(self, p0, result);
+    }
+    pub fn addTimePicked(
+        self: *const ITimePickerFlyout,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TimePickerFlyout__Microsoft_UI_Xaml_Controls_TimePickedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TimePickerFlyout__Microsoft_UI_Xaml_Controls_TimePickedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_TimePicked(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeTimePicked(self: *const ITimePickerFlyout, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_TimePicked(token));
     }
 };
 pub const ITimePickerFlyoutPresenter = extern struct {
@@ -31538,6 +33746,38 @@ pub const ITitleBar = extern struct {
     }
     pub fn remove_PaneToggleRequested(self: *const ITitleBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_PaneToggleRequested(self, p0);
+    }
+    pub fn addBackRequested(
+        self: *const ITitleBar,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TitleBar__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TitleBar__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_BackRequested(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeBackRequested(self: *const ITitleBar, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_BackRequested(token));
+    }
+    pub fn addPaneToggleRequested(
+        self: *const ITitleBar,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TitleBar__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TitleBar__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_PaneToggleRequested(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removePaneToggleRequested(self: *const ITitleBar, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_PaneToggleRequested(token));
     }
 };
 pub const ITitleBar2 = extern struct {
@@ -31878,6 +34118,22 @@ pub const IToggleSplitButton = extern struct {
     }
     pub fn remove_IsCheckedChanged(self: *const IToggleSplitButton, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_IsCheckedChanged(self, p0);
+    }
+    pub fn addIsCheckedChanged(
+        self: *const IToggleSplitButton,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ToggleSplitButton__Microsoft_UI_Xaml_Controls_ToggleSplitButtonIsCheckedChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ToggleSplitButton__Microsoft_UI_Xaml_Controls_ToggleSplitButtonIsCheckedChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_IsCheckedChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeIsCheckedChanged(self: *const IToggleSplitButton, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_IsCheckedChanged(token));
     }
 };
 pub const IToggleSplitButtonFactory = extern struct {
@@ -32335,6 +34591,54 @@ pub const ITreeView = extern struct {
     pub fn remove_Collapsed(self: *const ITreeView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_Collapsed(self, p0);
     }
+    pub fn addExpanding(
+        self: *const ITreeView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewExpandingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewExpandingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Expanding(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeExpanding(self: *const ITreeView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Expanding(token));
+    }
+    pub fn addItemInvoked(
+        self: *const ITreeView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewItemInvokedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewItemInvokedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ItemInvoked(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeItemInvoked(self: *const ITreeView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ItemInvoked(token));
+    }
+    pub fn addCollapsed(
+        self: *const ITreeView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewCollapsedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewCollapsedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_Collapsed(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeCollapsed(self: *const ITreeView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_Collapsed(token));
+    }
 };
 pub const ITreeView2 = extern struct {
     vtable: *const ITreeView2_Vtbl,
@@ -32441,6 +34745,38 @@ pub const ITreeView2 = extern struct {
     pub fn get_SelectedItems(self: *const ITreeView2, result: **@"Windows.Foundation.Collections".IVector__G1__object) callconv(.winapi) HRESULT {
         return self.vtable.get_SelectedItems(self, result);
     }
+    pub fn addDragItemsCompleted(
+        self: *const ITreeView2,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewDragItemsCompletedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewDragItemsCompletedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_DragItemsCompleted(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeDragItemsCompleted(self: *const ITreeView2, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_DragItemsCompleted(token));
+    }
+    pub fn addDragItemsStarting(
+        self: *const ITreeView2,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewDragItemsStartingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewDragItemsStartingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_DragItemsStarting(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeDragItemsStarting(self: *const ITreeView2, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_DragItemsStarting(token));
+    }
 };
 pub const ITreeView3 = extern struct {
     vtable: *const ITreeView3_Vtbl,
@@ -32465,6 +34801,22 @@ pub const ITreeView3 = extern struct {
     }
     pub fn remove_SelectionChanged(self: *const ITreeView3, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_SelectionChanged(self, p0);
+    }
+    pub fn addSelectionChanged(
+        self: *const ITreeView3,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewSelectionChangedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewSelectionChangedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_SelectionChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeSelectionChanged(self: *const ITreeView3, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_SelectionChanged(token));
     }
 };
 pub const ITreeViewCollapsedEventArgs = extern struct {
@@ -33279,6 +35631,22 @@ pub const ITwoPaneView = extern struct {
     }
     pub fn remove_ModeChanged(self: *const ITwoPaneView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ModeChanged(self, p0);
+    }
+    pub fn addModeChanged(
+        self: *const ITwoPaneView,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TwoPaneView__object_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TwoPaneView__object.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_ModeChanged(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeModeChanged(self: *const ITwoPaneView, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_ModeChanged(token));
     }
 };
 pub const ITwoPaneViewFactory = extern struct {
@@ -34278,6 +36646,86 @@ pub const IWebView2 = extern struct {
     }
     pub fn remove_CoreWebView2Initialized(self: *const IWebView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_CoreWebView2Initialized(self, p0);
+    }
+    pub fn addNavigationCompleted(
+        self: *const IWebView2,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_WebView2__Microsoft_Web_WebView2_Core_CoreWebView2NavigationCompletedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_WebView2__Microsoft_Web_WebView2_Core_CoreWebView2NavigationCompletedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_NavigationCompleted(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeNavigationCompleted(self: *const IWebView2, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_NavigationCompleted(token));
+    }
+    pub fn addCoreWebView2Initialized(
+        self: *const IWebView2,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_WebView2__Microsoft_UI_Xaml_Controls_CoreWebView2InitializedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_WebView2__Microsoft_UI_Xaml_Controls_CoreWebView2InitializedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_CoreWebView2Initialized(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeCoreWebView2Initialized(self: *const IWebView2, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_CoreWebView2Initialized(token));
+    }
+    pub fn addNavigationStarting(
+        self: *const IWebView2,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_WebView2__Microsoft_Web_WebView2_Core_CoreWebView2NavigationStartingEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_WebView2__Microsoft_Web_WebView2_Core_CoreWebView2NavigationStartingEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_NavigationStarting(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeNavigationStarting(self: *const IWebView2, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_NavigationStarting(token));
+    }
+    pub fn addWebMessageReceived(
+        self: *const IWebView2,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_WebView2__Microsoft_Web_WebView2_Core_CoreWebView2WebMessageReceivedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_WebView2__Microsoft_Web_WebView2_Core_CoreWebView2WebMessageReceivedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_WebMessageReceived(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeWebMessageReceived(self: *const IWebView2, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_WebMessageReceived(token));
+    }
+    pub fn addCoreProcessFailed(
+        self: *const IWebView2,
+        allocator: std.mem.Allocator,
+        invoke: @FieldType(@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_WebView2__Microsoft_Web_WebView2_Core_CoreWebView2ProcessFailedEventArgs_Vtbl, "Invoke"),
+        user_data: ?*anyopaque,
+    ) (win_core.hresult.Error || error{OutOfMemory})!@"Windows.Foundation".EventRegistrationToken {
+        const _D = win_core.Delegate(std.meta.Child(@TypeOf(invoke)), @"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_WebView2__Microsoft_Web_WebView2_Core_CoreWebView2ProcessFailedEventArgs.IID);
+        const _handler = try _D.create(allocator, invoke, user_data);
+        defer _ = _D.release(_handler);
+        var _token: @"Windows.Foundation".EventRegistrationToken = undefined;
+        try win_core.hresult.ok(self.add_CoreProcessFailed(@ptrCast(@alignCast(_handler)), &_token));
+        return _token;
+    }
+    pub fn removeCoreProcessFailed(self: *const IWebView2, token: @"Windows.Foundation".EventRegistrationToken) win_core.hresult.Error!void {
+        try win_core.hresult.ok(self.remove_CoreProcessFailed(token));
     }
 };
 pub const IWebView22 = extern struct {

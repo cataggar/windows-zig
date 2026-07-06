@@ -178,6 +178,137 @@ fn applyMicrosoftUIXamlControlsCanvasZIndex(widget: *anyopaque, value: SetterVal
     try setMicrosoftUIXamlControlsCanvasZIndex(@ptrCast(@alignCast(widget)), typed_value);
 }
 
+pub fn setMicrosoftUIXamlControlsContentDialogCloseButtonText(widget: *@"Microsoft.UI.Xaml.Controls".ContentDialog, value: []const u16) Error!void {
+    const target: *const @"Microsoft.UI.Xaml.Controls".IContentDialog = @ptrCast(widget);
+    try win_core.hresult.ok(target.put_CloseButtonTextFromUtf16(value));
+}
+
+fn applyMicrosoftUIXamlControlsContentDialogCloseButtonText(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .string => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsContentDialogCloseButtonText(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsContentDialogContent(widget: *@"Microsoft.UI.Xaml.Controls".ContentDialog, value: *@"Microsoft.UI.Xaml".UIElement) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".IContentDialog = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls".IContentControl) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try win_core.hresult.ok(target.put_Content(@as(?*const anyopaque, @ptrCast(value))));
+}
+
+fn applyMicrosoftUIXamlControlsContentDialogContent(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .element => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsContentDialogContent(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsContentDialogPrimaryButtonText(widget: *@"Microsoft.UI.Xaml.Controls".ContentDialog, value: []const u16) Error!void {
+    const target: *const @"Microsoft.UI.Xaml.Controls".IContentDialog = @ptrCast(widget);
+    try win_core.hresult.ok(target.put_PrimaryButtonTextFromUtf16(value));
+}
+
+fn applyMicrosoftUIXamlControlsContentDialogPrimaryButtonText(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .string => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsContentDialogPrimaryButtonText(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsContentDialogSecondaryButtonText(widget: *@"Microsoft.UI.Xaml.Controls".ContentDialog, value: []const u16) Error!void {
+    const target: *const @"Microsoft.UI.Xaml.Controls".IContentDialog = @ptrCast(widget);
+    try win_core.hresult.ok(target.put_SecondaryButtonTextFromUtf16(value));
+}
+
+fn applyMicrosoftUIXamlControlsContentDialogSecondaryButtonText(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .string => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsContentDialogSecondaryButtonText(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsContentDialogTitle(widget: *@"Microsoft.UI.Xaml.Controls".ContentDialog, value: []const u16) Error!void {
+    const target: *const @"Microsoft.UI.Xaml.Controls".IContentDialog = @ptrCast(widget);
+    const text_block = try @"Microsoft.UI.Xaml.Controls".TextBlock.activate();
+    const text_block_iface: *const @"Microsoft.UI.Xaml.Controls".ITextBlock = @ptrCast(text_block);
+    defer _ = text_block_iface.Release();
+    try win_core.hresult.ok(text_block_iface.put_TextFromUtf16(value));
+    try win_core.hresult.ok(target.put_Title(@as(?*const anyopaque, @ptrCast(text_block))));
+}
+
+fn applyMicrosoftUIXamlControlsContentDialogTitle(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .string => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsContentDialogTitle(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsFlyoutContent(widget: *@"Microsoft.UI.Xaml.Controls".Flyout, value: *@"Microsoft.UI.Xaml".UIElement) Error!void {
+    const target: *const @"Microsoft.UI.Xaml.Controls".IFlyout = @ptrCast(widget);
+    try win_core.hresult.ok(target.put_Content(@ptrCast(value)));
+}
+
+fn applyMicrosoftUIXamlControlsFlyoutContent(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .element => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsFlyoutContent(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsMenuBarItemTitle(widget: *@"Microsoft.UI.Xaml.Controls".MenuBarItem, value: []const u16) Error!void {
+    const target: *const @"Microsoft.UI.Xaml.Controls".IMenuBarItem = @ptrCast(widget);
+    try win_core.hresult.ok(target.put_TitleFromUtf16(value));
+}
+
+fn applyMicrosoftUIXamlControlsMenuBarItemTitle(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .string => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsMenuBarItemTitle(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsNavigationViewContent(widget: *@"Microsoft.UI.Xaml.Controls".NavigationView, value: *@"Microsoft.UI.Xaml".UIElement) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".INavigationView = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls".IContentControl) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    try win_core.hresult.ok(target.put_Content(@as(?*const anyopaque, @ptrCast(value))));
+}
+
+fn applyMicrosoftUIXamlControlsNavigationViewContent(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .element => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsNavigationViewContent(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsNavigationViewItemContent(widget: *@"Microsoft.UI.Xaml.Controls".NavigationViewItem, value: []const u16) Error!void {
+    const default_iface: *const @"Microsoft.UI.Xaml.Controls".INavigationViewItem = @ptrCast(widget);
+    const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls".IContentControl) orelse return error.InterfaceCastFailed;
+    defer _ = target.Release();
+    const text_block = try @"Microsoft.UI.Xaml.Controls".TextBlock.activate();
+    const text_block_iface: *const @"Microsoft.UI.Xaml.Controls".ITextBlock = @ptrCast(text_block);
+    defer _ = text_block_iface.Release();
+    try win_core.hresult.ok(text_block_iface.put_TextFromUtf16(value));
+    try win_core.hresult.ok(target.put_Content(@as(?*const anyopaque, @ptrCast(text_block))));
+}
+
+fn applyMicrosoftUIXamlControlsNavigationViewItemContent(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .string => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsNavigationViewItemContent(@ptrCast(@alignCast(widget)), typed_value);
+}
+
 pub fn setMicrosoftUIXamlControlsScrollViewerContent(widget: *@"Microsoft.UI.Xaml.Controls".ScrollViewer, value: *@"Microsoft.UI.Xaml".UIElement) Error!void {
     const default_iface: *const @"Microsoft.UI.Xaml.Controls".IScrollViewer = @ptrCast(widget);
     const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls".IContentControl) orelse return error.InterfaceCastFailed;
@@ -498,6 +629,96 @@ pub const entries = [_]PropertySetter{
         .apply = applyMicrosoftUIXamlControlsCanvasZIndex,
     },
     .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ContentDialog",
+        .widget_name = "ContentDialog",
+        .handle_name = "ContentDialog",
+        .property_name = "CloseButtonText",
+        .field_name = "close_button_text",
+        .value_kind = .string,
+        .setter_kind = .direct,
+        .apply = applyMicrosoftUIXamlControlsContentDialogCloseButtonText,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ContentDialog",
+        .widget_name = "ContentDialog",
+        .handle_name = "ContentDialog",
+        .property_name = "Content",
+        .field_name = "content",
+        .value_kind = .element,
+        .setter_kind = .direct,
+        .apply = applyMicrosoftUIXamlControlsContentDialogContent,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ContentDialog",
+        .widget_name = "ContentDialog",
+        .handle_name = "ContentDialog",
+        .property_name = "PrimaryButtonText",
+        .field_name = "primary_button_text",
+        .value_kind = .string,
+        .setter_kind = .direct,
+        .apply = applyMicrosoftUIXamlControlsContentDialogPrimaryButtonText,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ContentDialog",
+        .widget_name = "ContentDialog",
+        .handle_name = "ContentDialog",
+        .property_name = "SecondaryButtonText",
+        .field_name = "secondary_button_text",
+        .value_kind = .string,
+        .setter_kind = .direct,
+        .apply = applyMicrosoftUIXamlControlsContentDialogSecondaryButtonText,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ContentDialog",
+        .widget_name = "ContentDialog",
+        .handle_name = "ContentDialog",
+        .property_name = "Title",
+        .field_name = "title",
+        .value_kind = .string,
+        .setter_kind = .text_block,
+        .apply = applyMicrosoftUIXamlControlsContentDialogTitle,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Flyout",
+        .widget_name = "Flyout",
+        .handle_name = "Flyout",
+        .property_name = "Content",
+        .field_name = "content",
+        .value_kind = .element,
+        .setter_kind = .direct,
+        .apply = applyMicrosoftUIXamlControlsFlyoutContent,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.MenuBarItem",
+        .widget_name = "MenuBarItem",
+        .handle_name = "MenuBarItem",
+        .property_name = "Title",
+        .field_name = "title",
+        .value_kind = .string,
+        .setter_kind = .direct,
+        .apply = applyMicrosoftUIXamlControlsMenuBarItemTitle,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.NavigationView",
+        .widget_name = "NavigationView",
+        .handle_name = "NavigationView",
+        .property_name = "Content",
+        .field_name = "content",
+        .value_kind = .element,
+        .setter_kind = .direct,
+        .apply = applyMicrosoftUIXamlControlsNavigationViewContent,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.NavigationViewItem",
+        .widget_name = "NavigationViewItem",
+        .handle_name = "NavigationViewItem",
+        .property_name = "Content",
+        .field_name = "content",
+        .value_kind = .string,
+        .setter_kind = .text_block,
+        .apply = applyMicrosoftUIXamlControlsNavigationViewItemContent,
+    },
+    .{
         .widget_class = "Microsoft.UI.Xaml.Controls.ScrollViewer",
         .widget_name = "ScrollViewer",
         .handle_name = "ScrollViewer",
@@ -648,20 +869,29 @@ pub const by_widget_prop = std.StaticStringMap(usize).initComptime(.{
     .{ "Microsoft.UI.Xaml.Controls.Canvas#Left", 5 },
     .{ "Microsoft.UI.Xaml.Controls.Canvas#Top", 6 },
     .{ "Microsoft.UI.Xaml.Controls.Canvas#ZIndex", 7 },
-    .{ "Microsoft.UI.Xaml.Controls.ScrollViewer#Content", 8 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Left", 9 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Orientation", 10 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Spacing", 11 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Top", 12 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#ZIndex", 13 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Left", 14 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Text", 15 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Top", 16 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#ZIndex", 17 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#Left", 18 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#Top", 19 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#ZIndex", 20 },
-    .{ "Microsoft.UI.Xaml.Window#Title", 21 },
+    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#CloseButtonText", 8 },
+    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#Content", 9 },
+    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#PrimaryButtonText", 10 },
+    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#SecondaryButtonText", 11 },
+    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#Title", 12 },
+    .{ "Microsoft.UI.Xaml.Controls.Flyout#Content", 13 },
+    .{ "Microsoft.UI.Xaml.Controls.MenuBarItem#Title", 14 },
+    .{ "Microsoft.UI.Xaml.Controls.NavigationView#Content", 15 },
+    .{ "Microsoft.UI.Xaml.Controls.NavigationViewItem#Content", 16 },
+    .{ "Microsoft.UI.Xaml.Controls.ScrollViewer#Content", 17 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Left", 18 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Orientation", 19 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Spacing", 20 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Top", 21 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#ZIndex", 22 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Left", 23 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Text", 24 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Top", 25 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#ZIndex", 26 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#Left", 27 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#Top", 28 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#ZIndex", 29 },
+    .{ "Microsoft.UI.Xaml.Window#Title", 30 },
 });
 
 pub fn find(widget_class: []const u8, property_name: []const u8) ?*const PropertySetter {

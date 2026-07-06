@@ -84,6 +84,9 @@ pub fn build(b: *std.Build) void {
     win_future_mod.addAnonymousImport("Windows.winmd", .{
         .root_source_file = b.path("vendor/winmd/Windows.winmd"),
     });
+    win_future_mod.addAnonymousImport("Microsoft.UI.Xaml.winmd", .{
+        .root_source_file = b.path("vendor/winmd/Microsoft.UI.Xaml.winmd"),
+    });
 
     const win_collections_mod = b.addModule("win-collections", .{
         .root_source_file = b.path("packages/win-collections/src/root.zig"),

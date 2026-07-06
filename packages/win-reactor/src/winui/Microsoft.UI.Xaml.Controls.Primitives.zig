@@ -58,3 +58,79 @@ pub const IButtonBase = extern struct {
         return self.vtable.remove_Click(self, token);
     }
 };
+
+pub const IFlyoutBase_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    get_Placement: *const anyopaque,
+    put_Placement: *const anyopaque,
+    get_Target: *const anyopaque,
+    get_AllowFocusOnInteraction: *const anyopaque,
+    put_AllowFocusOnInteraction: *const anyopaque,
+    get_LightDismissOverlayMode: *const anyopaque,
+    put_LightDismissOverlayMode: *const anyopaque,
+    get_AllowFocusWhenDisabled: *const anyopaque,
+    put_AllowFocusWhenDisabled: *const anyopaque,
+    get_ShowMode: *const anyopaque,
+    put_ShowMode: *const anyopaque,
+    get_InputDevicePrefersPrimaryCommands: *const anyopaque,
+    get_AreOpenCloseAnimationsEnabled: *const anyopaque,
+    put_AreOpenCloseAnimationsEnabled: *const anyopaque,
+    get_ShouldConstrainToRootBounds: *const anyopaque,
+    put_ShouldConstrainToRootBounds: *const anyopaque,
+    get_IsConstrainedToRootBounds: *const anyopaque,
+    get_ElementSoundMode: *const anyopaque,
+    put_ElementSoundMode: *const anyopaque,
+    get_OverlayInputPassThroughElement: *const anyopaque,
+    put_OverlayInputPassThroughElement: *const anyopaque,
+    get_IsOpen: *const anyopaque,
+    get_XamlRoot: *const anyopaque,
+    put_XamlRoot: *const anyopaque,
+    add_Opened: *const anyopaque,
+    remove_Opened: *const anyopaque,
+    add_Closed: *const anyopaque,
+    remove_Closed: *const anyopaque,
+    add_Opening: *const anyopaque,
+    remove_Opening: *const anyopaque,
+    add_Closing: *const anyopaque,
+    remove_Closing: *const anyopaque,
+    ShowAt: *const fn (this: *const IFlyoutBase, target: *xaml.FrameworkElement) callconv(.winapi) HRESULT,
+    ShowAt_2: *const anyopaque,
+    Hide: *const fn (this: *const IFlyoutBase) callconv(.winapi) HRESULT,
+};
+
+pub const IFlyoutBase = extern struct {
+    vtable: *const IFlyoutBase_Vtbl,
+    pub const Vtbl = IFlyoutBase_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0xBB6603BF,
+        .data2 = 0x744D,
+        .data3 = 0x5C31,
+        .data4 = .{ 0xA8, 0x7D, 0x74, 0x43, 0x94, 0x63, 0x4D, 0x77 },
+    };
+
+    pub fn QueryInterface(self: *const IFlyoutBase, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.base.base.QueryInterface(@ptrCast(@constCast(self)), iid, interface);
+    }
+
+    pub fn AddRef(self: *const IFlyoutBase) callconv(.winapi) u32 {
+        return self.vtable.base.base.AddRef(@ptrCast(@constCast(self)));
+    }
+
+    pub fn Release(self: *const IFlyoutBase) callconv(.winapi) u32 {
+        return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn cast(self: *const IFlyoutBase, comptime T: type) ?*const T {
+        var out: ?*anyopaque = null;
+        if (self.QueryInterface(&T.IID, &out) < 0) return null;
+        return @ptrCast(@alignCast(out));
+    }
+
+    pub fn ShowAt(self: *const IFlyoutBase, target: *xaml.FrameworkElement) callconv(.winapi) HRESULT {
+        return self.vtable.ShowAt(self, target);
+    }
+
+    pub fn Hide(self: *const IFlyoutBase) callconv(.winapi) HRESULT {
+        return self.vtable.Hide(self);
+    }
+};
