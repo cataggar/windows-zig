@@ -4979,13 +4979,18 @@ fn writeClassNames(
 }
 
 /// Emit `pub const Factory = <FactoryInterface>;` inside a runtime
-/// class body when the class carries an `ActivatableAttribute` whose
-/// first positional argument is a `System.Type` naming the factory
-/// interface (i.e. `[Activatable(typeof(IFooFactory), version)]`).
+/// class body when the class carries either:
+///   - `ActivatableAttribute` whose first positional argument is a
+///     `System.Type` naming the factory interface (i.e.
+///     `[Activatable(typeof(IFooFactory), version)]`), or
+///   - `ComposableAttribute` whose first positional argument is that
+///     same factory interface `System.Type`.
 ///
 /// Classes with only the parameterless `[Activatable(version)]`
-/// overload activate through the generic `IActivationFactory` and
-/// need no class-specific alias — they are skipped.
+/// overload still activate through the generic
+/// `IActivationFactory::ActivateInstance` path and need no
+/// class-specific alias — they are skipped here and only receive the
+/// separate `activate()` convenience.
 ///
 /// When the factory lives in a different projectable namespace
 /// (`Windows.*`) the alias is qualified through the namespace import
@@ -5009,7 +5014,7 @@ fn writeFactoryAlias(
     namespace: []const u8,
     cross: *CrossNsSet,
 ) !void {
-    const factory = activationFactoryName(arena, file, class_row) orelse return;
+    const factory = classFactoryName(arena, file, class_row) orelse return;
     if (std.mem.findScalar(u8, factory.name, '`') != null) return;
     if (std.mem.eql(u8, factory.namespace, namespace)) {
         try writer.print("    pub const Factory = {s};\n", .{factory.name});
@@ -5028,23 +5033,28 @@ fn writeFactoryAlias(
 }
 
 /// Scan the custom attributes on runtime-class row `class_row` for
-/// an `ActivatableAttribute` whose first positional argument is a
-/// `System.Type` — i.e. the explicit-factory overload
-/// `[Activatable(typeof(IFooFactory), version)]`. Returns the
-/// resolved `TypeName` of that factory interface.
+/// either:
+///   - an `ActivatableAttribute` whose first positional argument is a
+///     `System.Type` — i.e. the explicit-factory overload
+///     `[Activatable(typeof(IFooFactory), version)]`, or
+///   - a `ComposableAttribute` whose first positional argument is that
+///     same factory-interface `System.Type`.
 ///
-/// Classes can carry several `ActivatableAttribute` rows (one per
-/// contract version plus zero or more static-factory siblings). The
-/// first typed overload wins — in practice every class has at most
-/// one activation factory, and the version/contract ordering is not
-/// relevant for codegen.
+/// Returns the resolved `TypeName` of that factory interface.
+///
+/// Classes can carry several candidate rows (one per contract version
+/// plus zero or more static-factory siblings). The first typed
+/// overload wins — in practice every class has at most one factory
+/// interface, and the version/contract ordering is not relevant for
+/// codegen.
 ///
 /// Returns null when:
-///   - the class has no `ActivatableAttribute`,
-///   - every attribute uses the parameterless `[Activatable(version)]`
-///     overload (generic `IActivationFactory` path), or
+///   - the class has neither supported attribute kind,
+///   - every `ActivatableAttribute` uses the parameterless
+///     `[Activatable(version)]` overload (generic `IActivationFactory`
+///     path), or
 ///   - the arg blob cannot be decoded (malformed metadata).
-fn activationFactoryName(
+fn classFactoryName(
     arena: std.mem.Allocator,
     file: *const winmd.File,
     class_row: u32,
@@ -5053,7 +5063,9 @@ fn activationFactoryName(
     var i = range.start;
     while (i < range.end) : (i += 1) {
         const tn = winmd.attributeName(file, i) orelse continue;
-        if (!std.mem.eql(u8, tn.name, "ActivatableAttribute")) continue;
+        const is_supported_attr = std.mem.eql(u8, tn.name, "ActivatableAttribute") or
+            std.mem.eql(u8, tn.name, "ComposableAttribute");
+        if (!is_supported_attr) continue;
 
         const args = winmd.readAttributeArgs(arena, file, i) catch continue;
         if (args.len == 0) continue;
@@ -5321,6 +5333,93 @@ test "emitRuntimeClasses emits activate() on parameterless WinRT classes" {
     const jv_end_rel = std.mem.find(u8, out[jv_start..], "\n};\n").?;
     const jv_body = out[jv_start .. jv_start + jv_end_rel];
     try std.testing.expect(std.mem.find(u8, jv_body, "pub fn activate") == null);
+}
+
+fn runtimeClassBlock(source: []const u8, class_name: []const u8) ?[]const u8 {
+    var marker_buf: [128]u8 = undefined;
+    const marker = std.fmt.bufPrint(&marker_buf, "pub const {s} = extern struct {{", .{class_name}) catch return null;
+    const start = std.mem.find(u8, source, marker) orelse return null;
+    const rest = source[start..];
+    const end = std.mem.find(u8, rest, "\n};") orelse return null;
+    return rest[0 .. end + "\n};".len];
+}
+
+fn expectRuntimeClassHasFactory(
+    source: []const u8,
+    class_name: []const u8,
+    factory_iface_name: []const u8,
+) !void {
+    const block = runtimeClassBlock(source, class_name) orelse {
+        try std.testing.expect(false);
+        return;
+    };
+
+    var factory_alias_buf: [160]u8 = undefined;
+    const factory_alias = try std.fmt.bufPrint(
+        &factory_alias_buf,
+        "pub const Factory = {s};",
+        .{factory_iface_name},
+    );
+    try std.testing.expect(std.mem.find(u8, block, factory_alias) != null);
+    try std.testing.expect(std.mem.find(u8, block, "pub fn factory() !win_core.Com(Factory.Vtbl) {") != null);
+}
+
+fn expectRuntimeClassLacksFactory(source: []const u8, class_name: []const u8) !void {
+    const block = runtimeClassBlock(source, class_name) orelse {
+        try std.testing.expect(false);
+        return;
+    };
+
+    try std.testing.expect(std.mem.find(u8, block, "pub const Factory = ") == null);
+    try std.testing.expect(std.mem.find(u8, block, "pub fn factory() !win_core.Com(Factory.Vtbl) {") == null);
+}
+
+test "emitRuntimeClasses emits factory helpers for composable WinUI runtime classes" {
+    if (@import("builtin").single_threaded) return error.SkipZigTest;
+
+    const gpa = std.testing.allocator;
+    var io_instance: std.Io.Threaded = .init(gpa, .{});
+    defer io_instance.deinit();
+    const io = io_instance.io();
+
+    const bytes = std.Io.Dir.cwd().readFileAlloc(
+        io,
+        "vendor/winmd/Microsoft.UI.Xaml.winmd",
+        gpa,
+        .unlimited,
+    ) catch |err| switch (err) {
+        error.FileNotFound => return error.SkipZigTest,
+        else => return err,
+    };
+    defer gpa.free(bytes);
+
+    var file = try winmd.parse(bytes);
+
+    var arena = std.heap.ArenaAllocator.init(std.testing.allocator);
+    defer arena.deinit();
+
+    var xaml_buf: std.Io.Writer.Allocating = .init(std.testing.allocator);
+    defer xaml_buf.deinit();
+    var xaml_cross: CrossNsSet = .empty;
+    try emitRuntimeClasses(&xaml_buf.writer, arena.allocator(), &file, "Microsoft.UI.Xaml", &xaml_cross);
+    const xaml_out = xaml_buf.written();
+
+    var controls_buf: std.Io.Writer.Allocating = .init(std.testing.allocator);
+    defer controls_buf.deinit();
+    var controls_cross: CrossNsSet = .empty;
+    try emitRuntimeClasses(&controls_buf.writer, arena.allocator(), &file, "Microsoft.UI.Xaml.Controls", &controls_cross);
+    const controls_out = controls_buf.written();
+
+    try expectRuntimeClassHasFactory(xaml_out, "Application", "IApplicationFactory");
+    try expectRuntimeClassHasFactory(xaml_out, "Window", "IWindowFactory");
+    try expectRuntimeClassHasFactory(controls_out, "Button", "IButtonFactory");
+
+    const text_block = runtimeClassBlock(controls_out, "TextBlock") orelse {
+        try std.testing.expect(false);
+        return;
+    };
+    try std.testing.expect(std.mem.find(u8, text_block, "pub fn activate() !*TextBlock {") != null);
+    try expectRuntimeClassLacksFactory(controls_out, "TextBlock");
 }
 
 test "emitDelegates writes opaque handles for WinRT delegates" {

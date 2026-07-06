@@ -7160,16 +7160,28 @@ pub const DependencyObject = extern struct {
     vtable: *const IDependencyObject_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.DependencyObject";
     pub const NAME_W: [34]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 68, 101, 112, 101, 110, 100, 101, 110, 99, 121, 79, 98, 106, 101, 99, 116 };
+    pub const Factory = IDependencyObjectFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
 };
 pub const StateTriggerBase = extern struct {
     vtable: *const IStateTriggerBase_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.StateTriggerBase";
     pub const NAME_W: [34]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 83, 116, 97, 116, 101, 84, 114, 105, 103, 103, 101, 114, 66, 97, 115, 101 };
+    pub const Factory = IStateTriggerBaseFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
 };
 pub const AdaptiveTrigger = extern struct {
     vtable: *const IAdaptiveTrigger_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.AdaptiveTrigger";
     pub const NAME_W: [33]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 65, 100, 97, 112, 116, 105, 118, 101, 84, 114, 105, 103, 103, 101, 114 };
+    pub const Factory = IAdaptiveTriggerFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
     pub const Statics = IAdaptiveTriggerStatics;
     pub fn statics() !win_core.Com(Statics.Vtbl) {
         return win_core.activationFactory(Statics.Vtbl, &Statics.IID, &NAME_W);
@@ -7179,6 +7191,10 @@ pub const Application = extern struct {
     vtable: *const IApplication_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Application";
     pub const NAME_W: [29]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 65, 112, 112, 108, 105, 99, 97, 116, 105, 111, 110 };
+    pub const Factory = IApplicationFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
     pub const Statics = IApplicationStatics;
     pub fn statics() !win_core.Com(Statics.Vtbl) {
         return win_core.activationFactory(Statics.Vtbl, &Statics.IID, &NAME_W);
@@ -7207,6 +7223,10 @@ pub const RoutedEventArgs = extern struct {
     vtable: *const IRoutedEventArgs_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.RoutedEventArgs";
     pub const NAME_W: [33]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 82, 111, 117, 116, 101, 100, 69, 118, 101, 110, 116, 65, 114, 103, 115 };
+    pub const Factory = IRoutedEventArgsFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
 };
 pub const BringIntoViewRequestedEventArgs = extern struct {
     vtable: *const IBringIntoViewRequestedEventArgs_Vtbl,
@@ -7217,21 +7237,37 @@ pub const BrushTransition = extern struct {
     vtable: *const IBrushTransition_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.BrushTransition";
     pub const NAME_W: [33]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 66, 114, 117, 115, 104, 84, 114, 97, 110, 115, 105, 116, 105, 111, 110 };
+    pub const Factory = IBrushTransitionFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
 };
 pub const ResourceDictionary = extern struct {
     vtable: *const IResourceDictionary_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.ResourceDictionary";
     pub const NAME_W: [36]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 82, 101, 115, 111, 117, 114, 99, 101, 68, 105, 99, 116, 105, 111, 110, 97, 114, 121 };
+    pub const Factory = IResourceDictionaryFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
 };
 pub const ColorPaletteResources = extern struct {
     vtable: *const IColorPaletteResources_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.ColorPaletteResources";
     pub const NAME_W: [39]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 67, 111, 108, 111, 114, 80, 97, 108, 101, 116, 116, 101, 82, 101, 115, 111, 117, 114, 99, 101, 115 };
+    pub const Factory = IColorPaletteResourcesFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
 };
 pub const UIElement = extern struct {
     vtable: *const IUIElement_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.UIElement";
     pub const NAME_W: [27]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 85, 73, 69, 108, 101, 109, 101, 110, 116 };
+    pub const Factory = IUIElementFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
     pub const Statics = IUIElementStatics;
     pub fn statics() !win_core.Com(Statics.Vtbl) {
         return win_core.activationFactory(Statics.Vtbl, &Statics.IID, &NAME_W);
@@ -7241,6 +7277,10 @@ pub const FrameworkElement = extern struct {
     vtable: *const IFrameworkElement_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.FrameworkElement";
     pub const NAME_W: [34]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 70, 114, 97, 109, 101, 119, 111, 114, 107, 69, 108, 101, 109, 101, 110, 116 };
+    pub const Factory = IFrameworkElementFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
     pub const Statics = IFrameworkElementStatics;
     pub fn statics() !win_core.Com(Statics.Vtbl) {
         return win_core.activationFactory(Statics.Vtbl, &Statics.IID, &NAME_W);
@@ -7250,6 +7290,10 @@ pub const FrameworkTemplate = extern struct {
     vtable: *const IFrameworkTemplate_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.FrameworkTemplate";
     pub const NAME_W: [35]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 70, 114, 97, 109, 101, 119, 111, 114, 107, 84, 101, 109, 112, 108, 97, 116, 101 };
+    pub const Factory = IFrameworkTemplateFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
 };
 pub const CornerRadiusHelper = extern struct {
     vtable: *const ICornerRadiusHelper_Vtbl,
@@ -7269,6 +7313,10 @@ pub const DataTemplate = extern struct {
     vtable: *const IDataTemplate_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.DataTemplate";
     pub const NAME_W: [30]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 68, 97, 116, 97, 84, 101, 109, 112, 108, 97, 116, 101 };
+    pub const Factory = IDataTemplateFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
     pub const Statics = IDataTemplateStatics;
     pub fn statics() !win_core.Com(Statics.Vtbl) {
         return win_core.activationFactory(Statics.Vtbl, &Statics.IID, &NAME_W);
@@ -7278,6 +7326,10 @@ pub const DataTemplateKey = extern struct {
     vtable: *const IDataTemplateKey_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.DataTemplateKey";
     pub const NAME_W: [33]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 68, 97, 116, 97, 84, 101, 109, 112, 108, 97, 116, 101, 75, 101, 121 };
+    pub const Factory = IDataTemplateKeyFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
 };
 pub const DebugSettings = extern struct {
     vtable: *const IDebugSettings_Vtbl,
@@ -7288,6 +7340,10 @@ pub const DependencyObjectCollection = extern struct {
     vtable: *const anyopaque,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.DependencyObjectCollection";
     pub const NAME_W: [44]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 68, 101, 112, 101, 110, 100, 101, 110, 99, 121, 79, 98, 106, 101, 99, 116, 67, 111, 108, 108, 101, 99, 116, 105, 111, 110 };
+    pub const Factory = IDependencyObjectCollectionFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
 };
 pub const DependencyProperty = extern struct {
     vtable: *const IDependencyProperty_Vtbl,
@@ -7307,6 +7363,10 @@ pub const DispatcherTimer = extern struct {
     vtable: *const IDispatcherTimer_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.DispatcherTimer";
     pub const NAME_W: [33]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 68, 105, 115, 112, 97, 116, 99, 104, 101, 114, 84, 105, 109, 101, 114 };
+    pub const Factory = IDispatcherTimerFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
 };
 pub const DragEventArgs = extern struct {
     vtable: *const IDragEventArgs_Vtbl,
@@ -7356,11 +7416,19 @@ pub const ElementFactoryGetArgs = extern struct {
     vtable: *const IElementFactoryGetArgs_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.ElementFactoryGetArgs";
     pub const NAME_W: [39]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 69, 108, 101, 109, 101, 110, 116, 70, 97, 99, 116, 111, 114, 121, 71, 101, 116, 65, 114, 103, 115 };
+    pub const Factory = IElementFactoryGetArgsFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
 };
 pub const ElementFactoryRecycleArgs = extern struct {
     vtable: *const IElementFactoryRecycleArgs_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.ElementFactoryRecycleArgs";
     pub const NAME_W: [43]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 69, 108, 101, 109, 101, 110, 116, 70, 97, 99, 116, 111, 114, 121, 82, 101, 99, 121, 99, 108, 101, 65, 114, 103, 115 };
+    pub const Factory = IElementFactoryRecycleArgsFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
 };
 pub const ElementSoundPlayer = extern struct {
     vtable: *const IElementSoundPlayer_Vtbl,
@@ -7375,6 +7443,10 @@ pub const TriggerBase = extern struct {
     vtable: *const ITriggerBase_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.TriggerBase";
     pub const NAME_W: [29]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 84, 114, 105, 103, 103, 101, 114, 66, 97, 115, 101 };
+    pub const Factory = ITriggerBaseFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
 };
 pub const EventTrigger = extern struct {
     vtable: *const IEventTrigger_Vtbl,
@@ -7389,6 +7461,10 @@ pub const ExceptionRoutedEventArgs = extern struct {
     vtable: *const IExceptionRoutedEventArgs_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.ExceptionRoutedEventArgs";
     pub const NAME_W: [42]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 69, 120, 99, 101, 112, 116, 105, 111, 110, 82, 111, 117, 116, 101, 100, 69, 118, 101, 110, 116, 65, 114, 103, 115 };
+    pub const Factory = IExceptionRoutedEventArgsFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
 };
 pub const FrameworkView = extern struct {
     vtable: *const IFrameworkView_Vtbl,
@@ -7426,6 +7502,10 @@ pub const TriggerAction = extern struct {
     vtable: *const ITriggerAction_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.TriggerAction";
     pub const NAME_W: [31]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 84, 114, 105, 103, 103, 101, 114, 65, 99, 116, 105, 111, 110 };
+    pub const Factory = ITriggerActionFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
 };
 pub const MediaFailedRoutedEventArgs = extern struct {
     vtable: *const IMediaFailedRoutedEventArgs_Vtbl,
@@ -7445,6 +7525,10 @@ pub const PropertyMetadata = extern struct {
     vtable: *const IPropertyMetadata_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.PropertyMetadata";
     pub const NAME_W: [34]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 80, 114, 111, 112, 101, 114, 116, 121, 77, 101, 116, 97, 100, 97, 116, 97 };
+    pub const Factory = IPropertyMetadataFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
     pub const Statics = IPropertyMetadataStatics;
     pub fn statics() !win_core.Com(Statics.Vtbl) {
         return win_core.activationFactory(Statics.Vtbl, &Statics.IID, &NAME_W);
@@ -7482,11 +7566,19 @@ pub const ScalarTransition = extern struct {
     vtable: *const IScalarTransition_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.ScalarTransition";
     pub const NAME_W: [34]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 83, 99, 97, 108, 97, 114, 84, 114, 97, 110, 115, 105, 116, 105, 111, 110 };
+    pub const Factory = IScalarTransitionFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
 };
 pub const SetterBase = extern struct {
     vtable: *const ISetterBase_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.SetterBase";
     pub const NAME_W: [28]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 83, 101, 116, 116, 101, 114, 66, 97, 115, 101 };
+    pub const Factory = ISetterBaseFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
 };
 pub const Setter = extern struct {
     vtable: *const ISetter_Vtbl,
@@ -7590,6 +7682,10 @@ pub const UIElementWeakCollection = extern struct {
     vtable: *const anyopaque,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.UIElementWeakCollection";
     pub const NAME_W: [41]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 85, 73, 69, 108, 101, 109, 101, 110, 116, 87, 101, 97, 107, 67, 111, 108, 108, 101, 99, 116, 105, 111, 110 };
+    pub const Factory = IUIElementWeakCollectionFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
 };
 pub const UnhandledExceptionEventArgs = extern struct {
     vtable: *const IUnhandledExceptionEventArgs_Vtbl,
@@ -7600,6 +7696,10 @@ pub const Vector3Transition = extern struct {
     vtable: *const IVector3Transition_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Vector3Transition";
     pub const NAME_W: [35]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 86, 101, 99, 116, 111, 114, 51, 84, 114, 97, 110, 115, 105, 116, 105, 111, 110 };
+    pub const Factory = IVector3TransitionFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
 };
 pub const VisualState = extern struct {
     vtable: *const IVisualState_Vtbl,
@@ -7632,6 +7732,10 @@ pub const VisualStateManager = extern struct {
     vtable: *const IVisualStateManager_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.VisualStateManager";
     pub const NAME_W: [36]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 86, 105, 115, 117, 97, 108, 83, 116, 97, 116, 101, 77, 97, 110, 97, 103, 101, 114 };
+    pub const Factory = IVisualStateManagerFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
     pub const Statics = IVisualStateManagerStatics;
     pub fn statics() !win_core.Com(Statics.Vtbl) {
         return win_core.activationFactory(Statics.Vtbl, &Statics.IID, &NAME_W);
@@ -7641,11 +7745,19 @@ pub const VisualTransition = extern struct {
     vtable: *const IVisualTransition_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.VisualTransition";
     pub const NAME_W: [34]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 86, 105, 115, 117, 97, 108, 84, 114, 97, 110, 115, 105, 116, 105, 111, 110 };
+    pub const Factory = IVisualTransitionFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
 };
 pub const Window = extern struct {
     vtable: *const IWindow_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.Window";
     pub const NAME_W: [24]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 87, 105, 110, 100, 111, 119 };
+    pub const Factory = IWindowFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
     pub const Statics = IWindowStatics;
     pub fn statics() !win_core.Com(Statics.Vtbl) {
         return win_core.activationFactory(Statics.Vtbl, &Statics.IID, &NAME_W);
@@ -7675,6 +7787,10 @@ pub const XamlIsland = extern struct {
     vtable: *const IXamlIsland_Vtbl,
     pub const NAME: []const u8 = "Microsoft.UI.Xaml.XamlIsland";
     pub const NAME_W: [28]u16 = .{ 77, 105, 99, 114, 111, 115, 111, 102, 116, 46, 85, 73, 46, 88, 97, 109, 108, 46, 88, 97, 109, 108, 73, 115, 108, 97, 110, 100 };
+    pub const Factory = IXamlIslandFactory;
+    pub fn factory() !win_core.Com(Factory.Vtbl) {
+        return win_core.activationFactory(Factory.Vtbl, &Factory.IID, &NAME_W);
+    }
 };
 pub const XamlResourceReferenceFailedEventArgs = extern struct {
     vtable: *const IXamlResourceReferenceFailedEventArgs_Vtbl,
