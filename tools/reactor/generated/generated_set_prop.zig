@@ -14,6 +14,20 @@ pub const Error = win_core.hresult.Error || error{
     InterfaceCastFailed,
     ValueKindMismatch,
 };
+const AttachedDependencyObject = struct {
+    const IID: win_core.GUID = .{
+        .data1 = 0xE7BEAEE7,
+        .data2 = 0x160E,
+        .data3 = 0x50F7,
+        .data4 = .{ 0x87, 0x89, 0xD6, 0x34, 0x63, 0xF9, 0x79, 0xFA },
+    };
+    const Vtbl = extern struct {
+        base: win_core.IInspectable_Vtbl,
+        GetValue: *const fn (this: *anyopaque, property: *@"Microsoft.UI.Xaml".DependencyProperty, result: *?*const anyopaque) callconv(.winapi) win_core.HRESULT,
+        SetValue: *const fn (this: *anyopaque, property: *@"Microsoft.UI.Xaml".DependencyProperty, value: ?*const anyopaque) callconv(.winapi) win_core.HRESULT,
+        ClearValue: *const fn (this: *anyopaque, property: *@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) win_core.HRESULT,
+    };
+};
 pub const SetterValue = union(enum) {
     string: []const u16,
     string_list: *const anyopaque,
@@ -26,6 +40,7 @@ pub const SetterValue = union(enum) {
 };
 
 pub const SetterFn = *const fn (widget: *anyopaque, value: SetterValue) Error!void;
+pub const ClearFn = *const fn (widget: *anyopaque) Error!void;
 
 pub const PropertySetter = struct {
     widget_class: []const u8,
@@ -36,6 +51,7 @@ pub const PropertySetter = struct {
     value_kind: ValueKind,
     setter_kind: SetterKind,
     apply: SetterFn,
+    clear: ?ClearFn,
 };
 pub fn setMicrosoftUIXamlControlsBorderChild(widget: *@"Microsoft.UI.Xaml.Controls".Border, value: *@"Microsoft.UI.Xaml".UIElement) Error!void {
     const target: *const @"Microsoft.UI.Xaml.Controls".IBorder = @ptrCast(widget);
@@ -48,6 +64,150 @@ fn applyMicrosoftUIXamlControlsBorderChild(widget: *anyopaque, value: SetterValu
         else => return error.ValueKindMismatch,
     };
     try setMicrosoftUIXamlControlsBorderChild(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsBorderGridColumn(widget: *@"Microsoft.UI.Xaml.Controls".Border, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetColumn(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsBorderGridColumn(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsBorderGridColumn(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsBorderGridColumn(widget: *@"Microsoft.UI.Xaml.Controls".Border) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ColumnProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsBorderGridColumn(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsBorderGridColumn(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsBorderGridColumnSpan(widget: *@"Microsoft.UI.Xaml.Controls".Border, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetColumnSpan(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsBorderGridColumnSpan(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsBorderGridColumnSpan(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsBorderGridColumnSpan(widget: *@"Microsoft.UI.Xaml.Controls".Border) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ColumnSpanProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsBorderGridColumnSpan(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsBorderGridColumnSpan(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsBorderGridRow(widget: *@"Microsoft.UI.Xaml.Controls".Border, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetRow(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsBorderGridRow(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsBorderGridRow(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsBorderGridRow(widget: *@"Microsoft.UI.Xaml.Controls".Border) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_RowProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsBorderGridRow(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsBorderGridRow(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsBorderGridRowSpan(widget: *@"Microsoft.UI.Xaml.Controls".Border, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetRowSpan(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsBorderGridRowSpan(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsBorderGridRowSpan(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsBorderGridRowSpan(widget: *@"Microsoft.UI.Xaml.Controls".Border) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_RowSpanProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsBorderGridRowSpan(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsBorderGridRowSpan(@ptrCast(@alignCast(widget)));
 }
 
 pub fn setMicrosoftUIXamlControlsButtonContent(widget: *@"Microsoft.UI.Xaml.Controls".Button, value: []const u16) Error!void {
@@ -69,6 +229,150 @@ fn applyMicrosoftUIXamlControlsButtonContent(widget: *anyopaque, value: SetterVa
     try setMicrosoftUIXamlControlsButtonContent(@ptrCast(@alignCast(widget)), typed_value);
 }
 
+pub fn setMicrosoftUIXamlControlsButtonGridColumn(widget: *@"Microsoft.UI.Xaml.Controls".Button, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetColumn(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsButtonGridColumn(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsButtonGridColumn(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsButtonGridColumn(widget: *@"Microsoft.UI.Xaml.Controls".Button) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ColumnProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsButtonGridColumn(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsButtonGridColumn(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsButtonGridColumnSpan(widget: *@"Microsoft.UI.Xaml.Controls".Button, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetColumnSpan(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsButtonGridColumnSpan(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsButtonGridColumnSpan(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsButtonGridColumnSpan(widget: *@"Microsoft.UI.Xaml.Controls".Button) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ColumnSpanProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsButtonGridColumnSpan(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsButtonGridColumnSpan(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsButtonGridRow(widget: *@"Microsoft.UI.Xaml.Controls".Button, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetRow(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsButtonGridRow(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsButtonGridRow(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsButtonGridRow(widget: *@"Microsoft.UI.Xaml.Controls".Button) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_RowProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsButtonGridRow(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsButtonGridRow(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsButtonGridRowSpan(widget: *@"Microsoft.UI.Xaml.Controls".Button, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetRowSpan(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsButtonGridRowSpan(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsButtonGridRowSpan(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsButtonGridRowSpan(widget: *@"Microsoft.UI.Xaml.Controls".Button) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_RowSpanProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsButtonGridRowSpan(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsButtonGridRowSpan(@ptrCast(@alignCast(widget)));
+}
+
 pub fn setMicrosoftUIXamlControlsButtonLeft(widget: *@"Microsoft.UI.Xaml.Controls".Button, value: f64) Error!void {
     const widget_object = win_core.IInspectable.from(@ptrCast(widget));
     const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
@@ -86,6 +390,23 @@ fn applyMicrosoftUIXamlControlsButtonLeft(widget: *anyopaque, value: SetterValue
         else => return error.ValueKindMismatch,
     };
     try setMicrosoftUIXamlControlsButtonLeft(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsButtonLeft(widget: *@"Microsoft.UI.Xaml.Controls".Button) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_LeftProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsButtonLeft(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsButtonLeft(@ptrCast(@alignCast(widget)));
 }
 
 pub fn setMicrosoftUIXamlControlsButtonTop(widget: *@"Microsoft.UI.Xaml.Controls".Button, value: f64) Error!void {
@@ -107,6 +428,23 @@ fn applyMicrosoftUIXamlControlsButtonTop(widget: *anyopaque, value: SetterValue)
     try setMicrosoftUIXamlControlsButtonTop(@ptrCast(@alignCast(widget)), typed_value);
 }
 
+pub fn clearMicrosoftUIXamlControlsButtonTop(widget: *@"Microsoft.UI.Xaml.Controls".Button) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_TopProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsButtonTop(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsButtonTop(@ptrCast(@alignCast(widget)));
+}
+
 pub fn setMicrosoftUIXamlControlsButtonZIndex(widget: *@"Microsoft.UI.Xaml.Controls".Button, value: i32) Error!void {
     const widget_object = win_core.IInspectable.from(@ptrCast(widget));
     const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
@@ -124,6 +462,167 @@ fn applyMicrosoftUIXamlControlsButtonZIndex(widget: *anyopaque, value: SetterVal
         else => return error.ValueKindMismatch,
     };
     try setMicrosoftUIXamlControlsButtonZIndex(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsButtonZIndex(widget: *@"Microsoft.UI.Xaml.Controls".Button) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ZIndexProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsButtonZIndex(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsButtonZIndex(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsCanvasGridColumn(widget: *@"Microsoft.UI.Xaml.Controls".Canvas, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetColumn(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsCanvasGridColumn(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsCanvasGridColumn(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsCanvasGridColumn(widget: *@"Microsoft.UI.Xaml.Controls".Canvas) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ColumnProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsCanvasGridColumn(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsCanvasGridColumn(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsCanvasGridColumnSpan(widget: *@"Microsoft.UI.Xaml.Controls".Canvas, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetColumnSpan(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsCanvasGridColumnSpan(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsCanvasGridColumnSpan(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsCanvasGridColumnSpan(widget: *@"Microsoft.UI.Xaml.Controls".Canvas) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ColumnSpanProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsCanvasGridColumnSpan(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsCanvasGridColumnSpan(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsCanvasGridRow(widget: *@"Microsoft.UI.Xaml.Controls".Canvas, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetRow(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsCanvasGridRow(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsCanvasGridRow(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsCanvasGridRow(widget: *@"Microsoft.UI.Xaml.Controls".Canvas) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_RowProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsCanvasGridRow(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsCanvasGridRow(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsCanvasGridRowSpan(widget: *@"Microsoft.UI.Xaml.Controls".Canvas, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetRowSpan(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsCanvasGridRowSpan(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsCanvasGridRowSpan(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsCanvasGridRowSpan(widget: *@"Microsoft.UI.Xaml.Controls".Canvas) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_RowSpanProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsCanvasGridRowSpan(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsCanvasGridRowSpan(@ptrCast(@alignCast(widget)));
 }
 
 pub fn setMicrosoftUIXamlControlsCanvasLeft(widget: *@"Microsoft.UI.Xaml.Controls".Canvas, value: f64) Error!void {
@@ -145,6 +644,23 @@ fn applyMicrosoftUIXamlControlsCanvasLeft(widget: *anyopaque, value: SetterValue
     try setMicrosoftUIXamlControlsCanvasLeft(@ptrCast(@alignCast(widget)), typed_value);
 }
 
+pub fn clearMicrosoftUIXamlControlsCanvasLeft(widget: *@"Microsoft.UI.Xaml.Controls".Canvas) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_LeftProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsCanvasLeft(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsCanvasLeft(@ptrCast(@alignCast(widget)));
+}
+
 pub fn setMicrosoftUIXamlControlsCanvasTop(widget: *@"Microsoft.UI.Xaml.Controls".Canvas, value: f64) Error!void {
     const widget_object = win_core.IInspectable.from(@ptrCast(widget));
     const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
@@ -164,6 +680,23 @@ fn applyMicrosoftUIXamlControlsCanvasTop(widget: *anyopaque, value: SetterValue)
     try setMicrosoftUIXamlControlsCanvasTop(@ptrCast(@alignCast(widget)), typed_value);
 }
 
+pub fn clearMicrosoftUIXamlControlsCanvasTop(widget: *@"Microsoft.UI.Xaml.Controls".Canvas) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_TopProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsCanvasTop(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsCanvasTop(@ptrCast(@alignCast(widget)));
+}
+
 pub fn setMicrosoftUIXamlControlsCanvasZIndex(widget: *@"Microsoft.UI.Xaml.Controls".Canvas, value: i32) Error!void {
     const widget_object = win_core.IInspectable.from(@ptrCast(widget));
     const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
@@ -181,6 +714,23 @@ fn applyMicrosoftUIXamlControlsCanvasZIndex(widget: *anyopaque, value: SetterVal
         else => return error.ValueKindMismatch,
     };
     try setMicrosoftUIXamlControlsCanvasZIndex(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsCanvasZIndex(widget: *@"Microsoft.UI.Xaml.Controls".Canvas) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ZIndexProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsCanvasZIndex(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsCanvasZIndex(@ptrCast(@alignCast(widget)));
 }
 
 pub fn setMicrosoftUIXamlControlsCheckBoxContent(widget: *@"Microsoft.UI.Xaml.Controls".CheckBox, value: []const u16) Error!void {
@@ -333,6 +883,294 @@ fn applyMicrosoftUIXamlControlsFlyoutContent(widget: *anyopaque, value: SetterVa
     try setMicrosoftUIXamlControlsFlyoutContent(@ptrCast(@alignCast(widget)), typed_value);
 }
 
+pub fn setMicrosoftUIXamlControlsGridGridColumn(widget: *@"Microsoft.UI.Xaml.Controls".Grid, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetColumn(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsGridGridColumn(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsGridGridColumn(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsGridGridColumn(widget: *@"Microsoft.UI.Xaml.Controls".Grid) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ColumnProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsGridGridColumn(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsGridGridColumn(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsGridGridColumnSpan(widget: *@"Microsoft.UI.Xaml.Controls".Grid, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetColumnSpan(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsGridGridColumnSpan(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsGridGridColumnSpan(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsGridGridColumnSpan(widget: *@"Microsoft.UI.Xaml.Controls".Grid) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ColumnSpanProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsGridGridColumnSpan(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsGridGridColumnSpan(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsGridGridRow(widget: *@"Microsoft.UI.Xaml.Controls".Grid, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetRow(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsGridGridRow(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsGridGridRow(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsGridGridRow(widget: *@"Microsoft.UI.Xaml.Controls".Grid) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_RowProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsGridGridRow(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsGridGridRow(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsGridGridRowSpan(widget: *@"Microsoft.UI.Xaml.Controls".Grid, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetRowSpan(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsGridGridRowSpan(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsGridGridRowSpan(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsGridGridRowSpan(widget: *@"Microsoft.UI.Xaml.Controls".Grid) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_RowSpanProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsGridGridRowSpan(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsGridGridRowSpan(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsItemsRepeaterGridColumn(widget: *@"Microsoft.UI.Xaml.Controls".ItemsRepeater, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetColumn(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsItemsRepeaterGridColumn(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsItemsRepeaterGridColumn(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsItemsRepeaterGridColumn(widget: *@"Microsoft.UI.Xaml.Controls".ItemsRepeater) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ColumnProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsItemsRepeaterGridColumn(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsItemsRepeaterGridColumn(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsItemsRepeaterGridColumnSpan(widget: *@"Microsoft.UI.Xaml.Controls".ItemsRepeater, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetColumnSpan(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsItemsRepeaterGridColumnSpan(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsItemsRepeaterGridColumnSpan(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsItemsRepeaterGridColumnSpan(widget: *@"Microsoft.UI.Xaml.Controls".ItemsRepeater) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ColumnSpanProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsItemsRepeaterGridColumnSpan(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsItemsRepeaterGridColumnSpan(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsItemsRepeaterGridRow(widget: *@"Microsoft.UI.Xaml.Controls".ItemsRepeater, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetRow(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsItemsRepeaterGridRow(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsItemsRepeaterGridRow(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsItemsRepeaterGridRow(widget: *@"Microsoft.UI.Xaml.Controls".ItemsRepeater) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_RowProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsItemsRepeaterGridRow(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsItemsRepeaterGridRow(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsItemsRepeaterGridRowSpan(widget: *@"Microsoft.UI.Xaml.Controls".ItemsRepeater, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetRowSpan(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsItemsRepeaterGridRowSpan(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsItemsRepeaterGridRowSpan(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsItemsRepeaterGridRowSpan(widget: *@"Microsoft.UI.Xaml.Controls".ItemsRepeater) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_RowSpanProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsItemsRepeaterGridRowSpan(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsItemsRepeaterGridRowSpan(@ptrCast(@alignCast(widget)));
+}
+
 pub fn setMicrosoftUIXamlControlsItemsRepeaterItemsSource(widget: *@"Microsoft.UI.Xaml.Controls".ItemsRepeater, value: ?*const anyopaque) Error!void {
     const target: *const @"Microsoft.UI.Xaml.Controls".IItemsRepeater = @ptrCast(widget);
     try win_core.hresult.ok(target.put_ItemsSource(value));
@@ -344,6 +1182,150 @@ fn applyMicrosoftUIXamlControlsItemsRepeaterItemsSource(widget: *anyopaque, valu
         else => return error.ValueKindMismatch,
     };
     try setMicrosoftUIXamlControlsItemsRepeaterItemsSource(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn setMicrosoftUIXamlControlsListViewGridColumn(widget: *@"Microsoft.UI.Xaml.Controls".ListView, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetColumn(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsListViewGridColumn(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsListViewGridColumn(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsListViewGridColumn(widget: *@"Microsoft.UI.Xaml.Controls".ListView) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ColumnProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsListViewGridColumn(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsListViewGridColumn(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsListViewGridColumnSpan(widget: *@"Microsoft.UI.Xaml.Controls".ListView, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetColumnSpan(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsListViewGridColumnSpan(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsListViewGridColumnSpan(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsListViewGridColumnSpan(widget: *@"Microsoft.UI.Xaml.Controls".ListView) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ColumnSpanProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsListViewGridColumnSpan(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsListViewGridColumnSpan(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsListViewGridRow(widget: *@"Microsoft.UI.Xaml.Controls".ListView, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetRow(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsListViewGridRow(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsListViewGridRow(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsListViewGridRow(widget: *@"Microsoft.UI.Xaml.Controls".ListView) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_RowProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsListViewGridRow(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsListViewGridRow(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsListViewGridRowSpan(widget: *@"Microsoft.UI.Xaml.Controls".ListView, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetRowSpan(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsListViewGridRowSpan(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsListViewGridRowSpan(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsListViewGridRowSpan(widget: *@"Microsoft.UI.Xaml.Controls".ListView) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_RowSpanProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsListViewGridRowSpan(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsListViewGridRowSpan(@ptrCast(@alignCast(widget)));
 }
 
 pub fn setMicrosoftUIXamlControlsListViewItemsSource(widget: *@"Microsoft.UI.Xaml.Controls".ListView, value: ?*const anyopaque) Error!void {
@@ -459,6 +1441,150 @@ fn applyMicrosoftUIXamlControlsScrollViewerContent(widget: *anyopaque, value: Se
     try setMicrosoftUIXamlControlsScrollViewerContent(@ptrCast(@alignCast(widget)), typed_value);
 }
 
+pub fn setMicrosoftUIXamlControlsScrollViewerGridColumn(widget: *@"Microsoft.UI.Xaml.Controls".ScrollViewer, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetColumn(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsScrollViewerGridColumn(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsScrollViewerGridColumn(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsScrollViewerGridColumn(widget: *@"Microsoft.UI.Xaml.Controls".ScrollViewer) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ColumnProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsScrollViewerGridColumn(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsScrollViewerGridColumn(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsScrollViewerGridColumnSpan(widget: *@"Microsoft.UI.Xaml.Controls".ScrollViewer, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetColumnSpan(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsScrollViewerGridColumnSpan(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsScrollViewerGridColumnSpan(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsScrollViewerGridColumnSpan(widget: *@"Microsoft.UI.Xaml.Controls".ScrollViewer) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ColumnSpanProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsScrollViewerGridColumnSpan(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsScrollViewerGridColumnSpan(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsScrollViewerGridRow(widget: *@"Microsoft.UI.Xaml.Controls".ScrollViewer, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetRow(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsScrollViewerGridRow(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsScrollViewerGridRow(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsScrollViewerGridRow(widget: *@"Microsoft.UI.Xaml.Controls".ScrollViewer) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_RowProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsScrollViewerGridRow(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsScrollViewerGridRow(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsScrollViewerGridRowSpan(widget: *@"Microsoft.UI.Xaml.Controls".ScrollViewer, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetRowSpan(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsScrollViewerGridRowSpan(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsScrollViewerGridRowSpan(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsScrollViewerGridRowSpan(widget: *@"Microsoft.UI.Xaml.Controls".ScrollViewer) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_RowSpanProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsScrollViewerGridRowSpan(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsScrollViewerGridRowSpan(@ptrCast(@alignCast(widget)));
+}
+
 pub fn setMicrosoftUIXamlControlsSliderMaximum(widget: *@"Microsoft.UI.Xaml.Controls".Slider, value: f64) Error!void {
     const default_iface: *const @"Microsoft.UI.Xaml.Controls".ISlider = @ptrCast(widget);
     const target = default_iface.cast(@"Microsoft.UI.Xaml.Controls.Primitives".IRangeBase) orelse return error.InterfaceCastFailed;
@@ -504,6 +1630,150 @@ fn applyMicrosoftUIXamlControlsSliderValue(widget: *anyopaque, value: SetterValu
     try setMicrosoftUIXamlControlsSliderValue(@ptrCast(@alignCast(widget)), typed_value);
 }
 
+pub fn setMicrosoftUIXamlControlsStackPanelGridColumn(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetColumn(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsStackPanelGridColumn(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsStackPanelGridColumn(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsStackPanelGridColumn(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ColumnProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsStackPanelGridColumn(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsStackPanelGridColumn(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsStackPanelGridColumnSpan(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetColumnSpan(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsStackPanelGridColumnSpan(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsStackPanelGridColumnSpan(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsStackPanelGridColumnSpan(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ColumnSpanProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsStackPanelGridColumnSpan(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsStackPanelGridColumnSpan(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsStackPanelGridRow(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetRow(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsStackPanelGridRow(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsStackPanelGridRow(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsStackPanelGridRow(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_RowProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsStackPanelGridRow(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsStackPanelGridRow(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsStackPanelGridRowSpan(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetRowSpan(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsStackPanelGridRowSpan(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsStackPanelGridRowSpan(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsStackPanelGridRowSpan(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_RowSpanProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsStackPanelGridRowSpan(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsStackPanelGridRowSpan(@ptrCast(@alignCast(widget)));
+}
+
 pub fn setMicrosoftUIXamlControlsStackPanelLeft(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel, value: f64) Error!void {
     const widget_object = win_core.IInspectable.from(@ptrCast(widget));
     const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
@@ -521,6 +1791,23 @@ fn applyMicrosoftUIXamlControlsStackPanelLeft(widget: *anyopaque, value: SetterV
         else => return error.ValueKindMismatch,
     };
     try setMicrosoftUIXamlControlsStackPanelLeft(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsStackPanelLeft(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_LeftProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsStackPanelLeft(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsStackPanelLeft(@ptrCast(@alignCast(widget)));
 }
 
 pub fn setMicrosoftUIXamlControlsStackPanelOrientation(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel, value: i32) Error!void {
@@ -568,6 +1855,23 @@ fn applyMicrosoftUIXamlControlsStackPanelTop(widget: *anyopaque, value: SetterVa
     try setMicrosoftUIXamlControlsStackPanelTop(@ptrCast(@alignCast(widget)), typed_value);
 }
 
+pub fn clearMicrosoftUIXamlControlsStackPanelTop(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_TopProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsStackPanelTop(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsStackPanelTop(@ptrCast(@alignCast(widget)));
+}
+
 pub fn setMicrosoftUIXamlControlsStackPanelZIndex(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel, value: i32) Error!void {
     const widget_object = win_core.IInspectable.from(@ptrCast(widget));
     const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
@@ -587,6 +1891,167 @@ fn applyMicrosoftUIXamlControlsStackPanelZIndex(widget: *anyopaque, value: Sette
     try setMicrosoftUIXamlControlsStackPanelZIndex(@ptrCast(@alignCast(widget)), typed_value);
 }
 
+pub fn clearMicrosoftUIXamlControlsStackPanelZIndex(widget: *@"Microsoft.UI.Xaml.Controls".StackPanel) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ZIndexProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsStackPanelZIndex(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsStackPanelZIndex(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsTextBlockGridColumn(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetColumn(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsTextBlockGridColumn(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsTextBlockGridColumn(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsTextBlockGridColumn(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ColumnProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsTextBlockGridColumn(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsTextBlockGridColumn(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsTextBlockGridColumnSpan(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetColumnSpan(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsTextBlockGridColumnSpan(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsTextBlockGridColumnSpan(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsTextBlockGridColumnSpan(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ColumnSpanProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsTextBlockGridColumnSpan(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsTextBlockGridColumnSpan(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsTextBlockGridRow(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetRow(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsTextBlockGridRow(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsTextBlockGridRow(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsTextBlockGridRow(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_RowProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsTextBlockGridRow(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsTextBlockGridRow(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsTextBlockGridRowSpan(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetRowSpan(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsTextBlockGridRowSpan(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsTextBlockGridRowSpan(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsTextBlockGridRowSpan(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_RowSpanProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsTextBlockGridRowSpan(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsTextBlockGridRowSpan(@ptrCast(@alignCast(widget)));
+}
+
 pub fn setMicrosoftUIXamlControlsTextBlockLeft(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock, value: f64) Error!void {
     const widget_object = win_core.IInspectable.from(@ptrCast(widget));
     const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
@@ -604,6 +2069,23 @@ fn applyMicrosoftUIXamlControlsTextBlockLeft(widget: *anyopaque, value: SetterVa
         else => return error.ValueKindMismatch,
     };
     try setMicrosoftUIXamlControlsTextBlockLeft(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsTextBlockLeft(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_LeftProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsTextBlockLeft(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsTextBlockLeft(@ptrCast(@alignCast(widget)));
 }
 
 pub fn setMicrosoftUIXamlControlsTextBlockText(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock, value: []const u16) Error!void {
@@ -638,6 +2120,23 @@ fn applyMicrosoftUIXamlControlsTextBlockTop(widget: *anyopaque, value: SetterVal
     try setMicrosoftUIXamlControlsTextBlockTop(@ptrCast(@alignCast(widget)), typed_value);
 }
 
+pub fn clearMicrosoftUIXamlControlsTextBlockTop(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_TopProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsTextBlockTop(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsTextBlockTop(@ptrCast(@alignCast(widget)));
+}
+
 pub fn setMicrosoftUIXamlControlsTextBlockZIndex(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock, value: i32) Error!void {
     const widget_object = win_core.IInspectable.from(@ptrCast(widget));
     const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
@@ -657,6 +2156,167 @@ fn applyMicrosoftUIXamlControlsTextBlockZIndex(widget: *anyopaque, value: Setter
     try setMicrosoftUIXamlControlsTextBlockZIndex(@ptrCast(@alignCast(widget)), typed_value);
 }
 
+pub fn clearMicrosoftUIXamlControlsTextBlockZIndex(widget: *@"Microsoft.UI.Xaml.Controls".TextBlock) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ZIndexProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsTextBlockZIndex(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsTextBlockZIndex(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsTextBoxGridColumn(widget: *@"Microsoft.UI.Xaml.Controls".TextBox, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetColumn(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsTextBoxGridColumn(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsTextBoxGridColumn(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsTextBoxGridColumn(widget: *@"Microsoft.UI.Xaml.Controls".TextBox) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ColumnProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsTextBoxGridColumn(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsTextBoxGridColumn(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsTextBoxGridColumnSpan(widget: *@"Microsoft.UI.Xaml.Controls".TextBox, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetColumnSpan(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsTextBoxGridColumnSpan(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsTextBoxGridColumnSpan(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsTextBoxGridColumnSpan(widget: *@"Microsoft.UI.Xaml.Controls".TextBox) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ColumnSpanProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsTextBoxGridColumnSpan(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsTextBoxGridColumnSpan(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsTextBoxGridRow(widget: *@"Microsoft.UI.Xaml.Controls".TextBox, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetRow(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsTextBoxGridRow(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsTextBoxGridRow(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsTextBoxGridRow(widget: *@"Microsoft.UI.Xaml.Controls".TextBox) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_RowProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsTextBoxGridRow(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsTextBoxGridRow(@ptrCast(@alignCast(widget)));
+}
+
+pub fn setMicrosoftUIXamlControlsTextBoxGridRowSpan(widget: *@"Microsoft.UI.Xaml.Controls".TextBox, value: i32) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IFrameworkElement_Vtbl, &@"Microsoft.UI.Xaml".IFrameworkElement.IID);
+    defer target.deinit();
+    const target_iface: *@"Microsoft.UI.Xaml".FrameworkElement = @ptrCast(@alignCast(target.ptr));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    try win_core.hresult.ok(owner.SetRowSpan(target_iface, value));
+}
+
+fn applyMicrosoftUIXamlControlsTextBoxGridRowSpan(widget: *anyopaque, value: SetterValue) Error!void {
+    const typed_value = switch (value) {
+        .i32 => |v| v,
+        else => return error.ValueKindMismatch,
+    };
+    try setMicrosoftUIXamlControlsTextBoxGridRowSpan(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsTextBoxGridRowSpan(widget: *@"Microsoft.UI.Xaml.Controls".TextBox) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Grid.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".IGridStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_RowSpanProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsTextBoxGridRowSpan(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsTextBoxGridRowSpan(@ptrCast(@alignCast(widget)));
+}
+
 pub fn setMicrosoftUIXamlControlsTextBoxLeft(widget: *@"Microsoft.UI.Xaml.Controls".TextBox, value: f64) Error!void {
     const widget_object = win_core.IInspectable.from(@ptrCast(widget));
     const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
@@ -674,6 +2334,23 @@ fn applyMicrosoftUIXamlControlsTextBoxLeft(widget: *anyopaque, value: SetterValu
         else => return error.ValueKindMismatch,
     };
     try setMicrosoftUIXamlControlsTextBoxLeft(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsTextBoxLeft(widget: *@"Microsoft.UI.Xaml.Controls".TextBox) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_LeftProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsTextBoxLeft(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsTextBoxLeft(@ptrCast(@alignCast(widget)));
 }
 
 pub fn setMicrosoftUIXamlControlsTextBoxText(widget: *@"Microsoft.UI.Xaml.Controls".TextBox, value: []const u16) Error!void {
@@ -708,6 +2385,23 @@ fn applyMicrosoftUIXamlControlsTextBoxTop(widget: *anyopaque, value: SetterValue
     try setMicrosoftUIXamlControlsTextBoxTop(@ptrCast(@alignCast(widget)), typed_value);
 }
 
+pub fn clearMicrosoftUIXamlControlsTextBoxTop(widget: *@"Microsoft.UI.Xaml.Controls".TextBox) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_TopProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsTextBoxTop(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsTextBoxTop(@ptrCast(@alignCast(widget)));
+}
+
 pub fn setMicrosoftUIXamlControlsTextBoxZIndex(widget: *@"Microsoft.UI.Xaml.Controls".TextBox, value: i32) Error!void {
     const widget_object = win_core.IInspectable.from(@ptrCast(widget));
     const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
@@ -725,6 +2419,23 @@ fn applyMicrosoftUIXamlControlsTextBoxZIndex(widget: *anyopaque, value: SetterVa
         else => return error.ValueKindMismatch,
     };
     try setMicrosoftUIXamlControlsTextBoxZIndex(@ptrCast(@alignCast(widget)), typed_value);
+}
+
+pub fn clearMicrosoftUIXamlControlsTextBoxZIndex(widget: *@"Microsoft.UI.Xaml.Controls".TextBox) Error!void {
+    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
+    var statics = try @"Microsoft.UI.Xaml.Controls".Canvas.statics();
+    defer statics.deinit();
+    const owner: *const @"Microsoft.UI.Xaml.Controls".ICanvasStatics = @ptrCast(@alignCast(statics.ptr));
+    var dependency_property: ?*@"Microsoft.UI.Xaml".DependencyProperty = null;
+    try win_core.hresult.ok(owner.vtable.get_ZIndexProperty(owner, @ptrCast(&dependency_property)));
+    const property = dependency_property orelse return error.InterfaceCastFailed;
+    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);
+    defer dependency_object.deinit();
+    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));
+}
+
+fn clearErasedMicrosoftUIXamlControlsTextBoxZIndex(widget: *anyopaque) Error!void {
+    try clearMicrosoftUIXamlControlsTextBoxZIndex(@ptrCast(@alignCast(widget)));
 }
 
 pub fn setMicrosoftUIXamlControlsToggleSwitchIsOn(widget: *@"Microsoft.UI.Xaml.Controls".ToggleSwitch, value: bool) Error!void {
@@ -763,6 +2474,51 @@ pub const entries = [_]PropertySetter{
         .value_kind = .element,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsBorderChild,
+        .clear = null,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Border",
+        .widget_name = "Border",
+        .handle_name = "Border",
+        .property_name = "Grid.Column",
+        .field_name = "grid_column",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsBorderGridColumn,
+        .clear = clearErasedMicrosoftUIXamlControlsBorderGridColumn,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Border",
+        .widget_name = "Border",
+        .handle_name = "Border",
+        .property_name = "Grid.ColumnSpan",
+        .field_name = "grid_column_span",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsBorderGridColumnSpan,
+        .clear = clearErasedMicrosoftUIXamlControlsBorderGridColumnSpan,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Border",
+        .widget_name = "Border",
+        .handle_name = "Border",
+        .property_name = "Grid.Row",
+        .field_name = "grid_row",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsBorderGridRow,
+        .clear = clearErasedMicrosoftUIXamlControlsBorderGridRow,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Border",
+        .widget_name = "Border",
+        .handle_name = "Border",
+        .property_name = "Grid.RowSpan",
+        .field_name = "grid_row_span",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsBorderGridRowSpan,
+        .clear = clearErasedMicrosoftUIXamlControlsBorderGridRowSpan,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.Button",
@@ -773,6 +2529,51 @@ pub const entries = [_]PropertySetter{
         .value_kind = .string,
         .setter_kind = .text_block,
         .apply = applyMicrosoftUIXamlControlsButtonContent,
+        .clear = null,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Button",
+        .widget_name = "Button",
+        .handle_name = "Button",
+        .property_name = "Grid.Column",
+        .field_name = "grid_column",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsButtonGridColumn,
+        .clear = clearErasedMicrosoftUIXamlControlsButtonGridColumn,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Button",
+        .widget_name = "Button",
+        .handle_name = "Button",
+        .property_name = "Grid.ColumnSpan",
+        .field_name = "grid_column_span",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsButtonGridColumnSpan,
+        .clear = clearErasedMicrosoftUIXamlControlsButtonGridColumnSpan,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Button",
+        .widget_name = "Button",
+        .handle_name = "Button",
+        .property_name = "Grid.Row",
+        .field_name = "grid_row",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsButtonGridRow,
+        .clear = clearErasedMicrosoftUIXamlControlsButtonGridRow,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Button",
+        .widget_name = "Button",
+        .handle_name = "Button",
+        .property_name = "Grid.RowSpan",
+        .field_name = "grid_row_span",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsButtonGridRowSpan,
+        .clear = clearErasedMicrosoftUIXamlControlsButtonGridRowSpan,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.Button",
@@ -783,6 +2584,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .f64,
         .setter_kind = .attached,
         .apply = applyMicrosoftUIXamlControlsButtonLeft,
+        .clear = clearErasedMicrosoftUIXamlControlsButtonLeft,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.Button",
@@ -793,6 +2595,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .f64,
         .setter_kind = .attached,
         .apply = applyMicrosoftUIXamlControlsButtonTop,
+        .clear = clearErasedMicrosoftUIXamlControlsButtonTop,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.Button",
@@ -803,6 +2606,51 @@ pub const entries = [_]PropertySetter{
         .value_kind = .i32,
         .setter_kind = .attached,
         .apply = applyMicrosoftUIXamlControlsButtonZIndex,
+        .clear = clearErasedMicrosoftUIXamlControlsButtonZIndex,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Canvas",
+        .widget_name = "Canvas",
+        .handle_name = "Canvas",
+        .property_name = "Grid.Column",
+        .field_name = "grid_column",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsCanvasGridColumn,
+        .clear = clearErasedMicrosoftUIXamlControlsCanvasGridColumn,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Canvas",
+        .widget_name = "Canvas",
+        .handle_name = "Canvas",
+        .property_name = "Grid.ColumnSpan",
+        .field_name = "grid_column_span",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsCanvasGridColumnSpan,
+        .clear = clearErasedMicrosoftUIXamlControlsCanvasGridColumnSpan,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Canvas",
+        .widget_name = "Canvas",
+        .handle_name = "Canvas",
+        .property_name = "Grid.Row",
+        .field_name = "grid_row",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsCanvasGridRow,
+        .clear = clearErasedMicrosoftUIXamlControlsCanvasGridRow,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Canvas",
+        .widget_name = "Canvas",
+        .handle_name = "Canvas",
+        .property_name = "Grid.RowSpan",
+        .field_name = "grid_row_span",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsCanvasGridRowSpan,
+        .clear = clearErasedMicrosoftUIXamlControlsCanvasGridRowSpan,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.Canvas",
@@ -813,6 +2661,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .f64,
         .setter_kind = .attached,
         .apply = applyMicrosoftUIXamlControlsCanvasLeft,
+        .clear = clearErasedMicrosoftUIXamlControlsCanvasLeft,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.Canvas",
@@ -823,6 +2672,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .f64,
         .setter_kind = .attached,
         .apply = applyMicrosoftUIXamlControlsCanvasTop,
+        .clear = clearErasedMicrosoftUIXamlControlsCanvasTop,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.Canvas",
@@ -833,6 +2683,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .i32,
         .setter_kind = .attached,
         .apply = applyMicrosoftUIXamlControlsCanvasZIndex,
+        .clear = clearErasedMicrosoftUIXamlControlsCanvasZIndex,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.CheckBox",
@@ -843,6 +2694,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .string,
         .setter_kind = .text_block,
         .apply = applyMicrosoftUIXamlControlsCheckBoxContent,
+        .clear = null,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.CheckBox",
@@ -853,6 +2705,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .bool,
         .setter_kind = .boxed_reference,
         .apply = applyMicrosoftUIXamlControlsCheckBoxIsChecked,
+        .clear = null,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.ComboBox",
@@ -863,6 +2716,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .string_list,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsComboBoxItemsSource,
+        .clear = null,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.ComboBox",
@@ -873,6 +2727,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .i32,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsComboBoxSelectedIndex,
+        .clear = null,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.ContentDialog",
@@ -883,6 +2738,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .string,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsContentDialogCloseButtonText,
+        .clear = null,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.ContentDialog",
@@ -893,6 +2749,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .element,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsContentDialogContent,
+        .clear = null,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.ContentDialog",
@@ -903,6 +2760,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .string,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsContentDialogPrimaryButtonText,
+        .clear = null,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.ContentDialog",
@@ -913,6 +2771,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .string,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsContentDialogSecondaryButtonText,
+        .clear = null,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.ContentDialog",
@@ -923,6 +2782,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .string,
         .setter_kind = .text_block,
         .apply = applyMicrosoftUIXamlControlsContentDialogTitle,
+        .clear = null,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.Flyout",
@@ -933,6 +2793,95 @@ pub const entries = [_]PropertySetter{
         .value_kind = .element,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsFlyoutContent,
+        .clear = null,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Grid",
+        .widget_name = "Grid",
+        .handle_name = "Grid",
+        .property_name = "Grid.Column",
+        .field_name = "grid_column",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsGridGridColumn,
+        .clear = clearErasedMicrosoftUIXamlControlsGridGridColumn,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Grid",
+        .widget_name = "Grid",
+        .handle_name = "Grid",
+        .property_name = "Grid.ColumnSpan",
+        .field_name = "grid_column_span",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsGridGridColumnSpan,
+        .clear = clearErasedMicrosoftUIXamlControlsGridGridColumnSpan,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Grid",
+        .widget_name = "Grid",
+        .handle_name = "Grid",
+        .property_name = "Grid.Row",
+        .field_name = "grid_row",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsGridGridRow,
+        .clear = clearErasedMicrosoftUIXamlControlsGridGridRow,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.Grid",
+        .widget_name = "Grid",
+        .handle_name = "Grid",
+        .property_name = "Grid.RowSpan",
+        .field_name = "grid_row_span",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsGridGridRowSpan,
+        .clear = clearErasedMicrosoftUIXamlControlsGridGridRowSpan,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ItemsRepeater",
+        .widget_name = "ItemsRepeater",
+        .handle_name = "ItemsRepeater",
+        .property_name = "Grid.Column",
+        .field_name = "grid_column",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsItemsRepeaterGridColumn,
+        .clear = clearErasedMicrosoftUIXamlControlsItemsRepeaterGridColumn,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ItemsRepeater",
+        .widget_name = "ItemsRepeater",
+        .handle_name = "ItemsRepeater",
+        .property_name = "Grid.ColumnSpan",
+        .field_name = "grid_column_span",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsItemsRepeaterGridColumnSpan,
+        .clear = clearErasedMicrosoftUIXamlControlsItemsRepeaterGridColumnSpan,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ItemsRepeater",
+        .widget_name = "ItemsRepeater",
+        .handle_name = "ItemsRepeater",
+        .property_name = "Grid.Row",
+        .field_name = "grid_row",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsItemsRepeaterGridRow,
+        .clear = clearErasedMicrosoftUIXamlControlsItemsRepeaterGridRow,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ItemsRepeater",
+        .widget_name = "ItemsRepeater",
+        .handle_name = "ItemsRepeater",
+        .property_name = "Grid.RowSpan",
+        .field_name = "grid_row_span",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsItemsRepeaterGridRowSpan,
+        .clear = clearErasedMicrosoftUIXamlControlsItemsRepeaterGridRowSpan,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.ItemsRepeater",
@@ -943,6 +2892,51 @@ pub const entries = [_]PropertySetter{
         .value_kind = .object,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsItemsRepeaterItemsSource,
+        .clear = null,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ListView",
+        .widget_name = "ListView",
+        .handle_name = "ListView",
+        .property_name = "Grid.Column",
+        .field_name = "grid_column",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsListViewGridColumn,
+        .clear = clearErasedMicrosoftUIXamlControlsListViewGridColumn,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ListView",
+        .widget_name = "ListView",
+        .handle_name = "ListView",
+        .property_name = "Grid.ColumnSpan",
+        .field_name = "grid_column_span",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsListViewGridColumnSpan,
+        .clear = clearErasedMicrosoftUIXamlControlsListViewGridColumnSpan,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ListView",
+        .widget_name = "ListView",
+        .handle_name = "ListView",
+        .property_name = "Grid.Row",
+        .field_name = "grid_row",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsListViewGridRow,
+        .clear = clearErasedMicrosoftUIXamlControlsListViewGridRow,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ListView",
+        .widget_name = "ListView",
+        .handle_name = "ListView",
+        .property_name = "Grid.RowSpan",
+        .field_name = "grid_row_span",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsListViewGridRowSpan,
+        .clear = clearErasedMicrosoftUIXamlControlsListViewGridRowSpan,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.ListView",
@@ -953,6 +2947,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .object,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsListViewItemsSource,
+        .clear = null,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.MenuBarItem",
@@ -963,6 +2958,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .string,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsMenuBarItemTitle,
+        .clear = null,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.NavigationView",
@@ -973,6 +2969,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .element,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsNavigationViewContent,
+        .clear = null,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.NavigationViewItem",
@@ -983,6 +2980,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .string,
         .setter_kind = .text_block,
         .apply = applyMicrosoftUIXamlControlsNavigationViewItemContent,
+        .clear = null,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.RadioButton",
@@ -993,6 +2991,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .string,
         .setter_kind = .text_block,
         .apply = applyMicrosoftUIXamlControlsRadioButtonContent,
+        .clear = null,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.RadioButton",
@@ -1003,6 +3002,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .bool,
         .setter_kind = .boxed_reference,
         .apply = applyMicrosoftUIXamlControlsRadioButtonIsChecked,
+        .clear = null,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.ScrollViewer",
@@ -1013,6 +3013,51 @@ pub const entries = [_]PropertySetter{
         .value_kind = .element,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsScrollViewerContent,
+        .clear = null,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ScrollViewer",
+        .widget_name = "ScrollViewer",
+        .handle_name = "ScrollViewer",
+        .property_name = "Grid.Column",
+        .field_name = "grid_column",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsScrollViewerGridColumn,
+        .clear = clearErasedMicrosoftUIXamlControlsScrollViewerGridColumn,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ScrollViewer",
+        .widget_name = "ScrollViewer",
+        .handle_name = "ScrollViewer",
+        .property_name = "Grid.ColumnSpan",
+        .field_name = "grid_column_span",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsScrollViewerGridColumnSpan,
+        .clear = clearErasedMicrosoftUIXamlControlsScrollViewerGridColumnSpan,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ScrollViewer",
+        .widget_name = "ScrollViewer",
+        .handle_name = "ScrollViewer",
+        .property_name = "Grid.Row",
+        .field_name = "grid_row",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsScrollViewerGridRow,
+        .clear = clearErasedMicrosoftUIXamlControlsScrollViewerGridRow,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.ScrollViewer",
+        .widget_name = "ScrollViewer",
+        .handle_name = "ScrollViewer",
+        .property_name = "Grid.RowSpan",
+        .field_name = "grid_row_span",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsScrollViewerGridRowSpan,
+        .clear = clearErasedMicrosoftUIXamlControlsScrollViewerGridRowSpan,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.Slider",
@@ -1023,6 +3068,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .f64,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsSliderMaximum,
+        .clear = null,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.Slider",
@@ -1033,6 +3079,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .f64,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsSliderMinimum,
+        .clear = null,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.Slider",
@@ -1043,6 +3090,51 @@ pub const entries = [_]PropertySetter{
         .value_kind = .f64,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsSliderValue,
+        .clear = null,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.StackPanel",
+        .widget_name = "StackPanel",
+        .handle_name = "StackPanel",
+        .property_name = "Grid.Column",
+        .field_name = "grid_column",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsStackPanelGridColumn,
+        .clear = clearErasedMicrosoftUIXamlControlsStackPanelGridColumn,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.StackPanel",
+        .widget_name = "StackPanel",
+        .handle_name = "StackPanel",
+        .property_name = "Grid.ColumnSpan",
+        .field_name = "grid_column_span",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsStackPanelGridColumnSpan,
+        .clear = clearErasedMicrosoftUIXamlControlsStackPanelGridColumnSpan,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.StackPanel",
+        .widget_name = "StackPanel",
+        .handle_name = "StackPanel",
+        .property_name = "Grid.Row",
+        .field_name = "grid_row",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsStackPanelGridRow,
+        .clear = clearErasedMicrosoftUIXamlControlsStackPanelGridRow,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.StackPanel",
+        .widget_name = "StackPanel",
+        .handle_name = "StackPanel",
+        .property_name = "Grid.RowSpan",
+        .field_name = "grid_row_span",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsStackPanelGridRowSpan,
+        .clear = clearErasedMicrosoftUIXamlControlsStackPanelGridRowSpan,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.StackPanel",
@@ -1053,6 +3145,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .f64,
         .setter_kind = .attached,
         .apply = applyMicrosoftUIXamlControlsStackPanelLeft,
+        .clear = clearErasedMicrosoftUIXamlControlsStackPanelLeft,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.StackPanel",
@@ -1063,6 +3156,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .enum_i32,
         .setter_kind = .enum_i32,
         .apply = applyMicrosoftUIXamlControlsStackPanelOrientation,
+        .clear = null,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.StackPanel",
@@ -1073,6 +3167,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .f64,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsStackPanelSpacing,
+        .clear = null,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.StackPanel",
@@ -1083,6 +3178,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .f64,
         .setter_kind = .attached,
         .apply = applyMicrosoftUIXamlControlsStackPanelTop,
+        .clear = clearErasedMicrosoftUIXamlControlsStackPanelTop,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.StackPanel",
@@ -1093,6 +3189,51 @@ pub const entries = [_]PropertySetter{
         .value_kind = .i32,
         .setter_kind = .attached,
         .apply = applyMicrosoftUIXamlControlsStackPanelZIndex,
+        .clear = clearErasedMicrosoftUIXamlControlsStackPanelZIndex,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.TextBlock",
+        .widget_name = "TextBlock",
+        .handle_name = "TextBlock",
+        .property_name = "Grid.Column",
+        .field_name = "grid_column",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsTextBlockGridColumn,
+        .clear = clearErasedMicrosoftUIXamlControlsTextBlockGridColumn,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.TextBlock",
+        .widget_name = "TextBlock",
+        .handle_name = "TextBlock",
+        .property_name = "Grid.ColumnSpan",
+        .field_name = "grid_column_span",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsTextBlockGridColumnSpan,
+        .clear = clearErasedMicrosoftUIXamlControlsTextBlockGridColumnSpan,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.TextBlock",
+        .widget_name = "TextBlock",
+        .handle_name = "TextBlock",
+        .property_name = "Grid.Row",
+        .field_name = "grid_row",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsTextBlockGridRow,
+        .clear = clearErasedMicrosoftUIXamlControlsTextBlockGridRow,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.TextBlock",
+        .widget_name = "TextBlock",
+        .handle_name = "TextBlock",
+        .property_name = "Grid.RowSpan",
+        .field_name = "grid_row_span",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsTextBlockGridRowSpan,
+        .clear = clearErasedMicrosoftUIXamlControlsTextBlockGridRowSpan,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.TextBlock",
@@ -1103,6 +3244,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .f64,
         .setter_kind = .attached,
         .apply = applyMicrosoftUIXamlControlsTextBlockLeft,
+        .clear = clearErasedMicrosoftUIXamlControlsTextBlockLeft,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.TextBlock",
@@ -1113,6 +3255,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .string,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsTextBlockText,
+        .clear = null,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.TextBlock",
@@ -1123,6 +3266,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .f64,
         .setter_kind = .attached,
         .apply = applyMicrosoftUIXamlControlsTextBlockTop,
+        .clear = clearErasedMicrosoftUIXamlControlsTextBlockTop,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.TextBlock",
@@ -1133,6 +3277,51 @@ pub const entries = [_]PropertySetter{
         .value_kind = .i32,
         .setter_kind = .attached,
         .apply = applyMicrosoftUIXamlControlsTextBlockZIndex,
+        .clear = clearErasedMicrosoftUIXamlControlsTextBlockZIndex,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.TextBox",
+        .widget_name = "TextBox",
+        .handle_name = "TextBox",
+        .property_name = "Grid.Column",
+        .field_name = "grid_column",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsTextBoxGridColumn,
+        .clear = clearErasedMicrosoftUIXamlControlsTextBoxGridColumn,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.TextBox",
+        .widget_name = "TextBox",
+        .handle_name = "TextBox",
+        .property_name = "Grid.ColumnSpan",
+        .field_name = "grid_column_span",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsTextBoxGridColumnSpan,
+        .clear = clearErasedMicrosoftUIXamlControlsTextBoxGridColumnSpan,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.TextBox",
+        .widget_name = "TextBox",
+        .handle_name = "TextBox",
+        .property_name = "Grid.Row",
+        .field_name = "grid_row",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsTextBoxGridRow,
+        .clear = clearErasedMicrosoftUIXamlControlsTextBoxGridRow,
+    },
+    .{
+        .widget_class = "Microsoft.UI.Xaml.Controls.TextBox",
+        .widget_name = "TextBox",
+        .handle_name = "TextBox",
+        .property_name = "Grid.RowSpan",
+        .field_name = "grid_row_span",
+        .value_kind = .i32,
+        .setter_kind = .attached,
+        .apply = applyMicrosoftUIXamlControlsTextBoxGridRowSpan,
+        .clear = clearErasedMicrosoftUIXamlControlsTextBoxGridRowSpan,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.TextBox",
@@ -1143,6 +3332,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .f64,
         .setter_kind = .attached,
         .apply = applyMicrosoftUIXamlControlsTextBoxLeft,
+        .clear = clearErasedMicrosoftUIXamlControlsTextBoxLeft,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.TextBox",
@@ -1153,6 +3343,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .string,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsTextBoxText,
+        .clear = null,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.TextBox",
@@ -1163,6 +3354,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .f64,
         .setter_kind = .attached,
         .apply = applyMicrosoftUIXamlControlsTextBoxTop,
+        .clear = clearErasedMicrosoftUIXamlControlsTextBoxTop,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.TextBox",
@@ -1173,6 +3365,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .i32,
         .setter_kind = .attached,
         .apply = applyMicrosoftUIXamlControlsTextBoxZIndex,
+        .clear = clearErasedMicrosoftUIXamlControlsTextBoxZIndex,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Controls.ToggleSwitch",
@@ -1183,6 +3376,7 @@ pub const entries = [_]PropertySetter{
         .value_kind = .bool,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlControlsToggleSwitchIsOn,
+        .clear = null,
     },
     .{
         .widget_class = "Microsoft.UI.Xaml.Window",
@@ -1193,54 +3387,95 @@ pub const entries = [_]PropertySetter{
         .value_kind = .string,
         .setter_kind = .direct,
         .apply = applyMicrosoftUIXamlWindowTitle,
+        .clear = null,
     },
 };
 
 pub const by_widget_prop = std.StaticStringMap(usize).initComptime(.{
     .{ "Microsoft.UI.Xaml.Controls.Border#Child", 0 },
-    .{ "Microsoft.UI.Xaml.Controls.Button#Content", 1 },
-    .{ "Microsoft.UI.Xaml.Controls.Button#Left", 2 },
-    .{ "Microsoft.UI.Xaml.Controls.Button#Top", 3 },
-    .{ "Microsoft.UI.Xaml.Controls.Button#ZIndex", 4 },
-    .{ "Microsoft.UI.Xaml.Controls.Canvas#Left", 5 },
-    .{ "Microsoft.UI.Xaml.Controls.Canvas#Top", 6 },
-    .{ "Microsoft.UI.Xaml.Controls.Canvas#ZIndex", 7 },
-    .{ "Microsoft.UI.Xaml.Controls.CheckBox#Content", 8 },
-    .{ "Microsoft.UI.Xaml.Controls.CheckBox#IsChecked", 9 },
-    .{ "Microsoft.UI.Xaml.Controls.ComboBox#ItemsSource", 10 },
-    .{ "Microsoft.UI.Xaml.Controls.ComboBox#SelectedIndex", 11 },
-    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#CloseButtonText", 12 },
-    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#Content", 13 },
-    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#PrimaryButtonText", 14 },
-    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#SecondaryButtonText", 15 },
-    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#Title", 16 },
-    .{ "Microsoft.UI.Xaml.Controls.Flyout#Content", 17 },
-    .{ "Microsoft.UI.Xaml.Controls.ItemsRepeater#ItemsSource", 18 },
-    .{ "Microsoft.UI.Xaml.Controls.ListView#ItemsSource", 19 },
-    .{ "Microsoft.UI.Xaml.Controls.MenuBarItem#Title", 20 },
-    .{ "Microsoft.UI.Xaml.Controls.NavigationView#Content", 21 },
-    .{ "Microsoft.UI.Xaml.Controls.NavigationViewItem#Content", 22 },
-    .{ "Microsoft.UI.Xaml.Controls.RadioButton#Content", 23 },
-    .{ "Microsoft.UI.Xaml.Controls.RadioButton#IsChecked", 24 },
-    .{ "Microsoft.UI.Xaml.Controls.ScrollViewer#Content", 25 },
-    .{ "Microsoft.UI.Xaml.Controls.Slider#Maximum", 26 },
-    .{ "Microsoft.UI.Xaml.Controls.Slider#Minimum", 27 },
-    .{ "Microsoft.UI.Xaml.Controls.Slider#Value", 28 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Left", 29 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Orientation", 30 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Spacing", 31 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Top", 32 },
-    .{ "Microsoft.UI.Xaml.Controls.StackPanel#ZIndex", 33 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Left", 34 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Text", 35 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Top", 36 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBlock#ZIndex", 37 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#Left", 38 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#Text", 39 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#Top", 40 },
-    .{ "Microsoft.UI.Xaml.Controls.TextBox#ZIndex", 41 },
-    .{ "Microsoft.UI.Xaml.Controls.ToggleSwitch#IsOn", 42 },
-    .{ "Microsoft.UI.Xaml.Window#Title", 43 },
+    .{ "Microsoft.UI.Xaml.Controls.Border#Grid.Column", 1 },
+    .{ "Microsoft.UI.Xaml.Controls.Border#Grid.ColumnSpan", 2 },
+    .{ "Microsoft.UI.Xaml.Controls.Border#Grid.Row", 3 },
+    .{ "Microsoft.UI.Xaml.Controls.Border#Grid.RowSpan", 4 },
+    .{ "Microsoft.UI.Xaml.Controls.Button#Content", 5 },
+    .{ "Microsoft.UI.Xaml.Controls.Button#Grid.Column", 6 },
+    .{ "Microsoft.UI.Xaml.Controls.Button#Grid.ColumnSpan", 7 },
+    .{ "Microsoft.UI.Xaml.Controls.Button#Grid.Row", 8 },
+    .{ "Microsoft.UI.Xaml.Controls.Button#Grid.RowSpan", 9 },
+    .{ "Microsoft.UI.Xaml.Controls.Button#Left", 10 },
+    .{ "Microsoft.UI.Xaml.Controls.Button#Top", 11 },
+    .{ "Microsoft.UI.Xaml.Controls.Button#ZIndex", 12 },
+    .{ "Microsoft.UI.Xaml.Controls.Canvas#Grid.Column", 13 },
+    .{ "Microsoft.UI.Xaml.Controls.Canvas#Grid.ColumnSpan", 14 },
+    .{ "Microsoft.UI.Xaml.Controls.Canvas#Grid.Row", 15 },
+    .{ "Microsoft.UI.Xaml.Controls.Canvas#Grid.RowSpan", 16 },
+    .{ "Microsoft.UI.Xaml.Controls.Canvas#Left", 17 },
+    .{ "Microsoft.UI.Xaml.Controls.Canvas#Top", 18 },
+    .{ "Microsoft.UI.Xaml.Controls.Canvas#ZIndex", 19 },
+    .{ "Microsoft.UI.Xaml.Controls.CheckBox#Content", 20 },
+    .{ "Microsoft.UI.Xaml.Controls.CheckBox#IsChecked", 21 },
+    .{ "Microsoft.UI.Xaml.Controls.ComboBox#ItemsSource", 22 },
+    .{ "Microsoft.UI.Xaml.Controls.ComboBox#SelectedIndex", 23 },
+    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#CloseButtonText", 24 },
+    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#Content", 25 },
+    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#PrimaryButtonText", 26 },
+    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#SecondaryButtonText", 27 },
+    .{ "Microsoft.UI.Xaml.Controls.ContentDialog#Title", 28 },
+    .{ "Microsoft.UI.Xaml.Controls.Flyout#Content", 29 },
+    .{ "Microsoft.UI.Xaml.Controls.Grid#Grid.Column", 30 },
+    .{ "Microsoft.UI.Xaml.Controls.Grid#Grid.ColumnSpan", 31 },
+    .{ "Microsoft.UI.Xaml.Controls.Grid#Grid.Row", 32 },
+    .{ "Microsoft.UI.Xaml.Controls.Grid#Grid.RowSpan", 33 },
+    .{ "Microsoft.UI.Xaml.Controls.ItemsRepeater#Grid.Column", 34 },
+    .{ "Microsoft.UI.Xaml.Controls.ItemsRepeater#Grid.ColumnSpan", 35 },
+    .{ "Microsoft.UI.Xaml.Controls.ItemsRepeater#Grid.Row", 36 },
+    .{ "Microsoft.UI.Xaml.Controls.ItemsRepeater#Grid.RowSpan", 37 },
+    .{ "Microsoft.UI.Xaml.Controls.ItemsRepeater#ItemsSource", 38 },
+    .{ "Microsoft.UI.Xaml.Controls.ListView#Grid.Column", 39 },
+    .{ "Microsoft.UI.Xaml.Controls.ListView#Grid.ColumnSpan", 40 },
+    .{ "Microsoft.UI.Xaml.Controls.ListView#Grid.Row", 41 },
+    .{ "Microsoft.UI.Xaml.Controls.ListView#Grid.RowSpan", 42 },
+    .{ "Microsoft.UI.Xaml.Controls.ListView#ItemsSource", 43 },
+    .{ "Microsoft.UI.Xaml.Controls.MenuBarItem#Title", 44 },
+    .{ "Microsoft.UI.Xaml.Controls.NavigationView#Content", 45 },
+    .{ "Microsoft.UI.Xaml.Controls.NavigationViewItem#Content", 46 },
+    .{ "Microsoft.UI.Xaml.Controls.RadioButton#Content", 47 },
+    .{ "Microsoft.UI.Xaml.Controls.RadioButton#IsChecked", 48 },
+    .{ "Microsoft.UI.Xaml.Controls.ScrollViewer#Content", 49 },
+    .{ "Microsoft.UI.Xaml.Controls.ScrollViewer#Grid.Column", 50 },
+    .{ "Microsoft.UI.Xaml.Controls.ScrollViewer#Grid.ColumnSpan", 51 },
+    .{ "Microsoft.UI.Xaml.Controls.ScrollViewer#Grid.Row", 52 },
+    .{ "Microsoft.UI.Xaml.Controls.ScrollViewer#Grid.RowSpan", 53 },
+    .{ "Microsoft.UI.Xaml.Controls.Slider#Maximum", 54 },
+    .{ "Microsoft.UI.Xaml.Controls.Slider#Minimum", 55 },
+    .{ "Microsoft.UI.Xaml.Controls.Slider#Value", 56 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Grid.Column", 57 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Grid.ColumnSpan", 58 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Grid.Row", 59 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Grid.RowSpan", 60 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Left", 61 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Orientation", 62 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Spacing", 63 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#Top", 64 },
+    .{ "Microsoft.UI.Xaml.Controls.StackPanel#ZIndex", 65 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Grid.Column", 66 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Grid.ColumnSpan", 67 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Grid.Row", 68 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Grid.RowSpan", 69 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Left", 70 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Text", 71 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#Top", 72 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBlock#ZIndex", 73 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#Grid.Column", 74 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#Grid.ColumnSpan", 75 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#Grid.Row", 76 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#Grid.RowSpan", 77 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#Left", 78 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#Text", 79 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#Top", 80 },
+    .{ "Microsoft.UI.Xaml.Controls.TextBox#ZIndex", 81 },
+    .{ "Microsoft.UI.Xaml.Controls.ToggleSwitch#IsOn", 82 },
+    .{ "Microsoft.UI.Xaml.Window#Title", 83 },
 });
 
 pub fn find(widget_class: []const u8, property_name: []const u8) ?*const PropertySetter {
@@ -1253,5 +3488,12 @@ pub fn find(widget_class: []const u8, property_name: []const u8) ?*const Propert
 pub fn dispatch(widget_class: []const u8, property_name: []const u8, widget: *anyopaque, value: SetterValue) Error!bool {
     const entry = find(widget_class, property_name) orelse return false;
     try entry.apply(widget, value);
+    return true;
+}
+
+pub fn dispatchClear(widget_class: []const u8, property_name: []const u8, widget: *anyopaque) Error!bool {
+    const entry = find(widget_class, property_name) orelse return false;
+    const clear = entry.clear orelse return false;
+    try clear(widget);
     return true;
 }

@@ -244,7 +244,7 @@ test "production manifest covers the committed widget set" {
     try std.testing.expect(text_block_left.setter.? == .attached);
 
     const text_box = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.TextBox") orelse return error.TestUnexpectedResult;
-    try std.testing.expectEqual(@as(usize, 4), text_box.props.len);
+    try std.testing.expectEqual(@as(usize, 8), text_box.props.len);
     try std.testing.expectEqual(@as(usize, 4), text_box.events.len);
     const text_box_text = findProp(text_box, "Text") orelse return error.TestUnexpectedResult;
     try std.testing.expect(text_box_text.value.? == .string);
@@ -330,6 +330,16 @@ test "production manifest covers the committed widget set" {
     try std.testing.expect(row_definitions.manual);
     const column_definitions = findProp(grid, "ColumnDefinitions") orelse return error.TestUnexpectedResult;
     try std.testing.expect(column_definitions.manual);
+    const grid_row = findProp(grid, "Grid.Row") orelse return error.TestUnexpectedResult;
+    try std.testing.expectEqualStrings("Row", grid_row.winrt_name);
+    try std.testing.expectEqualStrings("grid_row", grid_row.field);
+    try std.testing.expect(grid_row.setter.? == .attached);
+    try std.testing.expectEqualStrings("Microsoft.UI.Xaml.Controls.Grid", grid_row.attached.?.owner);
+    try std.testing.expectEqualStrings("SetRow", grid_row.attached.?.setter);
+    const grid_column_span = findProp(grid, "Grid.ColumnSpan") orelse return error.TestUnexpectedResult;
+    try std.testing.expectEqualStrings("ColumnSpan", grid_column_span.winrt_name);
+    try std.testing.expectEqualStrings("grid_column_span", grid_column_span.field);
+    try std.testing.expect(grid_column_span.value.? == .i32);
 
     const scroll_viewer = findWidget(manifest.widgets, "Microsoft.UI.Xaml.Controls.ScrollViewer") orelse return error.TestUnexpectedResult;
     const content_prop = findProp(scroll_viewer, "Content") orelse return error.TestUnexpectedResult;
@@ -447,4 +457,34 @@ test "loader derives defaults and preserves advanced overrides" {
         .paired_bool => |name| try std.testing.expectEqualStrings("Unchecked", name),
         else => return error.TestUnexpectedResult,
     }
+}
+
+test "loader preserves owner-qualified attached property overrides" {
+    const fixture = .{
+        .@"Microsoft.UI.Xaml.Controls.Button" = .{
+            .props = .{
+                .@"Grid.Row" = schema.PropInit{
+                    .winrt_name = "Row",
+                    .field = "grid_row",
+                    .value = .i32,
+                    .attached = .{
+                        .owner = "Microsoft.UI.Xaml.Controls.Grid",
+                        .setter = "SetRow",
+                    },
+                },
+            },
+        },
+    };
+
+    var loaded = try loadFromRaw(std.testing.allocator, fixture);
+    defer loaded.deinit();
+
+    const widget = findWidget(loaded.widgets, "Microsoft.UI.Xaml.Controls.Button") orelse return error.TestUnexpectedResult;
+    const row = findProp(widget, "Grid.Row") orelse return error.TestUnexpectedResult;
+    try std.testing.expectEqualStrings("Grid.Row", row.name);
+    try std.testing.expectEqualStrings("Row", row.winrt_name);
+    try std.testing.expectEqualStrings("grid_row", row.field);
+    try std.testing.expect(row.setter.? == .attached);
+    try std.testing.expectEqualStrings("Microsoft.UI.Xaml.Controls.Grid", row.attached.?.owner);
+    try std.testing.expectEqualStrings("SetRow", row.attached.?.setter);
 }

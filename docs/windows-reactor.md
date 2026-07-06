@@ -87,14 +87,16 @@ fn renderRoot(cx: *reactor.RenderCx) reactor.ElementError!reactor.Element {
    Examples: `window`, `button_builder`, `grid_builder`,
    `text_block_builder`, `content_dialog_builder`.
 
-Use raw builders when you need extra manifest-backed props or events such as
-`"Grid.Row"`, `"Grid.Column"`, pointer events, or widget refs.
+Use raw builders when you need extra manifest-backed props or events, typed
+attached properties such as `reactor.Grid.row(0)`, pointer events, or widget
+refs.
 
 All builders share the same core methods:
 
 ```zig
 builder.withKey("stable-key")
 builder.prop("Name", value)
+builder.attached(reactor.Grid.row(0))
 builder.on("EventName", callback)
 builder.child(&child)
 builder.childrenFrom(.{ &a, &b, &c })
@@ -568,35 +570,40 @@ or `useFlyout(...)`.
 
 ### Grid layout
 
-`grid` only sets track definitions. Child placement is still done on the child
-builder:
+`grid` only sets track definitions. Child placement is done on the child
+builder with typed attached-property helpers:
 
 ```zig
 var cell = reactor.button_builder(allocator);
 defer cell.deinit();
 _ = try cell.prop("Content", "A1");
-_ = try (try cell.prop("Grid.Row", @as(i32, 0)))
-    .prop("Grid.Column", @as(i32, 0));
+_ = try (try cell.attached(reactor.Grid.row(0)))
+    .attached(reactor.Grid.column(0));
 ```
 
-Supported attached grid props today:
+Supported attached grid helpers today:
 
-- `"Grid.Row"`
-- `"Grid.Column"`
-- `"Grid.RowSpan"`
-- `"Grid.ColumnSpan"`
+- `reactor.Grid.row(...)`
+- `reactor.Grid.column(...)`
+- `reactor.Grid.row_span(...)`
+- `reactor.Grid.column_span(...)`
+
+Raw `.prop("Grid.Row", value)` / `.prop("Grid.Column", value)` remain valid as
+an escape hatch when you need string-based property access.
 
 ### Canvas positioning
 
-Canvas positioning is attached-property based, but the Zig helper surface uses
-the short property names:
+Canvas positioning is attached-property based. You can either use the typed
+owner namespace directly or keep the convenience wrappers:
 
 ```zig
+_ = try (try builder.attached(reactor.Canvas.left(32)))
+    .attached(reactor.Canvas.top(64));
 _ = try reactor.canvas_position(&builder, 32, 64);
 _ = try reactor.canvas_position_z(&builder, 32, 64, 3);
 ```
 
-That writes:
+These lower to the same attached-property names:
 
 - `"Left"` → `Canvas.SetLeft`
 - `"Top"` → `Canvas.SetTop`

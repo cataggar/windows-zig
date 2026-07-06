@@ -1,5 +1,6 @@
 const std = @import("std");
 
+const attached_props = @import("reactor-generated-attached-props");
 const element = @import("element.zig");
 const widgets = @import("widgets.zig");
 const xaml = @import("Microsoft.UI.Xaml");
@@ -136,9 +137,9 @@ pub fn hstack_spaced(allocator: Allocator, spacing: f64, children: anytype) elem
     return stackPanel(allocator, controls.Orientation.Horizontal, spacing, children);
 }
 
-/// Grid child placement currently uses the raw builder escape hatch:
-/// attach `Grid.Row`, `Grid.Column`, `Grid.RowSpan`, or `Grid.ColumnSpan`
-/// via `.prop(...)` on the child widget builder.
+/// Grid child placement uses `builder.attached(...)` with the generated
+/// `reactor.Grid.*` helpers, while raw `.prop("Grid.Row", value)` remains
+/// available as an escape hatch.
 pub fn grid(allocator: Allocator, options: GridOptions, children: anytype) element.Error!element.Element {
     var builder = element.grid(allocator);
     defer builder.deinit();
@@ -256,6 +257,25 @@ test "grid helper stores manual row and column definitions" {
     try std.testing.expectEqual(rows, layout.widget.propertyValue(GridTracks, "RowDefinitions").?);
     try std.testing.expectEqual(columns, layout.widget.propertyValue(GridTracks, "ColumnDefinitions").?);
     try std.testing.expectEqual(@as(usize, 2), layout.widget.children.len);
+}
+
+test "grid attached helpers write owner-qualified property names" {
+    var builder = element.button(std.testing.allocator);
+    defer builder.deinit();
+
+    _ = try (try (try (try builder
+        .attached(attached_props.Grid.row(1)))
+        .attached(attached_props.Grid.column(2)))
+        .attached(attached_props.Grid.row_span(3)))
+        .attached(attached_props.Grid.column_span(4));
+
+    var positioned = try builder.build();
+    defer positioned.deinit(std.testing.allocator);
+
+    try std.testing.expectEqual(@as(i32, 1), positioned.widget.propertyValue(i32, "Grid.Row").?);
+    try std.testing.expectEqual(@as(i32, 2), positioned.widget.propertyValue(i32, "Grid.Column").?);
+    try std.testing.expectEqual(@as(i32, 3), positioned.widget.propertyValue(i32, "Grid.RowSpan").?);
+    try std.testing.expectEqual(@as(i32, 4), positioned.widget.propertyValue(i32, "Grid.ColumnSpan").?);
 }
 
 test "scroll viewer and border helpers create single-child layout widgets" {

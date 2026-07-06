@@ -32,6 +32,42 @@ const canvas_z_index = Prop{
         .setter = "SetZIndex",
     },
 };
+const grid_row = Prop{
+    .winrt_name = "Row",
+    .field = "grid_row",
+    .value = .i32,
+    .attached = .{
+        .owner = "Microsoft.UI.Xaml.Controls.Grid",
+        .setter = "SetRow",
+    },
+};
+const grid_column = Prop{
+    .winrt_name = "Column",
+    .field = "grid_column",
+    .value = .i32,
+    .attached = .{
+        .owner = "Microsoft.UI.Xaml.Controls.Grid",
+        .setter = "SetColumn",
+    },
+};
+const grid_row_span = Prop{
+    .winrt_name = "RowSpan",
+    .field = "grid_row_span",
+    .value = .i32,
+    .attached = .{
+        .owner = "Microsoft.UI.Xaml.Controls.Grid",
+        .setter = "SetRowSpan",
+    },
+};
+const grid_column_span = Prop{
+    .winrt_name = "ColumnSpan",
+    .field = "grid_column_span",
+    .value = .i32,
+    .attached = .{
+        .owner = "Microsoft.UI.Xaml.Controls.Grid",
+        .setter = "SetColumnSpan",
+    },
+};
 const pointer_pressed = Event{ .payload = .pointer };
 const pointer_moved = Event{ .payload = .pointer };
 const pointer_released = Event{ .payload = .pointer };
@@ -56,6 +92,10 @@ pub const raw_widgets = .{
             .Left = canvas_left,
             .Top = canvas_top,
             .ZIndex = canvas_z_index,
+            .@"Grid.Row" = grid_row,
+            .@"Grid.Column" = grid_column,
+            .@"Grid.RowSpan" = grid_row_span,
+            .@"Grid.ColumnSpan" = grid_column_span,
         },
         .events = .{
             .Click = Event{
@@ -72,6 +112,10 @@ pub const raw_widgets = .{
             .Left = canvas_left,
             .Top = canvas_top,
             .ZIndex = canvas_z_index,
+            .@"Grid.Row" = grid_row,
+            .@"Grid.Column" = grid_column,
+            .@"Grid.RowSpan" = grid_row_span,
+            .@"Grid.ColumnSpan" = grid_column_span,
         },
         .events = .{
             .PointerPressed = pointer_pressed,
@@ -91,6 +135,10 @@ pub const raw_widgets = .{
             .Left = canvas_left,
             .Top = canvas_top,
             .ZIndex = canvas_z_index,
+            .@"Grid.Row" = grid_row,
+            .@"Grid.Column" = grid_column,
+            .@"Grid.RowSpan" = grid_row_span,
+            .@"Grid.ColumnSpan" = grid_column_span,
         },
         .events = .{
             .PointerPressed = pointer_pressed,
@@ -107,6 +155,10 @@ pub const raw_widgets = .{
             .Left = canvas_left,
             .Top = canvas_top,
             .ZIndex = canvas_z_index,
+            .@"Grid.Row" = grid_row,
+            .@"Grid.Column" = grid_column,
+            .@"Grid.RowSpan" = grid_row_span,
+            .@"Grid.ColumnSpan" = grid_column_span,
         },
         .events = .{
             .PointerPressed = pointer_pressed,
@@ -123,6 +175,10 @@ pub const raw_widgets = .{
             .Left = canvas_left,
             .Top = canvas_top,
             .ZIndex = canvas_z_index,
+            .@"Grid.Row" = grid_row,
+            .@"Grid.Column" = grid_column,
+            .@"Grid.RowSpan" = grid_row_span,
+            .@"Grid.ColumnSpan" = grid_column_span,
         },
         .events = .{
             .PointerPressed = pointer_pressed,
@@ -241,6 +297,10 @@ pub const raw_widgets = .{
             .ColumnDefinitions = Prop{
                 .manual = true,
             },
+            .@"Grid.Row" = grid_row,
+            .@"Grid.Column" = grid_column,
+            .@"Grid.RowSpan" = grid_row_span,
+            .@"Grid.ColumnSpan" = grid_column_span,
         },
     },
 
@@ -249,6 +309,10 @@ pub const raw_widgets = .{
             .Content = Prop{
                 .value = .element,
             },
+            .@"Grid.Row" = grid_row,
+            .@"Grid.Column" = grid_column,
+            .@"Grid.RowSpan" = grid_row_span,
+            .@"Grid.ColumnSpan" = grid_column_span,
         },
     },
 
@@ -266,6 +330,10 @@ pub const raw_widgets = .{
             .Background = Prop{
                 .manual = true,
             },
+            .@"Grid.Row" = grid_row,
+            .@"Grid.Column" = grid_column,
+            .@"Grid.RowSpan" = grid_row_span,
+            .@"Grid.ColumnSpan" = grid_column_span,
         },
     },
 
@@ -330,6 +398,10 @@ pub const raw_widgets = .{
             .ItemsSource = Prop{
                 .value = .object,
             },
+            .@"Grid.Row" = grid_row,
+            .@"Grid.Column" = grid_column,
+            .@"Grid.RowSpan" = grid_row_span,
+            .@"Grid.ColumnSpan" = grid_column_span,
         },
         .events = .{
             .SelectionChanged = Event{
@@ -343,6 +415,10 @@ pub const raw_widgets = .{
             .ItemsSource = Prop{
                 .value = .object,
             },
+            .@"Grid.Row" = grid_row,
+            .@"Grid.Column" = grid_column,
+            .@"Grid.RowSpan" = grid_row_span,
+            .@"Grid.ColumnSpan" = grid_column_span,
         },
     },
 };

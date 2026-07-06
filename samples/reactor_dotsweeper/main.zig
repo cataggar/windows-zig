@@ -382,8 +382,8 @@ fn renderRoot(cx: *reactor.RenderCx) reactor.ElementError!reactor.Element {
         var builder = reactor.button_builder(allocator);
         defer builder.deinit();
         _ = try builder.prop("Content", cellLabel(&state.value.*.board, index));
-        _ = try (try builder.prop("Grid.Row", @as(i32, @intCast(index / column_count))))
-            .prop("Grid.Column", @as(i32, @intCast(index % column_count)));
+        _ = try (try builder.attached(reactor.Grid.row(@as(i32, @intCast(index / column_count)))))
+            .attached(reactor.Grid.column(@as(i32, @intCast(index % column_count))));
         _ = try builder.on(
             "Click",
             reactor.EventCallback.init(@ptrCast(&reveal[index]), RevealCapture.onClick),

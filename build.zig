@@ -276,6 +276,13 @@ pub fn build(b: *std.Build) void {
     reactor_generated_set_prop_mod.addImport("Microsoft.UI.Xaml.Controls.Primitives", reactor_winui_controls_primitives_mod);
     win_reactor_mod.addImport("reactor-generated-set-prop", reactor_generated_set_prop_mod);
 
+    const reactor_generated_attached_props_mod = b.addModule("reactor-generated-attached-props", .{
+        .root_source_file = b.path("tools/reactor/generated/generated_attached_props.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    win_reactor_mod.addImport("reactor-generated-attached-props", reactor_generated_attached_props_mod);
+
     const reactor_generated_attach_event_mod = b.addModule("reactor-generated-attach-event", .{
         .root_source_file = b.path("tools/reactor/generated/generated_attach_event.zig"),
         .target = target,
@@ -989,6 +996,10 @@ pub fn build(b: *std.Build) void {
     reactor_bindings_update.addCopyFileToSource(
         reactor_bindings_outdir.path(b, "generated_set_prop.zig"),
         "tools/reactor/generated/generated_set_prop.zig",
+    );
+    reactor_bindings_update.addCopyFileToSource(
+        reactor_bindings_outdir.path(b, "generated_attached_props.zig"),
+        "tools/reactor/generated/generated_attached_props.zig",
     );
     reactor_bindings_update.addCopyFileToSource(
         reactor_bindings_outdir.path(b, "generated_attach_event.zig"),
