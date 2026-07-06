@@ -20,7 +20,7 @@ reactor port.
 | Issue #2 / PR #50 | `zig build fetch-winui-metadata` can fetch the WinUI 3 metadata on demand and `winbindgen` can route `Microsoft.UI.*` namespaces to it. |
 | Issue #3 / PR #57 | A compile-only canary proved the minimal `Application` / `Window` / `Button` / `TextBlock` surface type-checks end-to-end. |
 | Issue #4 / PR #58 | A live `hello_window` sample opened a visible WinUI 3 window from Zig using Windows App Runtime bootstrap APIs. |
-| Follow-ups | Full checked-in WinUI namespace snapshots still hit the emitter gaps tracked in #52-#56, and shutdown currently leaks final WinUI refs to avoid a crash (#60). |
+| Follow-ups | Full checked-in WinUI namespace snapshots still hit the emitter gaps tracked in #52-#56, and `hello_window` teardown now relies on releasing the final WinUI refs before bootstrap/WinRT shutdown (#60). |
 
 ## Metadata source and version
 
@@ -161,9 +161,10 @@ bootstrap layer:
   returned `0x80070057` (`E_INVALIDARG`) in the minimal hand-copied surface, so
   the sample leaves wrapping at its default.
 - Explicitly releasing the final retained `Application` / `Window` / `Button` /
-  `TextBlock` refs after `Application.Start` returns crashes during XAML
-  teardown. The sample currently leaks those final refs on process exit; the
-  shutdown bug is tracked in [#60](https://github.com/cataggar/windows-zig/issues/60).
+  `TextBlock` refs is safe once `Application.Start` returns, but those
+  releases must happen before `MddBootstrapShutdown()` and `RoUninitialize()`.
+  `hello_window` now drops the retained refs in that window; the shutdown
+  ordering bug is tracked in [#60](https://github.com/cataggar/windows-zig/issues/60).
 
 ### Verification notes
 
@@ -195,8 +196,9 @@ The differences were mostly about maturity:
 - Rust's mature reactor stack does not rely on a hand-curated WinUI surface;
   Zig still does until #52-#56 are fixed.
 - The remaining surprises were runtime/lifetime quirks (`RPC_E_WRONG_THREAD`,
-  `E_INVALIDARG` on `TextWrapping`, teardown crash on final `Release`) rather
-  than evidence that the Rust bootstrap contract was hiding some extra step.
+  `E_INVALIDARG` on `TextWrapping`, and the need to release final WinUI refs
+  before bootstrap/WinRT teardown) rather than evidence that the Rust
+  bootstrap contract was hiding some extra step.
 
 ## Recommendation: go, but keep the scope narrow
 
