@@ -1,5 +1,5 @@
-//! Fetches the WinUI3 `.winmd` metadata from the `Microsoft.WindowsAppSDK.WinUI`
-//! NuGet package and stages it under `vendor/winmd/`.
+//! Fetches the WinUI3 `.winmd` metadata from the required Windows App SDK
+//! NuGet packages and stages it under `vendor/winmd/`.
 //!
 //! Unlike `Windows.winmd` / `Windows.Win32.winmd` / `Windows.Wdk.winmd` (which
 //! come from the MIT-licensed win32metadata project and are committed to
@@ -15,21 +15,12 @@
 //!   or directly:
 //!     fetch-winui-metadata [--out-dir <dir>]
 //!
-//! The download is verified against a pinned sha256 of the `.nupkg` before
+//! Each download is verified against a pinned sha256 of the `.nupkg` before
 //! extraction, so a compromised mirror/CDN can't silently substitute a
-//! different payload. Bump `package_version` and `expected_sha256` together
-//! when refreshing.
+//! different payload. Bump the corresponding `PackageSpec` version/checksum
+//! entries together when refreshing.
 
 const std = @import("std");
-
-const package_id = "microsoft.windowsappsdk.winui";
-const package_version = "2.2.1";
-const package_url = "https://api.nuget.org/v3-flatcontainer/" ++
-    package_id ++ "/" ++ package_version ++ "/" ++
-    package_id ++ "." ++ package_version ++ ".nupkg";
-
-/// sha256 of the `.nupkg` file itself (not its extracted contents).
-const expected_sha256 = "9ce50ddd6f2e2702f05f3575d8565651003e87b55d877fa4bff4369192dc5938";
 
 const WantedFile = struct {
     /// Path inside the .nupkg (zip) archive.
@@ -38,9 +29,40 @@ const WantedFile = struct {
     dest_name: []const u8,
 };
 
-const wanted_files = [_]WantedFile{
-    .{ .zip_path = "metadata/Microsoft.UI.Xaml.winmd", .dest_name = "Microsoft.UI.Xaml.winmd" },
-    .{ .zip_path = "metadata/Microsoft.UI.Text.winmd", .dest_name = "Microsoft.UI.Text.winmd" },
+const PackageSpec = struct {
+    package_id: []const u8,
+    package_version: []const u8,
+    /// sha256 of the `.nupkg` file itself (not its extracted contents).
+    expected_sha256: []const u8,
+    wanted_files: []const WantedFile,
+
+    fn url(self: PackageSpec, arena: std.mem.Allocator) ![]const u8 {
+        return std.fmt.allocPrint(
+            arena,
+            "https://api.nuget.org/v3-flatcontainer/{s}/{s}/{s}.{s}.nupkg",
+            .{ self.package_id, self.package_version, self.package_id, self.package_version },
+        );
+    }
+};
+
+const package_specs = [_]PackageSpec{
+    .{
+        .package_id = "microsoft.windowsappsdk.winui",
+        .package_version = "2.2.1",
+        .expected_sha256 = "9ce50ddd6f2e2702f05f3575d8565651003e87b55d877fa4bff4369192dc5938",
+        .wanted_files = &.{
+            .{ .zip_path = "metadata/Microsoft.UI.Xaml.winmd", .dest_name = "Microsoft.UI.Xaml.winmd" },
+            .{ .zip_path = "metadata/Microsoft.UI.Text.winmd", .dest_name = "Microsoft.UI.Text.winmd" },
+        },
+    },
+    .{
+        .package_id = "microsoft.windowsappsdk.interactiveexperiences",
+        .package_version = "2.0.15",
+        .expected_sha256 = "67dac7a22a66d1e9bf77a29d77028cffc2e22cb71d44e49e70cf7fac0ce6745d",
+        .wanted_files = &.{
+            .{ .zip_path = "metadata/10.0.18362.0/Microsoft.UI.winmd", .dest_name = "Microsoft.UI.winmd" },
+        },
+    },
 };
 
 const default_out_dir = "vendor/winmd";
@@ -96,43 +118,50 @@ pub fn main(init: std.process.Init) !void {
     try cwd.createDirPath(io, scratch_dir);
     defer cwd.deleteTree(io, scratch_dir) catch {};
 
-    const nupkg_name = "package.nupkg";
+    for (package_specs) |spec| {
+        if (try havePackageWantedFiles(io, out_dir, spec)) continue;
 
-    try stderr.print("Downloading {s}\n", .{package_url});
-    try stderr.flush();
+        const package_url = try spec.url(arena);
+        const package_scratch_dir = try std.fs.path.join(arena, &.{ scratch_dir, spec.package_id });
+        try cwd.createDirPath(io, package_scratch_dir);
 
-    {
-        var scratch_dir_handle = try cwd.openDir(io, scratch_dir, .{});
-        defer scratch_dir_handle.close(io);
-        try download(io, gpa, package_url, scratch_dir_handle, nupkg_name);
-    }
+        const nupkg_name = "package.nupkg";
 
-    const nupkg_path = try std.fs.path.join(arena, &.{ scratch_dir, nupkg_name });
+        try stderr.print("Downloading {s}\n", .{package_url});
+        try stderr.flush();
 
-    try stderr.writeAll("Verifying checksum\n");
-    try stderr.flush();
-    try verifySha256(io, gpa, cwd, nupkg_path, expected_sha256);
+        {
+            var package_scratch_handle = try cwd.openDir(io, package_scratch_dir, .{});
+            defer package_scratch_handle.close(io);
+            try download(io, gpa, package_url, package_scratch_handle, nupkg_name);
+        }
 
-    const extract_subdir = "extract";
-    const extract_dir_path = try std.fs.path.join(arena, &.{ scratch_dir, extract_subdir });
-    try cwd.createDirPath(io, extract_dir_path);
+        const nupkg_path = try std.fs.path.join(arena, &.{ package_scratch_dir, nupkg_name });
 
-    try stderr.writeAll("Extracting\n");
-    try stderr.flush();
-    {
-        var extract_dir = try cwd.openDir(io, extract_dir_path, .{});
-        defer extract_dir.close(io);
+        try stderr.writeAll("Verifying checksum\n");
+        try stderr.flush();
+        try verifySha256(io, gpa, cwd, nupkg_path, spec.expected_sha256);
 
-        const nupkg_file = try cwd.openFile(io, nupkg_path, .{});
-        defer nupkg_file.close(io);
-        var read_buffer: [4096]u8 = undefined;
-        var file_reader = nupkg_file.reader(io, &read_buffer);
-        try std.zip.extract(extract_dir, &file_reader, .{});
+        const extract_dir_path = try std.fs.path.join(arena, &.{ package_scratch_dir, "extract" });
+        try cwd.createDirPath(io, extract_dir_path);
 
-        for (wanted_files) |wf| {
-            try extract_dir.copyFile(wf.zip_path, out_dir, wf.dest_name, io, .{});
-            const st = try out_dir.statFile(io, wf.dest_name, .{});
-            try stderr.print("  wrote {s}/{s} ({d} bytes)\n", .{ out_dir_path, wf.dest_name, st.size });
+        try stderr.writeAll("Extracting\n");
+        try stderr.flush();
+        {
+            var extract_dir = try cwd.openDir(io, extract_dir_path, .{});
+            defer extract_dir.close(io);
+
+            const nupkg_file = try cwd.openFile(io, nupkg_path, .{});
+            defer nupkg_file.close(io);
+            var read_buffer: [4096]u8 = undefined;
+            var file_reader = nupkg_file.reader(io, &read_buffer);
+            try std.zip.extract(extract_dir, &file_reader, .{});
+
+            for (spec.wanted_files) |wf| {
+                try extract_dir.copyFile(wf.zip_path, out_dir, wf.dest_name, io, .{});
+                const st = try out_dir.statFile(io, wf.dest_name, .{});
+                try stderr.print("  wrote {s}/{s} ({d} bytes)\n", .{ out_dir_path, wf.dest_name, st.size });
+            }
         }
     }
 
@@ -182,7 +211,14 @@ fn verifySha256(io: std.Io, gpa: std.mem.Allocator, dir: std.Io.Dir, path: []con
 }
 
 fn haveWantedFiles(io: std.Io, out_dir: std.Io.Dir) !bool {
-    for (wanted_files) |wf| {
+    for (package_specs) |spec| {
+        if (!(try havePackageWantedFiles(io, out_dir, spec))) return false;
+    }
+    return true;
+}
+
+fn havePackageWantedFiles(io: std.Io, out_dir: std.Io.Dir, spec: PackageSpec) !bool {
+    for (spec.wanted_files) |wf| {
         _ = out_dir.statFile(io, wf.dest_name, .{}) catch |err| switch (err) {
             error.FileNotFound => return false,
             else => return err,

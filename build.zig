@@ -382,8 +382,9 @@ pub fn build(b: *std.Build) void {
 
     // ------------------------------------------------------------------
     // `fetch-winui-metadata` step — downloads the WinUI3 `.winmd` files
-    // (`Microsoft.UI.Xaml.winmd`, `Microsoft.UI.Text.winmd`) from the
-    // `Microsoft.WindowsAppSDK.WinUI` NuGet package into `vendor/winmd/`.
+    // (`Microsoft.UI.Xaml.winmd`, `Microsoft.UI.Text.winmd`, and
+    // `Microsoft.UI.winmd`) from the pinned Windows App SDK NuGet
+    // packages into `vendor/winmd/`.
     // Unlike the MIT win32metadata-derived files, these ship under
     // Microsoft's proprietary Windows App SDK license, so — mirroring how
     // windows-rs itself never commits `.winmd` to git — they're fetched on
@@ -937,16 +938,16 @@ pub fn build(b: *std.Build) void {
     );
     bindings_step.dependOn(&mod_update.step);
 
-    // Bindings-only WinUI snapshot: emit the two starter namespaces
-    // requested by `tools/bindings/src/winui.txt` using module-style
-    // imports and commit the generated Zig so #3 can catalog any
-    // remaining opaque placeholders without first teaching the runtime
-    // bundle about every transitive Windows App SDK dependency.
+    // Bindings-only WinUI snapshot: emit the starter namespaces
+    // requested by `tools/bindings/src/winui.txt` from one transitive
+    // module-style bundle so the checked-in repro manifest is a full
+    // closure rather than a shallow direct-import list.
     const winui_bundle_run = b.addRunArtifact(winbindgen_exe);
     winui_bundle_run.step.dependOn(&run_fetch_winui_metadata.step);
     winui_bundle_run.addArg("bundle");
     winui_bundle_run.addArg("--arch=x64");
     winui_bundle_run.addArg("--imports=module");
+    winui_bundle_run.addArg("--closure=transitive");
     winui_bundle_run.addArg("--outdir");
     const winui_bundle_outdir = winui_bundle_run.addOutputDirectoryArg("winui-bundle");
     winui_bundle_run.addArg("Microsoft.UI.Xaml");
@@ -962,29 +963,67 @@ pub fn build(b: *std.Build) void {
         "packages/win/src/generated/Microsoft.UI.Xaml.Controls.zig",
     );
     winui_bundle_update.addCopyFileToSource(
+        winui_bundle_outdir.path(b, "Microsoft.UI.Xaml.Controls.Primitives.zig"),
+        "packages/win/src/generated/Microsoft.UI.Xaml.Controls.Primitives.zig",
+    );
+    winui_bundle_update.addCopyFileToSource(
         winui_bundle_outdir.path(b, "win_bundle_deps.zig"),
         "packages/win/src/generated/winui_bundle_deps.zig",
     );
     bindings_step.dependOn(&winui_bundle_update.step);
 
-    // Button.Click resolves through `Microsoft.UI.Xaml.Controls.Primitives.IButtonBase`,
-    // so issue #18 needs that narrow extra namespace snapshot alongside the
-    // existing two starter WinUI files.
-    const winui_primitives_bundle_run = b.addRunArtifact(winbindgen_exe);
-    winui_primitives_bundle_run.step.dependOn(&run_fetch_winui_metadata.step);
-    winui_primitives_bundle_run.addArg("bundle");
-    winui_primitives_bundle_run.addArg("--arch=x64");
-    winui_primitives_bundle_run.addArg("--imports=module");
-    winui_primitives_bundle_run.addArg("--outdir");
-    const winui_primitives_outdir = winui_primitives_bundle_run.addOutputDirectoryArg("winui-primitives-bundle");
-    winui_primitives_bundle_run.addArg("Microsoft.UI.Xaml.Controls.Primitives");
+    const winui_dependency_namespaces = [_][]const u8{
+        "Microsoft.UI",
+        "Microsoft.UI.Composition",
+        "Microsoft.UI.Content",
+        "Microsoft.UI.Dispatching",
+        "Microsoft.UI.Input",
+        "Microsoft.UI.Windowing",
+        "Windows.Foundation",
+        "Windows.Foundation.Collections",
+        "Windows.Foundation.Numerics",
+        "Windows.Graphics",
+        "Windows.Graphics.DirectX",
+        "Windows.Graphics.DirectX.Direct3D11",
+        "Windows.Graphics.Effects",
+        "Windows.System",
+        "Windows.UI",
+        "Windows.UI.Composition",
+        "Windows.UI.Core",
+    };
+    var winui_dependency_mods: [winui_dependency_namespaces.len]*std.Build.Module = undefined;
+    for (winui_dependency_namespaces, 0..) |ns, i| {
+        const ns_mod = b.createModule(.{
+            .root_source_file = winui_bundle_outdir.path(b, b.fmt("{s}.zig", .{ns})),
+            .target = target,
+            .optimize = optimize,
+        });
+        ns_mod.addImport("win-core", win_core_mod);
+        winui_dependency_mods[i] = ns_mod;
+    }
+    for (winui_dependency_mods, 0..) |ns_mod, i| {
+        addGeneratedNamespaceImports(ns_mod, winui_dependency_namespaces[0..], winui_dependency_mods[0..], i);
+    }
+    if (target.result.os.tag == .windows) {
+        const winui_dependency_canary_mod = b.createModule(.{
+            .root_source_file = b.path("tools/winui_dependency_canary.zig"),
+            .target = target,
+            .optimize = optimize,
+        });
+        winui_dependency_canary_mod.addImport("win-core", win_core_mod);
+        addGeneratedNamespaceImports(
+            winui_dependency_canary_mod,
+            winui_dependency_namespaces[0..],
+            winui_dependency_mods[0..],
+            null,
+        );
 
-    const winui_primitives_update = b.addUpdateSourceFiles();
-    winui_primitives_update.addCopyFileToSource(
-        winui_primitives_outdir.path(b, "Microsoft.UI.Xaml.Controls.Primitives.zig"),
-        "packages/win/src/generated/Microsoft.UI.Xaml.Controls.Primitives.zig",
-    );
-    bindings_step.dependOn(&winui_primitives_update.step);
+        const winui_dependency_canary = b.addTest(.{
+            .name = "winui-dependency-canary",
+            .root_module = winui_dependency_canary_mod,
+        });
+        test_step.dependOn(&winui_dependency_canary.step);
+    }
 
     const reactor_bindings_run = b.addRunArtifact(winbindgen_exe);
     reactor_bindings_run.step.dependOn(&run_fetch_winui_metadata.step);

@@ -188,6 +188,19 @@ pub fn collectNamespaceClosure(
     return result;
 }
 
+fn normalizedProjectedTypeName(tn: winmd.TypeName) winmd.TypeName {
+    const namespace = if (std.mem.eql(u8, tn.namespace, "Microsoft.Graphics.DirectX"))
+        "Windows.Graphics.DirectX"
+    else
+        tn.namespace;
+    if (namespace.ptr == tn.namespace.ptr and namespace.len == tn.namespace.len) return tn;
+    return .{
+        .namespace = namespace,
+        .name = tn.name,
+        .generics = tn.generics,
+    };
+}
+
 /// Recursively walk a `Ty` and add any foreign namespace to the BFS queue.
 fn collectNsDepsFromTy(
     visited: *std.StringHashMapUnmanaged(void),
@@ -198,16 +211,17 @@ fn collectNsDepsFromTy(
 ) !void {
     switch (ty) {
         .class_name, .value_name => |tn| {
-            if (tn.namespace.len > 0 and
-                isProjectableNs(tn.namespace) and
-                !std.mem.eql(u8, tn.namespace, home_ns) and
-                !visited.contains(tn.namespace))
+            const projected_tn = normalizedProjectedTypeName(tn);
+            if (projected_tn.namespace.len > 0 and
+                isProjectableNs(projected_tn.namespace) and
+                !std.mem.eql(u8, projected_tn.namespace, home_ns) and
+                !visited.contains(projected_tn.namespace))
             {
-                const dep = try arena.dupe(u8, tn.namespace);
+                const dep = try arena.dupe(u8, projected_tn.namespace);
                 try visited.put(arena, dep, {});
                 try queue.append(arena, dep);
             }
-            for (tn.generics) |g| try collectNsDepsFromTy(visited, queue, arena, g, home_ns);
+            for (projected_tn.generics) |g| try collectNsDepsFromTy(visited, queue, arena, g, home_ns);
         },
         .ptr_mut => |p| try collectNsDepsFromTy(visited, queue, arena, p.inner.*, home_ns),
         .ptr_const => |p| try collectNsDepsFromTy(visited, queue, arena, p.inner.*, home_ns),
@@ -3794,6 +3808,7 @@ fn writeZigTy(
                     }
                 }
             }
+            const projected_tn = normalizedProjectedTypeName(tn);
             // Generic WinRT interfaces (`IReference\`1` etc.). If all
             // type arguments are mangleable, emit the mangled
             // closed-instantiation reference. Same-namespace generics
@@ -3805,31 +3820,31 @@ fn writeZigTy(
             // namespace, so raw ABI signatures can name the routed
             // handle directly instead of erasing it to `*anyopaque`.
             // Non-mangleable arg shapes still fall back cleanly.
-            if (std.mem.findScalar(u8, tn.name, '`') != null) {
-                if (tn.generics.len > 0) {
+            if (std.mem.findScalar(u8, projected_tn.name, '`') != null) {
+                if (projected_tn.generics.len > 0) {
                     var all_mangleable = true;
-                    for (tn.generics) |a| {
+                    for (projected_tn.generics) |a| {
                         if (!isMangleableArg(a)) {
                             all_mangleable = false;
                             break;
                         }
                     }
                     if (all_mangleable) {
-                        if (std.mem.eql(u8, tn.namespace, current_namespace)) {
+                        if (std.mem.eql(u8, projected_tn.namespace, current_namespace)) {
                             // Same namespace — unqualified reference.
                             try writer.writeAll("*");
-                            try writeInstMangle(writer, tn.name, tn.generics);
-                        } else if (isProjectableNs(tn.namespace)) {
+                            try writeInstMangle(writer, projected_tn.name, projected_tn.generics);
+                        } else if (isProjectableNs(projected_tn.namespace)) {
                             // Cross-namespace with mangleable args —
                             // bundle mode seeds the imported home
                             // namespace with this closed
                             // instantiation, so raw ABI slots can
                             // qualify the typed handle directly.
-                            try cross.put(gpa, tn.namespace, {});
+                            try cross.put(gpa, projected_tn.namespace, {});
                             try writer.writeAll("*@\"");
-                            try writer.writeAll(tn.namespace);
+                            try writer.writeAll(projected_tn.namespace);
                             try writer.writeAll("\".");
-                            try writeInstMangle(writer, tn.name, tn.generics);
+                            try writeInstMangle(writer, projected_tn.name, projected_tn.generics);
                         } else {
                             // Non-projectable home namespace — keep
                             // the raw ABI fallback.
@@ -3839,11 +3854,11 @@ fn writeZigTy(
                     }
                 }
                 try writer.writeAll("*anyopaque");
-            } else if (isProjectableNs(tn.namespace) and !std.mem.eql(u8, tn.namespace, current_namespace)) {
-                try cross.put(gpa, tn.namespace, {});
-                try writer.print("*@\"{s}\".{s}", .{ tn.namespace, tn.name });
+            } else if (isProjectableNs(projected_tn.namespace) and !std.mem.eql(u8, projected_tn.namespace, current_namespace)) {
+                try cross.put(gpa, projected_tn.namespace, {});
+                try writer.print("*@\"{s}\".{s}", .{ projected_tn.namespace, projected_tn.name });
             } else {
-                try writer.print("*{s}", .{tn.name});
+                try writer.print("*{s}", .{projected_tn.name});
             }
         },
         // WinRT value type (enum or struct) passed by value. Same
@@ -3874,25 +3889,27 @@ fn writeZigTy(
                 }
             }
 
-            if (std.mem.findScalar(u8, tn.name, '`') != null) {
+            const projected_tn = normalizedProjectedTypeName(tn);
+
+            if (std.mem.findScalar(u8, projected_tn.name, '`') != null) {
                 return false;
-            } else if (std.mem.eql(u8, tn.namespace, "System") and std.mem.eql(u8, tn.name, "Guid")) {
+            } else if (std.mem.eql(u8, projected_tn.namespace, "System") and std.mem.eql(u8, projected_tn.name, "Guid")) {
                 // `System.Guid` is the ECMA-335 name for the same
                 // struct `win-core` projects as `GUID`.
                 try writer.writeAll("GUID");
-            } else if (isProjectableNs(tn.namespace) and !std.mem.eql(u8, tn.namespace, current_namespace)) {
-                try cross.put(gpa, tn.namespace, {});
-                try writer.print("@\"{s}\".{s}", .{ tn.namespace, tn.name });
+            } else if (isProjectableNs(projected_tn.namespace) and !std.mem.eql(u8, projected_tn.namespace, current_namespace)) {
+                try cross.put(gpa, projected_tn.namespace, {});
+                try writer.print("@\"{s}\".{s}", .{ projected_tn.namespace, projected_tn.name });
             } else if (renames) |r| {
                 // Rewrite references to MIDL anon nested siblings
                 // like `_Anonymous_e__Union` → `<outer>_<i>`.
-                if (r.get(tn.name)) |new_name| {
+                if (r.get(projected_tn.name)) |new_name| {
                     try writer.writeAll(new_name);
                 } else {
-                    try writer.writeAll(tn.name);
+                    try writer.writeAll(projected_tn.name);
                 }
             } else {
-                try writer.writeAll(tn.name);
+                try writer.writeAll(projected_tn.name);
             }
         },
         .ptr_mut => |p| {

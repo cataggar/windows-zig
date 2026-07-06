@@ -3,13 +3,14 @@
 //!
 //!   * `Windows.Win32.*`  → `Windows.Win32.winmd`
 //!   * `Windows.Wdk.*`    → `Windows.Wdk.winmd`
+//!   * `Microsoft.UI.Xaml.*` → `Microsoft.UI.Xaml.winmd`
 //!   * `Microsoft.UI.Text.*` → `Microsoft.UI.Text.winmd`
-//!   * `Microsoft.UI.*`   → `Microsoft.UI.Xaml.winmd`
+//!   * `Microsoft.UI.*`   → `Microsoft.UI.winmd`
 //!   * everything else    → `Windows.winmd` (WinRT)
 //!
 //! Usage:
 //!     winbindgen [--arch=x86|x64|arm64] <namespace>
-//!     winbindgen bundle --outdir <dir> [--arch=x86|x64|arm64] [--imports=relative|module] <namespace>...
+//!     winbindgen bundle --outdir <dir> [--arch=x86|x64|arm64] [--imports=relative|module] [--closure=explicit|transitive] <namespace>...
 //!     winbindgen reactor-bindings --outdir <dir>
 //!     winbindgen --list
 //!
@@ -37,6 +38,7 @@ const wdk_bytes = @embedFile("Windows.Wdk.winmd");
 
 const winui_xaml_path = "vendor/winmd/Microsoft.UI.Xaml.winmd";
 const winui_text_path = "vendor/winmd/Microsoft.UI.Text.winmd";
+const winui_ui_path = "vendor/winmd/Microsoft.UI.winmd";
 
 const MetadataSource = enum {
     winrt,
@@ -44,7 +46,18 @@ const MetadataSource = enum {
     wdk,
     winui_xaml,
     winui_text,
+    winui_ui,
 };
+
+const metadata_sources = [_]MetadataSource{
+    .winrt,
+    .win32,
+    .wdk,
+    .winui_xaml,
+    .winui_text,
+    .winui_ui,
+};
+const MetadataSourceCount = metadata_sources.len;
 
 fn namespaceMatchesPrefix(namespace: []const u8, prefix: []const u8) bool {
     return std.mem.eql(u8, namespace, prefix) or
@@ -56,8 +69,9 @@ fn namespaceMatchesPrefix(namespace: []const u8, prefix: []const u8) bool {
 fn selectMetadataSource(namespace: []const u8) MetadataSource {
     if (namespaceMatchesPrefix(namespace, "Windows.Win32")) return .win32;
     if (namespaceMatchesPrefix(namespace, "Windows.Wdk")) return .wdk;
+    if (namespaceMatchesPrefix(namespace, "Microsoft.UI.Xaml")) return .winui_xaml;
     if (namespaceMatchesPrefix(namespace, "Microsoft.UI.Text")) return .winui_text;
-    if (namespaceMatchesPrefix(namespace, "Microsoft.UI")) return .winui_xaml;
+    if (namespaceMatchesPrefix(namespace, "Microsoft.UI")) return .winui_ui;
     return .winrt;
 }
 
@@ -68,6 +82,7 @@ fn metadataDisplayName(source: MetadataSource) []const u8 {
         .wdk => "Windows.Wdk.winmd",
         .winui_xaml => "Microsoft.UI.Xaml.winmd",
         .winui_text => "Microsoft.UI.Text.winmd",
+        .winui_ui => "Microsoft.UI.winmd",
     };
 }
 
@@ -75,13 +90,14 @@ fn metadataPath(source: MetadataSource) ?[]const u8 {
     return switch (source) {
         .winui_xaml => winui_xaml_path,
         .winui_text => winui_text_path,
+        .winui_ui => winui_ui_path,
         else => null,
     };
 }
 
 fn isFetchedMetadata(source: MetadataSource) bool {
     return switch (source) {
-        .winui_xaml, .winui_text => true,
+        .winui_xaml, .winui_text, .winui_ui => true,
         else => false,
     };
 }
@@ -95,7 +111,7 @@ fn loadMetadataBytes(
         .winrt => winrt_bytes,
         .win32 => win32_bytes,
         .wdk => wdk_bytes,
-        .winui_xaml, .winui_text => blk: {
+        .winui_xaml, .winui_text, .winui_ui => blk: {
             const path = metadataPath(source).?;
             break :blk try std.Io.Dir.cwd().readFileAlloc(io, path, arena, .unlimited);
         },
@@ -145,7 +161,7 @@ pub fn main(init: std.process.Init) !void {
 
     if (args.len == 2 and std.mem.eql(u8, args[1], "--list")) {
         const arena = init.arena.allocator();
-        for ([_]MetadataSource{ .winrt, .win32, .wdk, .winui_xaml, .winui_text }) |source| {
+        for (metadata_sources) |source| {
             const maybe_bytes = loadOptionalMetadataBytes(arena, io, source) catch |err| {
                 try writeMetadataLoadError(stderr, source, err);
                 try stderr.flush();
@@ -160,7 +176,7 @@ pub fn main(init: std.process.Init) !void {
         return;
     }
 
-    // `bundle --outdir <dir> [--arch=...] [--imports=relative|module] ns1 ns2 ...`
+    // `bundle --outdir <dir> [--arch=...] [--imports=relative|module] [--closure=explicit|transitive] ns1 ns2 ...`
     // emits a batch of namespaces as a coordinated bundle, auto-routing
     // cross-namespace closed-generic instantiations to their home
     // namespace. Writes `<outdir>/<ns>.zig` for each input plus a
@@ -416,7 +432,78 @@ fn stringLessThan(_: void, a: []const u8, b: []const u8) bool {
     return std.mem.lessThan(u8, a, b);
 }
 
-/// Handle the `bundle --outdir <dir> [--arch=...] [--imports=relative|module] ns1 ns2 ...` subcommand.
+const BundleClosureMode = enum {
+    explicit,
+    transitive,
+};
+
+fn loadParsedMetadata(
+    metadata_cache: *[MetadataSourceCount]?winmd.File,
+    arena: std.mem.Allocator,
+    io: std.Io,
+    source: MetadataSource,
+) !*const winmd.File {
+    const index = @intFromEnum(source);
+    if (metadata_cache[index] == null) {
+        const bytes = try loadMetadataBytes(arena, io, source);
+        metadata_cache[index] = try winmd.parse(bytes);
+    }
+    return &metadata_cache[index].?;
+}
+
+fn collectTransitiveBundleNamespaces(
+    arena: std.mem.Allocator,
+    io: std.Io,
+    roots: []const []const u8,
+    arch: winbindgen.Arch,
+) ![][]const u8 {
+    var visited: std.StringHashMapUnmanaged(void) = .empty;
+    var queue = try std.ArrayList([]const u8).initCapacity(arena, roots.len);
+    for (roots) |root| {
+        if (visited.contains(root)) continue;
+        try visited.put(arena, root, {});
+        try queue.append(arena, root);
+    }
+
+    var metadata_cache: [MetadataSourceCount]?winmd.File = [_]?winmd.File{null} ** MetadataSourceCount;
+
+    var frontier_start: usize = 0;
+    while (frontier_start < queue.items.len) {
+        const frontier_end = queue.items.len;
+        var groups: [MetadataSourceCount]std.ArrayListUnmanaged([]const u8) =
+            [_]std.ArrayListUnmanaged([]const u8){.empty} ** MetadataSourceCount;
+
+        for (queue.items[frontier_start..frontier_end]) |ns| {
+            const source = selectMetadataSource(ns);
+            try groups[@intFromEnum(source)].append(arena, ns);
+        }
+        frontier_start = frontier_end;
+
+        for (metadata_sources) |source| {
+            const group_ns = groups[@intFromEnum(source)].items;
+            if (group_ns.len == 0) continue;
+
+            const file = try loadParsedMetadata(&metadata_cache, arena, io, source);
+            const closure = try winbindgen.collectNamespaceClosure(
+                arena,
+                file,
+                group_ns,
+                arch,
+            );
+            for (closure) |ns| {
+                if (visited.contains(ns)) continue;
+                try visited.put(arena, ns, {});
+                try queue.append(arena, ns);
+            }
+        }
+    }
+
+    const result = try arena.dupe([]const u8, queue.items);
+    std.mem.sort([]const u8, result, {}, stringLessThan);
+    return result;
+}
+
+/// Handle the `bundle --outdir <dir> [--arch=...] [--imports=relative|module] [--closure=explicit|transitive] ns1 ns2 ...` subcommand.
 /// Calls `winbindgen.emitBundle` to emit every input namespace in a single
 /// coordinated pass (cross-namespace closed generics auto-route to their
 /// home namespace), then writes `<outdir>/<ns>.zig` for each result plus
@@ -430,6 +517,7 @@ fn runBundle(
 ) !void {
     var arch: winbindgen.Arch = .x64;
     var import_style: winbindgen.ImportStyle = .relative;
+    var closure_mode: BundleClosureMode = .explicit;
     var outdir: ?[]const u8 = null;
     var namespaces = try std.ArrayList([]const u8).initCapacity(arena, 0);
 
@@ -460,6 +548,17 @@ fn runBundle(
                 try stderr.flush();
                 std.process.exit(2);
             }
+        } else if (std.mem.startsWith(u8, a, "--closure=")) {
+            const v = a["--closure=".len..];
+            if (std.mem.eql(u8, v, "explicit")) {
+                closure_mode = .explicit;
+            } else if (std.mem.eql(u8, v, "transitive")) {
+                closure_mode = .transitive;
+            } else {
+                try stderr.print("unknown --closure value: {s}\n", .{v});
+                try stderr.flush();
+                std.process.exit(2);
+            }
         } else if (std.mem.startsWith(u8, a, "--outdir=")) {
             outdir = a["--outdir=".len..];
         } else if (std.mem.eql(u8, a, "--outdir")) {
@@ -477,7 +576,7 @@ fn runBundle(
 
     const dir_path = outdir orelse {
         try stderr.writeAll(
-            \\usage: winbindgen bundle --outdir <dir> [--arch=x86|x64|arm64] [--imports=relative|module] ns1 ns2 ...
+            \\usage: winbindgen bundle --outdir <dir> [--arch=x86|x64|arm64] [--imports=relative|module] [--closure=explicit|transitive] ns1 ns2 ...
             \\
         );
         try stderr.flush();
@@ -490,18 +589,18 @@ fn runBundle(
         std.process.exit(2);
     }
 
+    const bundle_namespaces = switch (closure_mode) {
+        .explicit => namespaces.items,
+        .transitive => try collectTransitiveBundleNamespaces(arena, io, namespaces.items, arch),
+    };
+
     // Group namespaces by which winmd file they resolve to; cross-ns
     // generic routing happens only within the same winmd. Phase 4b's
     // WinRT-only routing is a natural fit for this grouping because the
     // Windows.winmd group is where all closed generics live.
-    var groups = [_]std.ArrayListUnmanaged([]const u8){
-        .empty,
-        .empty,
-        .empty,
-        .empty,
-        .empty,
-    };
-    for (namespaces.items) |ns| {
+    var groups: [MetadataSourceCount]std.ArrayListUnmanaged([]const u8) =
+        [_]std.ArrayListUnmanaged([]const u8){.empty} ** MetadataSourceCount;
+    for (bundle_namespaces) |ns| {
         const source = selectMetadataSource(ns);
         try groups[@intFromEnum(source)].append(arena, ns);
     }
@@ -515,7 +614,7 @@ fn runBundle(
         .facade = "",
     };
 
-    for ([_]MetadataSource{ .winrt, .win32, .wdk, .winui_xaml, .winui_text }) |source| {
+    for (metadata_sources) |source| {
         const group_ns = groups[@intFromEnum(source)].items;
         if (group_ns.len == 0) continue;
         const group_bytes = loadMetadataBytes(arena, io, source) catch |err| {

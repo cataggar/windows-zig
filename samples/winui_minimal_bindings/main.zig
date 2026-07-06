@@ -2,8 +2,8 @@
 //!
 //! Directly importing the whole checked-in `packages/win/src/generated`
 //! WinUI namespace snapshots currently fails because unrelated emitter gaps
-//! leave undeclared `CoreWebView2*`, `IResourceManager`, and empty
-//! `Microsoft.UI.*` dependency modules behind (tracked in #52, #53, #54).
+//! leave undeclared `CoreWebView2*`, `IResourceManager`, and other emitter
+//! gaps behind (tracked in #53 and #54).
 //! This sample therefore isolates the exact emitted signatures needed for
 //! Application/Window/Button/TextBlock in `surface.zig`, so we can still
 //! prove the minimal four-type surface type-checks end-to-end while the
