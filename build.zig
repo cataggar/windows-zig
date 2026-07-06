@@ -337,7 +337,7 @@ pub fn build(b: *std.Build) void {
         .{ .name = "win-sys", .mod = win_sys_mod, .windows_only = true },
         .{ .name = "win-time", .mod = win_time_mod, .windows_only = true },
         .{ .name = "win-threading", .mod = win_threading_mod, .windows_only = true },
-        .{ .name = "win-reactor", .mod = win_reactor_mod },
+        .{ .name = "win-reactor", .mod = win_reactor_mod, .windows_only = true },
         // NOTE: `win` is intentionally omitted from test_pkgs while the
         // VARIANT emitter gap is pending. A test-harness rooted at
         // `win/root.zig` analyzes `Com`'s pub decls, some of which
@@ -356,8 +356,11 @@ pub fn build(b: *std.Build) void {
     for (test_pkgs) |p| {
         // win-sys / win-time / win-threading tests call `project()` which
         // emits `@extern(..., library_name="KERNEL32", ...)` — that cannot
-        // link against a native Linux target. Cross coverage for win-sys
-        // already happens via `compile-check-bundle-*` below.
+        // link against a native Linux target. win-reactor also reaches
+        // WinRT/COM externs from win-core that trigger the same Linux PIC
+        // limitation. Cross coverage for win-sys already happens via the
+        // `compile-check-bundle-*` loop below, and reactor coverage now has
+        // a dedicated Windows-only `reactor-selftest` step.
         if (p.windows_only and !native_windows_target) continue;
         const t = b.addTest(.{
             .name = b.fmt("test-{s}", .{p.name}),
