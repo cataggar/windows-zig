@@ -136,6 +136,7 @@ pub const SendDispatcher = winui_dispatcher.SendDispatcher;
 pub const UiMarshaller = winui_dispatcher.UiMarshaller;
 pub const ChannelDispatcher = winui_dispatcher.ChannelDispatcher;
 pub const WinUIDispatcher = winui_dispatcher.WinUIDispatcher;
+pub const Win = @import("win");
 pub const Xaml = @import("Microsoft.UI.Xaml");
 pub const XamlControls = @import("Microsoft.UI.Xaml.Controls");
 pub const XamlControlsPrimitives = @import("Microsoft.UI.Xaml.Controls.Primitives");
@@ -155,3 +156,36 @@ test {
     _ = @import("winui_backend.zig");
     _ = @import("winui_dispatcher.zig");
 }
+
+const widgets_navigation = @import("widgets_navigation.zig");
+
+pub const WidgetRef = element.WidgetRef;
+pub const ContentDialogBuilder = element.ContentDialogBuilder;
+pub const FlyoutBuilder = element.FlyoutBuilder;
+pub const NavigationViewBuilder = element.NavigationViewBuilder;
+pub const NavigationViewItemBuilder = element.NavigationViewItemBuilder;
+pub const MenuBarBuilder = element.MenuBarBuilder;
+pub const MenuBarItemBuilder = element.MenuBarItemBuilder;
+pub const content_dialog_builder = element.content_dialog;
+pub const flyout_builder = element.flyout;
+pub const navigation_view_builder = element.navigation_view;
+pub const navigation_view_item_builder = element.navigation_view_item;
+pub const menu_bar_builder = element.menu_bar;
+pub const menu_bar_item_builder = element.menu_bar_item;
+pub const OverlayHost = widgets_navigation.OverlayHost;
+pub const ContentDialogHandle = widgets_navigation.ContentDialogHandle;
+pub const FlyoutHandle = widgets_navigation.FlyoutHandle;
+pub const ContentDialogFuture = widgets_navigation.ContentDialogFuture;
+pub const ContentDialogOptions = widgets_navigation.ContentDialogOptions;
+pub const ContentDialogResult = widgets_navigation.ContentDialogResult;
+pub const OverlayHostContext = &widgets_navigation.overlay_host_context;
+pub const with_ref = widgets_navigation.with_ref;
+pub const content_dialog = widgets_navigation.content_dialog;
+pub const flyout = widgets_navigation.flyout;
+pub const navigation_view = widgets_navigation.navigation_view;
+pub const navigation_view_item = widgets_navigation.navigation_view_item;
+pub const menu_bar = widgets_navigation.menu_bar;
+pub const menu_bar_item = widgets_navigation.menu_bar_item;
+pub const useOverlayHost = widgets_navigation.useOverlayHost;
+pub const useContentDialog = widgets_navigation.useContentDialog;
+pub const useFlyout = widgets_navigation.useFlyout;

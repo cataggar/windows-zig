@@ -14,6 +14,16 @@ pub const Error = Allocator.Error || render_cx.Error || error{
     SingleChildWidgetCannotHaveMultipleChildren,
 };
 
+pub const WidgetRefPropertyName = "__reactor_ref";
+
+pub const WidgetRef = struct {
+    id: ?usize = null,
+
+    pub fn clear(self: *@This()) void {
+        self.id = null;
+    }
+};
+
 pub const WidgetKind = enum {
     leaf,
     container,
@@ -26,6 +36,12 @@ pub const WidgetKind = enum {
     border,
     text_block,
     text_box,
+    content_dialog,
+    flyout,
+    navigation_view,
+    navigation_view_item,
+    menu_bar,
+    menu_bar_item,
     canvas,
     list_view,
     items_repeater,
@@ -33,8 +49,28 @@ pub const WidgetKind = enum {
 
 pub fn widgetKindAllowsChildren(kind: WidgetKind) bool {
     return switch (kind) {
-        .container, .application, .window, .stack_panel, .grid, .scroll_viewer, .border, .canvas, .list_view, .items_repeater => true,
-        .leaf, .button, .text_block, .text_box => false,
+        .container,
+        .application,
+        .window,
+        .stack_panel,
+        .grid,
+        .scroll_viewer,
+        .border,
+        .content_dialog,
+        .flyout,
+        .navigation_view,
+        .menu_bar,
+        .canvas,
+        .list_view,
+        .items_repeater,
+        => true,
+        .leaf,
+        .button,
+        .text_block,
+        .text_box,
+        .navigation_view_item,
+        .menu_bar_item,
+        => false,
     };
 }
 
@@ -905,7 +941,7 @@ pub fn WidgetBuilder(comptime kind: WidgetKind) type {
         pub fn child(self: *@This(), value: anytype) Error!*@This() {
             comptime {
                 switch (kind) {
-                    .leaf, .button, .text_block, .text_box => {
+                    .leaf, .button, .text_block, .text_box, .navigation_view_item, .menu_bar_item => {
                         @compileError("this widget builder cannot accept children");
                     },
                     else => {},
@@ -919,7 +955,7 @@ pub fn WidgetBuilder(comptime kind: WidgetKind) type {
         pub fn childrenFrom(self: *@This(), values: anytype) Error!*@This() {
             comptime {
                 switch (kind) {
-                    .leaf, .button, .text_block, .text_box => {
+                    .leaf, .button, .text_block, .text_box, .navigation_view_item, .menu_bar_item => {
                         @compileError("this widget builder cannot accept children");
                     },
                     else => {},
@@ -1006,6 +1042,12 @@ pub const ScrollViewerBuilder = WidgetBuilder(.scroll_viewer);
 pub const BorderBuilder = WidgetBuilder(.border);
 pub const TextBlockBuilder = WidgetBuilder(.text_block);
 pub const TextBoxBuilder = WidgetBuilder(.text_box);
+pub const ContentDialogBuilder = WidgetBuilder(.content_dialog);
+pub const FlyoutBuilder = WidgetBuilder(.flyout);
+pub const NavigationViewBuilder = WidgetBuilder(.navigation_view);
+pub const NavigationViewItemBuilder = WidgetBuilder(.navigation_view_item);
+pub const MenuBarBuilder = WidgetBuilder(.menu_bar);
+pub const MenuBarItemBuilder = WidgetBuilder(.menu_bar_item);
 pub const CanvasBuilder = WidgetBuilder(.canvas);
 pub const ListViewBuilder = WidgetBuilder(.list_view);
 pub const ItemsRepeaterBuilder = WidgetBuilder(.items_repeater);
@@ -1052,6 +1094,30 @@ pub fn text_block(allocator: Allocator) TextBlockBuilder {
 
 pub fn text_box(allocator: Allocator) TextBoxBuilder {
     return TextBoxBuilder.init(allocator);
+}
+
+pub fn content_dialog(allocator: Allocator) ContentDialogBuilder {
+    return ContentDialogBuilder.init(allocator);
+}
+
+pub fn flyout(allocator: Allocator) FlyoutBuilder {
+    return FlyoutBuilder.init(allocator);
+}
+
+pub fn navigation_view(allocator: Allocator) NavigationViewBuilder {
+    return NavigationViewBuilder.init(allocator);
+}
+
+pub fn navigation_view_item(allocator: Allocator) NavigationViewItemBuilder {
+    return NavigationViewItemBuilder.init(allocator);
+}
+
+pub fn menu_bar(allocator: Allocator) MenuBarBuilder {
+    return MenuBarBuilder.init(allocator);
+}
+
+pub fn menu_bar_item(allocator: Allocator) MenuBarItemBuilder {
+    return MenuBarItemBuilder.init(allocator);
 }
 
 pub fn canvas(allocator: Allocator) CanvasBuilder {
