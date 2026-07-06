@@ -25,7 +25,7 @@ const ObservableObjectVector = win_collections.IObservableVector(?*const anyopaq
 /// Application, Window, Button, StackPanel, Grid, ScrollViewer, Border,
 /// TextBlock, TextBox, Canvas, list, and navigation/dialog widgets, with
 /// generated property/event dispatch wired for manifest-covered members plus
-/// manual fallbacks for current attached-property / collection-property gaps.
+/// manual fallbacks for the remaining non-generated layout/style gaps.
 pub const WinUIBackend = struct {
     allocator: Allocator,
     application: win_core.IInspectable,
@@ -407,8 +407,17 @@ pub const WinUIBackend = struct {
         }
         errdefer node.uses_explicit_items_source = prior_explicit;
 
-        if (try self.setManualProperty(id, property)) return;
         const widget_class = widgetClassName(node.kind) orelse return error.UnsupportedWidgetKind;
+        if (generated_set_prop.find(widget_class, property.name)) |entry| {
+            if (entry.setter_kind == .attached) {
+                var setter_value = try self.propertyToGeneratedValueKind(property, entry.value_kind);
+                defer setter_value.deinit(self.allocator);
+                try entry.apply(node.handle.ptr, setter_value.value);
+                return;
+            }
+        }
+
+        if (try self.setManualProperty(id, property)) return;
         var setter_value = try self.propertyToSetterValue(node.kind, property);
         defer setter_value.deinit(self.allocator);
 
@@ -435,6 +444,8 @@ pub const WinUIBackend = struct {
             try self.applyManagedItemsSource(node);
             return;
         }
+        const widget_class = widgetClassName(node.kind) orelse return error.UnsupportedWidgetKind;
+        if (try generated_set_prop.dispatchClear(widget_class, name, node.handle.ptr)) return;
         if (try self.unsetManualProperty(node.kind, node.handle, name)) return;
 
         var value = if (std.mem.eql(u8, name, "Left") or std.mem.eql(u8, name, "Top"))
@@ -512,7 +523,6 @@ pub const WinUIBackend = struct {
         };
         defer value.deinit(self.allocator);
 
-        const widget_class = widgetClassName(node.kind) orelse return error.UnsupportedWidgetKind;
         const applied = try generated_set_prop.dispatch(widget_class, name, node.handle.ptr, value.value);
         if (!applied) return error.UnsupportedProperty;
     }
@@ -876,13 +886,6 @@ pub const WinUIBackend = struct {
         const node = self.nodes.get(id) orelse return error.UnknownWidget;
 
         switch (node.kind) {
-            .button, .stack_panel, .grid, .scroll_viewer, .border, .text_block, .text_box, .canvas, .list_view, .items_repeater => {
-                if (try self.setGridAttachedProperty(node.handle, property)) return true;
-            },
-            else => {},
-        }
-
-        switch (node.kind) {
             .grid => {
                 if (std.mem.eql(u8, property.name, "RowDefinitions")) {
                     const tracks = property.get(widgets_layout.GridTracks) orelse return error.UnsupportedPropertyValue;
@@ -926,13 +929,6 @@ pub const WinUIBackend = struct {
 
     fn unsetManualProperty(self: *WinUIBackend, kind: element.WidgetKind, handle: win_core.IInspectable, name: []const u8) !bool {
         switch (kind) {
-            .button, .stack_panel, .grid, .scroll_viewer, .border, .text_block, .text_box, .canvas, .list_view, .items_repeater => {
-                if (try self.clearGridAttachedProperty(handle, name)) return true;
-            },
-            else => {},
-        }
-
-        switch (kind) {
             .grid => {
                 if (std.mem.eql(u8, name, "RowDefinitions")) {
                     try self.clearGridRowDefinitions(handle);
@@ -967,6 +963,49 @@ pub const WinUIBackend = struct {
         }
 
         return false;
+    }
+
+    fn propertyToGeneratedValueKind(
+        self: *WinUIBackend,
+        property: *const element.Property,
+        value_kind: generated_set_prop.ValueKind,
+    ) !OwnedSetterValue {
+        return switch (value_kind) {
+            .string => self.utf8SetterValue(property.get([]const u8) orelse return error.UnsupportedPropertyValue),
+            .string_list => self.stringListSetterValue(property.get([]const []const u8) orelse return error.UnsupportedPropertyValue),
+            .object => if (property.get(?*const anyopaque)) |value|
+                .{ .value = .{ .object = value } }
+            else if (property.get(*const anyopaque)) |value|
+                .{ .value = .{ .object = value } }
+            else
+                return error.UnsupportedPropertyValue,
+            .bool => .{ .value = .{ .bool = property.get(bool) orelse return error.UnsupportedPropertyValue } },
+            .f64 => if (property.get(f64)) |value|
+                .{ .value = .{ .f64 = value } }
+            else if (property.get(f32)) |value|
+                .{ .value = .{ .f64 = value } }
+            else if (property.get(i32)) |value|
+                .{ .value = .{ .f64 = @floatFromInt(value) } }
+            else if (property.get(u32)) |value|
+                .{ .value = .{ .f64 = @floatFromInt(value) } }
+            else
+                return error.UnsupportedPropertyValue,
+            .i32 => .{ .value = .{ .i32 = propertyI32(property) orelse return error.UnsupportedPropertyValue } },
+            .u32 => return error.UnsupportedPropertyValue,
+            .enum_i32 => if (property.get(i32)) |value|
+                .{ .value = .{ .enum_i32 = value } }
+            else
+                return error.UnsupportedPropertyValue,
+            .color => return error.UnsupportedPropertyValue,
+            .date_time => return error.UnsupportedPropertyValue,
+            .time_span => return error.UnsupportedPropertyValue,
+            .element => if (property.get(*xaml.UIElement)) |value|
+                .{ .value = .{ .element = value } }
+            else if (property.get(*const xaml.UIElement)) |value|
+                .{ .value = .{ .element = @constCast(value) } }
+            else
+                return error.UnsupportedPropertyValue,
+        };
     }
 
     fn propertyToSetterValue(self: *WinUIBackend, kind: element.WidgetKind, property: *const element.Property) !OwnedSetterValue {
@@ -1142,10 +1181,6 @@ pub const WinUIBackend = struct {
         return handle.cast(xaml.IUIElement_Vtbl, &xaml.IUIElement.IID);
     }
 
-    fn frameworkElementCom(_: *WinUIBackend, handle: win_core.IInspectable) !win_core.Com(xaml.IFrameworkElement_Vtbl) {
-        return handle.cast(xaml.IFrameworkElement_Vtbl, &xaml.IFrameworkElement.IID);
-    }
-
     fn contentControlCom(_: *WinUIBackend, handle: win_core.IInspectable) !win_core.Com(controls.IContentControl_Vtbl) {
         return handle.cast(controls.IContentControl_Vtbl, &controls.IContentControl.IID);
     }
@@ -1167,51 +1202,6 @@ pub const WinUIBackend = struct {
         try win_core.hresult.ok(iface.get_Children(&children_ptr));
         _ = self;
         return .from(@ptrCast(children_ptr));
-    }
-
-    fn setGridAttachedProperty(self: *WinUIBackend, handle: win_core.IInspectable, property: *const element.Property) !bool {
-        const value = propertyI32(property) orelse {
-            if (isGridAttachedProperty(property.name)) return error.UnsupportedPropertyValue;
-            return false;
-        };
-
-        const statics = try controls.Grid.statics();
-        defer statics.deinit();
-        const iface: *const controls.IGridStatics = @ptrCast(@alignCast(statics.ptr));
-
-        const framework = try self.frameworkElementCom(handle);
-        defer framework.deinit();
-        const framework_ptr: *xaml.FrameworkElement = @ptrCast(@alignCast(framework.ptr));
-
-        if (std.mem.eql(u8, property.name, "Grid.Row")) {
-            try win_core.hresult.ok(iface.SetRow(framework_ptr, value));
-            return true;
-        }
-        if (std.mem.eql(u8, property.name, "Grid.Column")) {
-            try win_core.hresult.ok(iface.SetColumn(framework_ptr, value));
-            return true;
-        }
-        if (std.mem.eql(u8, property.name, "Grid.RowSpan")) {
-            try win_core.hresult.ok(iface.SetRowSpan(framework_ptr, value));
-            return true;
-        }
-        if (std.mem.eql(u8, property.name, "Grid.ColumnSpan")) {
-            try win_core.hresult.ok(iface.SetColumnSpan(framework_ptr, value));
-            return true;
-        }
-        return false;
-    }
-
-    fn clearGridAttachedProperty(self: *WinUIBackend, handle: win_core.IInspectable, name: []const u8) !bool {
-        if (!isGridAttachedProperty(name)) return false;
-
-        const value: i32 = if (std.mem.eql(u8, name, "Grid.RowSpan") or std.mem.eql(u8, name, "Grid.ColumnSpan"))
-            1
-        else
-            0;
-        var property = try element.Property.init(self.allocator, name, value);
-        defer property.deinit(self.allocator);
-        return try self.setGridAttachedProperty(handle, &property);
     }
 
     fn setGridRowDefinitions(self: *WinUIBackend, handle: win_core.IInspectable, tracks: widgets_layout.GridTracks) !void {
@@ -1469,13 +1459,6 @@ fn isItemsSourceProperty(kind: element.WidgetKind, name: []const u8) bool {
 
 fn inspectableAsObject(handle: win_core.IInspectable) ?*const anyopaque {
     return @ptrCast(handle.ptr);
-}
-
-fn isGridAttachedProperty(name: []const u8) bool {
-    return std.mem.eql(u8, name, "Grid.Row") or
-        std.mem.eql(u8, name, "Grid.Column") or
-        std.mem.eql(u8, name, "Grid.RowSpan") or
-        std.mem.eql(u8, name, "Grid.ColumnSpan");
 }
 
 fn propertyI32(property: *const element.Property) ?i32 {

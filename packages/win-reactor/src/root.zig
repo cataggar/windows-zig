@@ -1,6 +1,7 @@
 //! `win-reactor` — a reconciler-driven hook engine plus the first real
 //! WinUI 3 backend and app host.
 
+const std = @import("std");
 const context = @import("context.zig");
 const element = @import("element.zig");
 const recording_backend = @import("recording_backend.zig");
@@ -15,6 +16,7 @@ const widgets_lists = @import("widgets_lists.zig");
 const widgets_text_input = @import("widgets_text_input.zig");
 const winui_backend = @import("winui_backend.zig");
 const winui_dispatcher = @import("winui_dispatcher.zig");
+const attached_props = @import("reactor-generated-attached-props");
 
 pub const ContextId = context.ContextId;
 pub const Context = context.Context;
@@ -101,6 +103,8 @@ pub const GridTracks = widgets_layout.GridTracks;
 pub const GridOptions = widgets_layout.GridOptions;
 pub const BorderOptions = widgets_layout.BorderOptions;
 pub const Color = widgets_layout.Color;
+pub const Canvas = attached_props.Canvas;
+pub const Grid = attached_props.Grid;
 pub const uniform_thickness = widgets_layout.uniform_thickness;
 pub const uniform_corner_radius = widgets_layout.uniform_corner_radius;
 pub const vstack_spaced = widgets_layout.vstack_spaced;
@@ -172,6 +176,19 @@ test {
     _ = @import("widgets_text_input.zig");
     _ = @import("winui_backend.zig");
     _ = @import("winui_dispatcher.zig");
+}
+
+test "root exports attached property namespaces" {
+    var builder = button_builder(std.testing.allocator);
+    defer builder.deinit();
+
+    _ = try (try builder.attached(Grid.row(1))).attached(Canvas.left(32));
+
+    var built = try builder.build();
+    defer built.deinit(std.testing.allocator);
+
+    try std.testing.expectEqual(@as(i32, 1), built.widget.propertyValue(i32, "Grid.Row").?);
+    try std.testing.expectEqual(@as(f64, 32), built.widget.propertyValue(f64, "Left").?);
 }
 
 const widgets_navigation = @import("widgets_navigation.zig");

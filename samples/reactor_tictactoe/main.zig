@@ -208,8 +208,8 @@ fn renderRoot(cx: *reactor.RenderCx) reactor.ElementError!reactor.Element {
         var builder = reactor.button_builder(allocator);
         defer builder.deinit();
         _ = try builder.prop("Content", game.value.*.cells[index].label());
-        _ = try (try builder.prop("Grid.Row", @as(i32, @intCast(index / Size))))
-            .prop("Grid.Column", @as(i32, @intCast(index % Size)));
+        _ = try (try builder.attached(reactor.Grid.row(@as(i32, @intCast(index / Size)))))
+            .attached(reactor.Grid.column(@as(i32, @intCast(index % Size))));
         _ = try builder.on(
             "Click",
             reactor.EventCallback.init(@ptrCast(&captures[index]), CellClickCapture.onClick),

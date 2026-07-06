@@ -2,6 +2,7 @@ const std = @import("std");
 
 const backend = @import("backend.zig");
 const element = @import("element.zig");
+const attached_props = @import("reactor-generated-attached-props");
 const RecordingBackend = @import("recording_backend.zig").RecordingBackend;
 const Reconciler = @import("reconciler.zig").Reconciler;
 const RequestRerender = @import("render_cx.zig").RequestRerender;
@@ -24,7 +25,7 @@ pub fn canvas_position(
     left: f64,
     top: f64,
 ) element.Error!@TypeOf(builder) {
-    _ = try (try builder.prop("Left", left)).prop("Top", top);
+    _ = try (try builder.attached(attached_props.Canvas.left(left))).attached(attached_props.Canvas.top(top));
     return builder;
 }
 
@@ -34,7 +35,7 @@ pub fn canvas_position_z(
     top: f64,
     z_index: i32,
 ) element.Error!@TypeOf(builder) {
-    _ = try (try canvas_position(builder, left, top)).prop("ZIndex", z_index);
+    _ = try (try canvas_position(builder, left, top)).attached(attached_props.Canvas.z_index(z_index));
     return builder;
 }
 

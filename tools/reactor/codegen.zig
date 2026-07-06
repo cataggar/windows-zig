@@ -7,6 +7,7 @@ const manifest_mod = @import("manifest.zig");
 
 pub const SetPropFileName = "generated_set_prop.zig";
 pub const AttachEventFileName = "generated_attach_event.zig";
+pub const AttachedPropsFileName = "generated_attached_props.zig";
 
 const Event = manifest_mod.Event;
 const EventPayload = manifest_mod.EventPayload;
@@ -15,6 +16,16 @@ const Property = manifest_mod.Property;
 const SetterKind = manifest_mod.SetterKind;
 const ValueKind = manifest_mod.ValueKind;
 const Widget = manifest_mod.Widget;
+
+const QualifiedName = struct {
+    namespace: []const u8,
+    name: []const u8,
+};
+
+const AttachedTarget = union(enum) {
+    object,
+    class_name: QualifiedName,
+};
 
 const Binding = struct {
     widget: *const Widget,
@@ -31,6 +42,7 @@ const ResolvedSetter = struct {
     param_ty: winmd.Ty,
     owner_namespace: ?[]const u8 = null,
     owner_name: ?[]const u8 = null,
+    attached_target: ?AttachedTarget = null,
 };
 
 const EventBinding = struct {
@@ -49,9 +61,13 @@ const ResolvedEvent = struct {
     delegate_iid: GuidLiteral,
 };
 
-const QualifiedName = struct {
-    namespace: []const u8,
-    name: []const u8,
+const AttachedPropBinding = struct {
+    owner_full_name: []const u8,
+    owner_namespace: []const u8,
+    owner_name: []const u8,
+    property_name: []const u8,
+    helper_name: []const u8,
+    value_kind: ValueKind,
 };
 
 const GuidLiteral = extern struct {
@@ -116,10 +132,12 @@ pub fn emitSetProp(
     defer used_kinds.deinit(gpa);
 
     var needs_win_reference = false;
+    var has_attached_bindings = false;
     for (bindings.items) |binding| {
         try collectImports(gpa, &imports, binding);
         try appendValueKind(gpa, &used_kinds, binding.value_kind);
         needs_win_reference = needs_win_reference or binding.setter_kind == .boxed_reference;
+        has_attached_bindings = has_attached_bindings or binding.setter_kind == .attached;
     }
 
     std.mem.sort(ValueKind, used_kinds.items, {}, struct {
@@ -128,15 +146,106 @@ pub fn emitSetProp(
         }
     }.lt);
 
-    try emitHeader(writer, gpa, imports, used_kinds.items, needs_win_reference);
+    try emitHeader(writer, gpa, imports, used_kinds.items, needs_win_reference, has_attached_bindings);
 
     for (bindings.items) |binding| {
         try emitTypedSetter(writer, binding);
         try emitErasedSetter(writer, binding);
+        if (binding.setter_kind == .attached) {
+            try emitTypedAttachedClear(writer, binding);
+            try emitErasedAttachedClear(writer, binding);
+        }
     }
 
     try emitEntries(writer, bindings.items);
     try emitLookup(writer, bindings.items);
+}
+
+pub fn emitAttachedPropsFromManifest(
+    writer: *std.Io.Writer,
+    gpa: std.mem.Allocator,
+) !void {
+    var manifest = try manifest_mod.load(gpa);
+    defer manifest.deinit();
+
+    try emitAttachedProps(writer, gpa, manifest.widgets);
+}
+
+pub fn emitAttachedProps(
+    writer: *std.Io.Writer,
+    gpa: std.mem.Allocator,
+    widgets: []const Widget,
+) !void {
+    var bindings = try std.ArrayList(AttachedPropBinding).initCapacity(gpa, 0);
+    defer {
+        for (bindings.items) |binding| {
+            gpa.free(binding.helper_name);
+        }
+        bindings.deinit(gpa);
+    }
+
+    for (widgets) |*widget| {
+        for (widget.props) |*prop| {
+            const attached = prop.attached orelse continue;
+            const value_kind = prop.value orelse return error.UnsupportedValueKindInference;
+
+            var duplicate = false;
+            for (bindings.items) |binding| {
+                if (std.mem.eql(u8, binding.owner_full_name, attached.owner) and
+                    std.mem.eql(u8, binding.property_name, prop.name))
+                {
+                    duplicate = true;
+                    break;
+                }
+            }
+            if (duplicate) continue;
+
+            const owner = try splitQualifiedName(attached.owner);
+            try bindings.append(gpa, .{
+                .owner_full_name = attached.owner,
+                .owner_namespace = owner.namespace,
+                .owner_name = owner.name,
+                .property_name = prop.name,
+                .helper_name = try snakeCaseAlloc(gpa, prop.winrt_name),
+                .value_kind = value_kind,
+            });
+        }
+    }
+
+    std.mem.sort(AttachedPropBinding, bindings.items, {}, struct {
+        fn lt(_: void, a: AttachedPropBinding, b: AttachedPropBinding) bool {
+            const owner_order = std.mem.order(u8, a.owner_full_name, b.owner_full_name);
+            if (owner_order != .eq) return owner_order == .lt;
+            return std.mem.lessThan(u8, a.property_name, b.property_name);
+        }
+    }.lt);
+
+    try emitAttachedPropsHeader(writer, bindings.items);
+
+    var current_owner: ?[]const u8 = null;
+    for (bindings.items) |binding| {
+        if (current_owner == null or !std.mem.eql(u8, current_owner.?, binding.owner_full_name)) {
+            if (current_owner != null) {
+                try writer.writeAll("};\n\n");
+            }
+            current_owner = binding.owner_full_name;
+            try writer.print("pub const {s} = struct {{\n", .{trimTick(binding.owner_name)});
+        }
+
+        try writer.writeAll("    pub fn ");
+        try writer.writeAll(binding.helper_name);
+        try writer.writeAll("(value: ");
+        try writeBuilderValueType(writer, binding.value_kind);
+        try writer.writeAll(") AttachedPropertySpec(");
+        try writeBuilderValueType(writer, binding.value_kind);
+        try writer.print(", \"{s}\") {{\n", .{binding.property_name});
+        try writer.writeAll("        return .{ .value = value };\n");
+        try writer.writeAll("    }\n");
+    }
+
+    if (current_owner != null) {
+        try writer.writeAll("};\n");
+    }
 }
 
 pub fn emitAttachEventFromManifest(
@@ -210,6 +319,7 @@ fn emitHeader(
     imports: std.StringHashMapUnmanaged(void),
     used_kinds: []const ValueKind,
     needs_win_reference: bool,
+    has_attached_bindings: bool,
 ) !void {
     try writer.writeAll("// Generated by winbindgen reactor-bindings - do not edit.\n");
     try writer.writeAll("const std = @import(\"std\");\n");
@@ -249,10 +359,31 @@ fn emitHeader(
         \\
     );
 
+    if (has_attached_bindings) {
+        try writer.writeAll(
+            \\const AttachedDependencyObject = struct {
+            \\    const IID: win_core.GUID = .{
+            \\        .data1 = 0xE7BEAEE7,
+            \\        .data2 = 0x160E,
+            \\        .data3 = 0x50F7,
+            \\        .data4 = .{ 0x87, 0x89, 0xD6, 0x34, 0x63, 0xF9, 0x79, 0xFA },
+            \\    };
+            \\    const Vtbl = extern struct {
+            \\        base: win_core.IInspectable_Vtbl,
+            \\        GetValue: *const fn (this: *anyopaque, property: *@"Microsoft.UI.Xaml".DependencyProperty, result: *?*const anyopaque) callconv(.winapi) win_core.HRESULT,
+            \\        SetValue: *const fn (this: *anyopaque, property: *@"Microsoft.UI.Xaml".DependencyProperty, value: ?*const anyopaque) callconv(.winapi) win_core.HRESULT,
+            \\        ClearValue: *const fn (this: *anyopaque, property: *@"Microsoft.UI.Xaml".DependencyProperty) callconv(.winapi) win_core.HRESULT,
+            \\    };
+            \\};
+            \\
+        );
+    }
+
     try emitSetterValueUnion(writer, used_kinds);
 
     try writer.writeAll(
         \\pub const SetterFn = *const fn (widget: *anyopaque, value: SetterValue) Error!void;
+        \\pub const ClearFn = *const fn (widget: *anyopaque) Error!void;
         \\
         \\pub const PropertySetter = struct {
         \\    widget_class: []const u8,
@@ -263,7 +394,44 @@ fn emitHeader(
         \\    value_kind: ValueKind,
         \\    setter_kind: SetterKind,
         \\    apply: SetterFn,
+        \\    clear: ?ClearFn,
         \\};
+        \\
+    );
+}
+
+fn emitAttachedPropsHeader(writer: *std.Io.Writer, bindings: []const AttachedPropBinding) !void {
+    try writer.writeAll("// Generated by winbindgen reactor-bindings - do not edit.\n");
+    var needs_windows_ui = false;
+    var needs_windows_foundation = false;
+    var needs_xaml = false;
+    for (bindings) |binding| {
+        switch (binding.value_kind) {
+            .color => needs_windows_ui = true,
+            .date_time, .time_span => needs_windows_foundation = true,
+            .element => needs_xaml = true,
+            else => {},
+        }
+    }
+
+    if (needs_windows_foundation) {
+        try writer.writeAll("const @\"Windows.Foundation\" = @import(\"Windows.Foundation\");\n");
+    }
+    if (needs_windows_ui) {
+        try writer.writeAll("const @\"Windows.UI\" = @import(\"Windows.UI\");\n");
+    }
+    if (needs_xaml) {
+        try writer.writeAll("const @\"Microsoft.UI.Xaml\" = @import(\"Microsoft.UI.Xaml\");\n");
+    }
+
+    try writer.writeAll(
+        \\
+        \\fn AttachedPropertySpec(comptime T: type, comptime property_name: []const u8) type {
+        \\    return struct {
+        \\        name: []const u8 = property_name,
+        \\        value: T,
+        \\    };
+        \\}
         \\
     );
 }
@@ -334,6 +502,33 @@ fn emitErasedSetter(writer: *std.Io.Writer, binding: Binding) !void {
     try writer.writeAll("}\n\n");
 }
 
+fn emitTypedAttachedClear(writer: *std.Io.Writer, binding: Binding) !void {
+    if (binding.setter_kind != .attached) return error.UnsupportedSetterStrategy;
+
+    try writer.writeAll("pub fn ");
+    try writeBindingStem(writer, "clear", binding);
+    try writer.writeAll("(widget: *");
+    try writeQualifiedType(writer, .{
+        .namespace = binding.widget.namespace,
+        .name = binding.widget.short_name,
+    });
+    try writer.writeAll(") Error!void {\n");
+    try emitAttachedClearCall(writer, binding);
+    try writer.writeAll("}\n\n");
+}
+
+fn emitErasedAttachedClear(writer: *std.Io.Writer, binding: Binding) !void {
+    if (binding.setter_kind != .attached) return error.UnsupportedSetterStrategy;
+
+    try writer.writeAll("fn ");
+    try writeBindingStem(writer, "clearErased", binding);
+    try writer.writeAll("(widget: *anyopaque) Error!void {\n");
+    try writer.writeAll("    try ");
+    try writeBindingStem(writer, "clear", binding);
+    try writer.writeAll("(@ptrCast(@alignCast(widget)));\n");
+    try writer.writeAll("}\n\n");
+}
+
 fn emitEntries(writer: *std.Io.Writer, bindings: []const Binding) !void {
     try writer.writeAll("pub const entries = [_]PropertySetter{\n");
     for (bindings) |binding| {
@@ -347,6 +542,13 @@ fn emitEntries(writer: *std.Io.Writer, bindings: []const Binding) !void {
         try writer.print("        .setter_kind = .{s},\n", .{@tagName(binding.setter_kind)});
         try writer.writeAll("        .apply = ");
         try writeBindingStem(writer, "apply", binding);
+        try writer.writeAll(",\n");
+        try writer.writeAll("        .clear = ");
+        if (binding.setter_kind == .attached) {
+            try writeBindingStem(writer, "clearErased", binding);
+        } else {
+            try writer.writeAll("null");
+        }
         try writer.writeAll(",\n");
         try writer.writeAll("    },\n");
     }
@@ -374,6 +576,13 @@ fn emitLookup(writer: *std.Io.Writer, bindings: []const Binding) !void {
         \\pub fn dispatch(widget_class: []const u8, property_name: []const u8, widget: *anyopaque, value: SetterValue) Error!bool {
         \\    const entry = find(widget_class, property_name) orelse return false;
         \\    try entry.apply(widget, value);
+        \\    return true;
+        \\}
+        \\
+        \\pub fn dispatchClear(widget_class: []const u8, property_name: []const u8, widget: *anyopaque) Error!bool {
+        \\    const entry = find(widget_class, property_name) orelse return false;
+        \\    const clear = entry.clear orelse return false;
+        \\    try clear(widget);
         \\    return true;
         \\}
     );
@@ -715,14 +924,23 @@ fn emitEnumSetterCall(writer: *std.Io.Writer, binding: Binding, target_name: []c
 fn emitAttachedSetterCall(writer: *std.Io.Writer, binding: Binding) !void {
     const owner_namespace = binding.setter.owner_namespace orelse return error.UnsupportedSetterStrategy;
     const owner_name = binding.setter.owner_name orelse return error.UnsupportedSetterStrategy;
+    const attached_target = binding.setter.attached_target orelse return error.UnsupportedSetterStrategy;
 
-    try writer.writeAll(
-        \\    const widget_object = win_core.IInspectable.from(@ptrCast(widget));
-        \\    const target = try widget_object.cast(@"Microsoft.UI.Xaml".IUIElement_Vtbl, &@"Microsoft.UI.Xaml".IUIElement.IID);
-        \\    defer target.deinit();
-        \\    const target_iface: *@"Microsoft.UI.Xaml".UIElement = @ptrCast(@alignCast(target.ptr));
-    );
-    try writer.writeByte('\n');
+    try writer.writeAll("    const widget_object = win_core.IInspectable.from(@ptrCast(widget));\n");
+    switch (attached_target) {
+        .object => {},
+        .class_name => |target_type| {
+            const target_name = trimTick(target_type.name);
+            try writer.print(
+                "    const target = try widget_object.cast(@\"{s}\".I{s}_Vtbl, &@\"{s}\".I{s}.IID);\n",
+                .{ target_type.namespace, target_name, target_type.namespace, target_name },
+            );
+            try writer.writeAll("    defer target.deinit();\n");
+            try writer.writeAll("    const target_iface: *");
+            try writeQualifiedType(writer, target_type);
+            try writer.writeAll(" = @ptrCast(@alignCast(target.ptr));\n");
+        },
+    }
     try writer.writeAll("    var statics = try ");
     try writer.print("@\"{s}\".{s}.statics();\n", .{ owner_namespace, owner_name });
     try writer.writeAll("    defer statics.deinit();\n");
@@ -734,7 +952,12 @@ fn emitAttachedSetterCall(writer: *std.Io.Writer, binding: Binding) !void {
     try writer.writeAll(" = @ptrCast(@alignCast(statics.ptr));\n");
     try writer.writeAll("    try win_core.hresult.ok(owner.");
     try writer.writeAll(binding.setter.method_name);
-    try writer.writeAll("(target_iface, ");
+    try writer.writeAll("(");
+    switch (attached_target) {
+        .object => try writer.writeAll("@as(?*const anyopaque, widget_object.ptr)"),
+        .class_name => try writer.writeAll("target_iface"),
+    }
+    try writer.writeAll(", ");
 
     switch (binding.value_kind) {
         .bool => {
@@ -754,6 +977,29 @@ fn emitAttachedSetterCall(writer: *std.Io.Writer, binding: Binding) !void {
     }
 
     try writer.writeAll("));\n");
+}
+
+fn emitAttachedClearCall(writer: *std.Io.Writer, binding: Binding) !void {
+    const owner_namespace = binding.setter.owner_namespace orelse return error.UnsupportedSetterStrategy;
+    const owner_name = binding.setter.owner_name orelse return error.UnsupportedSetterStrategy;
+
+    try writer.writeAll("    const widget_object = win_core.IInspectable.from(@ptrCast(widget));\n");
+    try writer.writeAll("    var statics = try ");
+    try writer.print("@\"{s}\".{s}.statics();\n", .{ owner_namespace, owner_name });
+    try writer.writeAll("    defer statics.deinit();\n");
+    try writer.writeAll("    const owner: *const ");
+    try writeQualifiedType(writer, .{
+        .namespace = binding.setter.interface_namespace,
+        .name = binding.setter.interface_name,
+    });
+    try writer.writeAll(" = @ptrCast(@alignCast(statics.ptr));\n");
+    try writer.writeAll("    var dependency_property: ?*@\"Microsoft.UI.Xaml\".DependencyProperty = null;\n");
+    try writer.writeAll("    try win_core.hresult.ok(owner.vtable.");
+    try writer.print("get_{s}Property(owner, @ptrCast(&dependency_property)));\n", .{binding.prop.winrt_name});
+    try writer.writeAll("    const property = dependency_property orelse return error.InterfaceCastFailed;\n");
+    try writer.writeAll("    const dependency_object = try widget_object.cast(AttachedDependencyObject.Vtbl, &AttachedDependencyObject.IID);\n");
+    try writer.writeAll("    defer dependency_object.deinit();\n");
+    try writer.writeAll("    try win_core.hresult.ok(dependency_object.vtbl().ClearValue(dependency_object.ptr, property));\n");
 }
 
 fn emitTextBlockSetterCall(writer: *std.Io.Writer, binding: Binding, target_name: []const u8) !void {
@@ -1189,6 +1435,12 @@ fn collectImports(
         if (binding.setter.owner_namespace) |owner_namespace| {
             try imports.put(gpa, owner_namespace, {});
         }
+        if (binding.setter.attached_target) |attached_target| {
+            switch (attached_target) {
+                .object => {},
+                .class_name => |target_type| try imports.put(gpa, target_type.namespace, {}),
+            }
+        }
     }
     if (binding.setter_kind == .text_block) {
         try imports.put(gpa, "Microsoft.UI.Xaml.Controls", {});
@@ -1259,17 +1511,25 @@ fn resolveAttachedSetter(
     const sig = try winmd.readMethodSignature(sig_alloc, file, file.blob(.method_def, method_row, 4));
     if (sig.params.len != 2) return error.UnsupportedPropertySignature;
 
-    switch (sig.params[0]) {
-        .class_name => |type_name| {
-            if (!std.mem.eql(u8, type_name.namespace, "Microsoft.UI.Xaml") or
-                !std.mem.eql(u8, trimTick(type_name.name), "UIElement"))
+    const attached_target: AttachedTarget = switch (sig.params[0]) {
+        .class_name => |type_name| blk: {
+            if (!std.mem.eql(u8, type_name.namespace, "Microsoft.UI.Xaml")) {
+                return error.UnsupportedSetterStrategy;
+            }
+            const target_name = trimTick(type_name.name);
+            if (!std.mem.eql(u8, target_name, "UIElement") and
+                !std.mem.eql(u8, target_name, "FrameworkElement"))
             {
                 return error.UnsupportedSetterStrategy;
             }
+            break :blk .{ .class_name = .{
+                .namespace = type_name.namespace,
+                .name = target_name,
+            } };
         },
-        .object => {},
+        .object => .object,
         else => return error.UnsupportedSetterStrategy,
-    }
+    };
 
     return .{
         .interface_namespace = owner.namespace,
@@ -1278,7 +1538,24 @@ fn resolveAttachedSetter(
         .param_ty = sig.params[1],
         .owner_namespace = owner.namespace,
         .owner_name = owner.name,
+        .attached_target = attached_target,
     };
+}
+
+fn snakeCaseAlloc(allocator: std.mem.Allocator, name: []const u8) ![]const u8 {
+    var buf = try allocator.alloc(u8, name.len * 2);
+    var out_len: usize = 0;
+
+    for (name, 0..) |ch, i| {
+        if (std.ascii.isUpper(ch) and i > 0) {
+            buf[out_len] = '_';
+            out_len += 1;
+        }
+
+        buf[out_len] = std.ascii.toLower(ch);
+        out_len += 1;
+    }
+    return try allocator.realloc(buf, out_len);
 }
 
 fn findSetterInClassHierarchy(
@@ -1479,7 +1756,10 @@ fn writeBindingStem(writer: *std.Io.Writer, prefix: []const u8, binding: Binding
         if (ch == '.') continue;
         try writer.writeByte(ch);
     }
-    try writer.writeAll(binding.prop.name);
+    for (binding.prop.name) |ch| {
+        if (!std.ascii.isAlphanumeric(ch)) continue;
+        try writer.writeByte(ch);
+    }
 }
 
 fn writeQualifiedType(writer: *std.Io.Writer, qualified: QualifiedName) !void {
@@ -1494,6 +1774,23 @@ fn writeValueType(writer: *std.Io.Writer, kind: ValueKind) !void {
     switch (kind) {
         .string => try writer.writeAll("[]const u16"),
         .string_list => try writer.writeAll("*const anyopaque"),
+        .object => try writer.writeAll("?*const anyopaque"),
+        .bool => try writer.writeAll("bool"),
+        .f64 => try writer.writeAll("f64"),
+        .i32 => try writer.writeAll("i32"),
+        .u32 => try writer.writeAll("u32"),
+        .enum_i32 => try writer.writeAll("i32"),
+        .color => try writer.writeAll("@\"Windows.UI\".Color"),
+        .date_time => try writer.writeAll("@\"Windows.Foundation\".DateTime"),
+        .time_span => try writer.writeAll("@\"Windows.Foundation\".TimeSpan"),
+        .element => try writer.writeAll("*@\"Microsoft.UI.Xaml\".UIElement"),
+    }
+}
+
+fn writeBuilderValueType(writer: *std.Io.Writer, kind: ValueKind) !void {
+    switch (kind) {
+        .string => try writer.writeAll("[]const u8"),
+        .string_list => try writer.writeAll("[]const []const u8"),
         .object => try writer.writeAll("?*const anyopaque"),
         .bool => try writer.writeAll("bool"),
         .f64 => try writer.writeAll("f64"),
@@ -1540,6 +1837,11 @@ test "emitSetPropFromManifest covers the seeded widget props" {
     try std.testing.expect(std.mem.find(u8, source, "default_iface.cast(@\"Microsoft.UI.Xaml.Controls\".IContentControl) orelse return error.InterfaceCastFailed;") != null);
     try std.testing.expect(std.mem.find(u8, source, "text_block_iface.put_TextFromUtf16(value)") != null);
     try std.testing.expect(std.mem.find(u8, source, "target.put_Content(@as(?*const anyopaque, @ptrCast(text_block)))") != null);
+    try std.testing.expect(std.mem.find(u8, source, "pub fn setMicrosoftUIXamlControlsButtonGridRow(widget: *@\"Microsoft.UI.Xaml.Controls\".Button, value: i32) Error!void {") != null);
+    try std.testing.expect(std.mem.find(u8, source, "const target = try widget_object.cast(@\"Microsoft.UI.Xaml\".IFrameworkElement_Vtbl, &@\"Microsoft.UI.Xaml\".IFrameworkElement.IID);") != null);
+    try std.testing.expect(std.mem.find(u8, source, "pub fn clearMicrosoftUIXamlControlsButtonGridRow(widget: *@\"Microsoft.UI.Xaml.Controls\".Button) Error!void {") != null);
+    try std.testing.expect(std.mem.find(u8, source, "owner.vtable.get_RowProperty(owner, @ptrCast(&dependency_property))") != null);
+    try std.testing.expect(std.mem.find(u8, source, "pub fn clearMicrosoftUIXamlControlsButtonLeft(widget: *@\"Microsoft.UI.Xaml.Controls\".Button) Error!void {") != null);
     try std.testing.expect(std.mem.find(u8, source, "pub fn setMicrosoftUIXamlControlsTextBoxText(widget: *@\"Microsoft.UI.Xaml.Controls\".TextBox, value: []const u16) Error!void {") != null);
     try std.testing.expect(std.mem.find(u8, source, "pub fn setMicrosoftUIXamlControlsCheckBoxIsChecked(widget: *@\"Microsoft.UI.Xaml.Controls\".CheckBox, value: bool) Error!void {") != null);
     try std.testing.expect(std.mem.find(u8, source, "var boxed = try win_reference.box(value);") != null);
@@ -1556,6 +1858,7 @@ test "emitSetPropFromManifest covers the seeded widget props" {
     try std.testing.expect(std.mem.find(u8, source, "pub fn setMicrosoftUIXamlControlsItemsRepeaterItemsSource(widget: *@\"Microsoft.UI.Xaml.Controls\".ItemsRepeater, value: ?*const anyopaque) Error!void {") != null);
     try std.testing.expect(std.mem.find(u8, source, "target.put_ItemsSource(value)") != null);
     try std.testing.expect(std.mem.find(u8, source, "pub const by_widget_prop = std.StaticStringMap(usize).initComptime(.{") != null);
+    try std.testing.expect(std.mem.find(u8, source, "pub fn dispatchClear(widget_class: []const u8, property_name: []const u8, widget: *anyopaque) Error!bool {") != null);
 }
 
 test "emitSetPropFromManifest is deterministic for the production manifest" {
@@ -1582,6 +1885,23 @@ test "emitSetPropFromManifest is deterministic for the production manifest" {
     try emitSetPropFromManifest(&out_b.writer, gpa, &mapped.file);
 
     try std.testing.expectEqualStrings(out_a.written(), out_b.written());
+}
+
+test "emitAttachedPropsFromManifest covers owner-scoped helper namespaces" {
+    const gpa = std.testing.allocator;
+    var out: std.Io.Writer.Allocating = .init(gpa);
+    defer out.deinit();
+
+    try emitAttachedPropsFromManifest(&out.writer, gpa);
+
+    const source = out.written();
+    try std.testing.expect(std.mem.find(u8, source, "pub const Canvas = struct {") != null);
+    try std.testing.expect(std.mem.find(u8, source, "pub fn left(value: f64) AttachedPropertySpec(f64, \"Left\") {") != null);
+    try std.testing.expect(std.mem.find(u8, source, "return .{ .value = value };") != null);
+    try std.testing.expect(std.mem.find(u8, source, "pub fn z_index(value: i32) AttachedPropertySpec(i32, \"ZIndex\") {") != null);
+    try std.testing.expect(std.mem.find(u8, source, "pub const Grid = struct {") != null);
+    try std.testing.expect(std.mem.find(u8, source, "pub fn row(value: i32) AttachedPropertySpec(i32, \"Grid.Row\") {") != null);
+    try std.testing.expect(std.mem.find(u8, source, "pub fn column_span(value: i32) AttachedPropertySpec(i32, \"Grid.ColumnSpan\") {") != null);
 }
 
 test "emitAttachEventFromManifest covers the seeded widget events" {

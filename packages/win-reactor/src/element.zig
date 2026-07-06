@@ -318,6 +318,24 @@ pub const Property = struct {
     }
 };
 
+pub fn AttachedPropertySpec(comptime T: type) type {
+    return struct {
+        name: []const u8,
+        value: T,
+
+        pub fn apply(self: @This(), builder: anytype) Error!@TypeOf(builder) {
+            return builder.prop(self.name, self.value);
+        }
+    };
+}
+
+pub fn attachedProperty(name: []const u8, value: anytype) AttachedPropertySpec(@TypeOf(value)) {
+    return .{
+        .name = name,
+        .value = value,
+    };
+}
+
 /// Provider payload stored on `Element.provider`. The active render tree clones
 /// this boxed value into the ambient `ContextStack` while descending into the
 /// provider's child subtree.
@@ -939,6 +957,17 @@ pub fn WidgetBuilder(comptime kind: WidgetKind) type {
             errdefer property.deinit(self.allocator);
             try self.props.append(self.allocator, property);
             return self;
+        }
+
+        pub fn attached(self: *@This(), spec: anytype) Error!*@This() {
+            const Spec = @TypeOf(spec);
+            if (comptime @hasDecl(Spec, "apply")) {
+                return spec.apply(self);
+            }
+            if (comptime @hasField(Spec, "name") and @hasField(Spec, "value")) {
+                return self.prop(spec.name, spec.value);
+            }
+            @compileError("attached specs must expose apply(builder) or name/value fields");
         }
 
         pub fn on(self: *@This(), name: []const u8, callback: EventCallback) Error!*@This() {
