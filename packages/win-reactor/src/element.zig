@@ -9,7 +9,19 @@ pub const Allocator = std.mem.Allocator;
 /// evaluating consumers, and a small amount of structural validation.
 pub const Error = Allocator.Error || render_cx.Error || error{
     LeafCannotHaveChildren,
+    ItemsSourceCannotHaveChildren,
     WindowCannotHaveMultipleChildren,
+    SingleChildWidgetCannotHaveMultipleChildren,
+};
+
+pub const WidgetRefPropertyName = "__reactor_ref";
+
+pub const WidgetRef = struct {
+    id: ?usize = null,
+
+    pub fn clear(self: *@This()) void {
+        self.id = null;
+    }
 };
 
 pub const WidgetKind = enum {
@@ -19,6 +31,9 @@ pub const WidgetKind = enum {
     window,
     button,
     stack_panel,
+    grid,
+    scroll_viewer,
+    border,
     text_block,
     text_box,
     check_box,
@@ -26,21 +41,110 @@ pub const WidgetKind = enum {
     combo_box,
     toggle_switch,
     radio_button,
+    content_dialog,
+    flyout,
+    navigation_view,
+    navigation_view_item,
+    menu_bar,
+    menu_bar_item,
+    canvas,
+    list_view,
+    items_repeater,
 };
 
 pub fn widgetKindAllowsChildren(kind: WidgetKind) bool {
     return switch (kind) {
-        .container, .application, .window, .stack_panel => true,
-        .leaf, .button, .text_block, .text_box, .check_box, .slider, .combo_box, .toggle_switch, .radio_button => false,
+        .container,
+        .application,
+        .window,
+        .stack_panel,
+        .grid,
+        .scroll_viewer,
+        .border,
+        .content_dialog,
+        .flyout,
+        .navigation_view,
+        .menu_bar,
+        .canvas,
+        .list_view,
+        .items_repeater,
+        => true,
+        .leaf,
+        .button,
+        .text_block,
+        .text_box,
+        .check_box,
+        .slider,
+        .combo_box,
+        .toggle_switch,
+        .radio_button,
+        .navigation_view_item,
+        .menu_bar_item,
+        => false,
     };
 }
 
-/// Zero-argument event callback. Concrete WinUI event payloads arrive later;
-/// for now the tree only needs stable callback identity plus an invocation
-/// hook that tests can exercise.
+pub const PointerEventInfo = struct {
+    x: f64 = 0,
+    y: f64 = 0,
+    is_left_button_pressed: bool = false,
+    is_right_button_pressed: bool = false,
+    is_middle_button_pressed: bool = false,
+};
+
+pub const EventValue = union(enum) {
+    unit: void,
+    bool: bool,
+    string: []const u8,
+    f64: f64,
+    i32: i32,
+    pointer: PointerEventInfo,
+
+    pub fn get(self: EventValue, comptime T: type) ?T {
+        if (T == void) {
+            return switch (self) {
+                .unit => {},
+                else => null,
+            };
+        }
+        if (T == bool) {
+            return switch (self) {
+                .bool => |value| value,
+                else => null,
+            };
+        }
+        if (T == []const u8) {
+            return switch (self) {
+                .string => |value| value,
+                else => null,
+            };
+        }
+        if (T == f64) {
+            return switch (self) {
+                .f64 => |value| value,
+                else => null,
+            };
+        }
+        if (T == i32) {
+            return switch (self) {
+                .i32 => |value| value,
+                else => null,
+            };
+        }
+        if (T == PointerEventInfo) {
+            return switch (self) {
+                .pointer => |value| value,
+                else => null,
+            };
+        }
+        @compileError("unsupported EventValue payload type: " ++ @typeName(T));
+    }
+};
+
 pub const EventCallback = struct {
     userdata: ?*anyopaque = null,
     invoke_fn: *const fn (?*anyopaque) void = noop,
+    invoke_value_fn: ?*const fn (?*anyopaque, EventValue) void = null,
 
     pub fn init(userdata: ?*anyopaque, invoke_fn: *const fn (?*anyopaque) void) EventCallback {
         return .{
@@ -59,12 +163,52 @@ pub const EventCallback = struct {
         };
     }
 
+    pub fn initTyped(
+        comptime T: type,
+        userdata: ?*anyopaque,
+        comptime invoke_value_fn: *const fn (?*anyopaque, T) void,
+    ) EventCallback {
+        return .{
+            .userdata = userdata,
+            .invoke_value_fn = &struct {
+                fn call(raw: ?*anyopaque, value: EventValue) void {
+                    const typed = value.get(T) orelse return;
+                    invoke_value_fn(raw, typed);
+                }
+            }.call,
+        };
+    }
+
+    pub fn fromTypedFunction(
+        comptime T: type,
+        comptime invoke_value_fn: *const fn (T) void,
+    ) EventCallback {
+        return .{
+            .invoke_value_fn = &struct {
+                fn call(_: ?*anyopaque, value: EventValue) void {
+                    const typed = value.get(T) orelse return;
+                    invoke_value_fn(typed);
+                }
+            }.call,
+        };
+    }
+
     pub fn invoke(self: *const EventCallback) void {
+        self.invokeValue(.{ .unit = {} });
+    }
+
+    pub fn invokeValue(self: *const EventCallback, value: EventValue) void {
+        if (self.invoke_value_fn) |invoke_value_fn| {
+            invoke_value_fn(self.userdata, value);
+            return;
+        }
         self.invoke_fn(self.userdata);
     }
 
     pub fn eql(self: *const EventCallback, other: *const EventCallback) bool {
-        return self.userdata == other.userdata and functionPtrEql(self.invoke_fn, other.invoke_fn);
+        return self.userdata == other.userdata and
+            functionPtrEql(self.invoke_fn, other.invoke_fn) and
+            optionalFunctionPtrEql(self.invoke_value_fn, other.invoke_value_fn);
     }
 
     fn noop(_: ?*anyopaque) void {}
@@ -95,6 +239,10 @@ pub const EventHandler = struct {
 
     pub fn invoke(self: *const EventHandler) void {
         self.callback.invoke();
+    }
+
+    pub fn invokeValue(self: *const EventHandler, value: EventValue) void {
+        self.callback.invokeValue(value);
     }
 
     pub fn eql(self: *const EventHandler, other: *const EventHandler) bool {
@@ -803,7 +951,7 @@ pub fn WidgetBuilder(comptime kind: WidgetKind) type {
         pub fn child(self: *@This(), value: anytype) Error!*@This() {
             comptime {
                 switch (kind) {
-                    .leaf, .button, .text_block, .text_box, .check_box, .slider, .combo_box, .toggle_switch, .radio_button => {
+                    .leaf, .button, .text_block, .text_box, .check_box, .slider, .combo_box, .toggle_switch, .radio_button, .navigation_view_item, .menu_bar_item => {
                         @compileError("this widget builder cannot accept children");
                     },
                     else => {},
@@ -817,7 +965,7 @@ pub fn WidgetBuilder(comptime kind: WidgetKind) type {
         pub fn childrenFrom(self: *@This(), values: anytype) Error!*@This() {
             comptime {
                 switch (kind) {
-                    .leaf, .button, .text_block, .text_box, .check_box, .slider, .combo_box, .toggle_switch, .radio_button => {
+                    .leaf, .button, .text_block, .text_box, .check_box, .slider, .combo_box, .toggle_switch, .radio_button, .navigation_view_item, .menu_bar_item => {
                         @compileError("this widget builder cannot accept children");
                     },
                     else => {},
@@ -841,8 +989,14 @@ pub fn WidgetBuilder(comptime kind: WidgetKind) type {
             if (!widgetKindAllowsChildren(kind) and self.children.items.len != 0) {
                 return error.LeafCannotHaveChildren;
             }
+            if (isCollectionBoundListWidget(kind) and self.children.items.len != 0 and propertyListContains(self.props.items, "ItemsSource")) {
+                return error.ItemsSourceCannotHaveChildren;
+            }
             if (kind == .window and self.children.items.len > 1) {
                 return error.WindowCannotHaveMultipleChildren;
+            }
+            if ((kind == .scroll_viewer or kind == .border) and self.children.items.len > 1) {
+                return error.SingleChildWidgetCannotHaveMultipleChildren;
             }
 
             const allocator = self.allocator;
@@ -893,6 +1047,9 @@ pub const ApplicationBuilder = WidgetBuilder(.application);
 pub const WindowBuilder = WidgetBuilder(.window);
 pub const ButtonBuilder = WidgetBuilder(.button);
 pub const StackPanelBuilder = WidgetBuilder(.stack_panel);
+pub const GridBuilder = WidgetBuilder(.grid);
+pub const ScrollViewerBuilder = WidgetBuilder(.scroll_viewer);
+pub const BorderBuilder = WidgetBuilder(.border);
 pub const TextBlockBuilder = WidgetBuilder(.text_block);
 pub const TextBoxBuilder = WidgetBuilder(.text_box);
 pub const CheckBoxBuilder = WidgetBuilder(.check_box);
@@ -900,6 +1057,15 @@ pub const SliderBuilder = WidgetBuilder(.slider);
 pub const ComboBoxBuilder = WidgetBuilder(.combo_box);
 pub const ToggleSwitchBuilder = WidgetBuilder(.toggle_switch);
 pub const RadioButtonBuilder = WidgetBuilder(.radio_button);
+pub const ContentDialogBuilder = WidgetBuilder(.content_dialog);
+pub const FlyoutBuilder = WidgetBuilder(.flyout);
+pub const NavigationViewBuilder = WidgetBuilder(.navigation_view);
+pub const NavigationViewItemBuilder = WidgetBuilder(.navigation_view_item);
+pub const MenuBarBuilder = WidgetBuilder(.menu_bar);
+pub const MenuBarItemBuilder = WidgetBuilder(.menu_bar_item);
+pub const CanvasBuilder = WidgetBuilder(.canvas);
+pub const ListViewBuilder = WidgetBuilder(.list_view);
+pub const ItemsRepeaterBuilder = WidgetBuilder(.items_repeater);
 
 pub fn leaf(allocator: Allocator) LeafBuilder {
     return LeafBuilder.init(allocator);
@@ -923,6 +1089,18 @@ pub fn button(allocator: Allocator) ButtonBuilder {
 
 pub fn stack_panel(allocator: Allocator) StackPanelBuilder {
     return StackPanelBuilder.init(allocator);
+}
+
+pub fn grid(allocator: Allocator) GridBuilder {
+    return GridBuilder.init(allocator);
+}
+
+pub fn scroll_viewer(allocator: Allocator) ScrollViewerBuilder {
+    return ScrollViewerBuilder.init(allocator);
+}
+
+pub fn border(allocator: Allocator) BorderBuilder {
+    return BorderBuilder.init(allocator);
 }
 
 pub fn text_block(allocator: Allocator) TextBlockBuilder {
@@ -951,6 +1129,56 @@ pub fn toggle_switch(allocator: Allocator) ToggleSwitchBuilder {
 
 pub fn radio_button(allocator: Allocator) RadioButtonBuilder {
     return RadioButtonBuilder.init(allocator);
+}
+
+pub fn content_dialog(allocator: Allocator) ContentDialogBuilder {
+    return ContentDialogBuilder.init(allocator);
+}
+
+pub fn flyout(allocator: Allocator) FlyoutBuilder {
+    return FlyoutBuilder.init(allocator);
+}
+
+pub fn navigation_view(allocator: Allocator) NavigationViewBuilder {
+    return NavigationViewBuilder.init(allocator);
+}
+
+pub fn navigation_view_item(allocator: Allocator) NavigationViewItemBuilder {
+    return NavigationViewItemBuilder.init(allocator);
+}
+
+pub fn menu_bar(allocator: Allocator) MenuBarBuilder {
+    return MenuBarBuilder.init(allocator);
+}
+
+pub fn menu_bar_item(allocator: Allocator) MenuBarItemBuilder {
+    return MenuBarItemBuilder.init(allocator);
+}
+
+pub fn canvas(allocator: Allocator) CanvasBuilder {
+    return CanvasBuilder.init(allocator);
+}
+
+pub fn list_view(allocator: Allocator) ListViewBuilder {
+    return ListViewBuilder.init(allocator);
+}
+
+pub fn items_repeater(allocator: Allocator) ItemsRepeaterBuilder {
+    return ItemsRepeaterBuilder.init(allocator);
+}
+
+fn isCollectionBoundListWidget(kind: WidgetKind) bool {
+    return switch (kind) {
+        .list_view, .items_repeater => true,
+        else => false,
+    };
+}
+
+fn propertyListContains(properties: []const Property, name: []const u8) bool {
+    for (properties) |property| {
+        if (std.mem.eql(u8, property.name, name)) return true;
+    }
+    return false;
 }
 
 fn appendElementInputs(items: *std.ArrayListUnmanaged(Element), allocator: Allocator, values: anytype) Error!void {
@@ -1126,6 +1354,49 @@ fn functionPtrEql(lhs: anytype, rhs: @TypeOf(lhs)) bool {
     return @intFromPtr(lhs) == @intFromPtr(rhs);
 }
 
+fn optionalFunctionPtrEql(lhs: anytype, rhs: @TypeOf(lhs)) bool {
+    if (lhs) |lhs_value| {
+        if (rhs) |rhs_value| {
+            return functionPtrEql(lhs_value, rhs_value);
+        }
+        return false;
+    }
+    return rhs == null;
+}
+
+test "typed event callbacks receive payloads" {
+    const Capture = struct {
+        pressed: bool = false,
+        position: PointerEventInfo = .{},
+
+        fn onPointer(raw: ?*anyopaque, info: PointerEventInfo) void {
+            const self: *@This() = @ptrCast(@alignCast(raw.?));
+            self.pressed = true;
+            self.position = info;
+        }
+    };
+
+    var capture: Capture = .{};
+    const callback = EventCallback.initTyped(
+        PointerEventInfo,
+        @ptrCast(&capture),
+        Capture.onPointer,
+    );
+
+    callback.invokeValue(.{
+        .pointer = .{
+            .x = 42,
+            .y = 18,
+            .is_left_button_pressed = true,
+        },
+    });
+
+    try std.testing.expect(capture.pressed);
+    try std.testing.expectEqual(@as(f64, 42), capture.position.x);
+    try std.testing.expectEqual(@as(f64, 18), capture.position.y);
+    try std.testing.expect(capture.position.is_left_button_pressed);
+}
+
 test "widget builders convert into element trees with props, children, and handlers" {
     const Counter = struct {
         fn increment(raw: ?*anyopaque) void {
@@ -1168,6 +1439,18 @@ test "widget builders convert into element trees with props, children, and handl
     try std.testing.expectEqualStrings("primary", button_el.widget.propertyValue([]const u8, "role").?);
     button_el.widget.event("click").?.invoke();
     try std.testing.expectEqual(@as(u32, 1), clicks);
+}
+
+test "list widgets reject explicit ItemsSource plus templated children" {
+    var child_builder = leaf(std.testing.allocator);
+    defer child_builder.deinit();
+    _ = try child_builder.prop("text", @as([]const u8, "child"));
+
+    var list_builder = list_view(std.testing.allocator);
+    defer list_builder.deinit();
+    _ = try (try list_builder.prop("ItemsSource", @as(?*const anyopaque, null))).child(&child_builder);
+
+    try std.testing.expectError(error.ItemsSourceCannotHaveChildren, list_builder.build());
 }
 
 test "provide folds multiple context values into one provider node" {

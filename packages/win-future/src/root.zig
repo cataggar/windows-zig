@@ -316,6 +316,18 @@ pub const Async = struct {
         };
     };
 
+    const winui_xaml_metadata = blk: {
+        @setEvalBranchQuota(2_000_000);
+        break :blk winmd.parse(@embedFile("Microsoft.UI.Xaml.winmd")) catch |err| {
+            @compileError("failed to parse Microsoft.UI.Xaml.winmd: " ++ @errorName(err));
+        };
+    };
+
+    const TypeDefRef = struct {
+        file: *const winmd.File,
+        row: u32,
+    };
+
     fn asyncOperationCompletedHandlerIid(comptime T: type) GUID {
         return parameterizedIid(std.fmt.comptimePrint(
             "pinterface({{{s}}};{s})",
@@ -402,6 +414,9 @@ pub const Async = struct {
         if (T == win_core.HSTRING) return "string";
 
         switch (@typeInfo(T)) {
+            .@"enum" => {
+                return valueSignature(typeNameFromFullName(@typeName(T)));
+            },
             .pointer => |pointer| {
                 if (pointer.size != .one) {
                     @compileError("win-future only supports single-item pointers in async signatures");
@@ -428,16 +443,16 @@ pub const Async = struct {
     }
 
     fn classSignature(comptime type_name: winmd.TypeName) []const u8 {
-        const row = findTypeDefRow(type_name.namespace, type_name.name) orelse
-            @compileError("type not found in Windows.winmd: " ++ type_name.namespace ++ "." ++ type_name.name);
-        const flags = metadata.cell(.type_def, row, 0);
+        const type_def = findTypeDef(type_name.namespace, type_name.name) orelse
+            @compileError("type not found in embedded winmd metadata: " ++ type_name.namespace ++ "." ++ type_name.name);
+        const flags = type_def.file.cell(.type_def, type_def.row, 0);
         const is_interface = (flags & winmd.TYPE_ATTR_INTERFACE) != 0;
 
         var is_delegate = false;
         if (!is_interface) {
-            const extends_tok = metadata.cell(.type_def, row, 3);
+            const extends_tok = type_def.file.cell(.type_def, type_def.row, 3);
             if (extends_tok != 0) {
-                const base = winmd.resolveTypeDefOrRefName(&metadata, extends_tok) catch
+                const base = winmd.resolveTypeDefOrRefName(type_def.file, extends_tok) catch
                     @compileError("failed to resolve base type for " ++ type_name.namespace ++ "." ++ type_name.name);
                 if (std.mem.eql(u8, base.namespace, "System") and std.mem.eql(u8, base.name, "MulticastDelegate")) {
                     is_delegate = true;
@@ -446,7 +461,7 @@ pub const Async = struct {
         }
 
         if (is_interface) {
-            const guid = readTypeDefGuid(row);
+            const guid = readTypeDefGuid(type_def.file, type_def.row);
             if (type_name.generics.len == 0) {
                 return std.fmt.comptimePrint("{{{s}}}", .{guidHex(guid)});
             }
@@ -458,7 +473,7 @@ pub const Async = struct {
         }
 
         if (is_delegate) {
-            const guid = readTypeDefGuid(row);
+            const guid = readTypeDefGuid(type_def.file, type_def.row);
             if (type_name.generics.len == 0) {
                 return std.fmt.comptimePrint("delegate({{{s}}})", .{guidHex(guid)});
             }
@@ -469,7 +484,7 @@ pub const Async = struct {
             return sig ++ ")";
         }
 
-        const default_iface = defaultInterfaceTypeName(row) orelse
+        const default_iface = defaultInterfaceTypeName(type_def.file, type_def.row) orelse
             @compileError("runtime class has no default interface: " ++ type_name.namespace ++ "." ++ type_name.name);
         return std.fmt.comptimePrint(
             "rc({s}.{s};{s})",
@@ -505,7 +520,58 @@ pub const Async = struct {
         if (std.mem.eql(u8, type_name.namespace, "System") and std.mem.eql(u8, type_name.name, "Guid")) {
             return "g16";
         }
+
+        const type_def = findTypeDef(type_name.namespace, type_name.name) orelse
+            @compileError("value type not found in embedded winmd metadata: " ++ type_name.namespace ++ "." ++ type_name.name);
+        const extends_tok = type_def.file.cell(.type_def, type_def.row, 3);
+        if (extends_tok == 0) {
+            @compileError("value type has no base type in embedded winmd metadata: " ++ type_name.namespace ++ "." ++ type_name.name);
+        }
+        const base = winmd.resolveTypeDefOrRefName(type_def.file, extends_tok) catch
+            @compileError("failed to resolve base type for " ++ type_name.namespace ++ "." ++ type_name.name);
+        if (std.mem.eql(u8, base.namespace, "System") and std.mem.eql(u8, base.name, "Enum")) {
+            return enumSignature(type_def.file, type_name, type_def.row);
+        }
         @compileError("unsupported WinRT value type in async signature: " ++ type_name.namespace ++ "." ++ type_name.name);
+    }
+
+    fn enumSignature(file: *const winmd.File, comptime type_name: winmd.TypeName, comptime row: u32) []const u8 {
+        const fields = file.list(.type_def, row, 4, .field);
+        comptime var field_row = fields.start;
+        inline while (field_row < fields.end) : (field_row += 1) {
+            if (!std.mem.eql(u8, file.str(.field, field_row, 1), "value__")) continue;
+            return std.fmt.comptimePrint(
+                "enum({s}.{s};{s})",
+                .{
+                    type_name.namespace,
+                    type_name.name,
+                    primitiveFieldSignature(file.blob(.field, field_row, 2)),
+                },
+            );
+        }
+        @compileError("enum value type is missing value__ field: " ++ type_name.namespace ++ "." ++ type_name.name);
+    }
+
+    fn primitiveFieldSignature(comptime blob: []const u8) []const u8 {
+        if (blob.len != 2 or blob[0] != 0x06) {
+            @compileError("expected primitive field signature blob");
+        }
+
+        return switch (blob[1]) {
+            0x02 => "b1",
+            0x03 => "c2",
+            0x04 => "i1",
+            0x05 => "u1",
+            0x06 => "i2",
+            0x07 => "u2",
+            0x08 => "i4",
+            0x09 => "u4",
+            0x0A => "i8",
+            0x0B => "u8",
+            0x18 => "is",
+            0x19 => "us",
+            else => @compileError("unsupported primitive field signature element type"),
+        };
     }
 
     fn typeNameFromFullName(comptime full_name: []const u8) winmd.TypeName {
@@ -517,13 +583,23 @@ pub const Async = struct {
         };
     }
 
-    fn findTypeDefRow(comptime namespace: []const u8, comptime name: []const u8) ?u32 {
+    fn findTypeDef(comptime namespace: []const u8, comptime name: []const u8) ?TypeDefRef {
+        if (findTypeDefRowIn(&metadata, namespace, name)) |row| {
+            return .{ .file = &metadata, .row = row };
+        }
+        if (findTypeDefRowIn(&winui_xaml_metadata, namespace, name)) |row| {
+            return .{ .file = &winui_xaml_metadata, .row = row };
+        }
+        return null;
+    }
+
+    fn findTypeDefRowIn(file: *const winmd.File, comptime namespace: []const u8, comptime name: []const u8) ?u32 {
         @setEvalBranchQuota(2_000_000);
-        const rows = metadata.rowCount(.type_def);
+        const rows = file.rowCount(.type_def);
         comptime var row: u32 = 0;
         inline while (row < rows) : (row += 1) {
-            if (std.mem.eql(u8, metadata.str(.type_def, row, 2), namespace) and
-                std.mem.eql(u8, metadata.str(.type_def, row, 1), name))
+            if (std.mem.eql(u8, file.str(.type_def, row, 2), namespace) and
+                std.mem.eql(u8, file.str(.type_def, row, 1), name))
             {
                 return row;
             }
@@ -531,10 +607,10 @@ pub const Async = struct {
         return null;
     }
 
-    fn readTypeDefGuid(comptime type_def_row: u32) GUID {
-        const attr_row = winmd.findAttribute(&metadata, .type_def, type_def_row, "GuidAttribute") orelse
+    fn readTypeDefGuid(file: *const winmd.File, comptime type_def_row: u32) GUID {
+        const attr_row = winmd.findAttribute(file, .type_def, type_def_row, "GuidAttribute") orelse
             @compileError("missing GuidAttribute in Windows.winmd");
-        const blob = metadata.blob(.attribute, attr_row, 2);
+        const blob = file.blob(.attribute, attr_row, 2);
         if (blob.len < 18) @compileError("unexpected GuidAttribute blob");
         if (blob[0] != 0x01 or blob[1] != 0x00) @compileError("bad GuidAttribute prolog");
 
@@ -546,13 +622,13 @@ pub const Async = struct {
         };
     }
 
-    fn defaultInterfaceTypeName(comptime class_row: u32) ?winmd.TypeName {
-        const impls = metadata.equalRange(.interface_impl, 0, class_row + 1);
+    fn defaultInterfaceTypeName(file: *const winmd.File, comptime class_row: u32) ?winmd.TypeName {
+        const impls = file.equalRange(.interface_impl, 0, class_row + 1);
         comptime var row = impls.start;
         inline while (row < impls.end) : (row += 1) {
-            if (!winmd.hasAttribute(&metadata, .interface_impl, row, "DefaultAttribute")) continue;
-            const iface_token = metadata.cell(.interface_impl, row, 1);
-            return winmd.resolveTypeDefOrRefName(&metadata, iface_token) catch
+            if (!winmd.hasAttribute(file, .interface_impl, row, "DefaultAttribute")) continue;
+            const iface_token = file.cell(.interface_impl, row, 1);
+            return winmd.resolveTypeDefOrRefName(file, iface_token) catch
                 @compileError("failed to resolve default interface token");
         }
         return null;

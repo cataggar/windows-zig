@@ -8,6 +8,7 @@ const reconciler = @import("reconciler.zig");
 const backend = @import("backend.zig");
 const winui_backend = @import("winui_backend.zig");
 const winui_dispatcher = @import("winui_dispatcher.zig");
+const widgets_navigation = @import("widgets_navigation.zig");
 const xaml = @import("Microsoft.UI.Xaml");
 
 const win_core = win.core;
@@ -176,6 +177,7 @@ fn ReactorHost(comptime root_render: RootRenderFn) type {
     return struct {
         allocator: std.mem.Allocator,
         backend_impl: winui_backend.WinUIBackend,
+        overlay_host: widgets_navigation.OverlayHost,
         reconciler_impl: reconciler.Reconciler,
         dispatcher: ?winui_dispatcher.WinUIDispatcher = null,
         tree: ?reconciler.Tree = null,
@@ -189,6 +191,9 @@ fn ReactorHost(comptime root_render: RootRenderFn) type {
 
             self.allocator = allocator;
             self.backend_impl = winui_backend.WinUIBackend.init(allocator, application);
+            self.overlay_host = .{
+                .backend = &self.backend_impl,
+            };
             self.reconciler_impl = reconciler.Reconciler.init(
                 allocator,
                 backend.Backend.from(&self.backend_impl),
@@ -222,7 +227,7 @@ fn ReactorHost(comptime root_render: RootRenderFn) type {
 
         fn buildRoot(self: *@This()) !element.Element {
             const RootProps = struct {};
-            return element.component(
+            var root = try element.component(
                 self.allocator,
                 "winui_root",
                 RootProps{},
@@ -231,6 +236,13 @@ fn ReactorHost(comptime root_render: RootRenderFn) type {
                         return root_render(cx);
                     }
                 }.render,
+            );
+            defer root.deinit(self.allocator);
+            return element.provide(
+                self.allocator,
+                &root,
+                &widgets_navigation.overlay_host_context,
+                &self.overlay_host,
             );
         }
 

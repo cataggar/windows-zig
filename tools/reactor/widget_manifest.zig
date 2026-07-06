@@ -11,6 +11,31 @@ const schema = @import("schema.zig");
 const Event = schema.EventInit;
 const Prop = schema.PropInit;
 
+const canvas_left = Prop{
+    .value = .f64,
+    .attached = .{
+        .owner = "Microsoft.UI.Xaml.Controls.Canvas",
+        .setter = "SetLeft",
+    },
+};
+const canvas_top = Prop{
+    .value = .f64,
+    .attached = .{
+        .owner = "Microsoft.UI.Xaml.Controls.Canvas",
+        .setter = "SetTop",
+    },
+};
+const canvas_z_index = Prop{
+    .value = .i32,
+    .attached = .{
+        .owner = "Microsoft.UI.Xaml.Controls.Canvas",
+        .setter = "SetZIndex",
+    },
+};
+const pointer_pressed = Event{ .payload = .pointer };
+const pointer_moved = Event{ .payload = .pointer };
+const pointer_released = Event{ .payload = .pointer };
+
 pub const raw_widgets = .{
     .@"Microsoft.UI.Xaml.Application" = .{},
 
@@ -28,11 +53,30 @@ pub const raw_widgets = .{
                 .value = .string,
                 .setter = .text_block,
             },
+            .Left = canvas_left,
+            .Top = canvas_top,
+            .ZIndex = canvas_z_index,
         },
         .events = .{
             .Click = Event{
                 .payload = .unit,
             },
+            .PointerPressed = pointer_pressed,
+            .PointerMoved = pointer_moved,
+            .PointerReleased = pointer_released,
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.Canvas" = .{
+        .props = .{
+            .Left = canvas_left,
+            .Top = canvas_top,
+            .ZIndex = canvas_z_index,
+        },
+        .events = .{
+            .PointerPressed = pointer_pressed,
+            .PointerMoved = pointer_moved,
+            .PointerReleased = pointer_released,
         },
     },
 
@@ -44,6 +88,14 @@ pub const raw_widgets = .{
             .Spacing = Prop{
                 .value = .f64,
             },
+            .Left = canvas_left,
+            .Top = canvas_top,
+            .ZIndex = canvas_z_index,
+        },
+        .events = .{
+            .PointerPressed = pointer_pressed,
+            .PointerMoved = pointer_moved,
+            .PointerReleased = pointer_released,
         },
     },
 
@@ -52,6 +104,14 @@ pub const raw_widgets = .{
             .Text = Prop{
                 .value = .string,
             },
+            .Left = canvas_left,
+            .Top = canvas_top,
+            .ZIndex = canvas_z_index,
+        },
+        .events = .{
+            .PointerPressed = pointer_pressed,
+            .PointerMoved = pointer_moved,
+            .PointerReleased = pointer_released,
         },
     },
 
@@ -60,8 +120,14 @@ pub const raw_widgets = .{
             .Text = Prop{
                 .value = .string,
             },
+            .Left = canvas_left,
+            .Top = canvas_top,
+            .ZIndex = canvas_z_index,
         },
         .events = .{
+            .PointerPressed = pointer_pressed,
+            .PointerMoved = pointer_moved,
+            .PointerReleased = pointer_released,
             .TextChanged = Event{
                 .payload = .string,
                 .source = .{
@@ -163,6 +229,119 @@ pub const raw_widgets = .{
         .events = .{
             .Checked = Event{
                 .payload = .unit,
+            },
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.Grid" = .{
+        .props = .{
+            .RowDefinitions = Prop{
+                .manual = true,
+            },
+            .ColumnDefinitions = Prop{
+                .manual = true,
+            },
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.ScrollViewer" = .{
+        .props = .{
+            .Content = Prop{
+                .value = .element,
+            },
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.Border" = .{
+        .props = .{
+            .Child = Prop{
+                .value = .element,
+            },
+            .BorderThickness = Prop{
+                .manual = true,
+            },
+            .CornerRadius = Prop{
+                .manual = true,
+            },
+            .Background = Prop{
+                .manual = true,
+            },
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.ContentDialog" = .{
+        .props = .{
+            .Title = Prop{
+                .value = .string,
+                .setter = .text_block,
+            },
+            .Content = Prop{
+                .value = .element,
+            },
+            .PrimaryButtonText = Prop{
+                .value = .string,
+            },
+            .SecondaryButtonText = Prop{
+                .value = .string,
+            },
+            .CloseButtonText = Prop{
+                .value = .string,
+            },
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.Flyout" = .{
+        .props = .{
+            .Content = Prop{
+                .value = .element,
+            },
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.NavigationView" = .{
+        .props = .{
+            .Content = Prop{
+                .value = .element,
+            },
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.NavigationViewItem" = .{
+        .props = .{
+            .Content = Prop{
+                .value = .string,
+                .setter = .text_block,
+            },
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.MenuBar" = .{},
+
+    .@"Microsoft.UI.Xaml.Controls.MenuBarItem" = .{
+        .props = .{
+            .Title = Prop{
+                .value = .string,
+            },
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.ListView" = .{
+        .props = .{
+            .ItemsSource = Prop{
+                .value = .object,
+            },
+        },
+        .events = .{
+            .SelectionChanged = Event{
+                .payload = .unit,
+            },
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.ItemsRepeater" = .{
+        .props = .{
+            .ItemsSource = Prop{
+                .value = .object,
             },
         },
     },
