@@ -7,7 +7,7 @@ const controls = @import("Microsoft.UI.Xaml.Controls");
 
 pub const Allocator = element.Allocator;
 pub const DefaultStackSpacing: f64 = widgets.DefaultStackSpacing;
-pub const MaxGridTracks: usize = 16;
+pub const MaxGridTracks: usize = 32;
 
 pub const GridUnit = enum {
     auto,

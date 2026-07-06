@@ -1698,13 +1698,11 @@ fn extractPointerEventInfo(
     var info: element.PointerEventInfo = .{};
 
     const raw_args = args orelse return info;
-    const element_iface = queryInterfaceOwnedRaw(sender, xaml.IUIElement) orelse return info;
-    defer _ = element_iface.Release();
-
     const routed: *const xaml_input.PointerRoutedEventArgs = @ptrCast(@alignCast(raw_args));
     var point_ptr: *ui_input.PointerPoint = undefined;
-    try win_core.hresult.ok(routed.GetCurrentPoint(@ptrCast(@constCast(element_iface)), &point_ptr));
+    try win_core.hresult.ok(routed.GetCurrentPoint(null, &point_ptr));
     defer _ = point_ptr.Release();
+    _ = sender;
 
     var position: foundation.Point = .{};
     try win_core.hresult.ok(point_ptr.get_Position(&position));
