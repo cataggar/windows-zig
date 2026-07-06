@@ -65,4 +65,60 @@ pub const raw_widgets = .{
             },
         },
     },
+
+    .@"Microsoft.UI.Xaml.Controls.ContentDialog" = .{
+        .props = .{
+            .Title = Prop{
+                .value = .string,
+                .setter = .text_block,
+            },
+            .Content = Prop{
+                .value = .element,
+            },
+            .PrimaryButtonText = Prop{
+                .value = .string,
+            },
+            .SecondaryButtonText = Prop{
+                .value = .string,
+            },
+            .CloseButtonText = Prop{
+                .value = .string,
+            },
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.Flyout" = .{
+        .props = .{
+            .Content = Prop{
+                .value = .element,
+            },
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.NavigationView" = .{
+        .props = .{
+            .Content = Prop{
+                .value = .element,
+            },
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.NavigationViewItem" = .{
+        .props = .{
+            .Content = Prop{
+                .value = .string,
+                .setter = .text_block,
+            },
+        },
+    },
+
+    .@"Microsoft.UI.Xaml.Controls.MenuBar" = .{},
+
+    .@"Microsoft.UI.Xaml.Controls.MenuBarItem" = .{
+        .props = .{
+            .Title = Prop{
+                .value = .string,
+            },
+        },
+    },
 };

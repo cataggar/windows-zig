@@ -98,6 +98,10 @@ pub const UIElement = extern struct {
     vtable: *const IUIElement_Vtbl,
 };
 
+pub const FrameworkElement = extern struct {
+    vtable: *const IUIElement_Vtbl,
+};
+
 pub const IApplication_Vtbl = extern struct {
     base: IInspectable_Vtbl,
     get_Resources: *const fn (this: *const IApplication, result: **ResourceDictionary) callconv(.winapi) HRESULT,

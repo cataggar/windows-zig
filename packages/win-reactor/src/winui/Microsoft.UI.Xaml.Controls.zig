@@ -508,7 +508,551 @@ pub const IUIElementCollection = extern struct {
         return self.vtable.Append(self, value);
     }
 
+    pub fn Clear(self: *const IUIElementCollection) callconv(.winapi) HRESULT {
+        return self.vtable.Clear(self);
+    }
+
     pub fn Move(self: *const IUIElementCollection, from: u32, to: u32) callconv(.winapi) HRESULT {
         return self.vtable.Move(self, from, to);
     }
+};
+
+pub const ContentDialogResult = enum(i32) {
+    None = 0,
+    Primary = 1,
+    Secondary = 2,
+    _,
+};
+
+pub const IContentDialog_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    get_Title: *const anyopaque,
+    put_Title: *const fn (this: *const IContentDialog, value: ?*const anyopaque) callconv(.winapi) HRESULT,
+    get_TitleTemplate: *const anyopaque,
+    put_TitleTemplate: *const anyopaque,
+    get_FullSizeDesired: *const anyopaque,
+    put_FullSizeDesired: *const anyopaque,
+    get_PrimaryButtonText: *const anyopaque,
+    put_PrimaryButtonText: *const fn (this: *const IContentDialog, value: HSTRING) callconv(.winapi) HRESULT,
+    get_SecondaryButtonText: *const anyopaque,
+    put_SecondaryButtonText: *const fn (this: *const IContentDialog, value: HSTRING) callconv(.winapi) HRESULT,
+    get_CloseButtonText: *const anyopaque,
+    put_CloseButtonText: *const fn (this: *const IContentDialog, value: HSTRING) callconv(.winapi) HRESULT,
+    get_PrimaryButtonCommand: *const anyopaque,
+    put_PrimaryButtonCommand: *const anyopaque,
+    get_SecondaryButtonCommand: *const anyopaque,
+    put_SecondaryButtonCommand: *const anyopaque,
+    get_CloseButtonCommand: *const anyopaque,
+    put_CloseButtonCommand: *const anyopaque,
+    get_PrimaryButtonCommandParameter: *const anyopaque,
+    put_PrimaryButtonCommandParameter: *const anyopaque,
+    get_SecondaryButtonCommandParameter: *const anyopaque,
+    put_SecondaryButtonCommandParameter: *const anyopaque,
+    get_CloseButtonCommandParameter: *const anyopaque,
+    put_CloseButtonCommandParameter: *const anyopaque,
+    get_IsPrimaryButtonEnabled: *const anyopaque,
+    put_IsPrimaryButtonEnabled: *const anyopaque,
+    get_IsSecondaryButtonEnabled: *const anyopaque,
+    put_IsSecondaryButtonEnabled: *const anyopaque,
+    get_PrimaryButtonStyle: *const anyopaque,
+    put_PrimaryButtonStyle: *const anyopaque,
+    get_SecondaryButtonStyle: *const anyopaque,
+    put_SecondaryButtonStyle: *const anyopaque,
+    get_CloseButtonStyle: *const anyopaque,
+    put_CloseButtonStyle: *const anyopaque,
+    get_DefaultButton: *const anyopaque,
+    put_DefaultButton: *const anyopaque,
+    add_Closing: *const anyopaque,
+    remove_Closing: *const anyopaque,
+    add_Closed: *const anyopaque,
+    remove_Closed: *const anyopaque,
+    add_Opened: *const anyopaque,
+    remove_Opened: *const anyopaque,
+    add_PrimaryButtonClick: *const anyopaque,
+    remove_PrimaryButtonClick: *const anyopaque,
+    add_SecondaryButtonClick: *const anyopaque,
+    remove_SecondaryButtonClick: *const anyopaque,
+    add_CloseButtonClick: *const anyopaque,
+    remove_CloseButtonClick: *const anyopaque,
+    Hide: *const fn (this: *const IContentDialog) callconv(.winapi) HRESULT,
+    ShowAsync: *const fn (this: *const IContentDialog, result: **anyopaque) callconv(.winapi) HRESULT,
+    ShowAsync_2: *const anyopaque,
+};
+
+pub const IContentDialog = extern struct {
+    vtable: *const IContentDialog_Vtbl,
+    pub const Vtbl = IContentDialog_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0xAC2145A3,
+        .data2 = 0x4A32,
+        .data3 = 0x5305,
+        .data4 = .{ 0xA8, 0x1D, 0x47, 0x50, 0x95, 0x15, 0xBF, 0xCE },
+    };
+
+    pub fn QueryInterface(self: *const IContentDialog, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.base.base.QueryInterface(@ptrCast(@constCast(self)), iid, interface);
+    }
+
+    pub fn AddRef(self: *const IContentDialog) callconv(.winapi) u32 {
+        return self.vtable.base.base.AddRef(@ptrCast(@constCast(self)));
+    }
+
+    pub fn Release(self: *const IContentDialog) callconv(.winapi) u32 {
+        return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn cast(self: *const IContentDialog, comptime T: type) ?*const T {
+        var out: ?*anyopaque = null;
+        if (self.QueryInterface(&T.IID, &out) < 0) return null;
+        return @ptrCast(@alignCast(out));
+    }
+
+    pub fn put_Title(self: *const IContentDialog, value: ?*const anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.put_Title(self, value);
+    }
+
+    pub fn put_PrimaryButtonText(self: *const IContentDialog, value: HSTRING) callconv(.winapi) HRESULT {
+        return self.vtable.put_PrimaryButtonText(self, value);
+    }
+
+    pub fn put_PrimaryButtonTextFromUtf16(self: *const IContentDialog, value: []const u16) HRESULT {
+        var h = win_core.Hstring.create(value) catch return win_core.hresult.E_OUTOFMEMORY;
+        defer h.deinit();
+        return self.vtable.put_PrimaryButtonText(self, h.raw);
+    }
+
+    pub fn put_SecondaryButtonText(self: *const IContentDialog, value: HSTRING) callconv(.winapi) HRESULT {
+        return self.vtable.put_SecondaryButtonText(self, value);
+    }
+
+    pub fn put_SecondaryButtonTextFromUtf16(self: *const IContentDialog, value: []const u16) HRESULT {
+        var h = win_core.Hstring.create(value) catch return win_core.hresult.E_OUTOFMEMORY;
+        defer h.deinit();
+        return self.vtable.put_SecondaryButtonText(self, h.raw);
+    }
+
+    pub fn put_CloseButtonText(self: *const IContentDialog, value: HSTRING) callconv(.winapi) HRESULT {
+        return self.vtable.put_CloseButtonText(self, value);
+    }
+
+    pub fn put_CloseButtonTextFromUtf16(self: *const IContentDialog, value: []const u16) HRESULT {
+        var h = win_core.Hstring.create(value) catch return win_core.hresult.E_OUTOFMEMORY;
+        defer h.deinit();
+        return self.vtable.put_CloseButtonText(self, h.raw);
+    }
+
+    pub fn Hide(self: *const IContentDialog) callconv(.winapi) HRESULT {
+        return self.vtable.Hide(self);
+    }
+
+    pub fn ShowAsync(self: *const IContentDialog, result: **anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.ShowAsync(self, result);
+    }
+};
+
+pub const IContentDialogFactory_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    CreateInstance: *const fn (
+        this: *const IContentDialogFactory,
+        outer: ?*const anyopaque,
+        inner: *?*const anyopaque,
+        result: **ContentDialog,
+    ) callconv(.winapi) HRESULT,
+};
+
+pub const IContentDialogFactory = extern struct {
+    vtable: *const IContentDialogFactory_Vtbl,
+    pub const Vtbl = IContentDialogFactory_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0xA05B3AD7,
+        .data2 = 0xC60E,
+        .data3 = 0x545A,
+        .data4 = .{ 0x9E, 0xE4, 0xF0, 0x98, 0x22, 0x0E, 0xD8, 0x16 },
+    };
+
+    pub fn CreateInstance(self: *const IContentDialogFactory, outer: ?*const anyopaque, inner: *?*const anyopaque, result: **ContentDialog) callconv(.winapi) HRESULT {
+        return self.vtable.CreateInstance(self, outer, inner, result);
+    }
+};
+
+pub const ContentDialog = extern struct {
+    vtable: *const IContentDialog_Vtbl,
+    pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.ContentDialog";
+    pub const NAME_W = std.unicode.utf8ToUtf16LeStringLiteral(NAME).*;
+};
+
+pub const IFlyout_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    get_Content: *const anyopaque,
+    put_Content: *const fn (this: *const IFlyout, value: ?*xaml.UIElement) callconv(.winapi) HRESULT,
+    get_FlyoutPresenterStyle: *const anyopaque,
+    put_FlyoutPresenterStyle: *const anyopaque,
+};
+
+pub const IFlyout = extern struct {
+    vtable: *const IFlyout_Vtbl,
+    pub const Vtbl = IFlyout_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0xD4A1EB7D,
+        .data2 = 0x59B8,
+        .data3 = 0x5DF9,
+        .data4 = .{ 0x87, 0xC3, 0xBD, 0x5E, 0x38, 0x56, 0x92, 0x3F },
+    };
+
+    pub fn QueryInterface(self: *const IFlyout, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.base.base.QueryInterface(@ptrCast(@constCast(self)), iid, interface);
+    }
+
+    pub fn AddRef(self: *const IFlyout) callconv(.winapi) u32 {
+        return self.vtable.base.base.AddRef(@ptrCast(@constCast(self)));
+    }
+
+    pub fn Release(self: *const IFlyout) callconv(.winapi) u32 {
+        return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn cast(self: *const IFlyout, comptime T: type) ?*const T {
+        var out: ?*anyopaque = null;
+        if (self.QueryInterface(&T.IID, &out) < 0) return null;
+        return @ptrCast(@alignCast(out));
+    }
+
+    pub fn put_Content(self: *const IFlyout, value: ?*xaml.UIElement) callconv(.winapi) HRESULT {
+        return self.vtable.put_Content(self, value);
+    }
+};
+
+pub const IFlyoutFactory_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    CreateInstance: *const fn (
+        this: *const IFlyoutFactory,
+        outer: ?*const anyopaque,
+        inner: *?*const anyopaque,
+        result: **Flyout,
+    ) callconv(.winapi) HRESULT,
+};
+
+pub const IFlyoutFactory = extern struct {
+    vtable: *const IFlyoutFactory_Vtbl,
+    pub const Vtbl = IFlyoutFactory_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0xFD19002E,
+        .data2 = 0x66B3,
+        .data3 = 0x5656,
+        .data4 = .{ 0xB4, 0x9C, 0xB2, 0xAC, 0xA1, 0x1E, 0x96, 0x02 },
+    };
+
+    pub fn CreateInstance(self: *const IFlyoutFactory, outer: ?*const anyopaque, inner: *?*const anyopaque, result: **Flyout) callconv(.winapi) HRESULT {
+        return self.vtable.CreateInstance(self, outer, inner, result);
+    }
+};
+
+pub const Flyout = extern struct {
+    vtable: *const IFlyout_Vtbl,
+    pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.Flyout";
+    pub const NAME_W = std.unicode.utf8ToUtf16LeStringLiteral(NAME).*;
+};
+
+pub const IMenuBar_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    get_Items: *const fn (this: *const IMenuBar, result: **anyopaque) callconv(.winapi) HRESULT,
+};
+
+pub const IMenuBar = extern struct {
+    vtable: *const IMenuBar_Vtbl,
+    pub const Vtbl = IMenuBar_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0xBA97F337,
+        .data2 = 0x8F1E,
+        .data3 = 0x5141,
+        .data4 = .{ 0xB5, 0x3F, 0xE7, 0x7A, 0x8B, 0xA3, 0xEB, 0xBD },
+    };
+
+    pub fn QueryInterface(self: *const IMenuBar, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.base.base.QueryInterface(@ptrCast(@constCast(self)), iid, interface);
+    }
+
+    pub fn AddRef(self: *const IMenuBar) callconv(.winapi) u32 {
+        return self.vtable.base.base.AddRef(@ptrCast(@constCast(self)));
+    }
+
+    pub fn Release(self: *const IMenuBar) callconv(.winapi) u32 {
+        return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn get_Items(self: *const IMenuBar, result: **anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.get_Items(self, result);
+    }
+};
+
+pub const IMenuBarFactory_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    CreateInstance: *const fn (
+        this: *const IMenuBarFactory,
+        outer: ?*const anyopaque,
+        inner: *?*const anyopaque,
+        result: **MenuBar,
+    ) callconv(.winapi) HRESULT,
+};
+
+pub const IMenuBarFactory = extern struct {
+    vtable: *const IMenuBarFactory_Vtbl,
+    pub const Vtbl = IMenuBarFactory_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0x76AA8759,
+        .data2 = 0x04EE,
+        .data3 = 0x5A4C,
+        .data4 = .{ 0xB9, 0x8C, 0xD0, 0x37, 0x42, 0xD4, 0x7C, 0xDB },
+    };
+
+    pub fn CreateInstance(self: *const IMenuBarFactory, outer: ?*const anyopaque, inner: *?*const anyopaque, result: **MenuBar) callconv(.winapi) HRESULT {
+        return self.vtable.CreateInstance(self, outer, inner, result);
+    }
+};
+
+pub const MenuBar = extern struct {
+    vtable: *const IMenuBar_Vtbl,
+    pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.MenuBar";
+    pub const NAME_W = std.unicode.utf8ToUtf16LeStringLiteral(NAME).*;
+};
+
+pub const IMenuBarItem_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    get_Title: *const anyopaque,
+    put_Title: *const fn (this: *const IMenuBarItem, value: HSTRING) callconv(.winapi) HRESULT,
+    get_Items: *const fn (this: *const IMenuBarItem, result: **anyopaque) callconv(.winapi) HRESULT,
+};
+
+pub const IMenuBarItem = extern struct {
+    vtable: *const IMenuBarItem_Vtbl,
+    pub const Vtbl = IMenuBarItem_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0xA7900980,
+        .data2 = 0x51CC,
+        .data3 = 0x531D,
+        .data4 = .{ 0x97, 0xC5, 0x35, 0x6B, 0x13, 0x57, 0x33, 0x98 },
+    };
+
+    pub fn QueryInterface(self: *const IMenuBarItem, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.base.base.QueryInterface(@ptrCast(@constCast(self)), iid, interface);
+    }
+
+    pub fn AddRef(self: *const IMenuBarItem) callconv(.winapi) u32 {
+        return self.vtable.base.base.AddRef(@ptrCast(@constCast(self)));
+    }
+
+    pub fn Release(self: *const IMenuBarItem) callconv(.winapi) u32 {
+        return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn put_Title(self: *const IMenuBarItem, value: HSTRING) callconv(.winapi) HRESULT {
+        return self.vtable.put_Title(self, value);
+    }
+
+    pub fn put_TitleFromUtf16(self: *const IMenuBarItem, value: []const u16) HRESULT {
+        var h = win_core.Hstring.create(value) catch return win_core.hresult.E_OUTOFMEMORY;
+        defer h.deinit();
+        return self.vtable.put_Title(self, h.raw);
+    }
+
+    pub fn get_Items(self: *const IMenuBarItem, result: **anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.get_Items(self, result);
+    }
+};
+
+pub const IMenuBarItemFactory_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    CreateInstance: *const fn (
+        this: *const IMenuBarItemFactory,
+        outer: ?*const anyopaque,
+        inner: *?*const anyopaque,
+        result: **MenuBarItem,
+    ) callconv(.winapi) HRESULT,
+};
+
+pub const IMenuBarItemFactory = extern struct {
+    vtable: *const IMenuBarItemFactory_Vtbl,
+    pub const Vtbl = IMenuBarItemFactory_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0x87D02172,
+        .data2 = 0x83CB,
+        .data3 = 0x5459,
+        .data4 = .{ 0x94, 0x0F, 0x17, 0x3F, 0x75, 0x01, 0xB3, 0x00 },
+    };
+
+    pub fn CreateInstance(self: *const IMenuBarItemFactory, outer: ?*const anyopaque, inner: *?*const anyopaque, result: **MenuBarItem) callconv(.winapi) HRESULT {
+        return self.vtable.CreateInstance(self, outer, inner, result);
+    }
+};
+
+pub const MenuBarItem = extern struct {
+    vtable: *const IMenuBarItem_Vtbl,
+    pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.MenuBarItem";
+    pub const NAME_W = std.unicode.utf8ToUtf16LeStringLiteral(NAME).*;
+};
+
+pub const INavigationView_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    get_IsPaneOpen: *const anyopaque,
+    put_IsPaneOpen: *const anyopaque,
+    get_CompactModeThresholdWidth: *const anyopaque,
+    put_CompactModeThresholdWidth: *const anyopaque,
+    get_ExpandedModeThresholdWidth: *const anyopaque,
+    put_ExpandedModeThresholdWidth: *const anyopaque,
+    get_FooterMenuItems: *const anyopaque,
+    get_FooterMenuItemsSource: *const anyopaque,
+    put_FooterMenuItemsSource: *const anyopaque,
+    get_PaneFooter: *const anyopaque,
+    put_PaneFooter: *const anyopaque,
+    get_Header: *const anyopaque,
+    put_Header: *const anyopaque,
+    get_HeaderTemplate: *const anyopaque,
+    put_HeaderTemplate: *const anyopaque,
+    get_DisplayMode: *const anyopaque,
+    get_IsSettingsVisible: *const anyopaque,
+    put_IsSettingsVisible: *const anyopaque,
+    get_IsPaneToggleButtonVisible: *const anyopaque,
+    put_IsPaneToggleButtonVisible: *const anyopaque,
+    get_AlwaysShowHeader: *const anyopaque,
+    put_AlwaysShowHeader: *const anyopaque,
+    get_CompactPaneLength: *const anyopaque,
+    put_CompactPaneLength: *const anyopaque,
+    get_OpenPaneLength: *const anyopaque,
+    put_OpenPaneLength: *const anyopaque,
+    get_PaneToggleButtonStyle: *const anyopaque,
+    put_PaneToggleButtonStyle: *const anyopaque,
+    get_SelectedItem: *const anyopaque,
+    put_SelectedItem: *const anyopaque,
+    get_MenuItems: *const fn (this: *const INavigationView, result: **anyopaque) callconv(.winapi) HRESULT,
+};
+
+pub const INavigationView = extern struct {
+    vtable: *const INavigationView_Vtbl,
+    pub const Vtbl = INavigationView_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0xE77A4B36,
+        .data2 = 0x3DD1,
+        .data3 = 0x53D9,
+        .data4 = .{ 0x9F, 0x97, 0x65, 0xDC, 0xCA, 0xA7, 0x4A, 0x5C },
+    };
+
+    pub fn QueryInterface(self: *const INavigationView, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.base.base.QueryInterface(@ptrCast(@constCast(self)), iid, interface);
+    }
+
+    pub fn AddRef(self: *const INavigationView) callconv(.winapi) u32 {
+        return self.vtable.base.base.AddRef(@ptrCast(@constCast(self)));
+    }
+
+    pub fn Release(self: *const INavigationView) callconv(.winapi) u32 {
+        return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn cast(self: *const INavigationView, comptime T: type) ?*const T {
+        var out: ?*anyopaque = null;
+        if (self.QueryInterface(&T.IID, &out) < 0) return null;
+        return @ptrCast(@alignCast(out));
+    }
+
+    pub fn get_MenuItems(self: *const INavigationView, result: **anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.get_MenuItems(self, result);
+    }
+};
+
+pub const INavigationViewFactory_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    CreateInstance: *const fn (
+        this: *const INavigationViewFactory,
+        outer: ?*const anyopaque,
+        inner: *?*const anyopaque,
+        result: **NavigationView,
+    ) callconv(.winapi) HRESULT,
+};
+
+pub const INavigationViewFactory = extern struct {
+    vtable: *const INavigationViewFactory_Vtbl,
+    pub const Vtbl = INavigationViewFactory_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0xFFEA1ADA,
+        .data2 = 0x9232,
+        .data3 = 0x5507,
+        .data4 = .{ 0xA3, 0x20, 0xED, 0x2F, 0xAD, 0xBE, 0x61, 0x27 },
+    };
+
+    pub fn CreateInstance(self: *const INavigationViewFactory, outer: ?*const anyopaque, inner: *?*const anyopaque, result: **NavigationView) callconv(.winapi) HRESULT {
+        return self.vtable.CreateInstance(self, outer, inner, result);
+    }
+};
+
+pub const NavigationView = extern struct {
+    vtable: *const INavigationView_Vtbl,
+    pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.NavigationView";
+    pub const NAME_W = std.unicode.utf8ToUtf16LeStringLiteral(NAME).*;
+};
+
+pub const INavigationViewItem_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    get_Icon: *const anyopaque,
+    put_Icon: *const anyopaque,
+    get_CompactPaneLength: *const anyopaque,
+};
+
+pub const INavigationViewItem = extern struct {
+    vtable: *const INavigationViewItem_Vtbl,
+    pub const Vtbl = INavigationViewItem_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0x3AB3D503,
+        .data2 = 0xA37C,
+        .data3 = 0x5836,
+        .data4 = .{ 0x8A, 0xDB, 0x28, 0x82, 0x06, 0x2E, 0x73, 0xA1 },
+    };
+
+    pub fn QueryInterface(self: *const INavigationViewItem, iid: *const GUID, interface: *?*anyopaque) callconv(.winapi) HRESULT {
+        return self.vtable.base.base.QueryInterface(@ptrCast(@constCast(self)), iid, interface);
+    }
+
+    pub fn AddRef(self: *const INavigationViewItem) callconv(.winapi) u32 {
+        return self.vtable.base.base.AddRef(@ptrCast(@constCast(self)));
+    }
+
+    pub fn Release(self: *const INavigationViewItem) callconv(.winapi) u32 {
+        return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn cast(self: *const INavigationViewItem, comptime T: type) ?*const T {
+        var out: ?*anyopaque = null;
+        if (self.QueryInterface(&T.IID, &out) < 0) return null;
+        return @ptrCast(@alignCast(out));
+    }
+};
+
+pub const INavigationViewItemFactory_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    CreateInstance: *const fn (
+        this: *const INavigationViewItemFactory,
+        outer: ?*const anyopaque,
+        inner: *?*const anyopaque,
+        result: **NavigationViewItem,
+    ) callconv(.winapi) HRESULT,
+};
+
+pub const INavigationViewItemFactory = extern struct {
+    vtable: *const INavigationViewItemFactory_Vtbl,
+    pub const Vtbl = INavigationViewItemFactory_Vtbl;
+    pub const IID: GUID = .{
+        .data1 = 0xDE60A001,
+        .data2 = 0x9385,
+        .data3 = 0x5535,
+        .data4 = .{ 0x80, 0xE1, 0x2B, 0x68, 0xF4, 0xBF, 0xDE, 0x26 },
+    };
+
+    pub fn CreateInstance(self: *const INavigationViewItemFactory, outer: ?*const anyopaque, inner: *?*const anyopaque, result: **NavigationViewItem) callconv(.winapi) HRESULT {
+        return self.vtable.CreateInstance(self, outer, inner, result);
+    }
+};
+
+pub const NavigationViewItem = extern struct {
+    vtable: *const INavigationViewItem_Vtbl,
+    pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.NavigationViewItem";
+    pub const NAME_W = std.unicode.utf8ToUtf16LeStringLiteral(NAME).*;
 };
