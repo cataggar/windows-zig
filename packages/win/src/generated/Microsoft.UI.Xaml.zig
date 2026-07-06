@@ -1232,16 +1232,16 @@ pub const IAdaptiveTrigger = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_MinWindowWidth(self: *const IAdaptiveTrigger, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_MinWindowWidth(self, result);
+        return self.vtable.@"get_MinWindowWidth"(self, result);
     }
     pub fn put_MinWindowWidth(self: *const IAdaptiveTrigger, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.put_MinWindowWidth(self, p0);
+        return self.vtable.@"put_MinWindowWidth"(self, p0);
     }
     pub fn get_MinWindowHeight(self: *const IAdaptiveTrigger, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_MinWindowHeight(self, result);
+        return self.vtable.@"get_MinWindowHeight"(self, result);
     }
     pub fn put_MinWindowHeight(self: *const IAdaptiveTrigger, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.put_MinWindowHeight(self, p0);
+        return self.vtable.@"put_MinWindowHeight"(self, p0);
     }
 };
 pub const IAdaptiveTriggerFactory = extern struct {
@@ -1263,7 +1263,7 @@ pub const IAdaptiveTriggerFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IAdaptiveTriggerFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **AdaptiveTrigger) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const IAdaptiveTriggerStatics = extern struct {
@@ -1285,10 +1285,10 @@ pub const IAdaptiveTriggerStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_MinWindowWidthProperty(self: *const IAdaptiveTriggerStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_MinWindowWidthProperty(self, result);
+        return self.vtable.@"get_MinWindowWidthProperty"(self, result);
     }
     pub fn get_MinWindowHeightProperty(self: *const IAdaptiveTriggerStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_MinWindowHeightProperty(self, result);
+        return self.vtable.@"get_MinWindowHeightProperty"(self, result);
     }
 };
 pub const IApplication = extern struct {
@@ -1310,40 +1310,40 @@ pub const IApplication = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Resources(self: *const IApplication, result: **ResourceDictionary) callconv(.winapi) HRESULT {
-        return self.vtable.get_Resources(self, result);
+        return self.vtable.@"get_Resources"(self, result);
     }
     pub fn put_Resources(self: *const IApplication, p0: *ResourceDictionary) callconv(.winapi) HRESULT {
-        return self.vtable.put_Resources(self, p0);
+        return self.vtable.@"put_Resources"(self, p0);
     }
     pub fn get_DebugSettings(self: *const IApplication, result: **DebugSettings) callconv(.winapi) HRESULT {
-        return self.vtable.get_DebugSettings(self, result);
+        return self.vtable.@"get_DebugSettings"(self, result);
     }
     pub fn get_RequestedTheme(self: *const IApplication, result: *ApplicationTheme) callconv(.winapi) HRESULT {
-        return self.vtable.get_RequestedTheme(self, result);
+        return self.vtable.@"get_RequestedTheme"(self, result);
     }
     pub fn put_RequestedTheme(self: *const IApplication, p0: ApplicationTheme) callconv(.winapi) HRESULT {
-        return self.vtable.put_RequestedTheme(self, p0);
+        return self.vtable.@"put_RequestedTheme"(self, p0);
     }
     pub fn get_FocusVisualKind(self: *const IApplication, result: *FocusVisualKind) callconv(.winapi) HRESULT {
-        return self.vtable.get_FocusVisualKind(self, result);
+        return self.vtable.@"get_FocusVisualKind"(self, result);
     }
     pub fn put_FocusVisualKind(self: *const IApplication, p0: FocusVisualKind) callconv(.winapi) HRESULT {
-        return self.vtable.put_FocusVisualKind(self, p0);
+        return self.vtable.@"put_FocusVisualKind"(self, p0);
     }
     pub fn get_HighContrastAdjustment(self: *const IApplication, result: *ApplicationHighContrastAdjustment) callconv(.winapi) HRESULT {
-        return self.vtable.get_HighContrastAdjustment(self, result);
+        return self.vtable.@"get_HighContrastAdjustment"(self, result);
     }
     pub fn put_HighContrastAdjustment(self: *const IApplication, p0: ApplicationHighContrastAdjustment) callconv(.winapi) HRESULT {
-        return self.vtable.put_HighContrastAdjustment(self, p0);
+        return self.vtable.@"put_HighContrastAdjustment"(self, p0);
     }
     pub fn add_UnhandledException(self: *const IApplication, p0: *UnhandledExceptionEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_UnhandledException(self, p0, result);
+        return self.vtable.@"add_UnhandledException"(self, p0, result);
     }
     pub fn remove_UnhandledException(self: *const IApplication, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_UnhandledException(self, p0);
+        return self.vtable.@"remove_UnhandledException"(self, p0);
     }
     pub fn Exit(self: *const IApplication) callconv(.winapi) HRESULT {
-        return self.vtable.Exit(self);
+        return self.vtable.@"Exit"(self);
     }
 };
 pub const IApplication2 = extern struct {
@@ -1364,11 +1364,11 @@ pub const IApplication2 = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn add_ResourceManagerRequested(self: *const IApplication2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_ResourceManagerRequested(self, p0, result);
+    pub fn add_ResourceManagerRequested(self: *const IApplication2, p0: *@"Windows.Foundation".TypedEventHandler__G2__object__Microsoft_UI_Xaml_ResourceManagerRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_ResourceManagerRequested"(self, p0, result);
     }
     pub fn remove_ResourceManagerRequested(self: *const IApplication2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_ResourceManagerRequested(self, p0);
+        return self.vtable.@"remove_ResourceManagerRequested"(self, p0);
     }
     pub fn addResourceManagerRequested(
         self: *const IApplication2,
@@ -1406,10 +1406,10 @@ pub const IApplication3 = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_DispatcherShutdownMode(self: *const IApplication3, result: *DispatcherShutdownMode) callconv(.winapi) HRESULT {
-        return self.vtable.get_DispatcherShutdownMode(self, result);
+        return self.vtable.@"get_DispatcherShutdownMode"(self, result);
     }
     pub fn put_DispatcherShutdownMode(self: *const IApplication3, p0: DispatcherShutdownMode) callconv(.winapi) HRESULT {
-        return self.vtable.put_DispatcherShutdownMode(self, p0);
+        return self.vtable.@"put_DispatcherShutdownMode"(self, p0);
     }
 };
 pub const IApplicationFactory = extern struct {
@@ -1431,7 +1431,7 @@ pub const IApplicationFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IApplicationFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **Application) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const IApplicationInitializationCallbackParams = extern struct {
@@ -1472,7 +1472,7 @@ pub const IApplicationOverrides = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn OnLaunched(self: *const IApplicationOverrides, p0: *LaunchActivatedEventArgs) callconv(.winapi) HRESULT {
-        return self.vtable.OnLaunched(self, p0);
+        return self.vtable.@"OnLaunched"(self, p0);
     }
 };
 pub const IApplicationStatics = extern struct {
@@ -1494,16 +1494,16 @@ pub const IApplicationStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Current(self: *const IApplicationStatics, result: **Application) callconv(.winapi) HRESULT {
-        return self.vtable.get_Current(self, result);
+        return self.vtable.@"get_Current"(self, result);
     }
     pub fn Start(self: *const IApplicationStatics, p0: *ApplicationInitializationCallback) callconv(.winapi) HRESULT {
-        return self.vtable.Start(self, p0);
+        return self.vtable.@"Start"(self, p0);
     }
     pub fn LoadComponent(self: *const IApplicationStatics, p0: ?*const anyopaque, p1: *@"Windows.Foundation".Uri) callconv(.winapi) HRESULT {
-        return self.vtable.LoadComponent(self, p0, p1);
+        return self.vtable.@"LoadComponent"(self, p0, p1);
     }
     pub fn LoadComponent_2(self: *const IApplicationStatics, p0: ?*const anyopaque, p1: *@"Windows.Foundation".Uri, p2: @"Microsoft.UI.Xaml.Controls.Primitives".ComponentResourceLocation) callconv(.winapi) HRESULT {
-        return self.vtable.LoadComponent_2(self, p0, p1, p2);
+        return self.vtable.@"LoadComponent_2"(self, p0, p1, p2);
     }
 };
 pub const IBindingFailedEventArgs = extern struct {
@@ -1525,11 +1525,11 @@ pub const IBindingFailedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Message(self: *const IBindingFailedEventArgs, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.get_Message(self, result);
+        return self.vtable.@"get_Message"(self, result);
     }
     pub fn get_MessageOwned(self: *const IBindingFailedEventArgs) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.get_Message(self, &r));
+        try win_core.hresult.ok(self.vtable.@"get_Message"(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
 };
@@ -1552,40 +1552,40 @@ pub const IBringIntoViewOptions = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_AnimationDesired(self: *const IBringIntoViewOptions, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_AnimationDesired(self, result);
+        return self.vtable.@"get_AnimationDesired"(self, result);
     }
     pub fn put_AnimationDesired(self: *const IBringIntoViewOptions, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_AnimationDesired(self, p0);
+        return self.vtable.@"put_AnimationDesired"(self, p0);
     }
-    pub fn get_TargetRect(self: *const IBringIntoViewOptions, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_TargetRect(self, result);
+    pub fn get_TargetRect(self: *const IBringIntoViewOptions, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_Rect) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_TargetRect"(self, result);
     }
-    pub fn put_TargetRect(self: *const IBringIntoViewOptions, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_TargetRect(self, p0);
+    pub fn put_TargetRect(self: *const IBringIntoViewOptions, p0: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Rect) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_TargetRect"(self, p0);
     }
     pub fn get_HorizontalAlignmentRatio(self: *const IBringIntoViewOptions, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_HorizontalAlignmentRatio(self, result);
+        return self.vtable.@"get_HorizontalAlignmentRatio"(self, result);
     }
     pub fn put_HorizontalAlignmentRatio(self: *const IBringIntoViewOptions, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.put_HorizontalAlignmentRatio(self, p0);
+        return self.vtable.@"put_HorizontalAlignmentRatio"(self, p0);
     }
     pub fn get_VerticalAlignmentRatio(self: *const IBringIntoViewOptions, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_VerticalAlignmentRatio(self, result);
+        return self.vtable.@"get_VerticalAlignmentRatio"(self, result);
     }
     pub fn put_VerticalAlignmentRatio(self: *const IBringIntoViewOptions, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.put_VerticalAlignmentRatio(self, p0);
+        return self.vtable.@"put_VerticalAlignmentRatio"(self, p0);
     }
     pub fn get_HorizontalOffset(self: *const IBringIntoViewOptions, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_HorizontalOffset(self, result);
+        return self.vtable.@"get_HorizontalOffset"(self, result);
     }
     pub fn put_HorizontalOffset(self: *const IBringIntoViewOptions, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.put_HorizontalOffset(self, p0);
+        return self.vtable.@"put_HorizontalOffset"(self, p0);
     }
     pub fn get_VerticalOffset(self: *const IBringIntoViewOptions, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_VerticalOffset(self, result);
+        return self.vtable.@"get_VerticalOffset"(self, result);
     }
     pub fn put_VerticalOffset(self: *const IBringIntoViewOptions, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.put_VerticalOffset(self, p0);
+        return self.vtable.@"put_VerticalOffset"(self, p0);
     }
 };
 pub const IBringIntoViewRequestedEventArgs = extern struct {
@@ -1607,46 +1607,46 @@ pub const IBringIntoViewRequestedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_TargetElement(self: *const IBringIntoViewRequestedEventArgs, result: **UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.get_TargetElement(self, result);
+        return self.vtable.@"get_TargetElement"(self, result);
     }
     pub fn put_TargetElement(self: *const IBringIntoViewRequestedEventArgs, p0: *UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.put_TargetElement(self, p0);
+        return self.vtable.@"put_TargetElement"(self, p0);
     }
     pub fn get_AnimationDesired(self: *const IBringIntoViewRequestedEventArgs, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_AnimationDesired(self, result);
+        return self.vtable.@"get_AnimationDesired"(self, result);
     }
     pub fn put_AnimationDesired(self: *const IBringIntoViewRequestedEventArgs, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_AnimationDesired(self, p0);
+        return self.vtable.@"put_AnimationDesired"(self, p0);
     }
     pub fn get_TargetRect(self: *const IBringIntoViewRequestedEventArgs, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT {
-        return self.vtable.get_TargetRect(self, result);
+        return self.vtable.@"get_TargetRect"(self, result);
     }
     pub fn put_TargetRect(self: *const IBringIntoViewRequestedEventArgs, p0: @"Windows.Foundation".Rect) callconv(.winapi) HRESULT {
-        return self.vtable.put_TargetRect(self, p0);
+        return self.vtable.@"put_TargetRect"(self, p0);
     }
     pub fn get_HorizontalAlignmentRatio(self: *const IBringIntoViewRequestedEventArgs, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_HorizontalAlignmentRatio(self, result);
+        return self.vtable.@"get_HorizontalAlignmentRatio"(self, result);
     }
     pub fn get_VerticalAlignmentRatio(self: *const IBringIntoViewRequestedEventArgs, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_VerticalAlignmentRatio(self, result);
+        return self.vtable.@"get_VerticalAlignmentRatio"(self, result);
     }
     pub fn get_HorizontalOffset(self: *const IBringIntoViewRequestedEventArgs, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_HorizontalOffset(self, result);
+        return self.vtable.@"get_HorizontalOffset"(self, result);
     }
     pub fn put_HorizontalOffset(self: *const IBringIntoViewRequestedEventArgs, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.put_HorizontalOffset(self, p0);
+        return self.vtable.@"put_HorizontalOffset"(self, p0);
     }
     pub fn get_VerticalOffset(self: *const IBringIntoViewRequestedEventArgs, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_VerticalOffset(self, result);
+        return self.vtable.@"get_VerticalOffset"(self, result);
     }
     pub fn put_VerticalOffset(self: *const IBringIntoViewRequestedEventArgs, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.put_VerticalOffset(self, p0);
+        return self.vtable.@"put_VerticalOffset"(self, p0);
     }
     pub fn get_Handled(self: *const IBringIntoViewRequestedEventArgs, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_Handled(self, result);
+        return self.vtable.@"get_Handled"(self, result);
     }
     pub fn put_Handled(self: *const IBringIntoViewRequestedEventArgs, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_Handled(self, p0);
+        return self.vtable.@"put_Handled"(self, p0);
     }
 };
 pub const IBrushTransition = extern struct {
@@ -1668,10 +1668,10 @@ pub const IBrushTransition = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Duration(self: *const IBrushTransition, result: *@"Windows.Foundation".TimeSpan) callconv(.winapi) HRESULT {
-        return self.vtable.get_Duration(self, result);
+        return self.vtable.@"get_Duration"(self, result);
     }
     pub fn put_Duration(self: *const IBrushTransition, p0: @"Windows.Foundation".TimeSpan) callconv(.winapi) HRESULT {
-        return self.vtable.put_Duration(self, p0);
+        return self.vtable.@"put_Duration"(self, p0);
     }
 };
 pub const IBrushTransitionFactory = extern struct {
@@ -1693,7 +1693,7 @@ pub const IBrushTransitionFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IBrushTransitionFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **BrushTransition) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const IColorPaletteResources = extern struct {
@@ -1714,167 +1714,167 @@ pub const IColorPaletteResources = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn get_AltHigh(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_AltHigh(self, result);
+    pub fn get_AltHigh(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_AltHigh"(self, result);
     }
-    pub fn put_AltHigh(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_AltHigh(self, p0);
+    pub fn put_AltHigh(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_AltHigh"(self, p0);
     }
-    pub fn get_AltLow(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_AltLow(self, result);
+    pub fn get_AltLow(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_AltLow"(self, result);
     }
-    pub fn put_AltLow(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_AltLow(self, p0);
+    pub fn put_AltLow(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_AltLow"(self, p0);
     }
-    pub fn get_AltMedium(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_AltMedium(self, result);
+    pub fn get_AltMedium(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_AltMedium"(self, result);
     }
-    pub fn put_AltMedium(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_AltMedium(self, p0);
+    pub fn put_AltMedium(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_AltMedium"(self, p0);
     }
-    pub fn get_AltMediumHigh(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_AltMediumHigh(self, result);
+    pub fn get_AltMediumHigh(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_AltMediumHigh"(self, result);
     }
-    pub fn put_AltMediumHigh(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_AltMediumHigh(self, p0);
+    pub fn put_AltMediumHigh(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_AltMediumHigh"(self, p0);
     }
-    pub fn get_AltMediumLow(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_AltMediumLow(self, result);
+    pub fn get_AltMediumLow(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_AltMediumLow"(self, result);
     }
-    pub fn put_AltMediumLow(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_AltMediumLow(self, p0);
+    pub fn put_AltMediumLow(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_AltMediumLow"(self, p0);
     }
-    pub fn get_BaseHigh(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_BaseHigh(self, result);
+    pub fn get_BaseHigh(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_BaseHigh"(self, result);
     }
-    pub fn put_BaseHigh(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_BaseHigh(self, p0);
+    pub fn put_BaseHigh(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_BaseHigh"(self, p0);
     }
-    pub fn get_BaseLow(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_BaseLow(self, result);
+    pub fn get_BaseLow(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_BaseLow"(self, result);
     }
-    pub fn put_BaseLow(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_BaseLow(self, p0);
+    pub fn put_BaseLow(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_BaseLow"(self, p0);
     }
-    pub fn get_BaseMedium(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_BaseMedium(self, result);
+    pub fn get_BaseMedium(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_BaseMedium"(self, result);
     }
-    pub fn put_BaseMedium(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_BaseMedium(self, p0);
+    pub fn put_BaseMedium(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_BaseMedium"(self, p0);
     }
-    pub fn get_BaseMediumHigh(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_BaseMediumHigh(self, result);
+    pub fn get_BaseMediumHigh(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_BaseMediumHigh"(self, result);
     }
-    pub fn put_BaseMediumHigh(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_BaseMediumHigh(self, p0);
+    pub fn put_BaseMediumHigh(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_BaseMediumHigh"(self, p0);
     }
-    pub fn get_BaseMediumLow(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_BaseMediumLow(self, result);
+    pub fn get_BaseMediumLow(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_BaseMediumLow"(self, result);
     }
-    pub fn put_BaseMediumLow(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_BaseMediumLow(self, p0);
+    pub fn put_BaseMediumLow(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_BaseMediumLow"(self, p0);
     }
-    pub fn get_ChromeAltLow(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_ChromeAltLow(self, result);
+    pub fn get_ChromeAltLow(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_ChromeAltLow"(self, result);
     }
-    pub fn put_ChromeAltLow(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_ChromeAltLow(self, p0);
+    pub fn put_ChromeAltLow(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_ChromeAltLow"(self, p0);
     }
-    pub fn get_ChromeBlackHigh(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_ChromeBlackHigh(self, result);
+    pub fn get_ChromeBlackHigh(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_ChromeBlackHigh"(self, result);
     }
-    pub fn put_ChromeBlackHigh(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_ChromeBlackHigh(self, p0);
+    pub fn put_ChromeBlackHigh(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_ChromeBlackHigh"(self, p0);
     }
-    pub fn get_ChromeBlackLow(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_ChromeBlackLow(self, result);
+    pub fn get_ChromeBlackLow(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_ChromeBlackLow"(self, result);
     }
-    pub fn put_ChromeBlackLow(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_ChromeBlackLow(self, p0);
+    pub fn put_ChromeBlackLow(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_ChromeBlackLow"(self, p0);
     }
-    pub fn get_ChromeBlackMediumLow(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_ChromeBlackMediumLow(self, result);
+    pub fn get_ChromeBlackMediumLow(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_ChromeBlackMediumLow"(self, result);
     }
-    pub fn put_ChromeBlackMediumLow(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_ChromeBlackMediumLow(self, p0);
+    pub fn put_ChromeBlackMediumLow(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_ChromeBlackMediumLow"(self, p0);
     }
-    pub fn get_ChromeBlackMedium(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_ChromeBlackMedium(self, result);
+    pub fn get_ChromeBlackMedium(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_ChromeBlackMedium"(self, result);
     }
-    pub fn put_ChromeBlackMedium(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_ChromeBlackMedium(self, p0);
+    pub fn put_ChromeBlackMedium(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_ChromeBlackMedium"(self, p0);
     }
-    pub fn get_ChromeDisabledHigh(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_ChromeDisabledHigh(self, result);
+    pub fn get_ChromeDisabledHigh(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_ChromeDisabledHigh"(self, result);
     }
-    pub fn put_ChromeDisabledHigh(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_ChromeDisabledHigh(self, p0);
+    pub fn put_ChromeDisabledHigh(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_ChromeDisabledHigh"(self, p0);
     }
-    pub fn get_ChromeDisabledLow(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_ChromeDisabledLow(self, result);
+    pub fn get_ChromeDisabledLow(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_ChromeDisabledLow"(self, result);
     }
-    pub fn put_ChromeDisabledLow(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_ChromeDisabledLow(self, p0);
+    pub fn put_ChromeDisabledLow(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_ChromeDisabledLow"(self, p0);
     }
-    pub fn get_ChromeHigh(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_ChromeHigh(self, result);
+    pub fn get_ChromeHigh(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_ChromeHigh"(self, result);
     }
-    pub fn put_ChromeHigh(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_ChromeHigh(self, p0);
+    pub fn put_ChromeHigh(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_ChromeHigh"(self, p0);
     }
-    pub fn get_ChromeLow(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_ChromeLow(self, result);
+    pub fn get_ChromeLow(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_ChromeLow"(self, result);
     }
-    pub fn put_ChromeLow(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_ChromeLow(self, p0);
+    pub fn put_ChromeLow(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_ChromeLow"(self, p0);
     }
-    pub fn get_ChromeMedium(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_ChromeMedium(self, result);
+    pub fn get_ChromeMedium(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_ChromeMedium"(self, result);
     }
-    pub fn put_ChromeMedium(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_ChromeMedium(self, p0);
+    pub fn put_ChromeMedium(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_ChromeMedium"(self, p0);
     }
-    pub fn get_ChromeMediumLow(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_ChromeMediumLow(self, result);
+    pub fn get_ChromeMediumLow(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_ChromeMediumLow"(self, result);
     }
-    pub fn put_ChromeMediumLow(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_ChromeMediumLow(self, p0);
+    pub fn put_ChromeMediumLow(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_ChromeMediumLow"(self, p0);
     }
-    pub fn get_ChromeWhite(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_ChromeWhite(self, result);
+    pub fn get_ChromeWhite(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_ChromeWhite"(self, result);
     }
-    pub fn put_ChromeWhite(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_ChromeWhite(self, p0);
+    pub fn put_ChromeWhite(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_ChromeWhite"(self, p0);
     }
-    pub fn get_ChromeGray(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_ChromeGray(self, result);
+    pub fn get_ChromeGray(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_ChromeGray"(self, result);
     }
-    pub fn put_ChromeGray(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_ChromeGray(self, p0);
+    pub fn put_ChromeGray(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_ChromeGray"(self, p0);
     }
-    pub fn get_ListLow(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_ListLow(self, result);
+    pub fn get_ListLow(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_ListLow"(self, result);
     }
-    pub fn put_ListLow(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_ListLow(self, p0);
+    pub fn put_ListLow(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_ListLow"(self, p0);
     }
-    pub fn get_ListMedium(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_ListMedium(self, result);
+    pub fn get_ListMedium(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_ListMedium"(self, result);
     }
-    pub fn put_ListMedium(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_ListMedium(self, p0);
+    pub fn put_ListMedium(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_ListMedium"(self, p0);
     }
-    pub fn get_ErrorText(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_ErrorText(self, result);
+    pub fn get_ErrorText(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_ErrorText"(self, result);
     }
-    pub fn put_ErrorText(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_ErrorText(self, p0);
+    pub fn put_ErrorText(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_ErrorText"(self, p0);
     }
-    pub fn get_Accent(self: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_Accent(self, result);
+    pub fn get_Accent(self: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_Accent"(self, result);
     }
-    pub fn put_Accent(self: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_Accent(self, p0);
+    pub fn put_Accent(self: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
+        return self.vtable.@"put_Accent"(self, p0);
     }
 };
 pub const IColorPaletteResourcesFactory = extern struct {
@@ -1896,7 +1896,7 @@ pub const IColorPaletteResourcesFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IColorPaletteResourcesFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **ColorPaletteResources) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const ICornerRadiusHelper = extern struct {
@@ -1937,10 +1937,10 @@ pub const ICornerRadiusHelperStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn FromRadii(self: *const ICornerRadiusHelperStatics, p0: f64, p1: f64, p2: f64, p3: f64, result: *CornerRadius) callconv(.winapi) HRESULT {
-        return self.vtable.FromRadii(self, p0, p1, p2, p3, result);
+        return self.vtable.@"FromRadii"(self, p0, p1, p2, p3, result);
     }
     pub fn FromUniformRadius(self: *const ICornerRadiusHelperStatics, p0: f64, result: *CornerRadius) callconv(.winapi) HRESULT {
-        return self.vtable.FromUniformRadius(self, p0, result);
+        return self.vtable.@"FromUniformRadius"(self, p0, result);
     }
 };
 pub const IDataContextChangedEventArgs = extern struct {
@@ -1962,13 +1962,13 @@ pub const IDataContextChangedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_NewValue(self: *const IDataContextChangedEventArgs, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_NewValue(self, result);
+        return self.vtable.@"get_NewValue"(self, result);
     }
     pub fn get_Handled(self: *const IDataContextChangedEventArgs, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_Handled(self, result);
+        return self.vtable.@"get_Handled"(self, result);
     }
     pub fn put_Handled(self: *const IDataContextChangedEventArgs, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_Handled(self, p0);
+        return self.vtable.@"put_Handled"(self, p0);
     }
 };
 pub const IDataTemplate = extern struct {
@@ -1990,7 +1990,7 @@ pub const IDataTemplate = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn LoadContent(self: *const IDataTemplate, result: **DependencyObject) callconv(.winapi) HRESULT {
-        return self.vtable.LoadContent(self, result);
+        return self.vtable.@"LoadContent"(self, result);
     }
 };
 pub const IDataTemplateExtension = extern struct {
@@ -2012,13 +2012,13 @@ pub const IDataTemplateExtension = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn ResetTemplate(self: *const IDataTemplateExtension) callconv(.winapi) HRESULT {
-        return self.vtable.ResetTemplate(self);
+        return self.vtable.@"ResetTemplate"(self);
     }
     pub fn ProcessBinding(self: *const IDataTemplateExtension, p0: u32, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.ProcessBinding(self, p0, result);
+        return self.vtable.@"ProcessBinding"(self, p0, result);
     }
     pub fn ProcessBindings(self: *const IDataTemplateExtension, p0: *@"Microsoft.UI.Xaml.Controls".ContainerContentChangingEventArgs, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.ProcessBindings(self, p0, result);
+        return self.vtable.@"ProcessBindings"(self, p0, result);
     }
 };
 pub const IDataTemplateFactory = extern struct {
@@ -2040,7 +2040,7 @@ pub const IDataTemplateFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IDataTemplateFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **DataTemplate) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const IDataTemplateKey = extern struct {
@@ -2062,10 +2062,10 @@ pub const IDataTemplateKey = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_DataType(self: *const IDataTemplateKey, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_DataType(self, result);
+        return self.vtable.@"get_DataType"(self, result);
     }
     pub fn put_DataType(self: *const IDataTemplateKey, p0: ?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_DataType(self, p0);
+        return self.vtable.@"put_DataType"(self, p0);
     }
 };
 pub const IDataTemplateKeyFactory = extern struct {
@@ -2087,10 +2087,10 @@ pub const IDataTemplateKeyFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IDataTemplateKeyFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **DataTemplateKey) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
     pub fn CreateInstanceWithType(self: *const IDataTemplateKeyFactory, p0: ?*const anyopaque, p1: ?*const anyopaque, p2: *?*const anyopaque, result: **DataTemplateKey) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstanceWithType(self, p0, p1, p2, result);
+        return self.vtable.@"CreateInstanceWithType"(self, p0, p1, p2, result);
     }
 };
 pub const IDataTemplateStatics = extern struct {
@@ -2112,13 +2112,13 @@ pub const IDataTemplateStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_ExtensionInstanceProperty(self: *const IDataTemplateStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_ExtensionInstanceProperty(self, result);
+        return self.vtable.@"get_ExtensionInstanceProperty"(self, result);
     }
     pub fn GetExtensionInstance(self: *const IDataTemplateStatics, p0: *FrameworkElement, result: **IDataTemplateExtension) callconv(.winapi) HRESULT {
-        return self.vtable.GetExtensionInstance(self, p0, result);
+        return self.vtable.@"GetExtensionInstance"(self, p0, result);
     }
     pub fn SetExtensionInstance(self: *const IDataTemplateStatics, p0: *FrameworkElement, p1: *IDataTemplateExtension) callconv(.winapi) HRESULT {
-        return self.vtable.SetExtensionInstance(self, p0, p1);
+        return self.vtable.@"SetExtensionInstance"(self, p0, p1);
     }
 };
 pub const IDebugSettings = extern struct {
@@ -2140,34 +2140,34 @@ pub const IDebugSettings = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_EnableFrameRateCounter(self: *const IDebugSettings, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_EnableFrameRateCounter(self, result);
+        return self.vtable.@"get_EnableFrameRateCounter"(self, result);
     }
     pub fn put_EnableFrameRateCounter(self: *const IDebugSettings, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_EnableFrameRateCounter(self, p0);
+        return self.vtable.@"put_EnableFrameRateCounter"(self, p0);
     }
     pub fn get_IsBindingTracingEnabled(self: *const IDebugSettings, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsBindingTracingEnabled(self, result);
+        return self.vtable.@"get_IsBindingTracingEnabled"(self, result);
     }
     pub fn put_IsBindingTracingEnabled(self: *const IDebugSettings, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_IsBindingTracingEnabled(self, p0);
+        return self.vtable.@"put_IsBindingTracingEnabled"(self, p0);
     }
     pub fn get_IsTextPerformanceVisualizationEnabled(self: *const IDebugSettings, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsTextPerformanceVisualizationEnabled(self, result);
+        return self.vtable.@"get_IsTextPerformanceVisualizationEnabled"(self, result);
     }
     pub fn put_IsTextPerformanceVisualizationEnabled(self: *const IDebugSettings, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_IsTextPerformanceVisualizationEnabled(self, p0);
+        return self.vtable.@"put_IsTextPerformanceVisualizationEnabled"(self, p0);
     }
     pub fn get_FailFastOnErrors(self: *const IDebugSettings, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_FailFastOnErrors(self, result);
+        return self.vtable.@"get_FailFastOnErrors"(self, result);
     }
     pub fn put_FailFastOnErrors(self: *const IDebugSettings, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_FailFastOnErrors(self, p0);
+        return self.vtable.@"put_FailFastOnErrors"(self, p0);
     }
     pub fn add_BindingFailed(self: *const IDebugSettings, p0: *BindingFailedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_BindingFailed(self, p0, result);
+        return self.vtable.@"add_BindingFailed"(self, p0, result);
     }
     pub fn remove_BindingFailed(self: *const IDebugSettings, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_BindingFailed(self, p0);
+        return self.vtable.@"remove_BindingFailed"(self, p0);
     }
 };
 pub const IDebugSettings2 = extern struct {
@@ -2189,16 +2189,16 @@ pub const IDebugSettings2 = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_IsXamlResourceReferenceTracingEnabled(self: *const IDebugSettings2, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsXamlResourceReferenceTracingEnabled(self, result);
+        return self.vtable.@"get_IsXamlResourceReferenceTracingEnabled"(self, result);
     }
     pub fn put_IsXamlResourceReferenceTracingEnabled(self: *const IDebugSettings2, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_IsXamlResourceReferenceTracingEnabled(self, p0);
+        return self.vtable.@"put_IsXamlResourceReferenceTracingEnabled"(self, p0);
     }
-    pub fn add_XamlResourceReferenceFailed(self: *const IDebugSettings2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_XamlResourceReferenceFailed(self, p0, result);
+    pub fn add_XamlResourceReferenceFailed(self: *const IDebugSettings2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_DebugSettings__Microsoft_UI_Xaml_XamlResourceReferenceFailedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_XamlResourceReferenceFailed"(self, p0, result);
     }
     pub fn remove_XamlResourceReferenceFailed(self: *const IDebugSettings2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_XamlResourceReferenceFailed(self, p0);
+        return self.vtable.@"remove_XamlResourceReferenceFailed"(self, p0);
     }
     pub fn addXamlResourceReferenceFailed(
         self: *const IDebugSettings2,
@@ -2236,16 +2236,16 @@ pub const IDebugSettings3 = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_LayoutCycleTracingLevel(self: *const IDebugSettings3, result: *LayoutCycleTracingLevel) callconv(.winapi) HRESULT {
-        return self.vtable.get_LayoutCycleTracingLevel(self, result);
+        return self.vtable.@"get_LayoutCycleTracingLevel"(self, result);
     }
     pub fn put_LayoutCycleTracingLevel(self: *const IDebugSettings3, p0: LayoutCycleTracingLevel) callconv(.winapi) HRESULT {
-        return self.vtable.put_LayoutCycleTracingLevel(self, p0);
+        return self.vtable.@"put_LayoutCycleTracingLevel"(self, p0);
     }
     pub fn get_LayoutCycleDebugBreakLevel(self: *const IDebugSettings3, result: *LayoutCycleDebugBreakLevel) callconv(.winapi) HRESULT {
-        return self.vtable.get_LayoutCycleDebugBreakLevel(self, result);
+        return self.vtable.@"get_LayoutCycleDebugBreakLevel"(self, result);
     }
     pub fn put_LayoutCycleDebugBreakLevel(self: *const IDebugSettings3, p0: LayoutCycleDebugBreakLevel) callconv(.winapi) HRESULT {
-        return self.vtable.put_LayoutCycleDebugBreakLevel(self, p0);
+        return self.vtable.@"put_LayoutCycleDebugBreakLevel"(self, p0);
     }
 };
 pub const IDependencyObject = extern struct {
@@ -2267,31 +2267,31 @@ pub const IDependencyObject = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn GetValue(self: *const IDependencyObject, p0: *DependencyProperty, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.GetValue(self, p0, result);
+        return self.vtable.@"GetValue"(self, p0, result);
     }
     pub fn SetValue(self: *const IDependencyObject, p0: *DependencyProperty, p1: ?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.SetValue(self, p0, p1);
+        return self.vtable.@"SetValue"(self, p0, p1);
     }
     pub fn ClearValue(self: *const IDependencyObject, p0: *DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.ClearValue(self, p0);
+        return self.vtable.@"ClearValue"(self, p0);
     }
     pub fn ReadLocalValue(self: *const IDependencyObject, p0: *DependencyProperty, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.ReadLocalValue(self, p0, result);
+        return self.vtable.@"ReadLocalValue"(self, p0, result);
     }
     pub fn GetAnimationBaseValue(self: *const IDependencyObject, p0: *DependencyProperty, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.GetAnimationBaseValue(self, p0, result);
+        return self.vtable.@"GetAnimationBaseValue"(self, p0, result);
     }
     pub fn RegisterPropertyChangedCallback(self: *const IDependencyObject, p0: *DependencyProperty, p1: *DependencyPropertyChangedCallback, result: *i64) callconv(.winapi) HRESULT {
-        return self.vtable.RegisterPropertyChangedCallback(self, p0, p1, result);
+        return self.vtable.@"RegisterPropertyChangedCallback"(self, p0, p1, result);
     }
     pub fn UnregisterPropertyChangedCallback(self: *const IDependencyObject, p0: *DependencyProperty, p1: i64) callconv(.winapi) HRESULT {
-        return self.vtable.UnregisterPropertyChangedCallback(self, p0, p1);
+        return self.vtable.@"UnregisterPropertyChangedCallback"(self, p0, p1);
     }
     pub fn get_Dispatcher(self: *const IDependencyObject, result: **@"Windows.UI.Core".CoreDispatcher) callconv(.winapi) HRESULT {
-        return self.vtable.get_Dispatcher(self, result);
+        return self.vtable.@"get_Dispatcher"(self, result);
     }
     pub fn get_DispatcherQueue(self: *const IDependencyObject, result: **@"Microsoft.UI.Dispatching".DispatcherQueue) callconv(.winapi) HRESULT {
-        return self.vtable.get_DispatcherQueue(self, result);
+        return self.vtable.@"get_DispatcherQueue"(self, result);
     }
 };
 pub const IDependencyObjectCollectionFactory = extern struct {
@@ -2313,7 +2313,7 @@ pub const IDependencyObjectCollectionFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IDependencyObjectCollectionFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **DependencyObjectCollection) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const IDependencyObjectFactory = extern struct {
@@ -2335,7 +2335,7 @@ pub const IDependencyObjectFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IDependencyObjectFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **DependencyObject) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const IDependencyProperty = extern struct {
@@ -2357,7 +2357,7 @@ pub const IDependencyProperty = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn GetMetadata(self: *const IDependencyProperty, p0: @"Windows.UI.Xaml.Interop".TypeName, result: **PropertyMetadata) callconv(.winapi) HRESULT {
-        return self.vtable.GetMetadata(self, p0, result);
+        return self.vtable.@"GetMetadata"(self, p0, result);
     }
 };
 pub const IDependencyPropertyChangedEventArgs = extern struct {
@@ -2379,13 +2379,13 @@ pub const IDependencyPropertyChangedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Property(self: *const IDependencyPropertyChangedEventArgs, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_Property(self, result);
+        return self.vtable.@"get_Property"(self, result);
     }
     pub fn get_OldValue(self: *const IDependencyPropertyChangedEventArgs, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_OldValue(self, result);
+        return self.vtable.@"get_OldValue"(self, result);
     }
     pub fn get_NewValue(self: *const IDependencyPropertyChangedEventArgs, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_NewValue(self, result);
+        return self.vtable.@"get_NewValue"(self, result);
     }
 };
 pub const IDependencyPropertyStatics = extern struct {
@@ -2407,23 +2407,23 @@ pub const IDependencyPropertyStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_UnsetValue(self: *const IDependencyPropertyStatics, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_UnsetValue(self, result);
+        return self.vtable.@"get_UnsetValue"(self, result);
     }
     pub fn Register(self: *const IDependencyPropertyStatics, p0: HSTRING, p1: @"Windows.UI.Xaml.Interop".TypeName, p2: @"Windows.UI.Xaml.Interop".TypeName, p3: *PropertyMetadata, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.Register(self, p0, p1, p2, p3, result);
+        return self.vtable.@"Register"(self, p0, p1, p2, p3, result);
     }
     pub fn RegisterFromUtf16(self: *const IDependencyPropertyStatics, p0: []const u16, p1: @"Windows.UI.Xaml.Interop".TypeName, p2: @"Windows.UI.Xaml.Interop".TypeName, p3: *PropertyMetadata, result: **DependencyProperty) HRESULT {
         var h0 = win_core.Hstring.create(p0) catch return win_core.hresult.E_OUTOFMEMORY;
         defer h0.deinit();
-        return self.vtable.Register(self, h0.raw, p1, p2, p3, result);
+        return self.vtable.@"Register"(self, h0.raw, p1, p2, p3, result);
     }
     pub fn RegisterAttached(self: *const IDependencyPropertyStatics, p0: HSTRING, p1: @"Windows.UI.Xaml.Interop".TypeName, p2: @"Windows.UI.Xaml.Interop".TypeName, p3: *PropertyMetadata, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.RegisterAttached(self, p0, p1, p2, p3, result);
+        return self.vtable.@"RegisterAttached"(self, p0, p1, p2, p3, result);
     }
     pub fn RegisterAttachedFromUtf16(self: *const IDependencyPropertyStatics, p0: []const u16, p1: @"Windows.UI.Xaml.Interop".TypeName, p2: @"Windows.UI.Xaml.Interop".TypeName, p3: *PropertyMetadata, result: **DependencyProperty) HRESULT {
         var h0 = win_core.Hstring.create(p0) catch return win_core.hresult.E_OUTOFMEMORY;
         defer h0.deinit();
-        return self.vtable.RegisterAttached(self, h0.raw, p1, p2, p3, result);
+        return self.vtable.@"RegisterAttached"(self, h0.raw, p1, p2, p3, result);
     }
 };
 pub const IDispatcherTimer = extern struct {
@@ -2445,25 +2445,25 @@ pub const IDispatcherTimer = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Interval(self: *const IDispatcherTimer, result: *@"Windows.Foundation".TimeSpan) callconv(.winapi) HRESULT {
-        return self.vtable.get_Interval(self, result);
+        return self.vtable.@"get_Interval"(self, result);
     }
     pub fn put_Interval(self: *const IDispatcherTimer, p0: @"Windows.Foundation".TimeSpan) callconv(.winapi) HRESULT {
-        return self.vtable.put_Interval(self, p0);
+        return self.vtable.@"put_Interval"(self, p0);
     }
     pub fn get_IsEnabled(self: *const IDispatcherTimer, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsEnabled(self, result);
+        return self.vtable.@"get_IsEnabled"(self, result);
     }
     pub fn add_Tick(self: *const IDispatcherTimer, p0: *@"Windows.Foundation".EventHandler__G1__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_Tick(self, p0, result);
+        return self.vtable.@"add_Tick"(self, p0, result);
     }
     pub fn remove_Tick(self: *const IDispatcherTimer, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_Tick(self, p0);
+        return self.vtable.@"remove_Tick"(self, p0);
     }
     pub fn Start(self: *const IDispatcherTimer) callconv(.winapi) HRESULT {
-        return self.vtable.Start(self);
+        return self.vtable.@"Start"(self);
     }
     pub fn Stop(self: *const IDispatcherTimer) callconv(.winapi) HRESULT {
-        return self.vtable.Stop(self);
+        return self.vtable.@"Stop"(self);
     }
     pub fn addTick(
         self: *const IDispatcherTimer,
@@ -2501,7 +2501,7 @@ pub const IDispatcherTimerFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IDispatcherTimerFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **DispatcherTimer) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const IDragEventArgs = extern struct {
@@ -2523,40 +2523,40 @@ pub const IDragEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Handled(self: *const IDragEventArgs, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_Handled(self, result);
+        return self.vtable.@"get_Handled"(self, result);
     }
     pub fn put_Handled(self: *const IDragEventArgs, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_Handled(self, p0);
+        return self.vtable.@"put_Handled"(self, p0);
     }
     pub fn get_Data(self: *const IDragEventArgs, result: **@"Windows.ApplicationModel.DataTransfer".DataPackage) callconv(.winapi) HRESULT {
-        return self.vtable.get_Data(self, result);
+        return self.vtable.@"get_Data"(self, result);
     }
     pub fn put_Data(self: *const IDragEventArgs, p0: *@"Windows.ApplicationModel.DataTransfer".DataPackage) callconv(.winapi) HRESULT {
-        return self.vtable.put_Data(self, p0);
+        return self.vtable.@"put_Data"(self, p0);
     }
     pub fn get_DataView(self: *const IDragEventArgs, result: **@"Windows.ApplicationModel.DataTransfer".DataPackageView) callconv(.winapi) HRESULT {
-        return self.vtable.get_DataView(self, result);
+        return self.vtable.@"get_DataView"(self, result);
     }
     pub fn get_DragUIOverride(self: *const IDragEventArgs, result: **DragUIOverride) callconv(.winapi) HRESULT {
-        return self.vtable.get_DragUIOverride(self, result);
+        return self.vtable.@"get_DragUIOverride"(self, result);
     }
     pub fn get_Modifiers(self: *const IDragEventArgs, result: *@"Windows.ApplicationModel.DataTransfer.DragDrop".DragDropModifiers) callconv(.winapi) HRESULT {
-        return self.vtable.get_Modifiers(self, result);
+        return self.vtable.@"get_Modifiers"(self, result);
     }
     pub fn get_AcceptedOperation(self: *const IDragEventArgs, result: *@"Windows.ApplicationModel.DataTransfer".DataPackageOperation) callconv(.winapi) HRESULT {
-        return self.vtable.get_AcceptedOperation(self, result);
+        return self.vtable.@"get_AcceptedOperation"(self, result);
     }
     pub fn put_AcceptedOperation(self: *const IDragEventArgs, p0: @"Windows.ApplicationModel.DataTransfer".DataPackageOperation) callconv(.winapi) HRESULT {
-        return self.vtable.put_AcceptedOperation(self, p0);
+        return self.vtable.@"put_AcceptedOperation"(self, p0);
     }
     pub fn get_AllowedOperations(self: *const IDragEventArgs, result: *@"Windows.ApplicationModel.DataTransfer".DataPackageOperation) callconv(.winapi) HRESULT {
-        return self.vtable.get_AllowedOperations(self, result);
+        return self.vtable.@"get_AllowedOperations"(self, result);
     }
     pub fn GetDeferral(self: *const IDragEventArgs, result: **DragOperationDeferral) callconv(.winapi) HRESULT {
-        return self.vtable.GetDeferral(self, result);
+        return self.vtable.@"GetDeferral"(self, result);
     }
     pub fn GetPosition(self: *const IDragEventArgs, p0: *UIElement, result: *@"Windows.Foundation".Point) callconv(.winapi) HRESULT {
-        return self.vtable.GetPosition(self, p0, result);
+        return self.vtable.@"GetPosition"(self, p0, result);
     }
 };
 pub const IDragOperationDeferral = extern struct {
@@ -2578,7 +2578,7 @@ pub const IDragOperationDeferral = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn Complete(self: *const IDragOperationDeferral) callconv(.winapi) HRESULT {
-        return self.vtable.Complete(self);
+        return self.vtable.@"Complete"(self);
     }
 };
 pub const IDragStartingEventArgs = extern struct {
@@ -2600,28 +2600,28 @@ pub const IDragStartingEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Cancel(self: *const IDragStartingEventArgs, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_Cancel(self, result);
+        return self.vtable.@"get_Cancel"(self, result);
     }
     pub fn put_Cancel(self: *const IDragStartingEventArgs, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_Cancel(self, p0);
+        return self.vtable.@"put_Cancel"(self, p0);
     }
     pub fn get_Data(self: *const IDragStartingEventArgs, result: **@"Windows.ApplicationModel.DataTransfer".DataPackage) callconv(.winapi) HRESULT {
-        return self.vtable.get_Data(self, result);
+        return self.vtable.@"get_Data"(self, result);
     }
     pub fn get_DragUI(self: *const IDragStartingEventArgs, result: **DragUI) callconv(.winapi) HRESULT {
-        return self.vtable.get_DragUI(self, result);
+        return self.vtable.@"get_DragUI"(self, result);
     }
     pub fn get_AllowedOperations(self: *const IDragStartingEventArgs, result: *@"Windows.ApplicationModel.DataTransfer".DataPackageOperation) callconv(.winapi) HRESULT {
-        return self.vtable.get_AllowedOperations(self, result);
+        return self.vtable.@"get_AllowedOperations"(self, result);
     }
     pub fn put_AllowedOperations(self: *const IDragStartingEventArgs, p0: @"Windows.ApplicationModel.DataTransfer".DataPackageOperation) callconv(.winapi) HRESULT {
-        return self.vtable.put_AllowedOperations(self, p0);
+        return self.vtable.@"put_AllowedOperations"(self, p0);
     }
     pub fn GetDeferral(self: *const IDragStartingEventArgs, result: **DragOperationDeferral) callconv(.winapi) HRESULT {
-        return self.vtable.GetDeferral(self, result);
+        return self.vtable.@"GetDeferral"(self, result);
     }
     pub fn GetPosition(self: *const IDragStartingEventArgs, p0: *UIElement, result: *@"Windows.Foundation".Point) callconv(.winapi) HRESULT {
-        return self.vtable.GetPosition(self, p0, result);
+        return self.vtable.@"GetPosition"(self, p0, result);
     }
 };
 pub const IDragUI = extern struct {
@@ -2643,19 +2643,19 @@ pub const IDragUI = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn SetContentFromBitmapImage(self: *const IDragUI, p0: *@"Microsoft.UI.Xaml.Media.Imaging".BitmapImage) callconv(.winapi) HRESULT {
-        return self.vtable.SetContentFromBitmapImage(self, p0);
+        return self.vtable.@"SetContentFromBitmapImage"(self, p0);
     }
     pub fn SetContentFromBitmapImage_2(self: *const IDragUI, p0: *@"Microsoft.UI.Xaml.Media.Imaging".BitmapImage, p1: @"Windows.Foundation".Point) callconv(.winapi) HRESULT {
-        return self.vtable.SetContentFromBitmapImage_2(self, p0, p1);
+        return self.vtable.@"SetContentFromBitmapImage_2"(self, p0, p1);
     }
     pub fn SetContentFromSoftwareBitmap(self: *const IDragUI, p0: *@"Windows.Graphics.Imaging".SoftwareBitmap) callconv(.winapi) HRESULT {
-        return self.vtable.SetContentFromSoftwareBitmap(self, p0);
+        return self.vtable.@"SetContentFromSoftwareBitmap"(self, p0);
     }
     pub fn SetContentFromSoftwareBitmap_2(self: *const IDragUI, p0: *@"Windows.Graphics.Imaging".SoftwareBitmap, p1: @"Windows.Foundation".Point) callconv(.winapi) HRESULT {
-        return self.vtable.SetContentFromSoftwareBitmap_2(self, p0, p1);
+        return self.vtable.@"SetContentFromSoftwareBitmap_2"(self, p0, p1);
     }
     pub fn SetContentFromDataPackage(self: *const IDragUI) callconv(.winapi) HRESULT {
-        return self.vtable.SetContentFromDataPackage(self);
+        return self.vtable.@"SetContentFromDataPackage"(self);
     }
 };
 pub const IDragUIOverride = extern struct {
@@ -2677,53 +2677,53 @@ pub const IDragUIOverride = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Caption(self: *const IDragUIOverride, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.get_Caption(self, result);
+        return self.vtable.@"get_Caption"(self, result);
     }
     pub fn get_CaptionOwned(self: *const IDragUIOverride) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.get_Caption(self, &r));
+        try win_core.hresult.ok(self.vtable.@"get_Caption"(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
     pub fn put_Caption(self: *const IDragUIOverride, p0: HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.put_Caption(self, p0);
+        return self.vtable.@"put_Caption"(self, p0);
     }
     pub fn put_CaptionFromUtf16(self: *const IDragUIOverride, p0: []const u16) HRESULT {
         var h0 = win_core.Hstring.create(p0) catch return win_core.hresult.E_OUTOFMEMORY;
         defer h0.deinit();
-        return self.vtable.put_Caption(self, h0.raw);
+        return self.vtable.@"put_Caption"(self, h0.raw);
     }
     pub fn get_IsContentVisible(self: *const IDragUIOverride, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsContentVisible(self, result);
+        return self.vtable.@"get_IsContentVisible"(self, result);
     }
     pub fn put_IsContentVisible(self: *const IDragUIOverride, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_IsContentVisible(self, p0);
+        return self.vtable.@"put_IsContentVisible"(self, p0);
     }
     pub fn get_IsCaptionVisible(self: *const IDragUIOverride, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsCaptionVisible(self, result);
+        return self.vtable.@"get_IsCaptionVisible"(self, result);
     }
     pub fn put_IsCaptionVisible(self: *const IDragUIOverride, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_IsCaptionVisible(self, p0);
+        return self.vtable.@"put_IsCaptionVisible"(self, p0);
     }
     pub fn get_IsGlyphVisible(self: *const IDragUIOverride, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsGlyphVisible(self, result);
+        return self.vtable.@"get_IsGlyphVisible"(self, result);
     }
     pub fn put_IsGlyphVisible(self: *const IDragUIOverride, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_IsGlyphVisible(self, p0);
+        return self.vtable.@"put_IsGlyphVisible"(self, p0);
     }
     pub fn Clear(self: *const IDragUIOverride) callconv(.winapi) HRESULT {
-        return self.vtable.Clear(self);
+        return self.vtable.@"Clear"(self);
     }
     pub fn SetContentFromBitmapImage(self: *const IDragUIOverride, p0: *@"Microsoft.UI.Xaml.Media.Imaging".BitmapImage) callconv(.winapi) HRESULT {
-        return self.vtable.SetContentFromBitmapImage(self, p0);
+        return self.vtable.@"SetContentFromBitmapImage"(self, p0);
     }
     pub fn SetContentFromBitmapImage_2(self: *const IDragUIOverride, p0: *@"Microsoft.UI.Xaml.Media.Imaging".BitmapImage, p1: @"Windows.Foundation".Point) callconv(.winapi) HRESULT {
-        return self.vtable.SetContentFromBitmapImage_2(self, p0, p1);
+        return self.vtable.@"SetContentFromBitmapImage_2"(self, p0, p1);
     }
     pub fn SetContentFromSoftwareBitmap(self: *const IDragUIOverride, p0: *@"Windows.Graphics.Imaging".SoftwareBitmap) callconv(.winapi) HRESULT {
-        return self.vtable.SetContentFromSoftwareBitmap(self, p0);
+        return self.vtable.@"SetContentFromSoftwareBitmap"(self, p0);
     }
     pub fn SetContentFromSoftwareBitmap_2(self: *const IDragUIOverride, p0: *@"Windows.Graphics.Imaging".SoftwareBitmap, p1: @"Windows.Foundation".Point) callconv(.winapi) HRESULT {
-        return self.vtable.SetContentFromSoftwareBitmap_2(self, p0, p1);
+        return self.vtable.@"SetContentFromSoftwareBitmap_2"(self, p0, p1);
     }
 };
 pub const IDropCompletedEventArgs = extern struct {
@@ -2745,7 +2745,7 @@ pub const IDropCompletedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_DropResult(self: *const IDropCompletedEventArgs, result: *@"Windows.ApplicationModel.DataTransfer".DataPackageOperation) callconv(.winapi) HRESULT {
-        return self.vtable.get_DropResult(self, result);
+        return self.vtable.@"get_DropResult"(self, result);
     }
 };
 pub const IDurationHelper = extern struct {
@@ -2786,28 +2786,28 @@ pub const IDurationHelperStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Automatic(self: *const IDurationHelperStatics, result: *Duration) callconv(.winapi) HRESULT {
-        return self.vtable.get_Automatic(self, result);
+        return self.vtable.@"get_Automatic"(self, result);
     }
     pub fn get_Forever(self: *const IDurationHelperStatics, result: *Duration) callconv(.winapi) HRESULT {
-        return self.vtable.get_Forever(self, result);
+        return self.vtable.@"get_Forever"(self, result);
     }
     pub fn Compare(self: *const IDurationHelperStatics, p0: Duration, p1: Duration, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.Compare(self, p0, p1, result);
+        return self.vtable.@"Compare"(self, p0, p1, result);
     }
     pub fn FromTimeSpan(self: *const IDurationHelperStatics, p0: @"Windows.Foundation".TimeSpan, result: *Duration) callconv(.winapi) HRESULT {
-        return self.vtable.FromTimeSpan(self, p0, result);
+        return self.vtable.@"FromTimeSpan"(self, p0, result);
     }
     pub fn GetHasTimeSpan(self: *const IDurationHelperStatics, p0: Duration, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.GetHasTimeSpan(self, p0, result);
+        return self.vtable.@"GetHasTimeSpan"(self, p0, result);
     }
     pub fn Add(self: *const IDurationHelperStatics, p0: Duration, p1: Duration, result: *Duration) callconv(.winapi) HRESULT {
-        return self.vtable.Add(self, p0, p1, result);
+        return self.vtable.@"Add"(self, p0, p1, result);
     }
     pub fn Equals(self: *const IDurationHelperStatics, p0: Duration, p1: Duration, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.Equals(self, p0, p1, result);
+        return self.vtable.@"Equals"(self, p0, p1, result);
     }
     pub fn Subtract(self: *const IDurationHelperStatics, p0: Duration, p1: Duration, result: *Duration) callconv(.winapi) HRESULT {
-        return self.vtable.Subtract(self, p0, p1, result);
+        return self.vtable.@"Subtract"(self, p0, p1, result);
     }
 };
 pub const IEffectiveViewportChangedEventArgs = extern struct {
@@ -2829,16 +2829,16 @@ pub const IEffectiveViewportChangedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_EffectiveViewport(self: *const IEffectiveViewportChangedEventArgs, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT {
-        return self.vtable.get_EffectiveViewport(self, result);
+        return self.vtable.@"get_EffectiveViewport"(self, result);
     }
     pub fn get_MaxViewport(self: *const IEffectiveViewportChangedEventArgs, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT {
-        return self.vtable.get_MaxViewport(self, result);
+        return self.vtable.@"get_MaxViewport"(self, result);
     }
     pub fn get_BringIntoViewDistanceX(self: *const IEffectiveViewportChangedEventArgs, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_BringIntoViewDistanceX(self, result);
+        return self.vtable.@"get_BringIntoViewDistanceX"(self, result);
     }
     pub fn get_BringIntoViewDistanceY(self: *const IEffectiveViewportChangedEventArgs, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_BringIntoViewDistanceY(self, result);
+        return self.vtable.@"get_BringIntoViewDistanceY"(self, result);
     }
 };
 pub const IElementFactory = extern struct {
@@ -2860,10 +2860,10 @@ pub const IElementFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn GetElement(self: *const IElementFactory, p0: *ElementFactoryGetArgs, result: **UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.GetElement(self, p0, result);
+        return self.vtable.@"GetElement"(self, p0, result);
     }
     pub fn RecycleElement(self: *const IElementFactory, p0: *ElementFactoryRecycleArgs) callconv(.winapi) HRESULT {
-        return self.vtable.RecycleElement(self, p0);
+        return self.vtable.@"RecycleElement"(self, p0);
     }
 };
 pub const IElementFactoryGetArgs = extern struct {
@@ -2885,16 +2885,16 @@ pub const IElementFactoryGetArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Data(self: *const IElementFactoryGetArgs, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_Data(self, result);
+        return self.vtable.@"get_Data"(self, result);
     }
     pub fn put_Data(self: *const IElementFactoryGetArgs, p0: ?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_Data(self, p0);
+        return self.vtable.@"put_Data"(self, p0);
     }
     pub fn get_Parent(self: *const IElementFactoryGetArgs, result: **UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.get_Parent(self, result);
+        return self.vtable.@"get_Parent"(self, result);
     }
     pub fn put_Parent(self: *const IElementFactoryGetArgs, p0: *UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.put_Parent(self, p0);
+        return self.vtable.@"put_Parent"(self, p0);
     }
 };
 pub const IElementFactoryGetArgsFactory = extern struct {
@@ -2916,7 +2916,7 @@ pub const IElementFactoryGetArgsFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IElementFactoryGetArgsFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **ElementFactoryGetArgs) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const IElementFactoryRecycleArgs = extern struct {
@@ -2938,16 +2938,16 @@ pub const IElementFactoryRecycleArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Element(self: *const IElementFactoryRecycleArgs, result: **UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.get_Element(self, result);
+        return self.vtable.@"get_Element"(self, result);
     }
     pub fn put_Element(self: *const IElementFactoryRecycleArgs, p0: *UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.put_Element(self, p0);
+        return self.vtable.@"put_Element"(self, p0);
     }
     pub fn get_Parent(self: *const IElementFactoryRecycleArgs, result: **UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.get_Parent(self, result);
+        return self.vtable.@"get_Parent"(self, result);
     }
     pub fn put_Parent(self: *const IElementFactoryRecycleArgs, p0: *UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.put_Parent(self, p0);
+        return self.vtable.@"put_Parent"(self, p0);
     }
 };
 pub const IElementFactoryRecycleArgsFactory = extern struct {
@@ -2969,7 +2969,7 @@ pub const IElementFactoryRecycleArgsFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IElementFactoryRecycleArgsFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **ElementFactoryRecycleArgs) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const IElementSoundPlayer = extern struct {
@@ -3010,25 +3010,25 @@ pub const IElementSoundPlayerStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Volume(self: *const IElementSoundPlayerStatics, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_Volume(self, result);
+        return self.vtable.@"get_Volume"(self, result);
     }
     pub fn put_Volume(self: *const IElementSoundPlayerStatics, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.put_Volume(self, p0);
+        return self.vtable.@"put_Volume"(self, p0);
     }
     pub fn get_State(self: *const IElementSoundPlayerStatics, result: *ElementSoundPlayerState) callconv(.winapi) HRESULT {
-        return self.vtable.get_State(self, result);
+        return self.vtable.@"get_State"(self, result);
     }
     pub fn put_State(self: *const IElementSoundPlayerStatics, p0: ElementSoundPlayerState) callconv(.winapi) HRESULT {
-        return self.vtable.put_State(self, p0);
+        return self.vtable.@"put_State"(self, p0);
     }
     pub fn get_SpatialAudioMode(self: *const IElementSoundPlayerStatics, result: *ElementSpatialAudioMode) callconv(.winapi) HRESULT {
-        return self.vtable.get_SpatialAudioMode(self, result);
+        return self.vtable.@"get_SpatialAudioMode"(self, result);
     }
     pub fn put_SpatialAudioMode(self: *const IElementSoundPlayerStatics, p0: ElementSpatialAudioMode) callconv(.winapi) HRESULT {
-        return self.vtable.put_SpatialAudioMode(self, p0);
+        return self.vtable.@"put_SpatialAudioMode"(self, p0);
     }
     pub fn Play(self: *const IElementSoundPlayerStatics, p0: ElementSoundKind) callconv(.winapi) HRESULT {
-        return self.vtable.Play(self, p0);
+        return self.vtable.@"Play"(self, p0);
     }
 };
 pub const IEventTrigger = extern struct {
@@ -3050,13 +3050,13 @@ pub const IEventTrigger = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_RoutedEvent(self: *const IEventTrigger, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_RoutedEvent(self, result);
+        return self.vtable.@"get_RoutedEvent"(self, result);
     }
     pub fn put_RoutedEvent(self: *const IEventTrigger, p0: *RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.put_RoutedEvent(self, p0);
+        return self.vtable.@"put_RoutedEvent"(self, p0);
     }
     pub fn get_Actions(self: *const IEventTrigger, result: **TriggerActionCollection) callconv(.winapi) HRESULT {
-        return self.vtable.get_Actions(self, result);
+        return self.vtable.@"get_Actions"(self, result);
     }
 };
 pub const IExceptionRoutedEventArgs = extern struct {
@@ -3078,11 +3078,11 @@ pub const IExceptionRoutedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_ErrorMessage(self: *const IExceptionRoutedEventArgs, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.get_ErrorMessage(self, result);
+        return self.vtable.@"get_ErrorMessage"(self, result);
     }
     pub fn get_ErrorMessageOwned(self: *const IExceptionRoutedEventArgs) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.get_ErrorMessage(self, &r));
+        try win_core.hresult.ok(self.vtable.@"get_ErrorMessage"(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
 };
@@ -3124,251 +3124,251 @@ pub const IFrameworkElement = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Triggers(self: *const IFrameworkElement, result: **TriggerCollection) callconv(.winapi) HRESULT {
-        return self.vtable.get_Triggers(self, result);
+        return self.vtable.@"get_Triggers"(self, result);
     }
     pub fn get_Resources(self: *const IFrameworkElement, result: **ResourceDictionary) callconv(.winapi) HRESULT {
-        return self.vtable.get_Resources(self, result);
+        return self.vtable.@"get_Resources"(self, result);
     }
     pub fn put_Resources(self: *const IFrameworkElement, p0: *ResourceDictionary) callconv(.winapi) HRESULT {
-        return self.vtable.put_Resources(self, p0);
+        return self.vtable.@"put_Resources"(self, p0);
     }
     pub fn get_Tag(self: *const IFrameworkElement, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_Tag(self, result);
+        return self.vtable.@"get_Tag"(self, result);
     }
     pub fn put_Tag(self: *const IFrameworkElement, p0: ?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_Tag(self, p0);
+        return self.vtable.@"put_Tag"(self, p0);
     }
     pub fn get_Language(self: *const IFrameworkElement, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.get_Language(self, result);
+        return self.vtable.@"get_Language"(self, result);
     }
     pub fn get_LanguageOwned(self: *const IFrameworkElement) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.get_Language(self, &r));
+        try win_core.hresult.ok(self.vtable.@"get_Language"(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
     pub fn put_Language(self: *const IFrameworkElement, p0: HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.put_Language(self, p0);
+        return self.vtable.@"put_Language"(self, p0);
     }
     pub fn put_LanguageFromUtf16(self: *const IFrameworkElement, p0: []const u16) HRESULT {
         var h0 = win_core.Hstring.create(p0) catch return win_core.hresult.E_OUTOFMEMORY;
         defer h0.deinit();
-        return self.vtable.put_Language(self, h0.raw);
+        return self.vtable.@"put_Language"(self, h0.raw);
     }
     pub fn get_ActualWidth(self: *const IFrameworkElement, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_ActualWidth(self, result);
+        return self.vtable.@"get_ActualWidth"(self, result);
     }
     pub fn get_ActualHeight(self: *const IFrameworkElement, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_ActualHeight(self, result);
+        return self.vtable.@"get_ActualHeight"(self, result);
     }
     pub fn get_Width(self: *const IFrameworkElement, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_Width(self, result);
+        return self.vtable.@"get_Width"(self, result);
     }
     pub fn put_Width(self: *const IFrameworkElement, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.put_Width(self, p0);
+        return self.vtable.@"put_Width"(self, p0);
     }
     pub fn get_Height(self: *const IFrameworkElement, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_Height(self, result);
+        return self.vtable.@"get_Height"(self, result);
     }
     pub fn put_Height(self: *const IFrameworkElement, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.put_Height(self, p0);
+        return self.vtable.@"put_Height"(self, p0);
     }
     pub fn get_MinWidth(self: *const IFrameworkElement, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_MinWidth(self, result);
+        return self.vtable.@"get_MinWidth"(self, result);
     }
     pub fn put_MinWidth(self: *const IFrameworkElement, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.put_MinWidth(self, p0);
+        return self.vtable.@"put_MinWidth"(self, p0);
     }
     pub fn get_MaxWidth(self: *const IFrameworkElement, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_MaxWidth(self, result);
+        return self.vtable.@"get_MaxWidth"(self, result);
     }
     pub fn put_MaxWidth(self: *const IFrameworkElement, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.put_MaxWidth(self, p0);
+        return self.vtable.@"put_MaxWidth"(self, p0);
     }
     pub fn get_MinHeight(self: *const IFrameworkElement, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_MinHeight(self, result);
+        return self.vtable.@"get_MinHeight"(self, result);
     }
     pub fn put_MinHeight(self: *const IFrameworkElement, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.put_MinHeight(self, p0);
+        return self.vtable.@"put_MinHeight"(self, p0);
     }
     pub fn get_MaxHeight(self: *const IFrameworkElement, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_MaxHeight(self, result);
+        return self.vtable.@"get_MaxHeight"(self, result);
     }
     pub fn put_MaxHeight(self: *const IFrameworkElement, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.put_MaxHeight(self, p0);
+        return self.vtable.@"put_MaxHeight"(self, p0);
     }
     pub fn get_HorizontalAlignment(self: *const IFrameworkElement, result: *HorizontalAlignment) callconv(.winapi) HRESULT {
-        return self.vtable.get_HorizontalAlignment(self, result);
+        return self.vtable.@"get_HorizontalAlignment"(self, result);
     }
     pub fn put_HorizontalAlignment(self: *const IFrameworkElement, p0: HorizontalAlignment) callconv(.winapi) HRESULT {
-        return self.vtable.put_HorizontalAlignment(self, p0);
+        return self.vtable.@"put_HorizontalAlignment"(self, p0);
     }
     pub fn get_VerticalAlignment(self: *const IFrameworkElement, result: *VerticalAlignment) callconv(.winapi) HRESULT {
-        return self.vtable.get_VerticalAlignment(self, result);
+        return self.vtable.@"get_VerticalAlignment"(self, result);
     }
     pub fn put_VerticalAlignment(self: *const IFrameworkElement, p0: VerticalAlignment) callconv(.winapi) HRESULT {
-        return self.vtable.put_VerticalAlignment(self, p0);
+        return self.vtable.@"put_VerticalAlignment"(self, p0);
     }
     pub fn get_Margin(self: *const IFrameworkElement, result: *Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.get_Margin(self, result);
+        return self.vtable.@"get_Margin"(self, result);
     }
     pub fn put_Margin(self: *const IFrameworkElement, p0: Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.put_Margin(self, p0);
+        return self.vtable.@"put_Margin"(self, p0);
     }
     pub fn get_Name(self: *const IFrameworkElement, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.get_Name(self, result);
+        return self.vtable.@"get_Name"(self, result);
     }
     pub fn get_NameOwned(self: *const IFrameworkElement) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.get_Name(self, &r));
+        try win_core.hresult.ok(self.vtable.@"get_Name"(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
     pub fn put_Name(self: *const IFrameworkElement, p0: HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.put_Name(self, p0);
+        return self.vtable.@"put_Name"(self, p0);
     }
     pub fn put_NameFromUtf16(self: *const IFrameworkElement, p0: []const u16) HRESULT {
         var h0 = win_core.Hstring.create(p0) catch return win_core.hresult.E_OUTOFMEMORY;
         defer h0.deinit();
-        return self.vtable.put_Name(self, h0.raw);
+        return self.vtable.@"put_Name"(self, h0.raw);
     }
     pub fn get_BaseUri(self: *const IFrameworkElement, result: **@"Windows.Foundation".Uri) callconv(.winapi) HRESULT {
-        return self.vtable.get_BaseUri(self, result);
+        return self.vtable.@"get_BaseUri"(self, result);
     }
     pub fn get_DataContext(self: *const IFrameworkElement, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_DataContext(self, result);
+        return self.vtable.@"get_DataContext"(self, result);
     }
     pub fn put_DataContext(self: *const IFrameworkElement, p0: ?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_DataContext(self, p0);
+        return self.vtable.@"put_DataContext"(self, p0);
     }
     pub fn get_AllowFocusOnInteraction(self: *const IFrameworkElement, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_AllowFocusOnInteraction(self, result);
+        return self.vtable.@"get_AllowFocusOnInteraction"(self, result);
     }
     pub fn put_AllowFocusOnInteraction(self: *const IFrameworkElement, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_AllowFocusOnInteraction(self, p0);
+        return self.vtable.@"put_AllowFocusOnInteraction"(self, p0);
     }
     pub fn get_FocusVisualMargin(self: *const IFrameworkElement, result: *Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.get_FocusVisualMargin(self, result);
+        return self.vtable.@"get_FocusVisualMargin"(self, result);
     }
     pub fn put_FocusVisualMargin(self: *const IFrameworkElement, p0: Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.put_FocusVisualMargin(self, p0);
+        return self.vtable.@"put_FocusVisualMargin"(self, p0);
     }
     pub fn get_FocusVisualSecondaryThickness(self: *const IFrameworkElement, result: *Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.get_FocusVisualSecondaryThickness(self, result);
+        return self.vtable.@"get_FocusVisualSecondaryThickness"(self, result);
     }
     pub fn put_FocusVisualSecondaryThickness(self: *const IFrameworkElement, p0: Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.put_FocusVisualSecondaryThickness(self, p0);
+        return self.vtable.@"put_FocusVisualSecondaryThickness"(self, p0);
     }
     pub fn get_FocusVisualPrimaryThickness(self: *const IFrameworkElement, result: *Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.get_FocusVisualPrimaryThickness(self, result);
+        return self.vtable.@"get_FocusVisualPrimaryThickness"(self, result);
     }
     pub fn put_FocusVisualPrimaryThickness(self: *const IFrameworkElement, p0: Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.put_FocusVisualPrimaryThickness(self, p0);
+        return self.vtable.@"put_FocusVisualPrimaryThickness"(self, p0);
     }
     pub fn get_FocusVisualSecondaryBrush(self: *const IFrameworkElement, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.get_FocusVisualSecondaryBrush(self, result);
+        return self.vtable.@"get_FocusVisualSecondaryBrush"(self, result);
     }
     pub fn put_FocusVisualSecondaryBrush(self: *const IFrameworkElement, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.put_FocusVisualSecondaryBrush(self, p0);
+        return self.vtable.@"put_FocusVisualSecondaryBrush"(self, p0);
     }
     pub fn get_FocusVisualPrimaryBrush(self: *const IFrameworkElement, result: **@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.get_FocusVisualPrimaryBrush(self, result);
+        return self.vtable.@"get_FocusVisualPrimaryBrush"(self, result);
     }
     pub fn put_FocusVisualPrimaryBrush(self: *const IFrameworkElement, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT {
-        return self.vtable.put_FocusVisualPrimaryBrush(self, p0);
+        return self.vtable.@"put_FocusVisualPrimaryBrush"(self, p0);
     }
     pub fn get_AllowFocusWhenDisabled(self: *const IFrameworkElement, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_AllowFocusWhenDisabled(self, result);
+        return self.vtable.@"get_AllowFocusWhenDisabled"(self, result);
     }
     pub fn put_AllowFocusWhenDisabled(self: *const IFrameworkElement, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_AllowFocusWhenDisabled(self, p0);
+        return self.vtable.@"put_AllowFocusWhenDisabled"(self, p0);
     }
     pub fn get_Style(self: *const IFrameworkElement, result: **Style) callconv(.winapi) HRESULT {
-        return self.vtable.get_Style(self, result);
+        return self.vtable.@"get_Style"(self, result);
     }
     pub fn put_Style(self: *const IFrameworkElement, p0: *Style) callconv(.winapi) HRESULT {
-        return self.vtable.put_Style(self, p0);
+        return self.vtable.@"put_Style"(self, p0);
     }
     pub fn get_Parent(self: *const IFrameworkElement, result: **DependencyObject) callconv(.winapi) HRESULT {
-        return self.vtable.get_Parent(self, result);
+        return self.vtable.@"get_Parent"(self, result);
     }
     pub fn get_FlowDirection(self: *const IFrameworkElement, result: *FlowDirection) callconv(.winapi) HRESULT {
-        return self.vtable.get_FlowDirection(self, result);
+        return self.vtable.@"get_FlowDirection"(self, result);
     }
     pub fn put_FlowDirection(self: *const IFrameworkElement, p0: FlowDirection) callconv(.winapi) HRESULT {
-        return self.vtable.put_FlowDirection(self, p0);
+        return self.vtable.@"put_FlowDirection"(self, p0);
     }
     pub fn get_RequestedTheme(self: *const IFrameworkElement, result: *ElementTheme) callconv(.winapi) HRESULT {
-        return self.vtable.get_RequestedTheme(self, result);
+        return self.vtable.@"get_RequestedTheme"(self, result);
     }
     pub fn put_RequestedTheme(self: *const IFrameworkElement, p0: ElementTheme) callconv(.winapi) HRESULT {
-        return self.vtable.put_RequestedTheme(self, p0);
+        return self.vtable.@"put_RequestedTheme"(self, p0);
     }
     pub fn get_IsLoaded(self: *const IFrameworkElement, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsLoaded(self, result);
+        return self.vtable.@"get_IsLoaded"(self, result);
     }
     pub fn get_ActualTheme(self: *const IFrameworkElement, result: *ElementTheme) callconv(.winapi) HRESULT {
-        return self.vtable.get_ActualTheme(self, result);
+        return self.vtable.@"get_ActualTheme"(self, result);
     }
     pub fn add_Loaded(self: *const IFrameworkElement, p0: *RoutedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_Loaded(self, p0, result);
+        return self.vtable.@"add_Loaded"(self, p0, result);
     }
     pub fn remove_Loaded(self: *const IFrameworkElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_Loaded(self, p0);
+        return self.vtable.@"remove_Loaded"(self, p0);
     }
     pub fn add_Unloaded(self: *const IFrameworkElement, p0: *RoutedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_Unloaded(self, p0, result);
+        return self.vtable.@"add_Unloaded"(self, p0, result);
     }
     pub fn remove_Unloaded(self: *const IFrameworkElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_Unloaded(self, p0);
+        return self.vtable.@"remove_Unloaded"(self, p0);
     }
-    pub fn add_DataContextChanged(self: *const IFrameworkElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_DataContextChanged(self, p0, result);
+    pub fn add_DataContextChanged(self: *const IFrameworkElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_FrameworkElement__Microsoft_UI_Xaml_DataContextChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_DataContextChanged"(self, p0, result);
     }
     pub fn remove_DataContextChanged(self: *const IFrameworkElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_DataContextChanged(self, p0);
+        return self.vtable.@"remove_DataContextChanged"(self, p0);
     }
     pub fn add_SizeChanged(self: *const IFrameworkElement, p0: *SizeChangedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_SizeChanged(self, p0, result);
+        return self.vtable.@"add_SizeChanged"(self, p0, result);
     }
     pub fn remove_SizeChanged(self: *const IFrameworkElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_SizeChanged(self, p0);
+        return self.vtable.@"remove_SizeChanged"(self, p0);
     }
     pub fn add_LayoutUpdated(self: *const IFrameworkElement, p0: *@"Windows.Foundation".EventHandler__G1__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_LayoutUpdated(self, p0, result);
+        return self.vtable.@"add_LayoutUpdated"(self, p0, result);
     }
     pub fn remove_LayoutUpdated(self: *const IFrameworkElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_LayoutUpdated(self, p0);
+        return self.vtable.@"remove_LayoutUpdated"(self, p0);
     }
-    pub fn add_Loading(self: *const IFrameworkElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_Loading(self, p0, result);
+    pub fn add_Loading(self: *const IFrameworkElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_FrameworkElement__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_Loading"(self, p0, result);
     }
     pub fn remove_Loading(self: *const IFrameworkElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_Loading(self, p0);
+        return self.vtable.@"remove_Loading"(self, p0);
     }
-    pub fn add_ActualThemeChanged(self: *const IFrameworkElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_ActualThemeChanged(self, p0, result);
+    pub fn add_ActualThemeChanged(self: *const IFrameworkElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_FrameworkElement__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_ActualThemeChanged"(self, p0, result);
     }
     pub fn remove_ActualThemeChanged(self: *const IFrameworkElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_ActualThemeChanged(self, p0);
+        return self.vtable.@"remove_ActualThemeChanged"(self, p0);
     }
-    pub fn add_EffectiveViewportChanged(self: *const IFrameworkElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_EffectiveViewportChanged(self, p0, result);
+    pub fn add_EffectiveViewportChanged(self: *const IFrameworkElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_FrameworkElement__Microsoft_UI_Xaml_EffectiveViewportChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_EffectiveViewportChanged"(self, p0, result);
     }
     pub fn remove_EffectiveViewportChanged(self: *const IFrameworkElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_EffectiveViewportChanged(self, p0);
+        return self.vtable.@"remove_EffectiveViewportChanged"(self, p0);
     }
     pub fn FindName(self: *const IFrameworkElement, p0: HSTRING, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.FindName(self, p0, result);
+        return self.vtable.@"FindName"(self, p0, result);
     }
     pub fn FindNameFromUtf16(self: *const IFrameworkElement, p0: []const u16, result: *?*const anyopaque) HRESULT {
         var h0 = win_core.Hstring.create(p0) catch return win_core.hresult.E_OUTOFMEMORY;
         defer h0.deinit();
-        return self.vtable.FindName(self, h0.raw, result);
+        return self.vtable.@"FindName"(self, h0.raw, result);
     }
     pub fn SetBinding(self: *const IFrameworkElement, p0: *DependencyProperty, p1: *@"Microsoft.UI.Xaml.Data".BindingBase) callconv(.winapi) HRESULT {
-        return self.vtable.SetBinding(self, p0, p1);
+        return self.vtable.@"SetBinding"(self, p0, p1);
     }
     pub fn GetBindingExpression(self: *const IFrameworkElement, p0: *DependencyProperty, result: **@"Microsoft.UI.Xaml.Data".BindingExpression) callconv(.winapi) HRESULT {
-        return self.vtable.GetBindingExpression(self, p0, result);
+        return self.vtable.@"GetBindingExpression"(self, p0, result);
     }
     pub fn addEffectiveViewportChanged(
         self: *const IFrameworkElement,
@@ -3470,7 +3470,7 @@ pub const IFrameworkElementFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IFrameworkElementFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **FrameworkElement) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const IFrameworkElementOverrides = extern struct {
@@ -3492,21 +3492,21 @@ pub const IFrameworkElementOverrides = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn MeasureOverride(self: *const IFrameworkElementOverrides, p0: @"Windows.Foundation".Size, result: *@"Windows.Foundation".Size) callconv(.winapi) HRESULT {
-        return self.vtable.MeasureOverride(self, p0, result);
+        return self.vtable.@"MeasureOverride"(self, p0, result);
     }
     pub fn ArrangeOverride(self: *const IFrameworkElementOverrides, p0: @"Windows.Foundation".Size, result: *@"Windows.Foundation".Size) callconv(.winapi) HRESULT {
-        return self.vtable.ArrangeOverride(self, p0, result);
+        return self.vtable.@"ArrangeOverride"(self, p0, result);
     }
     pub fn OnApplyTemplate(self: *const IFrameworkElementOverrides) callconv(.winapi) HRESULT {
-        return self.vtable.OnApplyTemplate(self);
+        return self.vtable.@"OnApplyTemplate"(self);
     }
     pub fn GoToElementStateCore(self: *const IFrameworkElementOverrides, p0: HSTRING, p1: BOOL, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.GoToElementStateCore(self, p0, p1, result);
+        return self.vtable.@"GoToElementStateCore"(self, p0, p1, result);
     }
     pub fn GoToElementStateCoreFromUtf16(self: *const IFrameworkElementOverrides, p0: []const u16, p1: BOOL, result: *BOOL) HRESULT {
         var h0 = win_core.Hstring.create(p0) catch return win_core.hresult.E_OUTOFMEMORY;
         defer h0.deinit();
-        return self.vtable.GoToElementStateCore(self, h0.raw, p1, result);
+        return self.vtable.@"GoToElementStateCore"(self, h0.raw, p1, result);
     }
 };
 pub const IFrameworkElementProtected = extern struct {
@@ -3528,7 +3528,7 @@ pub const IFrameworkElementProtected = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn InvalidateViewport(self: *const IFrameworkElementProtected) callconv(.winapi) HRESULT {
-        return self.vtable.InvalidateViewport(self);
+        return self.vtable.@"InvalidateViewport"(self);
     }
 };
 pub const IFrameworkElementStatics = extern struct {
@@ -3550,85 +3550,85 @@ pub const IFrameworkElementStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_TagProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_TagProperty(self, result);
+        return self.vtable.@"get_TagProperty"(self, result);
     }
     pub fn get_LanguageProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_LanguageProperty(self, result);
+        return self.vtable.@"get_LanguageProperty"(self, result);
     }
     pub fn get_ActualWidthProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_ActualWidthProperty(self, result);
+        return self.vtable.@"get_ActualWidthProperty"(self, result);
     }
     pub fn get_ActualHeightProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_ActualHeightProperty(self, result);
+        return self.vtable.@"get_ActualHeightProperty"(self, result);
     }
     pub fn get_WidthProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_WidthProperty(self, result);
+        return self.vtable.@"get_WidthProperty"(self, result);
     }
     pub fn get_HeightProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_HeightProperty(self, result);
+        return self.vtable.@"get_HeightProperty"(self, result);
     }
     pub fn get_MinWidthProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_MinWidthProperty(self, result);
+        return self.vtable.@"get_MinWidthProperty"(self, result);
     }
     pub fn get_MaxWidthProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_MaxWidthProperty(self, result);
+        return self.vtable.@"get_MaxWidthProperty"(self, result);
     }
     pub fn get_MinHeightProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_MinHeightProperty(self, result);
+        return self.vtable.@"get_MinHeightProperty"(self, result);
     }
     pub fn get_MaxHeightProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_MaxHeightProperty(self, result);
+        return self.vtable.@"get_MaxHeightProperty"(self, result);
     }
     pub fn get_HorizontalAlignmentProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_HorizontalAlignmentProperty(self, result);
+        return self.vtable.@"get_HorizontalAlignmentProperty"(self, result);
     }
     pub fn get_VerticalAlignmentProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_VerticalAlignmentProperty(self, result);
+        return self.vtable.@"get_VerticalAlignmentProperty"(self, result);
     }
     pub fn get_MarginProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_MarginProperty(self, result);
+        return self.vtable.@"get_MarginProperty"(self, result);
     }
     pub fn get_NameProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_NameProperty(self, result);
+        return self.vtable.@"get_NameProperty"(self, result);
     }
     pub fn get_DataContextProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_DataContextProperty(self, result);
+        return self.vtable.@"get_DataContextProperty"(self, result);
     }
     pub fn get_AllowFocusOnInteractionProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_AllowFocusOnInteractionProperty(self, result);
+        return self.vtable.@"get_AllowFocusOnInteractionProperty"(self, result);
     }
     pub fn get_FocusVisualMarginProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_FocusVisualMarginProperty(self, result);
+        return self.vtable.@"get_FocusVisualMarginProperty"(self, result);
     }
     pub fn get_FocusVisualSecondaryThicknessProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_FocusVisualSecondaryThicknessProperty(self, result);
+        return self.vtable.@"get_FocusVisualSecondaryThicknessProperty"(self, result);
     }
     pub fn get_FocusVisualPrimaryThicknessProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_FocusVisualPrimaryThicknessProperty(self, result);
+        return self.vtable.@"get_FocusVisualPrimaryThicknessProperty"(self, result);
     }
     pub fn get_FocusVisualSecondaryBrushProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_FocusVisualSecondaryBrushProperty(self, result);
+        return self.vtable.@"get_FocusVisualSecondaryBrushProperty"(self, result);
     }
     pub fn get_FocusVisualPrimaryBrushProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_FocusVisualPrimaryBrushProperty(self, result);
+        return self.vtable.@"get_FocusVisualPrimaryBrushProperty"(self, result);
     }
     pub fn get_AllowFocusWhenDisabledProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_AllowFocusWhenDisabledProperty(self, result);
+        return self.vtable.@"get_AllowFocusWhenDisabledProperty"(self, result);
     }
     pub fn get_StyleProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_StyleProperty(self, result);
+        return self.vtable.@"get_StyleProperty"(self, result);
     }
     pub fn get_FlowDirectionProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_FlowDirectionProperty(self, result);
+        return self.vtable.@"get_FlowDirectionProperty"(self, result);
     }
     pub fn get_RequestedThemeProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_RequestedThemeProperty(self, result);
+        return self.vtable.@"get_RequestedThemeProperty"(self, result);
     }
     pub fn get_ActualThemeProperty(self: *const IFrameworkElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_ActualThemeProperty(self, result);
+        return self.vtable.@"get_ActualThemeProperty"(self, result);
     }
     pub fn DeferTree(self: *const IFrameworkElementStatics, p0: *DependencyObject) callconv(.winapi) HRESULT {
-        return self.vtable.DeferTree(self, p0);
+        return self.vtable.@"DeferTree"(self, p0);
     }
 };
 pub const IFrameworkTemplate = extern struct {
@@ -3669,7 +3669,7 @@ pub const IFrameworkTemplateFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IFrameworkTemplateFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **FrameworkTemplate) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const IFrameworkView = extern struct {
@@ -3748,25 +3748,25 @@ pub const IGridLengthHelperStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Auto(self: *const IGridLengthHelperStatics, result: *GridLength) callconv(.winapi) HRESULT {
-        return self.vtable.get_Auto(self, result);
+        return self.vtable.@"get_Auto"(self, result);
     }
     pub fn FromPixels(self: *const IGridLengthHelperStatics, p0: f64, result: *GridLength) callconv(.winapi) HRESULT {
-        return self.vtable.FromPixels(self, p0, result);
+        return self.vtable.@"FromPixels"(self, p0, result);
     }
     pub fn FromValueAndType(self: *const IGridLengthHelperStatics, p0: f64, p1: GridUnitType, result: *GridLength) callconv(.winapi) HRESULT {
-        return self.vtable.FromValueAndType(self, p0, p1, result);
+        return self.vtable.@"FromValueAndType"(self, p0, p1, result);
     }
     pub fn GetIsAbsolute(self: *const IGridLengthHelperStatics, p0: GridLength, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.GetIsAbsolute(self, p0, result);
+        return self.vtable.@"GetIsAbsolute"(self, p0, result);
     }
     pub fn GetIsAuto(self: *const IGridLengthHelperStatics, p0: GridLength, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.GetIsAuto(self, p0, result);
+        return self.vtable.@"GetIsAuto"(self, p0, result);
     }
     pub fn GetIsStar(self: *const IGridLengthHelperStatics, p0: GridLength, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.GetIsStar(self, p0, result);
+        return self.vtable.@"GetIsStar"(self, p0, result);
     }
     pub fn Equals(self: *const IGridLengthHelperStatics, p0: GridLength, p1: GridLength, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.Equals(self, p0, p1, result);
+        return self.vtable.@"Equals"(self, p0, p1, result);
     }
 };
 pub const ILaunchActivatedEventArgs = extern struct {
@@ -3788,15 +3788,15 @@ pub const ILaunchActivatedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Arguments(self: *const ILaunchActivatedEventArgs, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.get_Arguments(self, result);
+        return self.vtable.@"get_Arguments"(self, result);
     }
     pub fn get_ArgumentsOwned(self: *const ILaunchActivatedEventArgs) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.get_Arguments(self, &r));
+        try win_core.hresult.ok(self.vtable.@"get_Arguments"(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
     pub fn get_UWPLaunchActivatedEventArgs(self: *const ILaunchActivatedEventArgs, result: **@"Windows.ApplicationModel.Activation".LaunchActivatedEventArgs) callconv(.winapi) HRESULT {
-        return self.vtable.get_UWPLaunchActivatedEventArgs(self, result);
+        return self.vtable.@"get_UWPLaunchActivatedEventArgs"(self, result);
     }
 };
 pub const IMediaFailedRoutedEventArgs = extern struct {
@@ -3818,11 +3818,11 @@ pub const IMediaFailedRoutedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_ErrorTrace(self: *const IMediaFailedRoutedEventArgs, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.get_ErrorTrace(self, result);
+        return self.vtable.@"get_ErrorTrace"(self, result);
     }
     pub fn get_ErrorTraceOwned(self: *const IMediaFailedRoutedEventArgs) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.get_ErrorTrace(self, &r));
+        try win_core.hresult.ok(self.vtable.@"get_ErrorTrace"(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
 };
@@ -3864,7 +3864,7 @@ pub const IPointHelperStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn FromCoordinates(self: *const IPointHelperStatics, p0: f32, p1: f32, result: *@"Windows.Foundation".Point) callconv(.winapi) HRESULT {
-        return self.vtable.FromCoordinates(self, p0, p1, result);
+        return self.vtable.@"FromCoordinates"(self, p0, p1, result);
     }
 };
 pub const IPropertyMetadata = extern struct {
@@ -3886,10 +3886,10 @@ pub const IPropertyMetadata = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_DefaultValue(self: *const IPropertyMetadata, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_DefaultValue(self, result);
+        return self.vtable.@"get_DefaultValue"(self, result);
     }
     pub fn get_CreateDefaultValueCallback(self: *const IPropertyMetadata, result: **CreateDefaultValueCallback) callconv(.winapi) HRESULT {
-        return self.vtable.get_CreateDefaultValueCallback(self, result);
+        return self.vtable.@"get_CreateDefaultValueCallback"(self, result);
     }
 };
 pub const IPropertyMetadataFactory = extern struct {
@@ -3911,10 +3911,10 @@ pub const IPropertyMetadataFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstanceWithDefaultValue(self: *const IPropertyMetadataFactory, p0: ?*const anyopaque, p1: ?*const anyopaque, p2: *?*const anyopaque, result: **PropertyMetadata) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstanceWithDefaultValue(self, p0, p1, p2, result);
+        return self.vtable.@"CreateInstanceWithDefaultValue"(self, p0, p1, p2, result);
     }
     pub fn CreateInstanceWithDefaultValueAndCallback(self: *const IPropertyMetadataFactory, p0: ?*const anyopaque, p1: *PropertyChangedCallback, p2: ?*const anyopaque, p3: *?*const anyopaque, result: **PropertyMetadata) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstanceWithDefaultValueAndCallback(self, p0, p1, p2, p3, result);
+        return self.vtable.@"CreateInstanceWithDefaultValueAndCallback"(self, p0, p1, p2, p3, result);
     }
 };
 pub const IPropertyMetadataStatics = extern struct {
@@ -3936,16 +3936,16 @@ pub const IPropertyMetadataStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn Create(self: *const IPropertyMetadataStatics, p0: ?*const anyopaque, result: **PropertyMetadata) callconv(.winapi) HRESULT {
-        return self.vtable.Create(self, p0, result);
+        return self.vtable.@"Create"(self, p0, result);
     }
     pub fn Create_2(self: *const IPropertyMetadataStatics, p0: ?*const anyopaque, p1: *PropertyChangedCallback, result: **PropertyMetadata) callconv(.winapi) HRESULT {
-        return self.vtable.Create_2(self, p0, p1, result);
+        return self.vtable.@"Create_2"(self, p0, p1, result);
     }
     pub fn Create_3(self: *const IPropertyMetadataStatics, p0: *CreateDefaultValueCallback, result: **PropertyMetadata) callconv(.winapi) HRESULT {
-        return self.vtable.Create_3(self, p0, result);
+        return self.vtable.@"Create_3"(self, p0, result);
     }
     pub fn Create_4(self: *const IPropertyMetadataStatics, p0: *CreateDefaultValueCallback, p1: *PropertyChangedCallback, result: **PropertyMetadata) callconv(.winapi) HRESULT {
-        return self.vtable.Create_4(self, p0, p1, result);
+        return self.vtable.@"Create_4"(self, p0, p1, result);
     }
 };
 pub const IPropertyPath = extern struct {
@@ -3967,11 +3967,11 @@ pub const IPropertyPath = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Path(self: *const IPropertyPath, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.get_Path(self, result);
+        return self.vtable.@"get_Path"(self, result);
     }
     pub fn get_PathOwned(self: *const IPropertyPath) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.get_Path(self, &r));
+        try win_core.hresult.ok(self.vtable.@"get_Path"(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
 };
@@ -3994,12 +3994,12 @@ pub const IPropertyPathFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IPropertyPathFactory, p0: HSTRING, result: **PropertyPath) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, result);
+        return self.vtable.@"CreateInstance"(self, p0, result);
     }
     pub fn CreateInstanceFromUtf16(self: *const IPropertyPathFactory, p0: []const u16, result: **PropertyPath) HRESULT {
         var h0 = win_core.Hstring.create(p0) catch return win_core.hresult.E_OUTOFMEMORY;
         defer h0.deinit();
-        return self.vtable.CreateInstance(self, h0.raw, result);
+        return self.vtable.@"CreateInstance"(self, h0.raw, result);
     }
 };
 pub const IRectHelper = extern struct {
@@ -4040,46 +4040,46 @@ pub const IRectHelperStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Empty(self: *const IRectHelperStatics, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT {
-        return self.vtable.get_Empty(self, result);
+        return self.vtable.@"get_Empty"(self, result);
     }
     pub fn FromCoordinatesAndDimensions(self: *const IRectHelperStatics, p0: f32, p1: f32, p2: f32, p3: f32, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT {
-        return self.vtable.FromCoordinatesAndDimensions(self, p0, p1, p2, p3, result);
+        return self.vtable.@"FromCoordinatesAndDimensions"(self, p0, p1, p2, p3, result);
     }
     pub fn FromPoints(self: *const IRectHelperStatics, p0: @"Windows.Foundation".Point, p1: @"Windows.Foundation".Point, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT {
-        return self.vtable.FromPoints(self, p0, p1, result);
+        return self.vtable.@"FromPoints"(self, p0, p1, result);
     }
     pub fn FromLocationAndSize(self: *const IRectHelperStatics, p0: @"Windows.Foundation".Point, p1: @"Windows.Foundation".Size, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT {
-        return self.vtable.FromLocationAndSize(self, p0, p1, result);
+        return self.vtable.@"FromLocationAndSize"(self, p0, p1, result);
     }
     pub fn GetIsEmpty(self: *const IRectHelperStatics, p0: @"Windows.Foundation".Rect, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.GetIsEmpty(self, p0, result);
+        return self.vtable.@"GetIsEmpty"(self, p0, result);
     }
     pub fn GetBottom(self: *const IRectHelperStatics, p0: @"Windows.Foundation".Rect, result: *f32) callconv(.winapi) HRESULT {
-        return self.vtable.GetBottom(self, p0, result);
+        return self.vtable.@"GetBottom"(self, p0, result);
     }
     pub fn GetLeft(self: *const IRectHelperStatics, p0: @"Windows.Foundation".Rect, result: *f32) callconv(.winapi) HRESULT {
-        return self.vtable.GetLeft(self, p0, result);
+        return self.vtable.@"GetLeft"(self, p0, result);
     }
     pub fn GetRight(self: *const IRectHelperStatics, p0: @"Windows.Foundation".Rect, result: *f32) callconv(.winapi) HRESULT {
-        return self.vtable.GetRight(self, p0, result);
+        return self.vtable.@"GetRight"(self, p0, result);
     }
     pub fn GetTop(self: *const IRectHelperStatics, p0: @"Windows.Foundation".Rect, result: *f32) callconv(.winapi) HRESULT {
-        return self.vtable.GetTop(self, p0, result);
+        return self.vtable.@"GetTop"(self, p0, result);
     }
     pub fn Contains(self: *const IRectHelperStatics, p0: @"Windows.Foundation".Rect, p1: @"Windows.Foundation".Point, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.Contains(self, p0, p1, result);
+        return self.vtable.@"Contains"(self, p0, p1, result);
     }
     pub fn Equals(self: *const IRectHelperStatics, p0: @"Windows.Foundation".Rect, p1: @"Windows.Foundation".Rect, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.Equals(self, p0, p1, result);
+        return self.vtable.@"Equals"(self, p0, p1, result);
     }
     pub fn Intersect(self: *const IRectHelperStatics, p0: @"Windows.Foundation".Rect, p1: @"Windows.Foundation".Rect, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT {
-        return self.vtable.Intersect(self, p0, p1, result);
+        return self.vtable.@"Intersect"(self, p0, p1, result);
     }
     pub fn Union(self: *const IRectHelperStatics, p0: @"Windows.Foundation".Rect, p1: @"Windows.Foundation".Point, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT {
-        return self.vtable.Union(self, p0, p1, result);
+        return self.vtable.@"Union"(self, p0, p1, result);
     }
     pub fn Union_2(self: *const IRectHelperStatics, p0: @"Windows.Foundation".Rect, p1: @"Windows.Foundation".Rect, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT {
-        return self.vtable.Union_2(self, p0, p1, result);
+        return self.vtable.@"Union_2"(self, p0, p1, result);
     }
 };
 pub const IResourceDictionary = extern struct {
@@ -4101,16 +4101,16 @@ pub const IResourceDictionary = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Source(self: *const IResourceDictionary, result: **@"Windows.Foundation".Uri) callconv(.winapi) HRESULT {
-        return self.vtable.get_Source(self, result);
+        return self.vtable.@"get_Source"(self, result);
     }
     pub fn put_Source(self: *const IResourceDictionary, p0: *@"Windows.Foundation".Uri) callconv(.winapi) HRESULT {
-        return self.vtable.put_Source(self, p0);
+        return self.vtable.@"put_Source"(self, p0);
     }
-    pub fn get_MergedDictionaries(self: *const IResourceDictionary, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_MergedDictionaries(self, result);
+    pub fn get_MergedDictionaries(self: *const IResourceDictionary, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_ResourceDictionary) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_MergedDictionaries"(self, result);
     }
     pub fn get_ThemeDictionaries(self: *const IResourceDictionary, result: **@"Windows.Foundation.Collections".IMap__G2__object__object) callconv(.winapi) HRESULT {
-        return self.vtable.get_ThemeDictionaries(self, result);
+        return self.vtable.@"get_ThemeDictionaries"(self, result);
     }
 };
 pub const IResourceDictionaryFactory = extern struct {
@@ -4132,7 +4132,7 @@ pub const IResourceDictionaryFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IResourceDictionaryFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **ResourceDictionary) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const IResourceManagerRequestedEventArgs = extern struct {
@@ -4154,10 +4154,10 @@ pub const IResourceManagerRequestedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_CustomResourceManager(self: *const IResourceManagerRequestedEventArgs, result: **IResourceManager) callconv(.winapi) HRESULT {
-        return self.vtable.get_CustomResourceManager(self, result);
+        return self.vtable.@"get_CustomResourceManager"(self, result);
     }
     pub fn put_CustomResourceManager(self: *const IResourceManagerRequestedEventArgs, p0: *IResourceManager) callconv(.winapi) HRESULT {
-        return self.vtable.put_CustomResourceManager(self, p0);
+        return self.vtable.@"put_CustomResourceManager"(self, p0);
     }
 };
 pub const IRoutedEvent = extern struct {
@@ -4198,7 +4198,7 @@ pub const IRoutedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_OriginalSource(self: *const IRoutedEventArgs, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_OriginalSource(self, result);
+        return self.vtable.@"get_OriginalSource"(self, result);
     }
 };
 pub const IRoutedEventArgsFactory = extern struct {
@@ -4220,7 +4220,7 @@ pub const IRoutedEventArgsFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IRoutedEventArgsFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **RoutedEventArgs) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const IScalarTransition = extern struct {
@@ -4242,10 +4242,10 @@ pub const IScalarTransition = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Duration(self: *const IScalarTransition, result: *@"Windows.Foundation".TimeSpan) callconv(.winapi) HRESULT {
-        return self.vtable.get_Duration(self, result);
+        return self.vtable.@"get_Duration"(self, result);
     }
     pub fn put_Duration(self: *const IScalarTransition, p0: @"Windows.Foundation".TimeSpan) callconv(.winapi) HRESULT {
-        return self.vtable.put_Duration(self, p0);
+        return self.vtable.@"put_Duration"(self, p0);
     }
 };
 pub const IScalarTransitionFactory = extern struct {
@@ -4267,7 +4267,7 @@ pub const IScalarTransitionFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IScalarTransitionFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **ScalarTransition) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const ISetter = extern struct {
@@ -4289,22 +4289,22 @@ pub const ISetter = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Property(self: *const ISetter, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_Property(self, result);
+        return self.vtable.@"get_Property"(self, result);
     }
     pub fn put_Property(self: *const ISetter, p0: *DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.put_Property(self, p0);
+        return self.vtable.@"put_Property"(self, p0);
     }
     pub fn get_Value(self: *const ISetter, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_Value(self, result);
+        return self.vtable.@"get_Value"(self, result);
     }
     pub fn put_Value(self: *const ISetter, p0: ?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_Value(self, p0);
+        return self.vtable.@"put_Value"(self, p0);
     }
     pub fn get_Target(self: *const ISetter, result: **TargetPropertyPath) callconv(.winapi) HRESULT {
-        return self.vtable.get_Target(self, result);
+        return self.vtable.@"get_Target"(self, result);
     }
     pub fn put_Target(self: *const ISetter, p0: *TargetPropertyPath) callconv(.winapi) HRESULT {
-        return self.vtable.put_Target(self, p0);
+        return self.vtable.@"put_Target"(self, p0);
     }
 };
 pub const ISetterBase = extern struct {
@@ -4326,7 +4326,7 @@ pub const ISetterBase = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_IsSealed(self: *const ISetterBase, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsSealed(self, result);
+        return self.vtable.@"get_IsSealed"(self, result);
     }
 };
 pub const ISetterBaseCollection = extern struct {
@@ -4348,7 +4348,7 @@ pub const ISetterBaseCollection = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_IsSealed(self: *const ISetterBaseCollection, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsSealed(self, result);
+        return self.vtable.@"get_IsSealed"(self, result);
     }
 };
 pub const ISetterBaseFactory = extern struct {
@@ -4389,7 +4389,7 @@ pub const ISetterFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const ISetterFactory, p0: *DependencyProperty, p1: ?*const anyopaque, result: **Setter) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const ISetterStatics2 = extern struct {
@@ -4411,7 +4411,7 @@ pub const ISetterStatics2 = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_ValueProperty(self: *const ISetterStatics2, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_ValueProperty(self, result);
+        return self.vtable.@"get_ValueProperty"(self, result);
     }
 };
 pub const ISizeChangedEventArgs = extern struct {
@@ -4433,10 +4433,10 @@ pub const ISizeChangedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_PreviousSize(self: *const ISizeChangedEventArgs, result: *@"Windows.Foundation".Size) callconv(.winapi) HRESULT {
-        return self.vtable.get_PreviousSize(self, result);
+        return self.vtable.@"get_PreviousSize"(self, result);
     }
     pub fn get_NewSize(self: *const ISizeChangedEventArgs, result: *@"Windows.Foundation".Size) callconv(.winapi) HRESULT {
-        return self.vtable.get_NewSize(self, result);
+        return self.vtable.@"get_NewSize"(self, result);
     }
 };
 pub const ISizeHelper = extern struct {
@@ -4477,16 +4477,16 @@ pub const ISizeHelperStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Empty(self: *const ISizeHelperStatics, result: *@"Windows.Foundation".Size) callconv(.winapi) HRESULT {
-        return self.vtable.get_Empty(self, result);
+        return self.vtable.@"get_Empty"(self, result);
     }
     pub fn FromDimensions(self: *const ISizeHelperStatics, p0: f32, p1: f32, result: *@"Windows.Foundation".Size) callconv(.winapi) HRESULT {
-        return self.vtable.FromDimensions(self, p0, p1, result);
+        return self.vtable.@"FromDimensions"(self, p0, p1, result);
     }
     pub fn GetIsEmpty(self: *const ISizeHelperStatics, p0: @"Windows.Foundation".Size, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.GetIsEmpty(self, p0, result);
+        return self.vtable.@"GetIsEmpty"(self, p0, result);
     }
     pub fn Equals(self: *const ISizeHelperStatics, p0: @"Windows.Foundation".Size, p1: @"Windows.Foundation".Size, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.Equals(self, p0, p1, result);
+        return self.vtable.@"Equals"(self, p0, p1, result);
     }
 };
 pub const IStateTrigger = extern struct {
@@ -4508,10 +4508,10 @@ pub const IStateTrigger = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_IsActive(self: *const IStateTrigger, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsActive(self, result);
+        return self.vtable.@"get_IsActive"(self, result);
     }
     pub fn put_IsActive(self: *const IStateTrigger, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_IsActive(self, p0);
+        return self.vtable.@"put_IsActive"(self, p0);
     }
 };
 pub const IStateTriggerBase = extern struct {
@@ -4552,7 +4552,7 @@ pub const IStateTriggerBaseFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IStateTriggerBaseFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **StateTriggerBase) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const IStateTriggerBaseProtected = extern struct {
@@ -4574,7 +4574,7 @@ pub const IStateTriggerBaseProtected = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn SetActive(self: *const IStateTriggerBaseProtected, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.SetActive(self, p0);
+        return self.vtable.@"SetActive"(self, p0);
     }
 };
 pub const IStateTriggerStatics = extern struct {
@@ -4596,7 +4596,7 @@ pub const IStateTriggerStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_IsActiveProperty(self: *const IStateTriggerStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsActiveProperty(self, result);
+        return self.vtable.@"get_IsActiveProperty"(self, result);
     }
 };
 pub const IStyle = extern struct {
@@ -4618,25 +4618,25 @@ pub const IStyle = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_IsSealed(self: *const IStyle, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsSealed(self, result);
+        return self.vtable.@"get_IsSealed"(self, result);
     }
     pub fn get_Setters(self: *const IStyle, result: **SetterBaseCollection) callconv(.winapi) HRESULT {
-        return self.vtable.get_Setters(self, result);
+        return self.vtable.@"get_Setters"(self, result);
     }
     pub fn get_TargetType(self: *const IStyle, result: *@"Windows.UI.Xaml.Interop".TypeName) callconv(.winapi) HRESULT {
-        return self.vtable.get_TargetType(self, result);
+        return self.vtable.@"get_TargetType"(self, result);
     }
     pub fn put_TargetType(self: *const IStyle, p0: @"Windows.UI.Xaml.Interop".TypeName) callconv(.winapi) HRESULT {
-        return self.vtable.put_TargetType(self, p0);
+        return self.vtable.@"put_TargetType"(self, p0);
     }
     pub fn get_BasedOn(self: *const IStyle, result: **Style) callconv(.winapi) HRESULT {
-        return self.vtable.get_BasedOn(self, result);
+        return self.vtable.@"get_BasedOn"(self, result);
     }
     pub fn put_BasedOn(self: *const IStyle, p0: *Style) callconv(.winapi) HRESULT {
-        return self.vtable.put_BasedOn(self, p0);
+        return self.vtable.@"put_BasedOn"(self, p0);
     }
     pub fn Seal(self: *const IStyle) callconv(.winapi) HRESULT {
-        return self.vtable.Seal(self);
+        return self.vtable.@"Seal"(self);
     }
 };
 pub const IStyleFactory = extern struct {
@@ -4658,7 +4658,7 @@ pub const IStyleFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IStyleFactory, p0: @"Windows.UI.Xaml.Interop".TypeName, result: **Style) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, result);
+        return self.vtable.@"CreateInstance"(self, p0, result);
     }
 };
 pub const ITargetPropertyPath = extern struct {
@@ -4680,16 +4680,16 @@ pub const ITargetPropertyPath = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Path(self: *const ITargetPropertyPath, result: **PropertyPath) callconv(.winapi) HRESULT {
-        return self.vtable.get_Path(self, result);
+        return self.vtable.@"get_Path"(self, result);
     }
     pub fn put_Path(self: *const ITargetPropertyPath, p0: *PropertyPath) callconv(.winapi) HRESULT {
-        return self.vtable.put_Path(self, p0);
+        return self.vtable.@"put_Path"(self, p0);
     }
     pub fn get_Target(self: *const ITargetPropertyPath, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_Target(self, result);
+        return self.vtable.@"get_Target"(self, result);
     }
     pub fn put_Target(self: *const ITargetPropertyPath, p0: ?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.put_Target(self, p0);
+        return self.vtable.@"put_Target"(self, p0);
     }
 };
 pub const ITargetPropertyPathFactory = extern struct {
@@ -4711,7 +4711,7 @@ pub const ITargetPropertyPathFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const ITargetPropertyPathFactory, p0: *DependencyProperty, result: **TargetPropertyPath) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, result);
+        return self.vtable.@"CreateInstance"(self, p0, result);
     }
 };
 pub const IThicknessHelper = extern struct {
@@ -4752,10 +4752,10 @@ pub const IThicknessHelperStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn FromLengths(self: *const IThicknessHelperStatics, p0: f64, p1: f64, p2: f64, p3: f64, result: *Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.FromLengths(self, p0, p1, p2, p3, result);
+        return self.vtable.@"FromLengths"(self, p0, p1, p2, p3, result);
     }
     pub fn FromUniformLength(self: *const IThicknessHelperStatics, p0: f64, result: *Thickness) callconv(.winapi) HRESULT {
-        return self.vtable.FromUniformLength(self, p0, result);
+        return self.vtable.@"FromUniformLength"(self, p0, result);
     }
 };
 pub const ITriggerAction = extern struct {
@@ -4853,683 +4853,683 @@ pub const IUIElement = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_DesiredSize(self: *const IUIElement, result: *@"Windows.Foundation".Size) callconv(.winapi) HRESULT {
-        return self.vtable.get_DesiredSize(self, result);
+        return self.vtable.@"get_DesiredSize"(self, result);
     }
     pub fn get_AllowDrop(self: *const IUIElement, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_AllowDrop(self, result);
+        return self.vtable.@"get_AllowDrop"(self, result);
     }
     pub fn put_AllowDrop(self: *const IUIElement, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_AllowDrop(self, p0);
+        return self.vtable.@"put_AllowDrop"(self, p0);
     }
     pub fn get_Opacity(self: *const IUIElement, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_Opacity(self, result);
+        return self.vtable.@"get_Opacity"(self, result);
     }
     pub fn put_Opacity(self: *const IUIElement, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.put_Opacity(self, p0);
+        return self.vtable.@"put_Opacity"(self, p0);
     }
     pub fn get_Clip(self: *const IUIElement, result: **@"Microsoft.UI.Xaml.Media".RectangleGeometry) callconv(.winapi) HRESULT {
-        return self.vtable.get_Clip(self, result);
+        return self.vtable.@"get_Clip"(self, result);
     }
     pub fn put_Clip(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Media".RectangleGeometry) callconv(.winapi) HRESULT {
-        return self.vtable.put_Clip(self, p0);
+        return self.vtable.@"put_Clip"(self, p0);
     }
     pub fn get_RenderTransform(self: *const IUIElement, result: **@"Microsoft.UI.Xaml.Media".Transform) callconv(.winapi) HRESULT {
-        return self.vtable.get_RenderTransform(self, result);
+        return self.vtable.@"get_RenderTransform"(self, result);
     }
     pub fn put_RenderTransform(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Media".Transform) callconv(.winapi) HRESULT {
-        return self.vtable.put_RenderTransform(self, p0);
+        return self.vtable.@"put_RenderTransform"(self, p0);
     }
     pub fn get_Projection(self: *const IUIElement, result: **@"Microsoft.UI.Xaml.Media".Projection) callconv(.winapi) HRESULT {
-        return self.vtable.get_Projection(self, result);
+        return self.vtable.@"get_Projection"(self, result);
     }
     pub fn put_Projection(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Media".Projection) callconv(.winapi) HRESULT {
-        return self.vtable.put_Projection(self, p0);
+        return self.vtable.@"put_Projection"(self, p0);
     }
     pub fn get_Transform3D(self: *const IUIElement, result: **@"Microsoft.UI.Xaml.Media.Media3D".Transform3D) callconv(.winapi) HRESULT {
-        return self.vtable.get_Transform3D(self, result);
+        return self.vtable.@"get_Transform3D"(self, result);
     }
     pub fn put_Transform3D(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Media.Media3D".Transform3D) callconv(.winapi) HRESULT {
-        return self.vtable.put_Transform3D(self, p0);
+        return self.vtable.@"put_Transform3D"(self, p0);
     }
     pub fn get_RenderTransformOrigin(self: *const IUIElement, result: *@"Windows.Foundation".Point) callconv(.winapi) HRESULT {
-        return self.vtable.get_RenderTransformOrigin(self, result);
+        return self.vtable.@"get_RenderTransformOrigin"(self, result);
     }
     pub fn put_RenderTransformOrigin(self: *const IUIElement, p0: @"Windows.Foundation".Point) callconv(.winapi) HRESULT {
-        return self.vtable.put_RenderTransformOrigin(self, p0);
+        return self.vtable.@"put_RenderTransformOrigin"(self, p0);
     }
     pub fn get_IsHitTestVisible(self: *const IUIElement, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsHitTestVisible(self, result);
+        return self.vtable.@"get_IsHitTestVisible"(self, result);
     }
     pub fn put_IsHitTestVisible(self: *const IUIElement, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_IsHitTestVisible(self, p0);
+        return self.vtable.@"put_IsHitTestVisible"(self, p0);
     }
     pub fn get_Visibility(self: *const IUIElement, result: *Visibility) callconv(.winapi) HRESULT {
-        return self.vtable.get_Visibility(self, result);
+        return self.vtable.@"get_Visibility"(self, result);
     }
     pub fn put_Visibility(self: *const IUIElement, p0: Visibility) callconv(.winapi) HRESULT {
-        return self.vtable.put_Visibility(self, p0);
+        return self.vtable.@"put_Visibility"(self, p0);
     }
     pub fn get_RenderSize(self: *const IUIElement, result: *@"Windows.Foundation".Size) callconv(.winapi) HRESULT {
-        return self.vtable.get_RenderSize(self, result);
+        return self.vtable.@"get_RenderSize"(self, result);
     }
     pub fn get_UseLayoutRounding(self: *const IUIElement, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_UseLayoutRounding(self, result);
+        return self.vtable.@"get_UseLayoutRounding"(self, result);
     }
     pub fn put_UseLayoutRounding(self: *const IUIElement, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_UseLayoutRounding(self, p0);
+        return self.vtable.@"put_UseLayoutRounding"(self, p0);
     }
     pub fn get_Transitions(self: *const IUIElement, result: **@"Microsoft.UI.Xaml.Media.Animation".TransitionCollection) callconv(.winapi) HRESULT {
-        return self.vtable.get_Transitions(self, result);
+        return self.vtable.@"get_Transitions"(self, result);
     }
     pub fn put_Transitions(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Media.Animation".TransitionCollection) callconv(.winapi) HRESULT {
-        return self.vtable.put_Transitions(self, p0);
+        return self.vtable.@"put_Transitions"(self, p0);
     }
     pub fn get_CacheMode(self: *const IUIElement, result: **@"Microsoft.UI.Xaml.Media".CacheMode) callconv(.winapi) HRESULT {
-        return self.vtable.get_CacheMode(self, result);
+        return self.vtable.@"get_CacheMode"(self, result);
     }
     pub fn put_CacheMode(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Media".CacheMode) callconv(.winapi) HRESULT {
-        return self.vtable.put_CacheMode(self, p0);
+        return self.vtable.@"put_CacheMode"(self, p0);
     }
     pub fn get_IsTapEnabled(self: *const IUIElement, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsTapEnabled(self, result);
+        return self.vtable.@"get_IsTapEnabled"(self, result);
     }
     pub fn put_IsTapEnabled(self: *const IUIElement, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_IsTapEnabled(self, p0);
+        return self.vtable.@"put_IsTapEnabled"(self, p0);
     }
     pub fn get_IsDoubleTapEnabled(self: *const IUIElement, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsDoubleTapEnabled(self, result);
+        return self.vtable.@"get_IsDoubleTapEnabled"(self, result);
     }
     pub fn put_IsDoubleTapEnabled(self: *const IUIElement, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_IsDoubleTapEnabled(self, p0);
+        return self.vtable.@"put_IsDoubleTapEnabled"(self, p0);
     }
     pub fn get_CanDrag(self: *const IUIElement, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_CanDrag(self, result);
+        return self.vtable.@"get_CanDrag"(self, result);
     }
     pub fn put_CanDrag(self: *const IUIElement, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_CanDrag(self, p0);
+        return self.vtable.@"put_CanDrag"(self, p0);
     }
     pub fn get_IsRightTapEnabled(self: *const IUIElement, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsRightTapEnabled(self, result);
+        return self.vtable.@"get_IsRightTapEnabled"(self, result);
     }
     pub fn put_IsRightTapEnabled(self: *const IUIElement, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_IsRightTapEnabled(self, p0);
+        return self.vtable.@"put_IsRightTapEnabled"(self, p0);
     }
     pub fn get_IsHoldingEnabled(self: *const IUIElement, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsHoldingEnabled(self, result);
+        return self.vtable.@"get_IsHoldingEnabled"(self, result);
     }
     pub fn put_IsHoldingEnabled(self: *const IUIElement, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_IsHoldingEnabled(self, p0);
+        return self.vtable.@"put_IsHoldingEnabled"(self, p0);
     }
     pub fn get_ManipulationMode(self: *const IUIElement, result: *@"Microsoft.UI.Xaml.Input".ManipulationModes) callconv(.winapi) HRESULT {
-        return self.vtable.get_ManipulationMode(self, result);
+        return self.vtable.@"get_ManipulationMode"(self, result);
     }
     pub fn put_ManipulationMode(self: *const IUIElement, p0: @"Microsoft.UI.Xaml.Input".ManipulationModes) callconv(.winapi) HRESULT {
-        return self.vtable.put_ManipulationMode(self, p0);
+        return self.vtable.@"put_ManipulationMode"(self, p0);
     }
-    pub fn get_PointerCaptures(self: *const IUIElement, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_PointerCaptures(self, result);
+    pub fn get_PointerCaptures(self: *const IUIElement, result: **@"Windows.Foundation.Collections".IVectorView__G1__Microsoft_UI_Xaml_Input_Pointer) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_PointerCaptures"(self, result);
     }
     pub fn get_ContextFlyout(self: *const IUIElement, result: **@"Microsoft.UI.Xaml.Controls.Primitives".FlyoutBase) callconv(.winapi) HRESULT {
-        return self.vtable.get_ContextFlyout(self, result);
+        return self.vtable.@"get_ContextFlyout"(self, result);
     }
     pub fn put_ContextFlyout(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Controls.Primitives".FlyoutBase) callconv(.winapi) HRESULT {
-        return self.vtable.put_ContextFlyout(self, p0);
+        return self.vtable.@"put_ContextFlyout"(self, p0);
     }
     pub fn get_CompositeMode(self: *const IUIElement, result: *@"Microsoft.UI.Xaml.Media".ElementCompositeMode) callconv(.winapi) HRESULT {
-        return self.vtable.get_CompositeMode(self, result);
+        return self.vtable.@"get_CompositeMode"(self, result);
     }
     pub fn put_CompositeMode(self: *const IUIElement, p0: @"Microsoft.UI.Xaml.Media".ElementCompositeMode) callconv(.winapi) HRESULT {
-        return self.vtable.put_CompositeMode(self, p0);
+        return self.vtable.@"put_CompositeMode"(self, p0);
     }
-    pub fn get_Lights(self: *const IUIElement, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_Lights(self, result);
+    pub fn get_Lights(self: *const IUIElement, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Media_XamlLight) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_Lights"(self, result);
     }
     pub fn get_CanBeScrollAnchor(self: *const IUIElement, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_CanBeScrollAnchor(self, result);
+        return self.vtable.@"get_CanBeScrollAnchor"(self, result);
     }
     pub fn put_CanBeScrollAnchor(self: *const IUIElement, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_CanBeScrollAnchor(self, p0);
+        return self.vtable.@"put_CanBeScrollAnchor"(self, p0);
     }
     pub fn get_ExitDisplayModeOnAccessKeyInvoked(self: *const IUIElement, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_ExitDisplayModeOnAccessKeyInvoked(self, result);
+        return self.vtable.@"get_ExitDisplayModeOnAccessKeyInvoked"(self, result);
     }
     pub fn put_ExitDisplayModeOnAccessKeyInvoked(self: *const IUIElement, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_ExitDisplayModeOnAccessKeyInvoked(self, p0);
+        return self.vtable.@"put_ExitDisplayModeOnAccessKeyInvoked"(self, p0);
     }
     pub fn get_IsAccessKeyScope(self: *const IUIElement, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsAccessKeyScope(self, result);
+        return self.vtable.@"get_IsAccessKeyScope"(self, result);
     }
     pub fn put_IsAccessKeyScope(self: *const IUIElement, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_IsAccessKeyScope(self, p0);
+        return self.vtable.@"put_IsAccessKeyScope"(self, p0);
     }
     pub fn get_AccessKeyScopeOwner(self: *const IUIElement, result: **DependencyObject) callconv(.winapi) HRESULT {
-        return self.vtable.get_AccessKeyScopeOwner(self, result);
+        return self.vtable.@"get_AccessKeyScopeOwner"(self, result);
     }
     pub fn put_AccessKeyScopeOwner(self: *const IUIElement, p0: *DependencyObject) callconv(.winapi) HRESULT {
-        return self.vtable.put_AccessKeyScopeOwner(self, p0);
+        return self.vtable.@"put_AccessKeyScopeOwner"(self, p0);
     }
     pub fn get_AccessKey(self: *const IUIElement, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.get_AccessKey(self, result);
+        return self.vtable.@"get_AccessKey"(self, result);
     }
     pub fn get_AccessKeyOwned(self: *const IUIElement) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.get_AccessKey(self, &r));
+        try win_core.hresult.ok(self.vtable.@"get_AccessKey"(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
     pub fn put_AccessKey(self: *const IUIElement, p0: HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.put_AccessKey(self, p0);
+        return self.vtable.@"put_AccessKey"(self, p0);
     }
     pub fn put_AccessKeyFromUtf16(self: *const IUIElement, p0: []const u16) HRESULT {
         var h0 = win_core.Hstring.create(p0) catch return win_core.hresult.E_OUTOFMEMORY;
         defer h0.deinit();
-        return self.vtable.put_AccessKey(self, h0.raw);
+        return self.vtable.@"put_AccessKey"(self, h0.raw);
     }
     pub fn get_KeyTipPlacementMode(self: *const IUIElement, result: *@"Microsoft.UI.Xaml.Input".KeyTipPlacementMode) callconv(.winapi) HRESULT {
-        return self.vtable.get_KeyTipPlacementMode(self, result);
+        return self.vtable.@"get_KeyTipPlacementMode"(self, result);
     }
     pub fn put_KeyTipPlacementMode(self: *const IUIElement, p0: @"Microsoft.UI.Xaml.Input".KeyTipPlacementMode) callconv(.winapi) HRESULT {
-        return self.vtable.put_KeyTipPlacementMode(self, p0);
+        return self.vtable.@"put_KeyTipPlacementMode"(self, p0);
     }
     pub fn get_KeyTipHorizontalOffset(self: *const IUIElement, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_KeyTipHorizontalOffset(self, result);
+        return self.vtable.@"get_KeyTipHorizontalOffset"(self, result);
     }
     pub fn put_KeyTipHorizontalOffset(self: *const IUIElement, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.put_KeyTipHorizontalOffset(self, p0);
+        return self.vtable.@"put_KeyTipHorizontalOffset"(self, p0);
     }
     pub fn get_KeyTipVerticalOffset(self: *const IUIElement, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_KeyTipVerticalOffset(self, result);
+        return self.vtable.@"get_KeyTipVerticalOffset"(self, result);
     }
     pub fn put_KeyTipVerticalOffset(self: *const IUIElement, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.put_KeyTipVerticalOffset(self, p0);
+        return self.vtable.@"put_KeyTipVerticalOffset"(self, p0);
     }
     pub fn get_KeyTipTarget(self: *const IUIElement, result: **DependencyObject) callconv(.winapi) HRESULT {
-        return self.vtable.get_KeyTipTarget(self, result);
+        return self.vtable.@"get_KeyTipTarget"(self, result);
     }
     pub fn put_KeyTipTarget(self: *const IUIElement, p0: *DependencyObject) callconv(.winapi) HRESULT {
-        return self.vtable.put_KeyTipTarget(self, p0);
+        return self.vtable.@"put_KeyTipTarget"(self, p0);
     }
     pub fn get_XYFocusKeyboardNavigation(self: *const IUIElement, result: *@"Microsoft.UI.Xaml.Input".XYFocusKeyboardNavigationMode) callconv(.winapi) HRESULT {
-        return self.vtable.get_XYFocusKeyboardNavigation(self, result);
+        return self.vtable.@"get_XYFocusKeyboardNavigation"(self, result);
     }
     pub fn put_XYFocusKeyboardNavigation(self: *const IUIElement, p0: @"Microsoft.UI.Xaml.Input".XYFocusKeyboardNavigationMode) callconv(.winapi) HRESULT {
-        return self.vtable.put_XYFocusKeyboardNavigation(self, p0);
+        return self.vtable.@"put_XYFocusKeyboardNavigation"(self, p0);
     }
     pub fn get_XYFocusUpNavigationStrategy(self: *const IUIElement, result: *@"Microsoft.UI.Xaml.Input".XYFocusNavigationStrategy) callconv(.winapi) HRESULT {
-        return self.vtable.get_XYFocusUpNavigationStrategy(self, result);
+        return self.vtable.@"get_XYFocusUpNavigationStrategy"(self, result);
     }
     pub fn put_XYFocusUpNavigationStrategy(self: *const IUIElement, p0: @"Microsoft.UI.Xaml.Input".XYFocusNavigationStrategy) callconv(.winapi) HRESULT {
-        return self.vtable.put_XYFocusUpNavigationStrategy(self, p0);
+        return self.vtable.@"put_XYFocusUpNavigationStrategy"(self, p0);
     }
     pub fn get_XYFocusDownNavigationStrategy(self: *const IUIElement, result: *@"Microsoft.UI.Xaml.Input".XYFocusNavigationStrategy) callconv(.winapi) HRESULT {
-        return self.vtable.get_XYFocusDownNavigationStrategy(self, result);
+        return self.vtable.@"get_XYFocusDownNavigationStrategy"(self, result);
     }
     pub fn put_XYFocusDownNavigationStrategy(self: *const IUIElement, p0: @"Microsoft.UI.Xaml.Input".XYFocusNavigationStrategy) callconv(.winapi) HRESULT {
-        return self.vtable.put_XYFocusDownNavigationStrategy(self, p0);
+        return self.vtable.@"put_XYFocusDownNavigationStrategy"(self, p0);
     }
     pub fn get_XYFocusLeftNavigationStrategy(self: *const IUIElement, result: *@"Microsoft.UI.Xaml.Input".XYFocusNavigationStrategy) callconv(.winapi) HRESULT {
-        return self.vtable.get_XYFocusLeftNavigationStrategy(self, result);
+        return self.vtable.@"get_XYFocusLeftNavigationStrategy"(self, result);
     }
     pub fn put_XYFocusLeftNavigationStrategy(self: *const IUIElement, p0: @"Microsoft.UI.Xaml.Input".XYFocusNavigationStrategy) callconv(.winapi) HRESULT {
-        return self.vtable.put_XYFocusLeftNavigationStrategy(self, p0);
+        return self.vtable.@"put_XYFocusLeftNavigationStrategy"(self, p0);
     }
     pub fn get_XYFocusRightNavigationStrategy(self: *const IUIElement, result: *@"Microsoft.UI.Xaml.Input".XYFocusNavigationStrategy) callconv(.winapi) HRESULT {
-        return self.vtable.get_XYFocusRightNavigationStrategy(self, result);
+        return self.vtable.@"get_XYFocusRightNavigationStrategy"(self, result);
     }
     pub fn put_XYFocusRightNavigationStrategy(self: *const IUIElement, p0: @"Microsoft.UI.Xaml.Input".XYFocusNavigationStrategy) callconv(.winapi) HRESULT {
-        return self.vtable.put_XYFocusRightNavigationStrategy(self, p0);
+        return self.vtable.@"put_XYFocusRightNavigationStrategy"(self, p0);
     }
-    pub fn get_KeyboardAccelerators(self: *const IUIElement, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_KeyboardAccelerators(self, result);
+    pub fn get_KeyboardAccelerators(self: *const IUIElement, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Input_KeyboardAccelerator) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_KeyboardAccelerators"(self, result);
     }
     pub fn get_KeyboardAcceleratorPlacementTarget(self: *const IUIElement, result: **DependencyObject) callconv(.winapi) HRESULT {
-        return self.vtable.get_KeyboardAcceleratorPlacementTarget(self, result);
+        return self.vtable.@"get_KeyboardAcceleratorPlacementTarget"(self, result);
     }
     pub fn put_KeyboardAcceleratorPlacementTarget(self: *const IUIElement, p0: *DependencyObject) callconv(.winapi) HRESULT {
-        return self.vtable.put_KeyboardAcceleratorPlacementTarget(self, p0);
+        return self.vtable.@"put_KeyboardAcceleratorPlacementTarget"(self, p0);
     }
     pub fn get_KeyboardAcceleratorPlacementMode(self: *const IUIElement, result: *@"Microsoft.UI.Xaml.Input".KeyboardAcceleratorPlacementMode) callconv(.winapi) HRESULT {
-        return self.vtable.get_KeyboardAcceleratorPlacementMode(self, result);
+        return self.vtable.@"get_KeyboardAcceleratorPlacementMode"(self, result);
     }
     pub fn put_KeyboardAcceleratorPlacementMode(self: *const IUIElement, p0: @"Microsoft.UI.Xaml.Input".KeyboardAcceleratorPlacementMode) callconv(.winapi) HRESULT {
-        return self.vtable.put_KeyboardAcceleratorPlacementMode(self, p0);
+        return self.vtable.@"put_KeyboardAcceleratorPlacementMode"(self, p0);
     }
     pub fn get_HighContrastAdjustment(self: *const IUIElement, result: *ElementHighContrastAdjustment) callconv(.winapi) HRESULT {
-        return self.vtable.get_HighContrastAdjustment(self, result);
+        return self.vtable.@"get_HighContrastAdjustment"(self, result);
     }
     pub fn put_HighContrastAdjustment(self: *const IUIElement, p0: ElementHighContrastAdjustment) callconv(.winapi) HRESULT {
-        return self.vtable.put_HighContrastAdjustment(self, p0);
+        return self.vtable.@"put_HighContrastAdjustment"(self, p0);
     }
     pub fn get_TabFocusNavigation(self: *const IUIElement, result: *@"Microsoft.UI.Xaml.Input".KeyboardNavigationMode) callconv(.winapi) HRESULT {
-        return self.vtable.get_TabFocusNavigation(self, result);
+        return self.vtable.@"get_TabFocusNavigation"(self, result);
     }
     pub fn put_TabFocusNavigation(self: *const IUIElement, p0: @"Microsoft.UI.Xaml.Input".KeyboardNavigationMode) callconv(.winapi) HRESULT {
-        return self.vtable.put_TabFocusNavigation(self, p0);
+        return self.vtable.@"put_TabFocusNavigation"(self, p0);
     }
     pub fn get_OpacityTransition(self: *const IUIElement, result: **ScalarTransition) callconv(.winapi) HRESULT {
-        return self.vtable.get_OpacityTransition(self, result);
+        return self.vtable.@"get_OpacityTransition"(self, result);
     }
     pub fn put_OpacityTransition(self: *const IUIElement, p0: *ScalarTransition) callconv(.winapi) HRESULT {
-        return self.vtable.put_OpacityTransition(self, p0);
+        return self.vtable.@"put_OpacityTransition"(self, p0);
     }
     pub fn get_Translation(self: *const IUIElement, result: *@"Windows.Foundation.Numerics".Vector3) callconv(.winapi) HRESULT {
-        return self.vtable.get_Translation(self, result);
+        return self.vtable.@"get_Translation"(self, result);
     }
     pub fn put_Translation(self: *const IUIElement, p0: @"Windows.Foundation.Numerics".Vector3) callconv(.winapi) HRESULT {
-        return self.vtable.put_Translation(self, p0);
+        return self.vtable.@"put_Translation"(self, p0);
     }
     pub fn get_TranslationTransition(self: *const IUIElement, result: **Vector3Transition) callconv(.winapi) HRESULT {
-        return self.vtable.get_TranslationTransition(self, result);
+        return self.vtable.@"get_TranslationTransition"(self, result);
     }
     pub fn put_TranslationTransition(self: *const IUIElement, p0: *Vector3Transition) callconv(.winapi) HRESULT {
-        return self.vtable.put_TranslationTransition(self, p0);
+        return self.vtable.@"put_TranslationTransition"(self, p0);
     }
     pub fn get_Rotation(self: *const IUIElement, result: *f32) callconv(.winapi) HRESULT {
-        return self.vtable.get_Rotation(self, result);
+        return self.vtable.@"get_Rotation"(self, result);
     }
     pub fn put_Rotation(self: *const IUIElement, p0: f32) callconv(.winapi) HRESULT {
-        return self.vtable.put_Rotation(self, p0);
+        return self.vtable.@"put_Rotation"(self, p0);
     }
     pub fn get_RotationTransition(self: *const IUIElement, result: **ScalarTransition) callconv(.winapi) HRESULT {
-        return self.vtable.get_RotationTransition(self, result);
+        return self.vtable.@"get_RotationTransition"(self, result);
     }
     pub fn put_RotationTransition(self: *const IUIElement, p0: *ScalarTransition) callconv(.winapi) HRESULT {
-        return self.vtable.put_RotationTransition(self, p0);
+        return self.vtable.@"put_RotationTransition"(self, p0);
     }
     pub fn get_Scale(self: *const IUIElement, result: *@"Windows.Foundation.Numerics".Vector3) callconv(.winapi) HRESULT {
-        return self.vtable.get_Scale(self, result);
+        return self.vtable.@"get_Scale"(self, result);
     }
     pub fn put_Scale(self: *const IUIElement, p0: @"Windows.Foundation.Numerics".Vector3) callconv(.winapi) HRESULT {
-        return self.vtable.put_Scale(self, p0);
+        return self.vtable.@"put_Scale"(self, p0);
     }
     pub fn get_ScaleTransition(self: *const IUIElement, result: **Vector3Transition) callconv(.winapi) HRESULT {
-        return self.vtable.get_ScaleTransition(self, result);
+        return self.vtable.@"get_ScaleTransition"(self, result);
     }
     pub fn put_ScaleTransition(self: *const IUIElement, p0: *Vector3Transition) callconv(.winapi) HRESULT {
-        return self.vtable.put_ScaleTransition(self, p0);
+        return self.vtable.@"put_ScaleTransition"(self, p0);
     }
     pub fn get_TransformMatrix(self: *const IUIElement, result: *@"Windows.Foundation.Numerics".Matrix4x4) callconv(.winapi) HRESULT {
-        return self.vtable.get_TransformMatrix(self, result);
+        return self.vtable.@"get_TransformMatrix"(self, result);
     }
     pub fn put_TransformMatrix(self: *const IUIElement, p0: @"Windows.Foundation.Numerics".Matrix4x4) callconv(.winapi) HRESULT {
-        return self.vtable.put_TransformMatrix(self, p0);
+        return self.vtable.@"put_TransformMatrix"(self, p0);
     }
     pub fn get_CenterPoint(self: *const IUIElement, result: *@"Windows.Foundation.Numerics".Vector3) callconv(.winapi) HRESULT {
-        return self.vtable.get_CenterPoint(self, result);
+        return self.vtable.@"get_CenterPoint"(self, result);
     }
     pub fn put_CenterPoint(self: *const IUIElement, p0: @"Windows.Foundation.Numerics".Vector3) callconv(.winapi) HRESULT {
-        return self.vtable.put_CenterPoint(self, p0);
+        return self.vtable.@"put_CenterPoint"(self, p0);
     }
     pub fn get_RotationAxis(self: *const IUIElement, result: *@"Windows.Foundation.Numerics".Vector3) callconv(.winapi) HRESULT {
-        return self.vtable.get_RotationAxis(self, result);
+        return self.vtable.@"get_RotationAxis"(self, result);
     }
     pub fn put_RotationAxis(self: *const IUIElement, p0: @"Windows.Foundation.Numerics".Vector3) callconv(.winapi) HRESULT {
-        return self.vtable.put_RotationAxis(self, p0);
+        return self.vtable.@"put_RotationAxis"(self, p0);
     }
     pub fn get_ActualOffset(self: *const IUIElement, result: *@"Windows.Foundation.Numerics".Vector3) callconv(.winapi) HRESULT {
-        return self.vtable.get_ActualOffset(self, result);
+        return self.vtable.@"get_ActualOffset"(self, result);
     }
     pub fn get_ActualSize(self: *const IUIElement, result: *@"Windows.Foundation.Numerics".Vector2) callconv(.winapi) HRESULT {
-        return self.vtable.get_ActualSize(self, result);
+        return self.vtable.@"get_ActualSize"(self, result);
     }
     pub fn get_XamlRoot(self: *const IUIElement, result: **XamlRoot) callconv(.winapi) HRESULT {
-        return self.vtable.get_XamlRoot(self, result);
+        return self.vtable.@"get_XamlRoot"(self, result);
     }
     pub fn put_XamlRoot(self: *const IUIElement, p0: *XamlRoot) callconv(.winapi) HRESULT {
-        return self.vtable.put_XamlRoot(self, p0);
+        return self.vtable.@"put_XamlRoot"(self, p0);
     }
     pub fn get_Shadow(self: *const IUIElement, result: **@"Microsoft.UI.Xaml.Media".Shadow) callconv(.winapi) HRESULT {
-        return self.vtable.get_Shadow(self, result);
+        return self.vtable.@"get_Shadow"(self, result);
     }
     pub fn put_Shadow(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Media".Shadow) callconv(.winapi) HRESULT {
-        return self.vtable.put_Shadow(self, p0);
+        return self.vtable.@"put_Shadow"(self, p0);
     }
     pub fn get_RasterizationScale(self: *const IUIElement, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_RasterizationScale(self, result);
+        return self.vtable.@"get_RasterizationScale"(self, result);
     }
     pub fn put_RasterizationScale(self: *const IUIElement, p0: f64) callconv(.winapi) HRESULT {
-        return self.vtable.put_RasterizationScale(self, p0);
+        return self.vtable.@"put_RasterizationScale"(self, p0);
     }
     pub fn get_FocusState(self: *const IUIElement, result: *FocusState) callconv(.winapi) HRESULT {
-        return self.vtable.get_FocusState(self, result);
+        return self.vtable.@"get_FocusState"(self, result);
     }
     pub fn get_UseSystemFocusVisuals(self: *const IUIElement, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_UseSystemFocusVisuals(self, result);
+        return self.vtable.@"get_UseSystemFocusVisuals"(self, result);
     }
     pub fn put_UseSystemFocusVisuals(self: *const IUIElement, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_UseSystemFocusVisuals(self, p0);
+        return self.vtable.@"put_UseSystemFocusVisuals"(self, p0);
     }
     pub fn get_XYFocusLeft(self: *const IUIElement, result: **DependencyObject) callconv(.winapi) HRESULT {
-        return self.vtable.get_XYFocusLeft(self, result);
+        return self.vtable.@"get_XYFocusLeft"(self, result);
     }
     pub fn put_XYFocusLeft(self: *const IUIElement, p0: *DependencyObject) callconv(.winapi) HRESULT {
-        return self.vtable.put_XYFocusLeft(self, p0);
+        return self.vtable.@"put_XYFocusLeft"(self, p0);
     }
     pub fn get_XYFocusRight(self: *const IUIElement, result: **DependencyObject) callconv(.winapi) HRESULT {
-        return self.vtable.get_XYFocusRight(self, result);
+        return self.vtable.@"get_XYFocusRight"(self, result);
     }
     pub fn put_XYFocusRight(self: *const IUIElement, p0: *DependencyObject) callconv(.winapi) HRESULT {
-        return self.vtable.put_XYFocusRight(self, p0);
+        return self.vtable.@"put_XYFocusRight"(self, p0);
     }
     pub fn get_XYFocusUp(self: *const IUIElement, result: **DependencyObject) callconv(.winapi) HRESULT {
-        return self.vtable.get_XYFocusUp(self, result);
+        return self.vtable.@"get_XYFocusUp"(self, result);
     }
     pub fn put_XYFocusUp(self: *const IUIElement, p0: *DependencyObject) callconv(.winapi) HRESULT {
-        return self.vtable.put_XYFocusUp(self, p0);
+        return self.vtable.@"put_XYFocusUp"(self, p0);
     }
     pub fn get_XYFocusDown(self: *const IUIElement, result: **DependencyObject) callconv(.winapi) HRESULT {
-        return self.vtable.get_XYFocusDown(self, result);
+        return self.vtable.@"get_XYFocusDown"(self, result);
     }
     pub fn put_XYFocusDown(self: *const IUIElement, p0: *DependencyObject) callconv(.winapi) HRESULT {
-        return self.vtable.put_XYFocusDown(self, p0);
+        return self.vtable.@"put_XYFocusDown"(self, p0);
     }
     pub fn get_IsTabStop(self: *const IUIElement, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsTabStop(self, result);
+        return self.vtable.@"get_IsTabStop"(self, result);
     }
     pub fn put_IsTabStop(self: *const IUIElement, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_IsTabStop(self, p0);
+        return self.vtable.@"put_IsTabStop"(self, p0);
     }
     pub fn get_TabIndex(self: *const IUIElement, result: *i32) callconv(.winapi) HRESULT {
-        return self.vtable.get_TabIndex(self, result);
+        return self.vtable.@"get_TabIndex"(self, result);
     }
     pub fn put_TabIndex(self: *const IUIElement, p0: i32) callconv(.winapi) HRESULT {
-        return self.vtable.put_TabIndex(self, p0);
+        return self.vtable.@"put_TabIndex"(self, p0);
     }
     pub fn add_KeyUp(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".KeyEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_KeyUp(self, p0, result);
+        return self.vtable.@"add_KeyUp"(self, p0, result);
     }
     pub fn remove_KeyUp(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_KeyUp(self, p0);
+        return self.vtable.@"remove_KeyUp"(self, p0);
     }
     pub fn add_KeyDown(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".KeyEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_KeyDown(self, p0, result);
+        return self.vtable.@"add_KeyDown"(self, p0, result);
     }
     pub fn remove_KeyDown(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_KeyDown(self, p0);
+        return self.vtable.@"remove_KeyDown"(self, p0);
     }
     pub fn add_GotFocus(self: *const IUIElement, p0: *RoutedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_GotFocus(self, p0, result);
+        return self.vtable.@"add_GotFocus"(self, p0, result);
     }
     pub fn remove_GotFocus(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_GotFocus(self, p0);
+        return self.vtable.@"remove_GotFocus"(self, p0);
     }
     pub fn add_LostFocus(self: *const IUIElement, p0: *RoutedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_LostFocus(self, p0, result);
+        return self.vtable.@"add_LostFocus"(self, p0, result);
     }
     pub fn remove_LostFocus(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_LostFocus(self, p0);
+        return self.vtable.@"remove_LostFocus"(self, p0);
     }
-    pub fn add_DragStarting(self: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_DragStarting(self, p0, result);
+    pub fn add_DragStarting(self: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_DragStartingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_DragStarting"(self, p0, result);
     }
     pub fn remove_DragStarting(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_DragStarting(self, p0);
+        return self.vtable.@"remove_DragStarting"(self, p0);
     }
-    pub fn add_DropCompleted(self: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_DropCompleted(self, p0, result);
+    pub fn add_DropCompleted(self: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_DropCompletedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_DropCompleted"(self, p0, result);
     }
     pub fn remove_DropCompleted(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_DropCompleted(self, p0);
+        return self.vtable.@"remove_DropCompleted"(self, p0);
     }
-    pub fn add_CharacterReceived(self: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_CharacterReceived(self, p0, result);
+    pub fn add_CharacterReceived(self: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_Input_CharacterReceivedRoutedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_CharacterReceived"(self, p0, result);
     }
     pub fn remove_CharacterReceived(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_CharacterReceived(self, p0);
+        return self.vtable.@"remove_CharacterReceived"(self, p0);
     }
     pub fn add_DragEnter(self: *const IUIElement, p0: *DragEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_DragEnter(self, p0, result);
+        return self.vtable.@"add_DragEnter"(self, p0, result);
     }
     pub fn remove_DragEnter(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_DragEnter(self, p0);
+        return self.vtable.@"remove_DragEnter"(self, p0);
     }
     pub fn add_DragLeave(self: *const IUIElement, p0: *DragEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_DragLeave(self, p0, result);
+        return self.vtable.@"add_DragLeave"(self, p0, result);
     }
     pub fn remove_DragLeave(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_DragLeave(self, p0);
+        return self.vtable.@"remove_DragLeave"(self, p0);
     }
     pub fn add_DragOver(self: *const IUIElement, p0: *DragEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_DragOver(self, p0, result);
+        return self.vtable.@"add_DragOver"(self, p0, result);
     }
     pub fn remove_DragOver(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_DragOver(self, p0);
+        return self.vtable.@"remove_DragOver"(self, p0);
     }
     pub fn add_Drop(self: *const IUIElement, p0: *DragEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_Drop(self, p0, result);
+        return self.vtable.@"add_Drop"(self, p0, result);
     }
     pub fn remove_Drop(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_Drop(self, p0);
+        return self.vtable.@"remove_Drop"(self, p0);
     }
     pub fn add_PointerPressed(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".PointerEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_PointerPressed(self, p0, result);
+        return self.vtable.@"add_PointerPressed"(self, p0, result);
     }
     pub fn remove_PointerPressed(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_PointerPressed(self, p0);
+        return self.vtable.@"remove_PointerPressed"(self, p0);
     }
     pub fn add_PointerMoved(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".PointerEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_PointerMoved(self, p0, result);
+        return self.vtable.@"add_PointerMoved"(self, p0, result);
     }
     pub fn remove_PointerMoved(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_PointerMoved(self, p0);
+        return self.vtable.@"remove_PointerMoved"(self, p0);
     }
     pub fn add_PointerReleased(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".PointerEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_PointerReleased(self, p0, result);
+        return self.vtable.@"add_PointerReleased"(self, p0, result);
     }
     pub fn remove_PointerReleased(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_PointerReleased(self, p0);
+        return self.vtable.@"remove_PointerReleased"(self, p0);
     }
     pub fn add_PointerEntered(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".PointerEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_PointerEntered(self, p0, result);
+        return self.vtable.@"add_PointerEntered"(self, p0, result);
     }
     pub fn remove_PointerEntered(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_PointerEntered(self, p0);
+        return self.vtable.@"remove_PointerEntered"(self, p0);
     }
     pub fn add_PointerExited(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".PointerEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_PointerExited(self, p0, result);
+        return self.vtable.@"add_PointerExited"(self, p0, result);
     }
     pub fn remove_PointerExited(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_PointerExited(self, p0);
+        return self.vtable.@"remove_PointerExited"(self, p0);
     }
     pub fn add_PointerCaptureLost(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".PointerEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_PointerCaptureLost(self, p0, result);
+        return self.vtable.@"add_PointerCaptureLost"(self, p0, result);
     }
     pub fn remove_PointerCaptureLost(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_PointerCaptureLost(self, p0);
+        return self.vtable.@"remove_PointerCaptureLost"(self, p0);
     }
     pub fn add_PointerCanceled(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".PointerEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_PointerCanceled(self, p0, result);
+        return self.vtable.@"add_PointerCanceled"(self, p0, result);
     }
     pub fn remove_PointerCanceled(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_PointerCanceled(self, p0);
+        return self.vtable.@"remove_PointerCanceled"(self, p0);
     }
     pub fn add_PointerWheelChanged(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".PointerEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_PointerWheelChanged(self, p0, result);
+        return self.vtable.@"add_PointerWheelChanged"(self, p0, result);
     }
     pub fn remove_PointerWheelChanged(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_PointerWheelChanged(self, p0);
+        return self.vtable.@"remove_PointerWheelChanged"(self, p0);
     }
     pub fn add_Tapped(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".TappedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_Tapped(self, p0, result);
+        return self.vtable.@"add_Tapped"(self, p0, result);
     }
     pub fn remove_Tapped(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_Tapped(self, p0);
+        return self.vtable.@"remove_Tapped"(self, p0);
     }
     pub fn add_DoubleTapped(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".DoubleTappedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_DoubleTapped(self, p0, result);
+        return self.vtable.@"add_DoubleTapped"(self, p0, result);
     }
     pub fn remove_DoubleTapped(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_DoubleTapped(self, p0);
+        return self.vtable.@"remove_DoubleTapped"(self, p0);
     }
     pub fn add_Holding(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".HoldingEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_Holding(self, p0, result);
+        return self.vtable.@"add_Holding"(self, p0, result);
     }
     pub fn remove_Holding(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_Holding(self, p0);
+        return self.vtable.@"remove_Holding"(self, p0);
     }
-    pub fn add_ContextRequested(self: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_ContextRequested(self, p0, result);
+    pub fn add_ContextRequested(self: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_Input_ContextRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_ContextRequested"(self, p0, result);
     }
     pub fn remove_ContextRequested(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_ContextRequested(self, p0);
+        return self.vtable.@"remove_ContextRequested"(self, p0);
     }
-    pub fn add_ContextCanceled(self: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_ContextCanceled(self, p0, result);
+    pub fn add_ContextCanceled(self: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_RoutedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_ContextCanceled"(self, p0, result);
     }
     pub fn remove_ContextCanceled(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_ContextCanceled(self, p0);
+        return self.vtable.@"remove_ContextCanceled"(self, p0);
     }
     pub fn add_RightTapped(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".RightTappedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_RightTapped(self, p0, result);
+        return self.vtable.@"add_RightTapped"(self, p0, result);
     }
     pub fn remove_RightTapped(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_RightTapped(self, p0);
+        return self.vtable.@"remove_RightTapped"(self, p0);
     }
     pub fn add_ManipulationStarting(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".ManipulationStartingEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_ManipulationStarting(self, p0, result);
+        return self.vtable.@"add_ManipulationStarting"(self, p0, result);
     }
     pub fn remove_ManipulationStarting(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_ManipulationStarting(self, p0);
+        return self.vtable.@"remove_ManipulationStarting"(self, p0);
     }
     pub fn add_ManipulationInertiaStarting(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".ManipulationInertiaStartingEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_ManipulationInertiaStarting(self, p0, result);
+        return self.vtable.@"add_ManipulationInertiaStarting"(self, p0, result);
     }
     pub fn remove_ManipulationInertiaStarting(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_ManipulationInertiaStarting(self, p0);
+        return self.vtable.@"remove_ManipulationInertiaStarting"(self, p0);
     }
     pub fn add_ManipulationStarted(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".ManipulationStartedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_ManipulationStarted(self, p0, result);
+        return self.vtable.@"add_ManipulationStarted"(self, p0, result);
     }
     pub fn remove_ManipulationStarted(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_ManipulationStarted(self, p0);
+        return self.vtable.@"remove_ManipulationStarted"(self, p0);
     }
     pub fn add_ManipulationDelta(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".ManipulationDeltaEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_ManipulationDelta(self, p0, result);
+        return self.vtable.@"add_ManipulationDelta"(self, p0, result);
     }
     pub fn remove_ManipulationDelta(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_ManipulationDelta(self, p0);
+        return self.vtable.@"remove_ManipulationDelta"(self, p0);
     }
     pub fn add_ManipulationCompleted(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".ManipulationCompletedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_ManipulationCompleted(self, p0, result);
+        return self.vtable.@"add_ManipulationCompleted"(self, p0, result);
     }
     pub fn remove_ManipulationCompleted(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_ManipulationCompleted(self, p0);
+        return self.vtable.@"remove_ManipulationCompleted"(self, p0);
     }
-    pub fn add_AccessKeyDisplayRequested(self: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_AccessKeyDisplayRequested(self, p0, result);
+    pub fn add_AccessKeyDisplayRequested(self: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_Input_AccessKeyDisplayRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_AccessKeyDisplayRequested"(self, p0, result);
     }
     pub fn remove_AccessKeyDisplayRequested(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_AccessKeyDisplayRequested(self, p0);
+        return self.vtable.@"remove_AccessKeyDisplayRequested"(self, p0);
     }
-    pub fn add_AccessKeyDisplayDismissed(self: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_AccessKeyDisplayDismissed(self, p0, result);
+    pub fn add_AccessKeyDisplayDismissed(self: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_Input_AccessKeyDisplayDismissedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_AccessKeyDisplayDismissed"(self, p0, result);
     }
     pub fn remove_AccessKeyDisplayDismissed(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_AccessKeyDisplayDismissed(self, p0);
+        return self.vtable.@"remove_AccessKeyDisplayDismissed"(self, p0);
     }
-    pub fn add_AccessKeyInvoked(self: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_AccessKeyInvoked(self, p0, result);
+    pub fn add_AccessKeyInvoked(self: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_Input_AccessKeyInvokedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_AccessKeyInvoked"(self, p0, result);
     }
     pub fn remove_AccessKeyInvoked(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_AccessKeyInvoked(self, p0);
+        return self.vtable.@"remove_AccessKeyInvoked"(self, p0);
     }
-    pub fn add_ProcessKeyboardAccelerators(self: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_ProcessKeyboardAccelerators(self, p0, result);
+    pub fn add_ProcessKeyboardAccelerators(self: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_Input_ProcessKeyboardAcceleratorEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_ProcessKeyboardAccelerators"(self, p0, result);
     }
     pub fn remove_ProcessKeyboardAccelerators(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_ProcessKeyboardAccelerators(self, p0);
+        return self.vtable.@"remove_ProcessKeyboardAccelerators"(self, p0);
     }
-    pub fn add_GettingFocus(self: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_GettingFocus(self, p0, result);
+    pub fn add_GettingFocus(self: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_Input_GettingFocusEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_GettingFocus"(self, p0, result);
     }
     pub fn remove_GettingFocus(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_GettingFocus(self, p0);
+        return self.vtable.@"remove_GettingFocus"(self, p0);
     }
-    pub fn add_LosingFocus(self: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_LosingFocus(self, p0, result);
+    pub fn add_LosingFocus(self: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_Input_LosingFocusEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_LosingFocus"(self, p0, result);
     }
     pub fn remove_LosingFocus(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_LosingFocus(self, p0);
+        return self.vtable.@"remove_LosingFocus"(self, p0);
     }
-    pub fn add_NoFocusCandidateFound(self: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_NoFocusCandidateFound(self, p0, result);
+    pub fn add_NoFocusCandidateFound(self: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_Input_NoFocusCandidateFoundEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_NoFocusCandidateFound"(self, p0, result);
     }
     pub fn remove_NoFocusCandidateFound(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_NoFocusCandidateFound(self, p0);
+        return self.vtable.@"remove_NoFocusCandidateFound"(self, p0);
     }
     pub fn add_PreviewKeyDown(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".KeyEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_PreviewKeyDown(self, p0, result);
+        return self.vtable.@"add_PreviewKeyDown"(self, p0, result);
     }
     pub fn remove_PreviewKeyDown(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_PreviewKeyDown(self, p0);
+        return self.vtable.@"remove_PreviewKeyDown"(self, p0);
     }
     pub fn add_PreviewKeyUp(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".KeyEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_PreviewKeyUp(self, p0, result);
+        return self.vtable.@"add_PreviewKeyUp"(self, p0, result);
     }
     pub fn remove_PreviewKeyUp(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_PreviewKeyUp(self, p0);
+        return self.vtable.@"remove_PreviewKeyUp"(self, p0);
     }
-    pub fn add_BringIntoViewRequested(self: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_BringIntoViewRequested(self, p0, result);
+    pub fn add_BringIntoViewRequested(self: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_BringIntoViewRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_BringIntoViewRequested"(self, p0, result);
     }
     pub fn remove_BringIntoViewRequested(self: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_BringIntoViewRequested(self, p0);
+        return self.vtable.@"remove_BringIntoViewRequested"(self, p0);
     }
     pub fn Measure(self: *const IUIElement, p0: @"Windows.Foundation".Size) callconv(.winapi) HRESULT {
-        return self.vtable.Measure(self, p0);
+        return self.vtable.@"Measure"(self, p0);
     }
     pub fn Arrange(self: *const IUIElement, p0: @"Windows.Foundation".Rect) callconv(.winapi) HRESULT {
-        return self.vtable.Arrange(self, p0);
+        return self.vtable.@"Arrange"(self, p0);
     }
     pub fn CapturePointer(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".Pointer, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.CapturePointer(self, p0, result);
+        return self.vtable.@"CapturePointer"(self, p0, result);
     }
     pub fn ReleasePointerCapture(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".Pointer) callconv(.winapi) HRESULT {
-        return self.vtable.ReleasePointerCapture(self, p0);
+        return self.vtable.@"ReleasePointerCapture"(self, p0);
     }
     pub fn ReleasePointerCaptures(self: *const IUIElement) callconv(.winapi) HRESULT {
-        return self.vtable.ReleasePointerCaptures(self);
+        return self.vtable.@"ReleasePointerCaptures"(self);
     }
     pub fn AddHandler(self: *const IUIElement, p0: *RoutedEvent, p1: ?*const anyopaque, p2: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.AddHandler(self, p0, p1, p2);
+        return self.vtable.@"AddHandler"(self, p0, p1, p2);
     }
     pub fn RemoveHandler(self: *const IUIElement, p0: *RoutedEvent, p1: ?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.RemoveHandler(self, p0, p1);
+        return self.vtable.@"RemoveHandler"(self, p0, p1);
     }
     pub fn TransformToVisual(self: *const IUIElement, p0: *UIElement, result: **@"Microsoft.UI.Xaml.Media".GeneralTransform) callconv(.winapi) HRESULT {
-        return self.vtable.TransformToVisual(self, p0, result);
+        return self.vtable.@"TransformToVisual"(self, p0, result);
     }
     pub fn InvalidateMeasure(self: *const IUIElement) callconv(.winapi) HRESULT {
-        return self.vtable.InvalidateMeasure(self);
+        return self.vtable.@"InvalidateMeasure"(self);
     }
     pub fn InvalidateArrange(self: *const IUIElement) callconv(.winapi) HRESULT {
-        return self.vtable.InvalidateArrange(self);
+        return self.vtable.@"InvalidateArrange"(self);
     }
     pub fn UpdateLayout(self: *const IUIElement) callconv(.winapi) HRESULT {
-        return self.vtable.UpdateLayout(self);
+        return self.vtable.@"UpdateLayout"(self);
     }
     pub fn CancelDirectManipulations(self: *const IUIElement, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.CancelDirectManipulations(self, result);
+        return self.vtable.@"CancelDirectManipulations"(self, result);
     }
-    pub fn StartDragAsync(self: *const IUIElement, p0: *@"Microsoft.UI.Input".PointerPoint, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.StartDragAsync(self, p0, result);
+    pub fn StartDragAsync(self: *const IUIElement, p0: *@"Microsoft.UI.Input".PointerPoint, result: **@"Windows.Foundation".IAsyncOperation__G1__Windows_ApplicationModel_DataTransfer_DataPackageOperation) callconv(.winapi) HRESULT {
+        return self.vtable.@"StartDragAsync"(self, p0, result);
     }
     pub fn StartBringIntoView(self: *const IUIElement) callconv(.winapi) HRESULT {
-        return self.vtable.StartBringIntoView(self);
+        return self.vtable.@"StartBringIntoView"(self);
     }
     pub fn StartBringIntoView_2(self: *const IUIElement, p0: *BringIntoViewOptions) callconv(.winapi) HRESULT {
-        return self.vtable.StartBringIntoView_2(self, p0);
+        return self.vtable.@"StartBringIntoView_2"(self, p0);
     }
     pub fn TryInvokeKeyboardAccelerator(self: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".ProcessKeyboardAcceleratorEventArgs) callconv(.winapi) HRESULT {
-        return self.vtable.TryInvokeKeyboardAccelerator(self, p0);
+        return self.vtable.@"TryInvokeKeyboardAccelerator"(self, p0);
     }
     pub fn Focus(self: *const IUIElement, p0: FocusState, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.Focus(self, p0, result);
+        return self.vtable.@"Focus"(self, p0, result);
     }
     pub fn StartAnimation(self: *const IUIElement, p0: *@"Microsoft.UI.Composition".ICompositionAnimationBase) callconv(.winapi) HRESULT {
-        return self.vtable.StartAnimation(self, p0);
+        return self.vtable.@"StartAnimation"(self, p0);
     }
     pub fn StopAnimation(self: *const IUIElement, p0: *@"Microsoft.UI.Composition".ICompositionAnimationBase) callconv(.winapi) HRESULT {
-        return self.vtable.StopAnimation(self, p0);
+        return self.vtable.@"StopAnimation"(self, p0);
     }
     pub fn addLosingFocus(
         self: *const IUIElement,
@@ -5778,33 +5778,33 @@ pub const IUIElementOverrides = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn OnCreateAutomationPeer(self: *const IUIElementOverrides, result: **@"Microsoft.UI.Xaml.Automation.Peers".AutomationPeer) callconv(.winapi) HRESULT {
-        return self.vtable.OnCreateAutomationPeer(self, result);
+        return self.vtable.@"OnCreateAutomationPeer"(self, result);
     }
     pub fn OnDisconnectVisualChildren(self: *const IUIElementOverrides) callconv(.winapi) HRESULT {
-        return self.vtable.OnDisconnectVisualChildren(self);
+        return self.vtable.@"OnDisconnectVisualChildren"(self);
     }
-    pub fn FindSubElementsForTouchTargeting(self: *const IUIElementOverrides, p0: @"Windows.Foundation".Point, p1: @"Windows.Foundation".Rect, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.FindSubElementsForTouchTargeting(self, p0, p1, result);
+    pub fn FindSubElementsForTouchTargeting(self: *const IUIElementOverrides, p0: @"Windows.Foundation".Point, p1: @"Windows.Foundation".Rect, result: **@"Windows.Foundation.Collections".IIterable__G1__Windows_Foundation_Collections_IIterable__G1__Windows_Foundation_Point) callconv(.winapi) HRESULT {
+        return self.vtable.@"FindSubElementsForTouchTargeting"(self, p0, p1, result);
     }
-    pub fn GetChildrenInTabFocusOrder(self: *const IUIElementOverrides, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.GetChildrenInTabFocusOrder(self, result);
+    pub fn GetChildrenInTabFocusOrder(self: *const IUIElementOverrides, result: **@"Windows.Foundation.Collections".IIterable__G1__Microsoft_UI_Xaml_DependencyObject) callconv(.winapi) HRESULT {
+        return self.vtable.@"GetChildrenInTabFocusOrder"(self, result);
     }
     pub fn OnKeyboardAcceleratorInvoked(self: *const IUIElementOverrides, p0: *@"Microsoft.UI.Xaml.Input".KeyboardAcceleratorInvokedEventArgs) callconv(.winapi) HRESULT {
-        return self.vtable.OnKeyboardAcceleratorInvoked(self, p0);
+        return self.vtable.@"OnKeyboardAcceleratorInvoked"(self, p0);
     }
     pub fn OnProcessKeyboardAccelerators(self: *const IUIElementOverrides, p0: *@"Microsoft.UI.Xaml.Input".ProcessKeyboardAcceleratorEventArgs) callconv(.winapi) HRESULT {
-        return self.vtable.OnProcessKeyboardAccelerators(self, p0);
+        return self.vtable.@"OnProcessKeyboardAccelerators"(self, p0);
     }
     pub fn OnBringIntoViewRequested(self: *const IUIElementOverrides, p0: *BringIntoViewRequestedEventArgs) callconv(.winapi) HRESULT {
-        return self.vtable.OnBringIntoViewRequested(self, p0);
+        return self.vtable.@"OnBringIntoViewRequested"(self, p0);
     }
     pub fn PopulatePropertyInfoOverride(self: *const IUIElementOverrides, p0: HSTRING, p1: *@"Microsoft.UI.Composition".AnimationPropertyInfo) callconv(.winapi) HRESULT {
-        return self.vtable.PopulatePropertyInfoOverride(self, p0, p1);
+        return self.vtable.@"PopulatePropertyInfoOverride"(self, p0, p1);
     }
     pub fn PopulatePropertyInfoOverrideFromUtf16(self: *const IUIElementOverrides, p0: []const u16, p1: *@"Microsoft.UI.Composition".AnimationPropertyInfo) HRESULT {
         var h0 = win_core.Hstring.create(p0) catch return win_core.hresult.E_OUTOFMEMORY;
         defer h0.deinit();
-        return self.vtable.PopulatePropertyInfoOverride(self, h0.raw, p1);
+        return self.vtable.@"PopulatePropertyInfoOverride"(self, h0.raw, p1);
     }
 };
 pub const IUIElementProtected = extern struct {
@@ -5826,10 +5826,10 @@ pub const IUIElementProtected = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_ProtectedCursor(self: *const IUIElementProtected, result: **@"Microsoft.UI.Input".InputCursor) callconv(.winapi) HRESULT {
-        return self.vtable.get_ProtectedCursor(self, result);
+        return self.vtable.@"get_ProtectedCursor"(self, result);
     }
     pub fn put_ProtectedCursor(self: *const IUIElementProtected, p0: *@"Microsoft.UI.Input".InputCursor) callconv(.winapi) HRESULT {
-        return self.vtable.put_ProtectedCursor(self, p0);
+        return self.vtable.@"put_ProtectedCursor"(self, p0);
     }
 };
 pub const IUIElementStatics = extern struct {
@@ -5851,250 +5851,250 @@ pub const IUIElementStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_KeyDownEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_KeyDownEvent(self, result);
+        return self.vtable.@"get_KeyDownEvent"(self, result);
     }
     pub fn get_KeyUpEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_KeyUpEvent(self, result);
+        return self.vtable.@"get_KeyUpEvent"(self, result);
     }
     pub fn get_PointerEnteredEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_PointerEnteredEvent(self, result);
+        return self.vtable.@"get_PointerEnteredEvent"(self, result);
     }
     pub fn get_PointerPressedEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_PointerPressedEvent(self, result);
+        return self.vtable.@"get_PointerPressedEvent"(self, result);
     }
     pub fn get_PointerMovedEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_PointerMovedEvent(self, result);
+        return self.vtable.@"get_PointerMovedEvent"(self, result);
     }
     pub fn get_PointerReleasedEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_PointerReleasedEvent(self, result);
+        return self.vtable.@"get_PointerReleasedEvent"(self, result);
     }
     pub fn get_PointerExitedEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_PointerExitedEvent(self, result);
+        return self.vtable.@"get_PointerExitedEvent"(self, result);
     }
     pub fn get_PointerCaptureLostEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_PointerCaptureLostEvent(self, result);
+        return self.vtable.@"get_PointerCaptureLostEvent"(self, result);
     }
     pub fn get_PointerCanceledEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_PointerCanceledEvent(self, result);
+        return self.vtable.@"get_PointerCanceledEvent"(self, result);
     }
     pub fn get_PointerWheelChangedEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_PointerWheelChangedEvent(self, result);
+        return self.vtable.@"get_PointerWheelChangedEvent"(self, result);
     }
     pub fn get_TappedEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_TappedEvent(self, result);
+        return self.vtable.@"get_TappedEvent"(self, result);
     }
     pub fn get_DoubleTappedEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_DoubleTappedEvent(self, result);
+        return self.vtable.@"get_DoubleTappedEvent"(self, result);
     }
     pub fn get_HoldingEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_HoldingEvent(self, result);
+        return self.vtable.@"get_HoldingEvent"(self, result);
     }
     pub fn get_RightTappedEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_RightTappedEvent(self, result);
+        return self.vtable.@"get_RightTappedEvent"(self, result);
     }
     pub fn get_ManipulationStartingEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_ManipulationStartingEvent(self, result);
+        return self.vtable.@"get_ManipulationStartingEvent"(self, result);
     }
     pub fn get_ManipulationInertiaStartingEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_ManipulationInertiaStartingEvent(self, result);
+        return self.vtable.@"get_ManipulationInertiaStartingEvent"(self, result);
     }
     pub fn get_ManipulationStartedEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_ManipulationStartedEvent(self, result);
+        return self.vtable.@"get_ManipulationStartedEvent"(self, result);
     }
     pub fn get_ManipulationDeltaEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_ManipulationDeltaEvent(self, result);
+        return self.vtable.@"get_ManipulationDeltaEvent"(self, result);
     }
     pub fn get_ManipulationCompletedEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_ManipulationCompletedEvent(self, result);
+        return self.vtable.@"get_ManipulationCompletedEvent"(self, result);
     }
     pub fn get_DragEnterEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_DragEnterEvent(self, result);
+        return self.vtable.@"get_DragEnterEvent"(self, result);
     }
     pub fn get_DragLeaveEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_DragLeaveEvent(self, result);
+        return self.vtable.@"get_DragLeaveEvent"(self, result);
     }
     pub fn get_DragOverEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_DragOverEvent(self, result);
+        return self.vtable.@"get_DragOverEvent"(self, result);
     }
     pub fn get_DropEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_DropEvent(self, result);
+        return self.vtable.@"get_DropEvent"(self, result);
     }
     pub fn get_GettingFocusEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_GettingFocusEvent(self, result);
+        return self.vtable.@"get_GettingFocusEvent"(self, result);
     }
     pub fn get_LosingFocusEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_LosingFocusEvent(self, result);
+        return self.vtable.@"get_LosingFocusEvent"(self, result);
     }
     pub fn get_NoFocusCandidateFoundEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_NoFocusCandidateFoundEvent(self, result);
+        return self.vtable.@"get_NoFocusCandidateFoundEvent"(self, result);
     }
     pub fn get_PreviewKeyDownEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_PreviewKeyDownEvent(self, result);
+        return self.vtable.@"get_PreviewKeyDownEvent"(self, result);
     }
     pub fn get_CharacterReceivedEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_CharacterReceivedEvent(self, result);
+        return self.vtable.@"get_CharacterReceivedEvent"(self, result);
     }
     pub fn get_PreviewKeyUpEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_PreviewKeyUpEvent(self, result);
+        return self.vtable.@"get_PreviewKeyUpEvent"(self, result);
     }
     pub fn get_BringIntoViewRequestedEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_BringIntoViewRequestedEvent(self, result);
+        return self.vtable.@"get_BringIntoViewRequestedEvent"(self, result);
     }
     pub fn get_ContextRequestedEvent(self: *const IUIElementStatics, result: **RoutedEvent) callconv(.winapi) HRESULT {
-        return self.vtable.get_ContextRequestedEvent(self, result);
+        return self.vtable.@"get_ContextRequestedEvent"(self, result);
     }
     pub fn get_AllowDropProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_AllowDropProperty(self, result);
+        return self.vtable.@"get_AllowDropProperty"(self, result);
     }
     pub fn get_OpacityProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_OpacityProperty(self, result);
+        return self.vtable.@"get_OpacityProperty"(self, result);
     }
     pub fn get_ClipProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_ClipProperty(self, result);
+        return self.vtable.@"get_ClipProperty"(self, result);
     }
     pub fn get_RenderTransformProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_RenderTransformProperty(self, result);
+        return self.vtable.@"get_RenderTransformProperty"(self, result);
     }
     pub fn get_ProjectionProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_ProjectionProperty(self, result);
+        return self.vtable.@"get_ProjectionProperty"(self, result);
     }
     pub fn get_Transform3DProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_Transform3DProperty(self, result);
+        return self.vtable.@"get_Transform3DProperty"(self, result);
     }
     pub fn get_RenderTransformOriginProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_RenderTransformOriginProperty(self, result);
+        return self.vtable.@"get_RenderTransformOriginProperty"(self, result);
     }
     pub fn get_IsHitTestVisibleProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsHitTestVisibleProperty(self, result);
+        return self.vtable.@"get_IsHitTestVisibleProperty"(self, result);
     }
     pub fn get_VisibilityProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_VisibilityProperty(self, result);
+        return self.vtable.@"get_VisibilityProperty"(self, result);
     }
     pub fn get_UseLayoutRoundingProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_UseLayoutRoundingProperty(self, result);
+        return self.vtable.@"get_UseLayoutRoundingProperty"(self, result);
     }
     pub fn get_TransitionsProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_TransitionsProperty(self, result);
+        return self.vtable.@"get_TransitionsProperty"(self, result);
     }
     pub fn get_CacheModeProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_CacheModeProperty(self, result);
+        return self.vtable.@"get_CacheModeProperty"(self, result);
     }
     pub fn get_IsTapEnabledProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsTapEnabledProperty(self, result);
+        return self.vtable.@"get_IsTapEnabledProperty"(self, result);
     }
     pub fn get_IsDoubleTapEnabledProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsDoubleTapEnabledProperty(self, result);
+        return self.vtable.@"get_IsDoubleTapEnabledProperty"(self, result);
     }
     pub fn get_CanDragProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_CanDragProperty(self, result);
+        return self.vtable.@"get_CanDragProperty"(self, result);
     }
     pub fn get_IsRightTapEnabledProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsRightTapEnabledProperty(self, result);
+        return self.vtable.@"get_IsRightTapEnabledProperty"(self, result);
     }
     pub fn get_IsHoldingEnabledProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsHoldingEnabledProperty(self, result);
+        return self.vtable.@"get_IsHoldingEnabledProperty"(self, result);
     }
     pub fn get_ManipulationModeProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_ManipulationModeProperty(self, result);
+        return self.vtable.@"get_ManipulationModeProperty"(self, result);
     }
     pub fn get_PointerCapturesProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_PointerCapturesProperty(self, result);
+        return self.vtable.@"get_PointerCapturesProperty"(self, result);
     }
     pub fn get_ContextFlyoutProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_ContextFlyoutProperty(self, result);
+        return self.vtable.@"get_ContextFlyoutProperty"(self, result);
     }
     pub fn get_CompositeModeProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_CompositeModeProperty(self, result);
+        return self.vtable.@"get_CompositeModeProperty"(self, result);
     }
     pub fn get_LightsProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_LightsProperty(self, result);
+        return self.vtable.@"get_LightsProperty"(self, result);
     }
     pub fn get_CanBeScrollAnchorProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_CanBeScrollAnchorProperty(self, result);
+        return self.vtable.@"get_CanBeScrollAnchorProperty"(self, result);
     }
     pub fn get_ExitDisplayModeOnAccessKeyInvokedProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_ExitDisplayModeOnAccessKeyInvokedProperty(self, result);
+        return self.vtable.@"get_ExitDisplayModeOnAccessKeyInvokedProperty"(self, result);
     }
     pub fn get_IsAccessKeyScopeProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsAccessKeyScopeProperty(self, result);
+        return self.vtable.@"get_IsAccessKeyScopeProperty"(self, result);
     }
     pub fn get_AccessKeyScopeOwnerProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_AccessKeyScopeOwnerProperty(self, result);
+        return self.vtable.@"get_AccessKeyScopeOwnerProperty"(self, result);
     }
     pub fn get_AccessKeyProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_AccessKeyProperty(self, result);
+        return self.vtable.@"get_AccessKeyProperty"(self, result);
     }
     pub fn get_KeyTipPlacementModeProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_KeyTipPlacementModeProperty(self, result);
+        return self.vtable.@"get_KeyTipPlacementModeProperty"(self, result);
     }
     pub fn get_KeyTipHorizontalOffsetProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_KeyTipHorizontalOffsetProperty(self, result);
+        return self.vtable.@"get_KeyTipHorizontalOffsetProperty"(self, result);
     }
     pub fn get_KeyTipVerticalOffsetProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_KeyTipVerticalOffsetProperty(self, result);
+        return self.vtable.@"get_KeyTipVerticalOffsetProperty"(self, result);
     }
     pub fn get_KeyTipTargetProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_KeyTipTargetProperty(self, result);
+        return self.vtable.@"get_KeyTipTargetProperty"(self, result);
     }
     pub fn get_XYFocusKeyboardNavigationProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_XYFocusKeyboardNavigationProperty(self, result);
+        return self.vtable.@"get_XYFocusKeyboardNavigationProperty"(self, result);
     }
     pub fn get_XYFocusUpNavigationStrategyProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_XYFocusUpNavigationStrategyProperty(self, result);
+        return self.vtable.@"get_XYFocusUpNavigationStrategyProperty"(self, result);
     }
     pub fn get_XYFocusDownNavigationStrategyProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_XYFocusDownNavigationStrategyProperty(self, result);
+        return self.vtable.@"get_XYFocusDownNavigationStrategyProperty"(self, result);
     }
     pub fn get_XYFocusLeftNavigationStrategyProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_XYFocusLeftNavigationStrategyProperty(self, result);
+        return self.vtable.@"get_XYFocusLeftNavigationStrategyProperty"(self, result);
     }
     pub fn get_XYFocusRightNavigationStrategyProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_XYFocusRightNavigationStrategyProperty(self, result);
+        return self.vtable.@"get_XYFocusRightNavigationStrategyProperty"(self, result);
     }
     pub fn get_KeyboardAcceleratorPlacementTargetProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_KeyboardAcceleratorPlacementTargetProperty(self, result);
+        return self.vtable.@"get_KeyboardAcceleratorPlacementTargetProperty"(self, result);
     }
     pub fn get_KeyboardAcceleratorPlacementModeProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_KeyboardAcceleratorPlacementModeProperty(self, result);
+        return self.vtable.@"get_KeyboardAcceleratorPlacementModeProperty"(self, result);
     }
     pub fn get_HighContrastAdjustmentProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_HighContrastAdjustmentProperty(self, result);
+        return self.vtable.@"get_HighContrastAdjustmentProperty"(self, result);
     }
     pub fn get_TabFocusNavigationProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_TabFocusNavigationProperty(self, result);
+        return self.vtable.@"get_TabFocusNavigationProperty"(self, result);
     }
     pub fn get_ShadowProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_ShadowProperty(self, result);
+        return self.vtable.@"get_ShadowProperty"(self, result);
     }
     pub fn get_FocusStateProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_FocusStateProperty(self, result);
+        return self.vtable.@"get_FocusStateProperty"(self, result);
     }
     pub fn get_UseSystemFocusVisualsProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_UseSystemFocusVisualsProperty(self, result);
+        return self.vtable.@"get_UseSystemFocusVisualsProperty"(self, result);
     }
     pub fn get_XYFocusLeftProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_XYFocusLeftProperty(self, result);
+        return self.vtable.@"get_XYFocusLeftProperty"(self, result);
     }
     pub fn get_XYFocusRightProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_XYFocusRightProperty(self, result);
+        return self.vtable.@"get_XYFocusRightProperty"(self, result);
     }
     pub fn get_XYFocusUpProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_XYFocusUpProperty(self, result);
+        return self.vtable.@"get_XYFocusUpProperty"(self, result);
     }
     pub fn get_XYFocusDownProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_XYFocusDownProperty(self, result);
+        return self.vtable.@"get_XYFocusDownProperty"(self, result);
     }
     pub fn get_IsTabStopProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsTabStopProperty(self, result);
+        return self.vtable.@"get_IsTabStopProperty"(self, result);
     }
     pub fn get_TabIndexProperty(self: *const IUIElementStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_TabIndexProperty(self, result);
+        return self.vtable.@"get_TabIndexProperty"(self, result);
     }
     pub fn TryStartDirectManipulation(self: *const IUIElementStatics, p0: *@"Microsoft.UI.Xaml.Input".Pointer, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.TryStartDirectManipulation(self, p0, result);
+        return self.vtable.@"TryStartDirectManipulation"(self, p0, result);
     }
     pub fn RegisterAsScrollPort(self: *const IUIElementStatics, p0: *UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.RegisterAsScrollPort(self, p0);
+        return self.vtable.@"RegisterAsScrollPort"(self, p0);
     }
 };
 pub const IUIElementWeakCollectionFactory = extern struct {
@@ -6116,7 +6116,7 @@ pub const IUIElementWeakCollectionFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IUIElementWeakCollectionFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **UIElementWeakCollection) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const IUnhandledExceptionEventArgs = extern struct {
@@ -6138,21 +6138,21 @@ pub const IUnhandledExceptionEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Exception(self: *const IUnhandledExceptionEventArgs, result: *@"Windows.Foundation".HResult) callconv(.winapi) HRESULT {
-        return self.vtable.get_Exception(self, result);
+        return self.vtable.@"get_Exception"(self, result);
     }
     pub fn get_Message(self: *const IUnhandledExceptionEventArgs, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.get_Message(self, result);
+        return self.vtable.@"get_Message"(self, result);
     }
     pub fn get_MessageOwned(self: *const IUnhandledExceptionEventArgs) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.get_Message(self, &r));
+        try win_core.hresult.ok(self.vtable.@"get_Message"(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
     pub fn get_Handled(self: *const IUnhandledExceptionEventArgs, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_Handled(self, result);
+        return self.vtable.@"get_Handled"(self, result);
     }
     pub fn put_Handled(self: *const IUnhandledExceptionEventArgs, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_Handled(self, p0);
+        return self.vtable.@"put_Handled"(self, p0);
     }
 };
 pub const IVector3Transition = extern struct {
@@ -6174,16 +6174,16 @@ pub const IVector3Transition = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Duration(self: *const IVector3Transition, result: *@"Windows.Foundation".TimeSpan) callconv(.winapi) HRESULT {
-        return self.vtable.get_Duration(self, result);
+        return self.vtable.@"get_Duration"(self, result);
     }
     pub fn put_Duration(self: *const IVector3Transition, p0: @"Windows.Foundation".TimeSpan) callconv(.winapi) HRESULT {
-        return self.vtable.put_Duration(self, p0);
+        return self.vtable.@"put_Duration"(self, p0);
     }
     pub fn get_Components(self: *const IVector3Transition, result: *Vector3TransitionComponents) callconv(.winapi) HRESULT {
-        return self.vtable.get_Components(self, result);
+        return self.vtable.@"get_Components"(self, result);
     }
     pub fn put_Components(self: *const IVector3Transition, p0: Vector3TransitionComponents) callconv(.winapi) HRESULT {
-        return self.vtable.put_Components(self, p0);
+        return self.vtable.@"put_Components"(self, p0);
     }
 };
 pub const IVector3TransitionFactory = extern struct {
@@ -6205,7 +6205,7 @@ pub const IVector3TransitionFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IVector3TransitionFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **Vector3Transition) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const IVisualState = extern struct {
@@ -6227,24 +6227,24 @@ pub const IVisualState = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Name(self: *const IVisualState, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.get_Name(self, result);
+        return self.vtable.@"get_Name"(self, result);
     }
     pub fn get_NameOwned(self: *const IVisualState) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.get_Name(self, &r));
+        try win_core.hresult.ok(self.vtable.@"get_Name"(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
     pub fn get_Storyboard(self: *const IVisualState, result: **@"Microsoft.UI.Xaml.Media.Animation".Storyboard) callconv(.winapi) HRESULT {
-        return self.vtable.get_Storyboard(self, result);
+        return self.vtable.@"get_Storyboard"(self, result);
     }
     pub fn put_Storyboard(self: *const IVisualState, p0: *@"Microsoft.UI.Xaml.Media.Animation".Storyboard) callconv(.winapi) HRESULT {
-        return self.vtable.put_Storyboard(self, p0);
+        return self.vtable.@"put_Storyboard"(self, p0);
     }
     pub fn get_Setters(self: *const IVisualState, result: **SetterBaseCollection) callconv(.winapi) HRESULT {
-        return self.vtable.get_Setters(self, result);
+        return self.vtable.@"get_Setters"(self, result);
     }
-    pub fn get_StateTriggers(self: *const IVisualState, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_StateTriggers(self, result);
+    pub fn get_StateTriggers(self: *const IVisualState, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_StateTriggerBase) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_StateTriggers"(self, result);
     }
 };
 pub const IVisualStateChangedEventArgs = extern struct {
@@ -6266,22 +6266,22 @@ pub const IVisualStateChangedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_OldState(self: *const IVisualStateChangedEventArgs, result: **VisualState) callconv(.winapi) HRESULT {
-        return self.vtable.get_OldState(self, result);
+        return self.vtable.@"get_OldState"(self, result);
     }
     pub fn put_OldState(self: *const IVisualStateChangedEventArgs, p0: *VisualState) callconv(.winapi) HRESULT {
-        return self.vtable.put_OldState(self, p0);
+        return self.vtable.@"put_OldState"(self, p0);
     }
     pub fn get_NewState(self: *const IVisualStateChangedEventArgs, result: **VisualState) callconv(.winapi) HRESULT {
-        return self.vtable.get_NewState(self, result);
+        return self.vtable.@"get_NewState"(self, result);
     }
     pub fn put_NewState(self: *const IVisualStateChangedEventArgs, p0: *VisualState) callconv(.winapi) HRESULT {
-        return self.vtable.put_NewState(self, p0);
+        return self.vtable.@"put_NewState"(self, p0);
     }
     pub fn get_Control(self: *const IVisualStateChangedEventArgs, result: **@"Microsoft.UI.Xaml.Controls".Control) callconv(.winapi) HRESULT {
-        return self.vtable.get_Control(self, result);
+        return self.vtable.@"get_Control"(self, result);
     }
     pub fn put_Control(self: *const IVisualStateChangedEventArgs, p0: *@"Microsoft.UI.Xaml.Controls".Control) callconv(.winapi) HRESULT {
-        return self.vtable.put_Control(self, p0);
+        return self.vtable.@"put_Control"(self, p0);
     }
 };
 pub const IVisualStateGroup = extern struct {
@@ -6303,33 +6303,33 @@ pub const IVisualStateGroup = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Name(self: *const IVisualStateGroup, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.get_Name(self, result);
+        return self.vtable.@"get_Name"(self, result);
     }
     pub fn get_NameOwned(self: *const IVisualStateGroup) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.get_Name(self, &r));
+        try win_core.hresult.ok(self.vtable.@"get_Name"(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
-    pub fn get_Transitions(self: *const IVisualStateGroup, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_Transitions(self, result);
+    pub fn get_Transitions(self: *const IVisualStateGroup, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_VisualTransition) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_Transitions"(self, result);
     }
-    pub fn get_States(self: *const IVisualStateGroup, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.get_States(self, result);
+    pub fn get_States(self: *const IVisualStateGroup, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_VisualState) callconv(.winapi) HRESULT {
+        return self.vtable.@"get_States"(self, result);
     }
     pub fn get_CurrentState(self: *const IVisualStateGroup, result: **VisualState) callconv(.winapi) HRESULT {
-        return self.vtable.get_CurrentState(self, result);
+        return self.vtable.@"get_CurrentState"(self, result);
     }
     pub fn add_CurrentStateChanged(self: *const IVisualStateGroup, p0: *VisualStateChangedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_CurrentStateChanged(self, p0, result);
+        return self.vtable.@"add_CurrentStateChanged"(self, p0, result);
     }
     pub fn remove_CurrentStateChanged(self: *const IVisualStateGroup, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_CurrentStateChanged(self, p0);
+        return self.vtable.@"remove_CurrentStateChanged"(self, p0);
     }
     pub fn add_CurrentStateChanging(self: *const IVisualStateGroup, p0: *VisualStateChangedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_CurrentStateChanging(self, p0, result);
+        return self.vtable.@"add_CurrentStateChanging"(self, p0, result);
     }
     pub fn remove_CurrentStateChanging(self: *const IVisualStateGroup, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_CurrentStateChanging(self, p0);
+        return self.vtable.@"remove_CurrentStateChanging"(self, p0);
     }
 };
 pub const IVisualStateManager = extern struct {
@@ -6370,7 +6370,7 @@ pub const IVisualStateManagerFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IVisualStateManagerFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **VisualStateManager) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const IVisualStateManagerOverrides = extern struct {
@@ -6392,12 +6392,12 @@ pub const IVisualStateManagerOverrides = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn GoToStateCore(self: *const IVisualStateManagerOverrides, p0: *@"Microsoft.UI.Xaml.Controls".Control, p1: *FrameworkElement, p2: HSTRING, p3: *VisualStateGroup, p4: *VisualState, p5: BOOL, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.GoToStateCore(self, p0, p1, p2, p3, p4, p5, result);
+        return self.vtable.@"GoToStateCore"(self, p0, p1, p2, p3, p4, p5, result);
     }
     pub fn GoToStateCoreFromUtf16(self: *const IVisualStateManagerOverrides, p0: *@"Microsoft.UI.Xaml.Controls".Control, p1: *FrameworkElement, p2: []const u16, p3: *VisualStateGroup, p4: *VisualState, p5: BOOL, result: *BOOL) HRESULT {
         var h2 = win_core.Hstring.create(p2) catch return win_core.hresult.E_OUTOFMEMORY;
         defer h2.deinit();
-        return self.vtable.GoToStateCore(self, p0, p1, h2.raw, p3, p4, p5, result);
+        return self.vtable.@"GoToStateCore"(self, p0, p1, h2.raw, p3, p4, p5, result);
     }
 };
 pub const IVisualStateManagerProtected = extern struct {
@@ -6419,10 +6419,10 @@ pub const IVisualStateManagerProtected = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn RaiseCurrentStateChanging(self: *const IVisualStateManagerProtected, p0: *VisualStateGroup, p1: *VisualState, p2: *VisualState, p3: *@"Microsoft.UI.Xaml.Controls".Control) callconv(.winapi) HRESULT {
-        return self.vtable.RaiseCurrentStateChanging(self, p0, p1, p2, p3);
+        return self.vtable.@"RaiseCurrentStateChanging"(self, p0, p1, p2, p3);
     }
     pub fn RaiseCurrentStateChanged(self: *const IVisualStateManagerProtected, p0: *VisualStateGroup, p1: *VisualState, p2: *VisualState, p3: *@"Microsoft.UI.Xaml.Controls".Control) callconv(.winapi) HRESULT {
-        return self.vtable.RaiseCurrentStateChanged(self, p0, p1, p2, p3);
+        return self.vtable.@"RaiseCurrentStateChanged"(self, p0, p1, p2, p3);
     }
 };
 pub const IVisualStateManagerStatics = extern struct {
@@ -6443,25 +6443,25 @@ pub const IVisualStateManagerStatics = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn GetVisualStateGroups(self: *const IVisualStateManagerStatics, p0: *FrameworkElement, result: **anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.GetVisualStateGroups(self, p0, result);
+    pub fn GetVisualStateGroups(self: *const IVisualStateManagerStatics, p0: *FrameworkElement, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_VisualStateGroup) callconv(.winapi) HRESULT {
+        return self.vtable.@"GetVisualStateGroups"(self, p0, result);
     }
     pub fn get_CustomVisualStateManagerProperty(self: *const IVisualStateManagerStatics, result: **DependencyProperty) callconv(.winapi) HRESULT {
-        return self.vtable.get_CustomVisualStateManagerProperty(self, result);
+        return self.vtable.@"get_CustomVisualStateManagerProperty"(self, result);
     }
     pub fn GetCustomVisualStateManager(self: *const IVisualStateManagerStatics, p0: *FrameworkElement, result: **VisualStateManager) callconv(.winapi) HRESULT {
-        return self.vtable.GetCustomVisualStateManager(self, p0, result);
+        return self.vtable.@"GetCustomVisualStateManager"(self, p0, result);
     }
     pub fn SetCustomVisualStateManager(self: *const IVisualStateManagerStatics, p0: *FrameworkElement, p1: *VisualStateManager) callconv(.winapi) HRESULT {
-        return self.vtable.SetCustomVisualStateManager(self, p0, p1);
+        return self.vtable.@"SetCustomVisualStateManager"(self, p0, p1);
     }
     pub fn GoToState(self: *const IVisualStateManagerStatics, p0: *@"Microsoft.UI.Xaml.Controls".Control, p1: HSTRING, p2: BOOL, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.GoToState(self, p0, p1, p2, result);
+        return self.vtable.@"GoToState"(self, p0, p1, p2, result);
     }
     pub fn GoToStateFromUtf16(self: *const IVisualStateManagerStatics, p0: *@"Microsoft.UI.Xaml.Controls".Control, p1: []const u16, p2: BOOL, result: *BOOL) HRESULT {
         var h1 = win_core.Hstring.create(p1) catch return win_core.hresult.E_OUTOFMEMORY;
         defer h1.deinit();
-        return self.vtable.GoToState(self, p0, h1.raw, p2, result);
+        return self.vtable.@"GoToState"(self, p0, h1.raw, p2, result);
     }
 };
 pub const IVisualTransition = extern struct {
@@ -6483,54 +6483,54 @@ pub const IVisualTransition = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_GeneratedDuration(self: *const IVisualTransition, result: *Duration) callconv(.winapi) HRESULT {
-        return self.vtable.get_GeneratedDuration(self, result);
+        return self.vtable.@"get_GeneratedDuration"(self, result);
     }
     pub fn put_GeneratedDuration(self: *const IVisualTransition, p0: Duration) callconv(.winapi) HRESULT {
-        return self.vtable.put_GeneratedDuration(self, p0);
+        return self.vtable.@"put_GeneratedDuration"(self, p0);
     }
     pub fn get_GeneratedEasingFunction(self: *const IVisualTransition, result: **@"Microsoft.UI.Xaml.Media.Animation".EasingFunctionBase) callconv(.winapi) HRESULT {
-        return self.vtable.get_GeneratedEasingFunction(self, result);
+        return self.vtable.@"get_GeneratedEasingFunction"(self, result);
     }
     pub fn put_GeneratedEasingFunction(self: *const IVisualTransition, p0: *@"Microsoft.UI.Xaml.Media.Animation".EasingFunctionBase) callconv(.winapi) HRESULT {
-        return self.vtable.put_GeneratedEasingFunction(self, p0);
+        return self.vtable.@"put_GeneratedEasingFunction"(self, p0);
     }
     pub fn get_To(self: *const IVisualTransition, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.get_To(self, result);
+        return self.vtable.@"get_To"(self, result);
     }
     pub fn get_ToOwned(self: *const IVisualTransition) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.get_To(self, &r));
+        try win_core.hresult.ok(self.vtable.@"get_To"(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
     pub fn put_To(self: *const IVisualTransition, p0: HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.put_To(self, p0);
+        return self.vtable.@"put_To"(self, p0);
     }
     pub fn put_ToFromUtf16(self: *const IVisualTransition, p0: []const u16) HRESULT {
         var h0 = win_core.Hstring.create(p0) catch return win_core.hresult.E_OUTOFMEMORY;
         defer h0.deinit();
-        return self.vtable.put_To(self, h0.raw);
+        return self.vtable.@"put_To"(self, h0.raw);
     }
     pub fn get_From(self: *const IVisualTransition, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.get_From(self, result);
+        return self.vtable.@"get_From"(self, result);
     }
     pub fn get_FromOwned(self: *const IVisualTransition) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.get_From(self, &r));
+        try win_core.hresult.ok(self.vtable.@"get_From"(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
     pub fn put_From(self: *const IVisualTransition, p0: HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.put_From(self, p0);
+        return self.vtable.@"put_From"(self, p0);
     }
     pub fn put_FromFromUtf16(self: *const IVisualTransition, p0: []const u16) HRESULT {
         var h0 = win_core.Hstring.create(p0) catch return win_core.hresult.E_OUTOFMEMORY;
         defer h0.deinit();
-        return self.vtable.put_From(self, h0.raw);
+        return self.vtable.@"put_From"(self, h0.raw);
     }
     pub fn get_Storyboard(self: *const IVisualTransition, result: **@"Microsoft.UI.Xaml.Media.Animation".Storyboard) callconv(.winapi) HRESULT {
-        return self.vtable.get_Storyboard(self, result);
+        return self.vtable.@"get_Storyboard"(self, result);
     }
     pub fn put_Storyboard(self: *const IVisualTransition, p0: *@"Microsoft.UI.Xaml.Media.Animation".Storyboard) callconv(.winapi) HRESULT {
-        return self.vtable.put_Storyboard(self, p0);
+        return self.vtable.@"put_Storyboard"(self, p0);
     }
 };
 pub const IVisualTransitionFactory = extern struct {
@@ -6552,7 +6552,7 @@ pub const IVisualTransitionFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IVisualTransitionFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **VisualTransition) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const IWindow = extern struct {
@@ -6574,83 +6574,83 @@ pub const IWindow = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Bounds(self: *const IWindow, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT {
-        return self.vtable.get_Bounds(self, result);
+        return self.vtable.@"get_Bounds"(self, result);
     }
     pub fn get_Visible(self: *const IWindow, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_Visible(self, result);
+        return self.vtable.@"get_Visible"(self, result);
     }
     pub fn get_Content(self: *const IWindow, result: **UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.get_Content(self, result);
+        return self.vtable.@"get_Content"(self, result);
     }
     pub fn put_Content(self: *const IWindow, p0: *UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.put_Content(self, p0);
+        return self.vtable.@"put_Content"(self, p0);
     }
     pub fn get_CoreWindow(self: *const IWindow, result: **@"Windows.UI.Core".CoreWindow) callconv(.winapi) HRESULT {
-        return self.vtable.get_CoreWindow(self, result);
+        return self.vtable.@"get_CoreWindow"(self, result);
     }
     pub fn get_Compositor(self: *const IWindow, result: **@"Microsoft.UI.Composition".Compositor) callconv(.winapi) HRESULT {
-        return self.vtable.get_Compositor(self, result);
+        return self.vtable.@"get_Compositor"(self, result);
     }
     pub fn get_Dispatcher(self: *const IWindow, result: **@"Windows.UI.Core".CoreDispatcher) callconv(.winapi) HRESULT {
-        return self.vtable.get_Dispatcher(self, result);
+        return self.vtable.@"get_Dispatcher"(self, result);
     }
     pub fn get_DispatcherQueue(self: *const IWindow, result: **@"Microsoft.UI.Dispatching".DispatcherQueue) callconv(.winapi) HRESULT {
-        return self.vtable.get_DispatcherQueue(self, result);
+        return self.vtable.@"get_DispatcherQueue"(self, result);
     }
     pub fn get_Title(self: *const IWindow, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.get_Title(self, result);
+        return self.vtable.@"get_Title"(self, result);
     }
     pub fn get_TitleOwned(self: *const IWindow) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.get_Title(self, &r));
+        try win_core.hresult.ok(self.vtable.@"get_Title"(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
     pub fn put_Title(self: *const IWindow, p0: HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.put_Title(self, p0);
+        return self.vtable.@"put_Title"(self, p0);
     }
     pub fn put_TitleFromUtf16(self: *const IWindow, p0: []const u16) HRESULT {
         var h0 = win_core.Hstring.create(p0) catch return win_core.hresult.E_OUTOFMEMORY;
         defer h0.deinit();
-        return self.vtable.put_Title(self, h0.raw);
+        return self.vtable.@"put_Title"(self, h0.raw);
     }
     pub fn get_ExtendsContentIntoTitleBar(self: *const IWindow, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_ExtendsContentIntoTitleBar(self, result);
+        return self.vtable.@"get_ExtendsContentIntoTitleBar"(self, result);
     }
     pub fn put_ExtendsContentIntoTitleBar(self: *const IWindow, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_ExtendsContentIntoTitleBar(self, p0);
+        return self.vtable.@"put_ExtendsContentIntoTitleBar"(self, p0);
     }
-    pub fn add_Activated(self: *const IWindow, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_Activated(self, p0, result);
+    pub fn add_Activated(self: *const IWindow, p0: *@"Windows.Foundation".TypedEventHandler__G2__object__Microsoft_UI_Xaml_WindowActivatedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_Activated"(self, p0, result);
     }
     pub fn remove_Activated(self: *const IWindow, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_Activated(self, p0);
+        return self.vtable.@"remove_Activated"(self, p0);
     }
-    pub fn add_Closed(self: *const IWindow, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_Closed(self, p0, result);
+    pub fn add_Closed(self: *const IWindow, p0: *@"Windows.Foundation".TypedEventHandler__G2__object__Microsoft_UI_Xaml_WindowEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_Closed"(self, p0, result);
     }
     pub fn remove_Closed(self: *const IWindow, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_Closed(self, p0);
+        return self.vtable.@"remove_Closed"(self, p0);
     }
-    pub fn add_SizeChanged(self: *const IWindow, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_SizeChanged(self, p0, result);
+    pub fn add_SizeChanged(self: *const IWindow, p0: *@"Windows.Foundation".TypedEventHandler__G2__object__Microsoft_UI_Xaml_WindowSizeChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_SizeChanged"(self, p0, result);
     }
     pub fn remove_SizeChanged(self: *const IWindow, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_SizeChanged(self, p0);
+        return self.vtable.@"remove_SizeChanged"(self, p0);
     }
-    pub fn add_VisibilityChanged(self: *const IWindow, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_VisibilityChanged(self, p0, result);
+    pub fn add_VisibilityChanged(self: *const IWindow, p0: *@"Windows.Foundation".TypedEventHandler__G2__object__Microsoft_UI_Xaml_WindowVisibilityChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_VisibilityChanged"(self, p0, result);
     }
     pub fn remove_VisibilityChanged(self: *const IWindow, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_VisibilityChanged(self, p0);
+        return self.vtable.@"remove_VisibilityChanged"(self, p0);
     }
     pub fn Activate(self: *const IWindow) callconv(.winapi) HRESULT {
-        return self.vtable.Activate(self);
+        return self.vtable.@"Activate"(self);
     }
     pub fn Close(self: *const IWindow) callconv(.winapi) HRESULT {
-        return self.vtable.Close(self);
+        return self.vtable.@"Close"(self);
     }
     pub fn SetTitleBar(self: *const IWindow, p0: *UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.SetTitleBar(self, p0);
+        return self.vtable.@"SetTitleBar"(self, p0);
     }
     pub fn addSizeChanged(
         self: *const IWindow,
@@ -6736,13 +6736,13 @@ pub const IWindow2 = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_SystemBackdrop(self: *const IWindow2, result: **@"Microsoft.UI.Xaml.Media".SystemBackdrop) callconv(.winapi) HRESULT {
-        return self.vtable.get_SystemBackdrop(self, result);
+        return self.vtable.@"get_SystemBackdrop"(self, result);
     }
     pub fn put_SystemBackdrop(self: *const IWindow2, p0: *@"Microsoft.UI.Xaml.Media".SystemBackdrop) callconv(.winapi) HRESULT {
-        return self.vtable.put_SystemBackdrop(self, p0);
+        return self.vtable.@"put_SystemBackdrop"(self, p0);
     }
     pub fn get_AppWindow(self: *const IWindow2, result: **@"Microsoft.UI.Windowing".AppWindow) callconv(.winapi) HRESULT {
-        return self.vtable.get_AppWindow(self, result);
+        return self.vtable.@"get_AppWindow"(self, result);
     }
 };
 pub const IWindowActivatedEventArgs = extern struct {
@@ -6764,13 +6764,13 @@ pub const IWindowActivatedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Handled(self: *const IWindowActivatedEventArgs, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_Handled(self, result);
+        return self.vtable.@"get_Handled"(self, result);
     }
     pub fn put_Handled(self: *const IWindowActivatedEventArgs, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_Handled(self, p0);
+        return self.vtable.@"put_Handled"(self, p0);
     }
     pub fn get_WindowActivationState(self: *const IWindowActivatedEventArgs, result: *WindowActivationState) callconv(.winapi) HRESULT {
-        return self.vtable.get_WindowActivationState(self, result);
+        return self.vtable.@"get_WindowActivationState"(self, result);
     }
 };
 pub const IWindowEventArgs = extern struct {
@@ -6792,10 +6792,10 @@ pub const IWindowEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Handled(self: *const IWindowEventArgs, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_Handled(self, result);
+        return self.vtable.@"get_Handled"(self, result);
     }
     pub fn put_Handled(self: *const IWindowEventArgs, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_Handled(self, p0);
+        return self.vtable.@"put_Handled"(self, p0);
     }
 };
 pub const IWindowFactory = extern struct {
@@ -6817,7 +6817,7 @@ pub const IWindowFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IWindowFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **Window) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const IWindowSizeChangedEventArgs = extern struct {
@@ -6839,13 +6839,13 @@ pub const IWindowSizeChangedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Handled(self: *const IWindowSizeChangedEventArgs, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_Handled(self, result);
+        return self.vtable.@"get_Handled"(self, result);
     }
     pub fn put_Handled(self: *const IWindowSizeChangedEventArgs, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_Handled(self, p0);
+        return self.vtable.@"put_Handled"(self, p0);
     }
     pub fn get_Size(self: *const IWindowSizeChangedEventArgs, result: *@"Windows.Foundation".Size) callconv(.winapi) HRESULT {
-        return self.vtable.get_Size(self, result);
+        return self.vtable.@"get_Size"(self, result);
     }
 };
 pub const IWindowStatics = extern struct {
@@ -6867,7 +6867,7 @@ pub const IWindowStatics = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Current(self: *const IWindowStatics, result: **Window) callconv(.winapi) HRESULT {
-        return self.vtable.get_Current(self, result);
+        return self.vtable.@"get_Current"(self, result);
     }
 };
 pub const IWindowVisibilityChangedEventArgs = extern struct {
@@ -6889,13 +6889,13 @@ pub const IWindowVisibilityChangedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Handled(self: *const IWindowVisibilityChangedEventArgs, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_Handled(self, result);
+        return self.vtable.@"get_Handled"(self, result);
     }
     pub fn put_Handled(self: *const IWindowVisibilityChangedEventArgs, p0: BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.put_Handled(self, p0);
+        return self.vtable.@"put_Handled"(self, p0);
     }
     pub fn get_Visible(self: *const IWindowVisibilityChangedEventArgs, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_Visible(self, result);
+        return self.vtable.@"get_Visible"(self, result);
     }
 };
 pub const IXamlIsland = extern struct {
@@ -6917,19 +6917,19 @@ pub const IXamlIsland = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Content(self: *const IXamlIsland, result: **UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.get_Content(self, result);
+        return self.vtable.@"get_Content"(self, result);
     }
     pub fn put_Content(self: *const IXamlIsland, p0: *UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.put_Content(self, p0);
+        return self.vtable.@"put_Content"(self, p0);
     }
     pub fn get_ContentIsland(self: *const IXamlIsland, result: **@"Microsoft.UI.Content".ContentIsland) callconv(.winapi) HRESULT {
-        return self.vtable.get_ContentIsland(self, result);
+        return self.vtable.@"get_ContentIsland"(self, result);
     }
     pub fn get_SystemBackdrop(self: *const IXamlIsland, result: **@"Microsoft.UI.Xaml.Media".SystemBackdrop) callconv(.winapi) HRESULT {
-        return self.vtable.get_SystemBackdrop(self, result);
+        return self.vtable.@"get_SystemBackdrop"(self, result);
     }
     pub fn put_SystemBackdrop(self: *const IXamlIsland, p0: *@"Microsoft.UI.Xaml.Media".SystemBackdrop) callconv(.winapi) HRESULT {
-        return self.vtable.put_SystemBackdrop(self, p0);
+        return self.vtable.@"put_SystemBackdrop"(self, p0);
     }
 };
 pub const IXamlIslandFactory = extern struct {
@@ -6951,7 +6951,7 @@ pub const IXamlIslandFactory = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn CreateInstance(self: *const IXamlIslandFactory, p0: ?*const anyopaque, p1: *?*const anyopaque, result: **XamlIsland) callconv(.winapi) HRESULT {
-        return self.vtable.CreateInstance(self, p0, p1, result);
+        return self.vtable.@"CreateInstance"(self, p0, p1, result);
     }
 };
 pub const IXamlResourceReferenceFailedEventArgs = extern struct {
@@ -6973,11 +6973,11 @@ pub const IXamlResourceReferenceFailedEventArgs = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Message(self: *const IXamlResourceReferenceFailedEventArgs, result: *HSTRING) callconv(.winapi) HRESULT {
-        return self.vtable.get_Message(self, result);
+        return self.vtable.@"get_Message"(self, result);
     }
     pub fn get_MessageOwned(self: *const IXamlResourceReferenceFailedEventArgs) !win_core.Hstring {
         var r: HSTRING = null;
-        try win_core.hresult.ok(self.vtable.get_Message(self, &r));
+        try win_core.hresult.ok(self.vtable.@"get_Message"(self, &r));
         return win_core.Hstring.fromRaw(r);
     }
 };
@@ -7000,22 +7000,22 @@ pub const IXamlRoot = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_Content(self: *const IXamlRoot, result: **UIElement) callconv(.winapi) HRESULT {
-        return self.vtable.get_Content(self, result);
+        return self.vtable.@"get_Content"(self, result);
     }
     pub fn get_Size(self: *const IXamlRoot, result: *@"Windows.Foundation".Size) callconv(.winapi) HRESULT {
-        return self.vtable.get_Size(self, result);
+        return self.vtable.@"get_Size"(self, result);
     }
     pub fn get_RasterizationScale(self: *const IXamlRoot, result: *f64) callconv(.winapi) HRESULT {
-        return self.vtable.get_RasterizationScale(self, result);
+        return self.vtable.@"get_RasterizationScale"(self, result);
     }
     pub fn get_IsHostVisible(self: *const IXamlRoot, result: *BOOL) callconv(.winapi) HRESULT {
-        return self.vtable.get_IsHostVisible(self, result);
+        return self.vtable.@"get_IsHostVisible"(self, result);
     }
-    pub fn add_Changed(self: *const IXamlRoot, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.add_Changed(self, p0, result);
+    pub fn add_Changed(self: *const IXamlRoot, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_XamlRoot__Microsoft_UI_Xaml_XamlRootChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+        return self.vtable.@"add_Changed"(self, p0, result);
     }
     pub fn remove_Changed(self: *const IXamlRoot, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
-        return self.vtable.remove_Changed(self, p0);
+        return self.vtable.@"remove_Changed"(self, p0);
     }
     pub fn addChanged(
         self: *const IXamlRoot,
@@ -7053,7 +7053,7 @@ pub const IXamlRoot2 = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_ContentIslandEnvironment(self: *const IXamlRoot2, result: **@"Microsoft.UI.Content".ContentIslandEnvironment) callconv(.winapi) HRESULT {
-        return self.vtable.get_ContentIslandEnvironment(self, result);
+        return self.vtable.@"get_ContentIslandEnvironment"(self, result);
     }
 };
 pub const IXamlRoot3 = extern struct {
@@ -7075,7 +7075,7 @@ pub const IXamlRoot3 = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_CoordinateConverter(self: *const IXamlRoot3, result: **@"Microsoft.UI.Content".ContentCoordinateConverter) callconv(.winapi) HRESULT {
-        return self.vtable.get_CoordinateConverter(self, result);
+        return self.vtable.@"get_CoordinateConverter"(self, result);
     }
 };
 pub const IXamlRoot4 = extern struct {
@@ -7097,7 +7097,7 @@ pub const IXamlRoot4 = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn get_ContentIsland(self: *const IXamlRoot4, result: **@"Microsoft.UI.Content".ContentIsland) callconv(.winapi) HRESULT {
-        return self.vtable.get_ContentIsland(self, result);
+        return self.vtable.@"get_ContentIsland"(self, result);
     }
 };
 pub const IXamlRootChangedEventArgs = extern struct {
@@ -7138,7 +7138,7 @@ pub const IXamlServiceProvider = extern struct {
         return @ptrCast(@alignCast(out));
     }
     pub fn GetService(self: *const IXamlServiceProvider, p0: @"Windows.UI.Xaml.Interop".TypeName, result: *?*const anyopaque) callconv(.winapi) HRESULT {
-        return self.vtable.GetService(self, p0, result);
+        return self.vtable.@"GetService"(self, p0, result);
     }
 };
 pub const ApplicationInitializationCallback = opaque {};
@@ -7724,7 +7724,7 @@ pub const IApplication_Vtbl = extern struct {
 };
 pub const IApplication2_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    add_ResourceManagerRequested: *const fn (this: *const IApplication2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ResourceManagerRequested: *const fn (this: *const IApplication2, p0: *@"Windows.Foundation".TypedEventHandler__G2__object__Microsoft_UI_Xaml_ResourceManagerRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ResourceManagerRequested: *const fn (this: *const IApplication2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IApplication3_Vtbl = extern struct {
@@ -7748,7 +7748,7 @@ pub const IApplicationStatics_Vtbl = extern struct {
     get_Current: *const fn (this: *const IApplicationStatics, result: **Application) callconv(.winapi) HRESULT,
     Start: *const fn (this: *const IApplicationStatics, p0: *ApplicationInitializationCallback) callconv(.winapi) HRESULT,
     LoadComponent: *const fn (this: *const IApplicationStatics, p0: ?*const anyopaque, p1: *@"Windows.Foundation".Uri) callconv(.winapi) HRESULT,
-    LoadComponent_2: *const fn (this: *const IApplicationStatics, p0: ?*const anyopaque, p1: *@"Windows.Foundation".Uri, p2: @"Microsoft.UI.Xaml.Controls.Primitives".ComponentResourceLocation) callconv(.winapi) HRESULT,
+    @"LoadComponent_2": *const fn (this: *const IApplicationStatics, p0: ?*const anyopaque, p1: *@"Windows.Foundation".Uri, p2: @"Microsoft.UI.Xaml.Controls.Primitives".ComponentResourceLocation) callconv(.winapi) HRESULT,
 };
 pub const IBindingFailedEventArgs_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -7758,8 +7758,8 @@ pub const IBringIntoViewOptions_Vtbl = extern struct {
     base: IInspectable_Vtbl,
     get_AnimationDesired: *const fn (this: *const IBringIntoViewOptions, result: *BOOL) callconv(.winapi) HRESULT,
     put_AnimationDesired: *const fn (this: *const IBringIntoViewOptions, p0: BOOL) callconv(.winapi) HRESULT,
-    get_TargetRect: *const fn (this: *const IBringIntoViewOptions, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_TargetRect: *const fn (this: *const IBringIntoViewOptions, p0: *anyopaque) callconv(.winapi) HRESULT,
+    get_TargetRect: *const fn (this: *const IBringIntoViewOptions, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_Rect) callconv(.winapi) HRESULT,
+    put_TargetRect: *const fn (this: *const IBringIntoViewOptions, p0: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Rect) callconv(.winapi) HRESULT,
     get_HorizontalAlignmentRatio: *const fn (this: *const IBringIntoViewOptions, result: *f64) callconv(.winapi) HRESULT,
     put_HorizontalAlignmentRatio: *const fn (this: *const IBringIntoViewOptions, p0: f64) callconv(.winapi) HRESULT,
     get_VerticalAlignmentRatio: *const fn (this: *const IBringIntoViewOptions, result: *f64) callconv(.winapi) HRESULT,
@@ -7797,60 +7797,60 @@ pub const IBrushTransitionFactory_Vtbl = extern struct {
 };
 pub const IColorPaletteResources_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    get_AltHigh: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_AltHigh: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_AltLow: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_AltLow: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_AltMedium: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_AltMedium: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_AltMediumHigh: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_AltMediumHigh: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_AltMediumLow: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_AltMediumLow: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_BaseHigh: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_BaseHigh: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_BaseLow: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_BaseLow: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_BaseMedium: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_BaseMedium: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_BaseMediumHigh: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_BaseMediumHigh: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_BaseMediumLow: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_BaseMediumLow: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_ChromeAltLow: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_ChromeAltLow: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_ChromeBlackHigh: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_ChromeBlackHigh: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_ChromeBlackLow: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_ChromeBlackLow: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_ChromeBlackMediumLow: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_ChromeBlackMediumLow: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_ChromeBlackMedium: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_ChromeBlackMedium: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_ChromeDisabledHigh: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_ChromeDisabledHigh: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_ChromeDisabledLow: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_ChromeDisabledLow: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_ChromeHigh: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_ChromeHigh: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_ChromeLow: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_ChromeLow: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_ChromeMedium: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_ChromeMedium: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_ChromeMediumLow: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_ChromeMediumLow: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_ChromeWhite: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_ChromeWhite: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_ChromeGray: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_ChromeGray: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_ListLow: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_ListLow: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_ListMedium: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_ListMedium: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_ErrorText: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_ErrorText: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_Accent: *const fn (this: *const IColorPaletteResources, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_Accent: *const fn (this: *const IColorPaletteResources, p0: *anyopaque) callconv(.winapi) HRESULT,
+    get_AltHigh: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_AltHigh: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_AltLow: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_AltLow: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_AltMedium: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_AltMedium: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_AltMediumHigh: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_AltMediumHigh: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_AltMediumLow: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_AltMediumLow: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_BaseHigh: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_BaseHigh: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_BaseLow: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_BaseLow: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_BaseMedium: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_BaseMedium: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_BaseMediumHigh: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_BaseMediumHigh: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_BaseMediumLow: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_BaseMediumLow: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_ChromeAltLow: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_ChromeAltLow: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_ChromeBlackHigh: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_ChromeBlackHigh: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_ChromeBlackLow: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_ChromeBlackLow: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_ChromeBlackMediumLow: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_ChromeBlackMediumLow: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_ChromeBlackMedium: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_ChromeBlackMedium: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_ChromeDisabledHigh: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_ChromeDisabledHigh: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_ChromeDisabledLow: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_ChromeDisabledLow: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_ChromeHigh: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_ChromeHigh: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_ChromeLow: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_ChromeLow: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_ChromeMedium: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_ChromeMedium: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_ChromeMediumLow: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_ChromeMediumLow: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_ChromeWhite: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_ChromeWhite: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_ChromeGray: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_ChromeGray: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_ListLow: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_ListLow: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_ListMedium: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_ListMedium: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_ErrorText: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_ErrorText: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    get_Accent: *const fn (this: *const IColorPaletteResources, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_Accent: *const fn (this: *const IColorPaletteResources, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
 };
 pub const IColorPaletteResourcesFactory_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -7917,7 +7917,7 @@ pub const IDebugSettings2_Vtbl = extern struct {
     base: IInspectable_Vtbl,
     get_IsXamlResourceReferenceTracingEnabled: *const fn (this: *const IDebugSettings2, result: *BOOL) callconv(.winapi) HRESULT,
     put_IsXamlResourceReferenceTracingEnabled: *const fn (this: *const IDebugSettings2, p0: BOOL) callconv(.winapi) HRESULT,
-    add_XamlResourceReferenceFailed: *const fn (this: *const IDebugSettings2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_XamlResourceReferenceFailed: *const fn (this: *const IDebugSettings2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_DebugSettings__Microsoft_UI_Xaml_XamlResourceReferenceFailedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_XamlResourceReferenceFailed: *const fn (this: *const IDebugSettings2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IDebugSettings3_Vtbl = extern struct {
@@ -8010,9 +8010,9 @@ pub const IDragStartingEventArgs_Vtbl = extern struct {
 pub const IDragUI_Vtbl = extern struct {
     base: IInspectable_Vtbl,
     SetContentFromBitmapImage: *const fn (this: *const IDragUI, p0: *@"Microsoft.UI.Xaml.Media.Imaging".BitmapImage) callconv(.winapi) HRESULT,
-    SetContentFromBitmapImage_2: *const fn (this: *const IDragUI, p0: *@"Microsoft.UI.Xaml.Media.Imaging".BitmapImage, p1: @"Windows.Foundation".Point) callconv(.winapi) HRESULT,
+    @"SetContentFromBitmapImage_2": *const fn (this: *const IDragUI, p0: *@"Microsoft.UI.Xaml.Media.Imaging".BitmapImage, p1: @"Windows.Foundation".Point) callconv(.winapi) HRESULT,
     SetContentFromSoftwareBitmap: *const fn (this: *const IDragUI, p0: *@"Windows.Graphics.Imaging".SoftwareBitmap) callconv(.winapi) HRESULT,
-    SetContentFromSoftwareBitmap_2: *const fn (this: *const IDragUI, p0: *@"Windows.Graphics.Imaging".SoftwareBitmap, p1: @"Windows.Foundation".Point) callconv(.winapi) HRESULT,
+    @"SetContentFromSoftwareBitmap_2": *const fn (this: *const IDragUI, p0: *@"Windows.Graphics.Imaging".SoftwareBitmap, p1: @"Windows.Foundation".Point) callconv(.winapi) HRESULT,
     SetContentFromDataPackage: *const fn (this: *const IDragUI) callconv(.winapi) HRESULT,
 };
 pub const IDragUIOverride_Vtbl = extern struct {
@@ -8027,9 +8027,9 @@ pub const IDragUIOverride_Vtbl = extern struct {
     put_IsGlyphVisible: *const fn (this: *const IDragUIOverride, p0: BOOL) callconv(.winapi) HRESULT,
     Clear: *const fn (this: *const IDragUIOverride) callconv(.winapi) HRESULT,
     SetContentFromBitmapImage: *const fn (this: *const IDragUIOverride, p0: *@"Microsoft.UI.Xaml.Media.Imaging".BitmapImage) callconv(.winapi) HRESULT,
-    SetContentFromBitmapImage_2: *const fn (this: *const IDragUIOverride, p0: *@"Microsoft.UI.Xaml.Media.Imaging".BitmapImage, p1: @"Windows.Foundation".Point) callconv(.winapi) HRESULT,
+    @"SetContentFromBitmapImage_2": *const fn (this: *const IDragUIOverride, p0: *@"Microsoft.UI.Xaml.Media.Imaging".BitmapImage, p1: @"Windows.Foundation".Point) callconv(.winapi) HRESULT,
     SetContentFromSoftwareBitmap: *const fn (this: *const IDragUIOverride, p0: *@"Windows.Graphics.Imaging".SoftwareBitmap) callconv(.winapi) HRESULT,
-    SetContentFromSoftwareBitmap_2: *const fn (this: *const IDragUIOverride, p0: *@"Windows.Graphics.Imaging".SoftwareBitmap, p1: @"Windows.Foundation".Point) callconv(.winapi) HRESULT,
+    @"SetContentFromSoftwareBitmap_2": *const fn (this: *const IDragUIOverride, p0: *@"Windows.Graphics.Imaging".SoftwareBitmap, p1: @"Windows.Foundation".Point) callconv(.winapi) HRESULT,
 };
 pub const IDropCompletedEventArgs_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -8170,17 +8170,17 @@ pub const IFrameworkElement_Vtbl = extern struct {
     remove_Loaded: *const fn (this: *const IFrameworkElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     add_Unloaded: *const fn (this: *const IFrameworkElement, p0: *RoutedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Unloaded: *const fn (this: *const IFrameworkElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_DataContextChanged: *const fn (this: *const IFrameworkElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_DataContextChanged: *const fn (this: *const IFrameworkElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_FrameworkElement__Microsoft_UI_Xaml_DataContextChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_DataContextChanged: *const fn (this: *const IFrameworkElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     add_SizeChanged: *const fn (this: *const IFrameworkElement, p0: *SizeChangedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_SizeChanged: *const fn (this: *const IFrameworkElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     add_LayoutUpdated: *const fn (this: *const IFrameworkElement, p0: *@"Windows.Foundation".EventHandler__G1__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_LayoutUpdated: *const fn (this: *const IFrameworkElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_Loading: *const fn (this: *const IFrameworkElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Loading: *const fn (this: *const IFrameworkElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_FrameworkElement__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Loading: *const fn (this: *const IFrameworkElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ActualThemeChanged: *const fn (this: *const IFrameworkElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ActualThemeChanged: *const fn (this: *const IFrameworkElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_FrameworkElement__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ActualThemeChanged: *const fn (this: *const IFrameworkElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_EffectiveViewportChanged: *const fn (this: *const IFrameworkElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_EffectiveViewportChanged: *const fn (this: *const IFrameworkElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_FrameworkElement__Microsoft_UI_Xaml_EffectiveViewportChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_EffectiveViewportChanged: *const fn (this: *const IFrameworkElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     FindName: *const fn (this: *const IFrameworkElement, p0: HSTRING, result: *?*const anyopaque) callconv(.winapi) HRESULT,
     SetBinding: *const fn (this: *const IFrameworkElement, p0: *DependencyProperty, p1: *@"Microsoft.UI.Xaml.Data".BindingBase) callconv(.winapi) HRESULT,
@@ -8286,9 +8286,9 @@ pub const IPropertyMetadataFactory_Vtbl = extern struct {
 pub const IPropertyMetadataStatics_Vtbl = extern struct {
     base: IInspectable_Vtbl,
     Create: *const fn (this: *const IPropertyMetadataStatics, p0: ?*const anyopaque, result: **PropertyMetadata) callconv(.winapi) HRESULT,
-    Create_2: *const fn (this: *const IPropertyMetadataStatics, p0: ?*const anyopaque, p1: *PropertyChangedCallback, result: **PropertyMetadata) callconv(.winapi) HRESULT,
-    Create_3: *const fn (this: *const IPropertyMetadataStatics, p0: *CreateDefaultValueCallback, result: **PropertyMetadata) callconv(.winapi) HRESULT,
-    Create_4: *const fn (this: *const IPropertyMetadataStatics, p0: *CreateDefaultValueCallback, p1: *PropertyChangedCallback, result: **PropertyMetadata) callconv(.winapi) HRESULT,
+    @"Create_2": *const fn (this: *const IPropertyMetadataStatics, p0: ?*const anyopaque, p1: *PropertyChangedCallback, result: **PropertyMetadata) callconv(.winapi) HRESULT,
+    @"Create_3": *const fn (this: *const IPropertyMetadataStatics, p0: *CreateDefaultValueCallback, result: **PropertyMetadata) callconv(.winapi) HRESULT,
+    @"Create_4": *const fn (this: *const IPropertyMetadataStatics, p0: *CreateDefaultValueCallback, p1: *PropertyChangedCallback, result: **PropertyMetadata) callconv(.winapi) HRESULT,
 };
 pub const IPropertyPath_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -8316,13 +8316,13 @@ pub const IRectHelperStatics_Vtbl = extern struct {
     Equals: *const fn (this: *const IRectHelperStatics, p0: @"Windows.Foundation".Rect, p1: @"Windows.Foundation".Rect, result: *BOOL) callconv(.winapi) HRESULT,
     Intersect: *const fn (this: *const IRectHelperStatics, p0: @"Windows.Foundation".Rect, p1: @"Windows.Foundation".Rect, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT,
     Union: *const fn (this: *const IRectHelperStatics, p0: @"Windows.Foundation".Rect, p1: @"Windows.Foundation".Point, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT,
-    Union_2: *const fn (this: *const IRectHelperStatics, p0: @"Windows.Foundation".Rect, p1: @"Windows.Foundation".Rect, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT,
+    @"Union_2": *const fn (this: *const IRectHelperStatics, p0: @"Windows.Foundation".Rect, p1: @"Windows.Foundation".Rect, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT,
 };
 pub const IResourceDictionary_Vtbl = extern struct {
     base: IInspectable_Vtbl,
     get_Source: *const fn (this: *const IResourceDictionary, result: **@"Windows.Foundation".Uri) callconv(.winapi) HRESULT,
     put_Source: *const fn (this: *const IResourceDictionary, p0: *@"Windows.Foundation".Uri) callconv(.winapi) HRESULT,
-    get_MergedDictionaries: *const fn (this: *const IResourceDictionary, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_MergedDictionaries: *const fn (this: *const IResourceDictionary, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_ResourceDictionary) callconv(.winapi) HRESULT,
     get_ThemeDictionaries: *const fn (this: *const IResourceDictionary, result: **@"Windows.Foundation.Collections".IMap__G2__object__object) callconv(.winapi) HRESULT,
 };
 pub const IResourceDictionaryFactory_Vtbl = extern struct {
@@ -8502,12 +8502,12 @@ pub const IUIElement_Vtbl = extern struct {
     put_IsHoldingEnabled: *const fn (this: *const IUIElement, p0: BOOL) callconv(.winapi) HRESULT,
     get_ManipulationMode: *const fn (this: *const IUIElement, result: *@"Microsoft.UI.Xaml.Input".ManipulationModes) callconv(.winapi) HRESULT,
     put_ManipulationMode: *const fn (this: *const IUIElement, p0: @"Microsoft.UI.Xaml.Input".ManipulationModes) callconv(.winapi) HRESULT,
-    get_PointerCaptures: *const fn (this: *const IUIElement, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_PointerCaptures: *const fn (this: *const IUIElement, result: **@"Windows.Foundation.Collections".IVectorView__G1__Microsoft_UI_Xaml_Input_Pointer) callconv(.winapi) HRESULT,
     get_ContextFlyout: *const fn (this: *const IUIElement, result: **@"Microsoft.UI.Xaml.Controls.Primitives".FlyoutBase) callconv(.winapi) HRESULT,
     put_ContextFlyout: *const fn (this: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Controls.Primitives".FlyoutBase) callconv(.winapi) HRESULT,
     get_CompositeMode: *const fn (this: *const IUIElement, result: *@"Microsoft.UI.Xaml.Media".ElementCompositeMode) callconv(.winapi) HRESULT,
     put_CompositeMode: *const fn (this: *const IUIElement, p0: @"Microsoft.UI.Xaml.Media".ElementCompositeMode) callconv(.winapi) HRESULT,
-    get_Lights: *const fn (this: *const IUIElement, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_Lights: *const fn (this: *const IUIElement, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Media_XamlLight) callconv(.winapi) HRESULT,
     get_CanBeScrollAnchor: *const fn (this: *const IUIElement, result: *BOOL) callconv(.winapi) HRESULT,
     put_CanBeScrollAnchor: *const fn (this: *const IUIElement, p0: BOOL) callconv(.winapi) HRESULT,
     get_ExitDisplayModeOnAccessKeyInvoked: *const fn (this: *const IUIElement, result: *BOOL) callconv(.winapi) HRESULT,
@@ -8536,7 +8536,7 @@ pub const IUIElement_Vtbl = extern struct {
     put_XYFocusLeftNavigationStrategy: *const fn (this: *const IUIElement, p0: @"Microsoft.UI.Xaml.Input".XYFocusNavigationStrategy) callconv(.winapi) HRESULT,
     get_XYFocusRightNavigationStrategy: *const fn (this: *const IUIElement, result: *@"Microsoft.UI.Xaml.Input".XYFocusNavigationStrategy) callconv(.winapi) HRESULT,
     put_XYFocusRightNavigationStrategy: *const fn (this: *const IUIElement, p0: @"Microsoft.UI.Xaml.Input".XYFocusNavigationStrategy) callconv(.winapi) HRESULT,
-    get_KeyboardAccelerators: *const fn (this: *const IUIElement, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_KeyboardAccelerators: *const fn (this: *const IUIElement, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Input_KeyboardAccelerator) callconv(.winapi) HRESULT,
     get_KeyboardAcceleratorPlacementTarget: *const fn (this: *const IUIElement, result: **DependencyObject) callconv(.winapi) HRESULT,
     put_KeyboardAcceleratorPlacementTarget: *const fn (this: *const IUIElement, p0: *DependencyObject) callconv(.winapi) HRESULT,
     get_KeyboardAcceleratorPlacementMode: *const fn (this: *const IUIElement, result: *@"Microsoft.UI.Xaml.Input".KeyboardAcceleratorPlacementMode) callconv(.winapi) HRESULT,
@@ -8596,11 +8596,11 @@ pub const IUIElement_Vtbl = extern struct {
     remove_GotFocus: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     add_LostFocus: *const fn (this: *const IUIElement, p0: *RoutedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_LostFocus: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_DragStarting: *const fn (this: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_DragStarting: *const fn (this: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_DragStartingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_DragStarting: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_DropCompleted: *const fn (this: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_DropCompleted: *const fn (this: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_DropCompletedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_DropCompleted: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_CharacterReceived: *const fn (this: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_CharacterReceived: *const fn (this: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_Input_CharacterReceivedRoutedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_CharacterReceived: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     add_DragEnter: *const fn (this: *const IUIElement, p0: *DragEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_DragEnter: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
@@ -8632,9 +8632,9 @@ pub const IUIElement_Vtbl = extern struct {
     remove_DoubleTapped: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     add_Holding: *const fn (this: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".HoldingEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Holding: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ContextRequested: *const fn (this: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ContextRequested: *const fn (this: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_Input_ContextRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ContextRequested: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ContextCanceled: *const fn (this: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ContextCanceled: *const fn (this: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_RoutedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ContextCanceled: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     add_RightTapped: *const fn (this: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".RightTappedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_RightTapped: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
@@ -8648,25 +8648,25 @@ pub const IUIElement_Vtbl = extern struct {
     remove_ManipulationDelta: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     add_ManipulationCompleted: *const fn (this: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".ManipulationCompletedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ManipulationCompleted: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_AccessKeyDisplayRequested: *const fn (this: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_AccessKeyDisplayRequested: *const fn (this: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_Input_AccessKeyDisplayRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_AccessKeyDisplayRequested: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_AccessKeyDisplayDismissed: *const fn (this: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_AccessKeyDisplayDismissed: *const fn (this: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_Input_AccessKeyDisplayDismissedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_AccessKeyDisplayDismissed: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_AccessKeyInvoked: *const fn (this: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_AccessKeyInvoked: *const fn (this: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_Input_AccessKeyInvokedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_AccessKeyInvoked: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ProcessKeyboardAccelerators: *const fn (this: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ProcessKeyboardAccelerators: *const fn (this: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_Input_ProcessKeyboardAcceleratorEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ProcessKeyboardAccelerators: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_GettingFocus: *const fn (this: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_GettingFocus: *const fn (this: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_Input_GettingFocusEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_GettingFocus: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_LosingFocus: *const fn (this: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_LosingFocus: *const fn (this: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_Input_LosingFocusEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_LosingFocus: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_NoFocusCandidateFound: *const fn (this: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_NoFocusCandidateFound: *const fn (this: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_Input_NoFocusCandidateFoundEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_NoFocusCandidateFound: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     add_PreviewKeyDown: *const fn (this: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".KeyEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_PreviewKeyDown: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     add_PreviewKeyUp: *const fn (this: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".KeyEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_PreviewKeyUp: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_BringIntoViewRequested: *const fn (this: *const IUIElement, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_BringIntoViewRequested: *const fn (this: *const IUIElement, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_UIElement__Microsoft_UI_Xaml_BringIntoViewRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_BringIntoViewRequested: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     Measure: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".Size) callconv(.winapi) HRESULT,
     Arrange: *const fn (this: *const IUIElement, p0: @"Windows.Foundation".Rect) callconv(.winapi) HRESULT,
@@ -8680,9 +8680,9 @@ pub const IUIElement_Vtbl = extern struct {
     InvalidateArrange: *const fn (this: *const IUIElement) callconv(.winapi) HRESULT,
     UpdateLayout: *const fn (this: *const IUIElement) callconv(.winapi) HRESULT,
     CancelDirectManipulations: *const fn (this: *const IUIElement, result: *BOOL) callconv(.winapi) HRESULT,
-    StartDragAsync: *const fn (this: *const IUIElement, p0: *@"Microsoft.UI.Input".PointerPoint, result: **anyopaque) callconv(.winapi) HRESULT,
+    StartDragAsync: *const fn (this: *const IUIElement, p0: *@"Microsoft.UI.Input".PointerPoint, result: **@"Windows.Foundation".IAsyncOperation__G1__Windows_ApplicationModel_DataTransfer_DataPackageOperation) callconv(.winapi) HRESULT,
     StartBringIntoView: *const fn (this: *const IUIElement) callconv(.winapi) HRESULT,
-    StartBringIntoView_2: *const fn (this: *const IUIElement, p0: *BringIntoViewOptions) callconv(.winapi) HRESULT,
+    @"StartBringIntoView_2": *const fn (this: *const IUIElement, p0: *BringIntoViewOptions) callconv(.winapi) HRESULT,
     TryInvokeKeyboardAccelerator: *const fn (this: *const IUIElement, p0: *@"Microsoft.UI.Xaml.Input".ProcessKeyboardAcceleratorEventArgs) callconv(.winapi) HRESULT,
     Focus: *const fn (this: *const IUIElement, p0: FocusState, result: *BOOL) callconv(.winapi) HRESULT,
     StartAnimation: *const fn (this: *const IUIElement, p0: *@"Microsoft.UI.Composition".ICompositionAnimationBase) callconv(.winapi) HRESULT,
@@ -8695,8 +8695,8 @@ pub const IUIElementOverrides_Vtbl = extern struct {
     base: IInspectable_Vtbl,
     OnCreateAutomationPeer: *const fn (this: *const IUIElementOverrides, result: **@"Microsoft.UI.Xaml.Automation.Peers".AutomationPeer) callconv(.winapi) HRESULT,
     OnDisconnectVisualChildren: *const fn (this: *const IUIElementOverrides) callconv(.winapi) HRESULT,
-    FindSubElementsForTouchTargeting: *const fn (this: *const IUIElementOverrides, p0: @"Windows.Foundation".Point, p1: @"Windows.Foundation".Rect, result: **anyopaque) callconv(.winapi) HRESULT,
-    GetChildrenInTabFocusOrder: *const fn (this: *const IUIElementOverrides, result: **anyopaque) callconv(.winapi) HRESULT,
+    FindSubElementsForTouchTargeting: *const fn (this: *const IUIElementOverrides, p0: @"Windows.Foundation".Point, p1: @"Windows.Foundation".Rect, result: **@"Windows.Foundation.Collections".IIterable__G1__Windows_Foundation_Collections_IIterable__G1__Windows_Foundation_Point) callconv(.winapi) HRESULT,
+    GetChildrenInTabFocusOrder: *const fn (this: *const IUIElementOverrides, result: **@"Windows.Foundation.Collections".IIterable__G1__Microsoft_UI_Xaml_DependencyObject) callconv(.winapi) HRESULT,
     OnKeyboardAcceleratorInvoked: *const fn (this: *const IUIElementOverrides, p0: *@"Microsoft.UI.Xaml.Input".KeyboardAcceleratorInvokedEventArgs) callconv(.winapi) HRESULT,
     OnProcessKeyboardAccelerators: *const fn (this: *const IUIElementOverrides, p0: *@"Microsoft.UI.Xaml.Input".ProcessKeyboardAcceleratorEventArgs) callconv(.winapi) HRESULT,
     OnBringIntoViewRequested: *const fn (this: *const IUIElementOverrides, p0: *BringIntoViewRequestedEventArgs) callconv(.winapi) HRESULT,
@@ -8820,7 +8820,7 @@ pub const IVisualState_Vtbl = extern struct {
     get_Storyboard: *const fn (this: *const IVisualState, result: **@"Microsoft.UI.Xaml.Media.Animation".Storyboard) callconv(.winapi) HRESULT,
     put_Storyboard: *const fn (this: *const IVisualState, p0: *@"Microsoft.UI.Xaml.Media.Animation".Storyboard) callconv(.winapi) HRESULT,
     get_Setters: *const fn (this: *const IVisualState, result: **SetterBaseCollection) callconv(.winapi) HRESULT,
-    get_StateTriggers: *const fn (this: *const IVisualState, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_StateTriggers: *const fn (this: *const IVisualState, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_StateTriggerBase) callconv(.winapi) HRESULT,
 };
 pub const IVisualStateChangedEventArgs_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -8834,8 +8834,8 @@ pub const IVisualStateChangedEventArgs_Vtbl = extern struct {
 pub const IVisualStateGroup_Vtbl = extern struct {
     base: IInspectable_Vtbl,
     get_Name: *const fn (this: *const IVisualStateGroup, result: *HSTRING) callconv(.winapi) HRESULT,
-    get_Transitions: *const fn (this: *const IVisualStateGroup, result: **anyopaque) callconv(.winapi) HRESULT,
-    get_States: *const fn (this: *const IVisualStateGroup, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_Transitions: *const fn (this: *const IVisualStateGroup, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_VisualTransition) callconv(.winapi) HRESULT,
+    get_States: *const fn (this: *const IVisualStateGroup, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_VisualState) callconv(.winapi) HRESULT,
     get_CurrentState: *const fn (this: *const IVisualStateGroup, result: **VisualState) callconv(.winapi) HRESULT,
     add_CurrentStateChanged: *const fn (this: *const IVisualStateGroup, p0: *VisualStateChangedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_CurrentStateChanged: *const fn (this: *const IVisualStateGroup, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
@@ -8860,7 +8860,7 @@ pub const IVisualStateManagerProtected_Vtbl = extern struct {
 };
 pub const IVisualStateManagerStatics_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    GetVisualStateGroups: *const fn (this: *const IVisualStateManagerStatics, p0: *FrameworkElement, result: **anyopaque) callconv(.winapi) HRESULT,
+    GetVisualStateGroups: *const fn (this: *const IVisualStateManagerStatics, p0: *FrameworkElement, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_VisualStateGroup) callconv(.winapi) HRESULT,
     get_CustomVisualStateManagerProperty: *const fn (this: *const IVisualStateManagerStatics, result: **DependencyProperty) callconv(.winapi) HRESULT,
     GetCustomVisualStateManager: *const fn (this: *const IVisualStateManagerStatics, p0: *FrameworkElement, result: **VisualStateManager) callconv(.winapi) HRESULT,
     SetCustomVisualStateManager: *const fn (this: *const IVisualStateManagerStatics, p0: *FrameworkElement, p1: *VisualStateManager) callconv(.winapi) HRESULT,
@@ -8897,13 +8897,13 @@ pub const IWindow_Vtbl = extern struct {
     put_Title: *const fn (this: *const IWindow, p0: HSTRING) callconv(.winapi) HRESULT,
     get_ExtendsContentIntoTitleBar: *const fn (this: *const IWindow, result: *BOOL) callconv(.winapi) HRESULT,
     put_ExtendsContentIntoTitleBar: *const fn (this: *const IWindow, p0: BOOL) callconv(.winapi) HRESULT,
-    add_Activated: *const fn (this: *const IWindow, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Activated: *const fn (this: *const IWindow, p0: *@"Windows.Foundation".TypedEventHandler__G2__object__Microsoft_UI_Xaml_WindowActivatedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Activated: *const fn (this: *const IWindow, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_Closed: *const fn (this: *const IWindow, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Closed: *const fn (this: *const IWindow, p0: *@"Windows.Foundation".TypedEventHandler__G2__object__Microsoft_UI_Xaml_WindowEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Closed: *const fn (this: *const IWindow, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_SizeChanged: *const fn (this: *const IWindow, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_SizeChanged: *const fn (this: *const IWindow, p0: *@"Windows.Foundation".TypedEventHandler__G2__object__Microsoft_UI_Xaml_WindowSizeChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_SizeChanged: *const fn (this: *const IWindow, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_VisibilityChanged: *const fn (this: *const IWindow, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_VisibilityChanged: *const fn (this: *const IWindow, p0: *@"Windows.Foundation".TypedEventHandler__G2__object__Microsoft_UI_Xaml_WindowVisibilityChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_VisibilityChanged: *const fn (this: *const IWindow, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     Activate: *const fn (this: *const IWindow) callconv(.winapi) HRESULT,
     Close: *const fn (this: *const IWindow) callconv(.winapi) HRESULT,
@@ -8968,7 +8968,7 @@ pub const IXamlRoot_Vtbl = extern struct {
     get_Size: *const fn (this: *const IXamlRoot, result: *@"Windows.Foundation".Size) callconv(.winapi) HRESULT,
     get_RasterizationScale: *const fn (this: *const IXamlRoot, result: *f64) callconv(.winapi) HRESULT,
     get_IsHostVisible: *const fn (this: *const IXamlRoot, result: *BOOL) callconv(.winapi) HRESULT,
-    add_Changed: *const fn (this: *const IXamlRoot, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Changed: *const fn (this: *const IXamlRoot, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_XamlRoot__Microsoft_UI_Xaml_XamlRootChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Changed: *const fn (this: *const IXamlRoot, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IXamlRoot2_Vtbl = extern struct {

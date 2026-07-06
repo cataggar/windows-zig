@@ -342,7 +342,7 @@ pub fn emitNamespace(
     namespace: []const u8,
     arch: Arch,
 ) !void {
-    return emitNamespaceExWithImports(writer, arena, file, namespace, arch, null, .relative, null);
+    return emitNamespaceExWithImports(writer, arena, file, namespace, arch, null, .relative, null, null);
 }
 
 /// Extended `emitNamespace` that accepts optional external generic
@@ -361,7 +361,7 @@ pub fn emitNamespaceEx(
     arch: Arch,
     extra_insts: ?*const GenericInstSet,
 ) !void {
-    return emitNamespaceExWithImports(writer, arena, file, namespace, arch, extra_insts, .relative, null);
+    return emitNamespaceExWithImports(writer, arena, file, namespace, arch, extra_insts, .relative, null, null);
 }
 
 fn emitNamespaceExWithImports(
@@ -373,6 +373,7 @@ fn emitNamespaceExWithImports(
     extra_insts: ?*const GenericInstSet,
     import_style: ImportStyle,
     dependencies_out: ?*[]const []const u8,
+    type_entries: ?*const TypeEntryMap,
 ) !void {
     // Buffer the body into an arena-backed `Allocating` writer so the
     // cross-namespace alias list at the top is emitted *after* all
@@ -386,7 +387,7 @@ fn emitNamespaceExWithImports(
     try emitIidConstants(body_writer, arena, file, namespace);
     try emitGuidConstants(body_writer, arena, file, namespace);
     try emitEnums(body_writer, arena, file, namespace);
-    try emitStructsImpl(body_writer, arena, file, namespace, &cross, arch);
+    try emitStructsImpl(body_writer, arena, file, namespace, &cross, arch, type_entries);
     try emitInterfaceHandles(body_writer, arena, file, namespace, &cross);
     try emitDelegates(body_writer, arena, file, namespace);
     try emitRuntimeClasses(body_writer, arena, file, namespace, &cross);
@@ -2068,11 +2069,15 @@ pub fn emitBundleWithImports(
 
     var out: std.StringArrayHashMapUnmanaged([]const u8) = .empty;
     var deps_by_ns: std.StringArrayHashMapUnmanaged([]const []const u8) = .empty;
+    // Large bundle compile-checks walk hundreds of namespaces. Reuse a
+    // single TypeDef-kind index across the whole bundle instead of
+    // rebuilding it per namespace so the shared arena does not balloon.
+    var type_entries = try buildTypeEntryMap(arena, file);
     for (namespaces) |ns| {
         var buf: std.Io.Writer.Allocating = .init(arena);
         const extra = pending.getPtr(ns);
         var dependencies: []const []const u8 = &.{};
-        try emitNamespaceExWithImports(&buf.writer, arena, file, ns, arch, extra, import_style, &dependencies);
+        try emitNamespaceExWithImports(&buf.writer, arena, file, ns, arch, extra, import_style, &dependencies, &type_entries);
         try out.put(arena, ns, buf.written());
         try deps_by_ns.put(arena, ns, dependencies);
     }
@@ -3595,20 +3600,6 @@ fn isMangleableArg(arg: winmd.Ty) bool {
     };
 }
 
-/// Returns true iff every arg is a primitive type (no class/value name
-/// refs). Used to gate cross-namespace generic emission: only
-/// primitive-arg instantiations can be safely emitted without
-/// coordinating imports with the home namespace.
-fn allPrimitiveArgs(args: []const winmd.Ty) bool {
-    for (args) |a| {
-        switch (a) {
-            .bool, .char, .i8, .u8, .i16, .u16, .i32, .u32, .i64, .u64, .f32, .f64, .isize, .usize, .string, .object => {},
-            else => return false,
-        }
-    }
-    return true;
-}
-
 /// Write the Zig identifier fragment for a single generic-arg `Ty`.
 /// Mirrors the Zig type name emitted by `writeZigTy` for the
 /// primitive cases — so `i32` maps to `i32`, `.string` to `HSTRING`,
@@ -3809,6 +3800,11 @@ fn writeZigTy(
             // reference the local mangled struct; cross-namespace
             // generics qualify with `@"<home-ns>"` and add the home
             // namespace to `cross` so `emitNamespace` adds the import.
+            // Bundle mode discovers these mangleable cross-namespace
+            // instantiations up front and seeds them into their home
+            // namespace, so raw ABI signatures can name the routed
+            // handle directly instead of erasing it to `*anyopaque`.
+            // Non-mangleable arg shapes still fall back cleanly.
             if (std.mem.findScalar(u8, tn.name, '`') != null) {
                 if (tn.generics.len > 0) {
                     var all_mangleable = true;
@@ -3823,21 +3819,20 @@ fn writeZigTy(
                             // Same namespace — unqualified reference.
                             try writer.writeAll("*");
                             try writeInstMangle(writer, tn.name, tn.generics);
-                        } else if (isProjectableNs(tn.namespace) and allPrimitiveArgs(tn.generics)) {
-                            // Cross-namespace with primitive-only args —
-                            // safe to emit qualified reference because
-                            // the home namespace can define it without
-                            // importing a third namespace.
+                        } else if (isProjectableNs(tn.namespace)) {
+                            // Cross-namespace with mangleable args —
+                            // bundle mode seeds the imported home
+                            // namespace with this closed
+                            // instantiation, so raw ABI slots can
+                            // qualify the typed handle directly.
                             try cross.put(gpa, tn.namespace, {});
                             try writer.writeAll("*@\"");
                             try writer.writeAll(tn.namespace);
                             try writer.writeAll("\".");
                             try writeInstMangle(writer, tn.name, tn.generics);
                         } else {
-                            // Cross-namespace with class/value args —
-                            // the home ns may not have a seed for this
-                            // instantiation. Fall back to opaque until
-                            // a bundle driver seeds it.
+                            // Non-projectable home namespace — keep
+                            // the raw ABI fallback.
                             try writer.writeAll("*anyopaque");
                         }
                         return true;
@@ -4112,7 +4107,7 @@ pub fn emitStructs(
     arch: Arch,
 ) !void {
     var cross: CrossNsSet = .empty;
-    try emitStructsImpl(writer, arena, file, namespace, &cross, arch);
+    try emitStructsImpl(writer, arena, file, namespace, &cross, arch, null);
 }
 
 /// Emit a self-contained `<namespace>.structs.zig` sidecar: the
@@ -4139,7 +4134,7 @@ pub fn emitStructsFile(
     var body: std.Io.Writer.Allocating = .init(arena);
     const body_writer = &body.writer;
 
-    try emitStructsImpl(body_writer, arena, file, namespace, &cross, arch);
+    try emitStructsImpl(body_writer, arena, file, namespace, &cross, arch, null);
 
     try writer.writeAll(
         \\// Generated by winbindgen — do not edit.
@@ -4195,7 +4190,7 @@ pub fn collectStructsClosure(
         var cross: CrossNsSet = .empty;
         var scratch: std.Io.Writer.Allocating = .init(arena);
         defer scratch.deinit();
-        try emitStructsImpl(&scratch.writer, arena, file, ns, &cross, arch);
+        try emitStructsImpl(&scratch.writer, arena, file, ns, &cross, arch, null);
 
         for (cross.keys()) |dep| {
             if (!visited.contains(dep)) try queue.append(arena, dep);
@@ -4218,6 +4213,7 @@ fn emitStructsImpl(
     namespace: []const u8,
     cross: *CrossNsSet,
     arch: Arch,
+    type_entries: ?*const TypeEntryMap,
 ) !void {
     // TypeAttributes bits (ECMA-335 §II.23.1.15).
     const VISIBILITY_MASK: u32 = 0x7;
@@ -4225,7 +4221,11 @@ fn emitStructsImpl(
     const VIS_PUBLIC: u32 = 0x1;
 
     const rows = file.rowCount(.type_def);
-    const entries = try buildTypeEntryMap(arena, file);
+    var local_entries: TypeEntryMap = .empty;
+    const entries = if (type_entries) |shared| shared else blk: {
+        local_entries = try buildTypeEntryMap(arena, file);
+        break :blk &local_entries;
+    };
     var memo: EmitMemo = .empty;
     var emitted_names: std.StringHashMapUnmanaged(void) = .empty;
     defer emitted_names.deinit(arena);
@@ -4265,7 +4265,7 @@ fn emitStructsImpl(
         // Callers who actually use the type by value will fail later
         // with a targeted "opaque type has no layout" error instead
         // of the whole namespace failing to compile.
-        if (!typeDefRepresentable(file, arena, row, arch, &entries, &memo)) {
+        if (!typeDefRepresentable(file, arena, row, arch, entries, &memo)) {
             try writer.print("pub const {s} = opaque {{}};\n", .{name});
             try emitted_names.put(arena, name, {});
             continue;
@@ -4273,7 +4273,7 @@ fn emitStructsImpl(
 
         var all_names: std.StringHashMapUnmanaged(void) = .empty;
         try all_names.put(arena, name, {});
-        try emitOneStruct(writer, arena, file, namespace, cross, row, name, arch, &entries, &memo, &all_names);
+        try emitOneStruct(writer, arena, file, namespace, cross, row, name, arch, entries, &memo, &all_names);
         try emitted_names.put(arena, name, {});
     }
 }
@@ -5755,6 +5755,85 @@ test "emitBundle emits sugar for cross-namespace DeviceWatcher events" {
         enumeration,
         "invoke: @FieldType(@\"Windows.Foundation\".TypedEventHandler__G2__Windows_Devices_Enumeration_DeviceWatcher__object_Vtbl, \"Invoke\")",
     ) != null);
+
+    const raw_delegate_slots = [_]struct {
+        slot: []const u8,
+        handler: []const u8,
+    }{
+        .{
+            .slot = "add_Added",
+            .handler = "TypedEventHandler__G2__Windows_Devices_Enumeration_DeviceWatcher__Windows_Devices_Enumeration_DeviceInformation",
+        },
+        .{
+            .slot = "add_Updated",
+            .handler = "TypedEventHandler__G2__Windows_Devices_Enumeration_DeviceWatcher__Windows_Devices_Enumeration_DeviceInformationUpdate",
+        },
+        .{
+            .slot = "add_Removed",
+            .handler = "TypedEventHandler__G2__Windows_Devices_Enumeration_DeviceWatcher__Windows_Devices_Enumeration_DeviceInformationUpdate",
+        },
+        .{
+            .slot = "add_EnumerationCompleted",
+            .handler = "TypedEventHandler__G2__Windows_Devices_Enumeration_DeviceWatcher__object",
+        },
+        .{
+            .slot = "add_Stopped",
+            .handler = "TypedEventHandler__G2__Windows_Devices_Enumeration_DeviceWatcher__object",
+        },
+    };
+    for (raw_delegate_slots) |slot| {
+        const typed = try std.fmt.allocPrint(
+            arena.allocator(),
+            "{s}: *const fn (this: *const IDeviceWatcher, p0: *@\"Windows.Foundation\".{s}",
+            .{ slot.slot, slot.handler },
+        );
+        try std.testing.expect(std.mem.find(u8, enumeration, typed) != null);
+
+        const erased = try std.fmt.allocPrint(
+            arena.allocator(),
+            "{s}: *const fn (this: *const IDeviceWatcher, p0: *anyopaque",
+            .{slot.slot},
+        );
+        try std.testing.expect(std.mem.find(u8, enumeration, erased) == null);
+    }
+}
+
+test "writeZigTy emits typed cross-namespace collection handles for class args" {
+    var arena = std.heap.ArenaAllocator.init(std.testing.allocator);
+    defer arena.deinit();
+
+    var cross: CrossNsSet = .empty;
+
+    var buf: std.Io.Writer.Allocating = .init(std.testing.allocator);
+    defer buf.deinit();
+
+    const generics = try arena.allocator().alloc(winmd.Ty, 1);
+    generics[0] = .{ .class_name = .{
+        .namespace = "Microsoft.UI.Xaml.Documents",
+        .name = "TextHighlighter",
+    } };
+    const ty: winmd.Ty = .{ .class_name = .{
+        .namespace = "Windows.Foundation.Collections",
+        .name = "IVector`1",
+        .generics = generics,
+    } };
+
+    try std.testing.expect(try writeZigTy(
+        &buf.writer,
+        arena.allocator(),
+        ty,
+        "Microsoft.UI.Xaml.Controls",
+        &cross,
+        null,
+        null,
+        null,
+    ));
+    try std.testing.expectEqualSlices(
+        u8,
+        "*@\"Windows.Foundation.Collections\".IVector__G1__Microsoft_UI_Xaml_Documents_TextHighlighter",
+        buf.written(),
+    );
+    try std.testing.expect(cross.contains("Windows.Foundation.Collections"));
 }
 
 test "emitNamespaceEx accepts external generic seeds" {
@@ -6510,14 +6589,47 @@ test "emitStructsFile produces a self-contained sidecar" {
     );
 }
 
-test "emitNamespace succeeds on every Windows.Wdk namespace" {
+const wdk_namespace_golden = [_][]const u8{
+    "Windows.Wdk.Devices.Bluetooth",
+    "Windows.Wdk.Devices.HumanInterfaceDevice",
+    "Windows.Wdk.Foundation",
+    "Windows.Wdk.Graphics.Direct3D",
+    "Windows.Wdk.NetworkManagement.Ndis",
+    "Windows.Wdk.NetworkManagement.WindowsFilteringPlatform",
+    "Windows.Wdk.Storage.FileSystem",
+    "Windows.Wdk.Storage.FileSystem.Minifilters",
+    "Windows.Wdk.System.IO",
+    "Windows.Wdk.System.Memory",
+    "Windows.Wdk.System.OfflineRegistry",
+    "Windows.Wdk.System.Registry",
+    "Windows.Wdk.System.SystemInformation",
+    "Windows.Wdk.System.SystemServices",
+    "Windows.Wdk.System.Threading",
+};
+
+fn expectWdkNamespaceEmits(namespace: []const u8, require_non_empty: bool) !void {
     const bytes = @embedFile("Windows.Wdk.winmd");
     var file = try winmd.parse(bytes);
 
     var arena = std.heap.ArenaAllocator.init(std.testing.allocator);
     defer arena.deinit();
 
-    // Collect distinct namespaces.
+    var buf: std.Io.Writer.Allocating = .init(std.testing.allocator);
+    defer buf.deinit();
+
+    try emitNamespace(&buf.writer, arena.allocator(), &file, namespace, .x64);
+    if (require_non_empty) {
+        try std.testing.expect(buf.written().len > 0);
+    }
+}
+
+test "Windows.Wdk namespace list stays in sync" {
+    const bytes = @embedFile("Windows.Wdk.winmd");
+    var file = try winmd.parse(bytes);
+
+    var arena = std.heap.ArenaAllocator.init(std.testing.allocator);
+    defer arena.deinit();
+
     var seen = std.StringArrayHashMapUnmanaged(void).empty;
     defer seen.deinit(std.testing.allocator);
 
@@ -6529,19 +6641,77 @@ test "emitNamespace succeeds on every Windows.Wdk namespace" {
         try seen.put(std.testing.allocator, ns, {});
     }
 
-    // Every namespace must emit without panic. At least one namespace
-    // must produce a non-empty body so we know the Wdk pipeline is
-    // actually wired up (not silently skipped).
-    var any_non_empty = false;
-    var it = seen.iterator();
-    while (it.next()) |e| {
-        var buf: std.Io.Writer.Allocating = .init(std.testing.allocator);
-        defer buf.deinit();
+    const namespaces = try arena.allocator().dupe([]const u8, seen.keys());
+    std.mem.sort([]const u8, namespaces, {}, struct {
+        fn lt(_: void, a: []const u8, b: []const u8) bool {
+            return std.mem.lessThan(u8, a, b);
+        }
+    }.lt);
 
-        try emitNamespace(&buf.writer, arena.allocator(), &file, e.key_ptr.*, .x64);
-        if (buf.written().len > 0) any_non_empty = true;
+    try std.testing.expectEqual(wdk_namespace_golden.len, namespaces.len);
+    for (wdk_namespace_golden, namespaces) |expected, actual| {
+        try std.testing.expectEqualStrings(expected, actual);
     }
-    try std.testing.expect(any_non_empty);
+}
+
+test "emitNamespace succeeds on Windows.Wdk.Foundation" {
+    try expectWdkNamespaceEmits("Windows.Wdk.Foundation", true);
+}
+
+test "emitNamespace succeeds on Windows.Wdk.Devices.Bluetooth" {
+    try expectWdkNamespaceEmits("Windows.Wdk.Devices.Bluetooth", false);
+}
+
+test "emitNamespace succeeds on Windows.Wdk.Devices.HumanInterfaceDevice" {
+    try expectWdkNamespaceEmits("Windows.Wdk.Devices.HumanInterfaceDevice", false);
+}
+
+test "emitNamespace succeeds on Windows.Wdk.Graphics.Direct3D" {
+    try expectWdkNamespaceEmits("Windows.Wdk.Graphics.Direct3D", false);
+}
+
+test "emitNamespace succeeds on Windows.Wdk.NetworkManagement.Ndis" {
+    try expectWdkNamespaceEmits("Windows.Wdk.NetworkManagement.Ndis", false);
+}
+
+test "emitNamespace succeeds on Windows.Wdk.NetworkManagement.WindowsFilteringPlatform" {
+    try expectWdkNamespaceEmits("Windows.Wdk.NetworkManagement.WindowsFilteringPlatform", false);
+}
+
+test "emitNamespace succeeds on Windows.Wdk.Storage.FileSystem" {
+    try expectWdkNamespaceEmits("Windows.Wdk.Storage.FileSystem", false);
+}
+
+test "emitNamespace succeeds on Windows.Wdk.Storage.FileSystem.Minifilters" {
+    try expectWdkNamespaceEmits("Windows.Wdk.Storage.FileSystem.Minifilters", false);
+}
+
+test "emitNamespace succeeds on Windows.Wdk.System.IO" {
+    try expectWdkNamespaceEmits("Windows.Wdk.System.IO", false);
+}
+
+test "emitNamespace succeeds on Windows.Wdk.System.Memory" {
+    try expectWdkNamespaceEmits("Windows.Wdk.System.Memory", false);
+}
+
+test "emitNamespace succeeds on Windows.Wdk.System.OfflineRegistry" {
+    try expectWdkNamespaceEmits("Windows.Wdk.System.OfflineRegistry", false);
+}
+
+test "emitNamespace succeeds on Windows.Wdk.System.Registry" {
+    try expectWdkNamespaceEmits("Windows.Wdk.System.Registry", false);
+}
+
+test "emitNamespace succeeds on Windows.Wdk.System.SystemInformation" {
+    try expectWdkNamespaceEmits("Windows.Wdk.System.SystemInformation", false);
+}
+
+test "emitNamespace succeeds on Windows.Wdk.System.SystemServices" {
+    try expectWdkNamespaceEmits("Windows.Wdk.System.SystemServices", false);
+}
+
+test "emitNamespace succeeds on Windows.Wdk.System.Threading" {
+    try expectWdkNamespaceEmits("Windows.Wdk.System.Threading", false);
 }
 
 test "collectImports groups Win32 MethodDefs by DLL" {

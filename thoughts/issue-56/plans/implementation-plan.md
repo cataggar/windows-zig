@@ -4,6 +4,13 @@
 
 Fix the emitter path that still projects certain WinUI raw ABI delegate and collection signatures as `*anyopaque` even though bundle mode already discovers and emits the corresponding closed-generic handle types. The goal is to make the raw ABI wrappers/vtable slots in the committed WinUI snapshot use the same named handles that the existing event-sugar helpers already rely on.
 
+## Implementation Status
+
+- [x] Phase 1: Align raw signature rendering with bundle-seeded generic support
+- [x] Phase 2: Add regression coverage for raw delegate/collection projection
+- [x] Phase 3: Regenerate and verify the committed WinUI snapshot
+- [x] Phase 4: Validate end-to-end and record the remaining scope boundary
+
 ## Current State Analysis
 
 - `packages/win/src/generated/Microsoft.UI.Xaml.zig:1367-1383` shows the split clearly:
