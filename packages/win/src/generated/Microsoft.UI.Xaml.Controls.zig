@@ -5311,7 +5311,7 @@ pub const IAnchorRequestedEventArgs = extern struct {
     pub fn put_Anchor(self: *const IAnchorRequestedEventArgs, p0: *@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT {
         return self.vtable.put_Anchor(self, p0);
     }
-    pub fn get_AnchorCandidates(self: *const IAnchorRequestedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_AnchorCandidates(self: *const IAnchorRequestedEventArgs, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_UIElement) callconv(.winapi) HRESULT {
         return self.vtable.get_AnchorCandidates(self, result);
     }
 };
@@ -5850,10 +5850,10 @@ pub const IAnnotatedScrollBar = extern struct {
     pub fn get_ScrollController(self: *const IAnnotatedScrollBar, result: **@"Microsoft.UI.Xaml.Controls.Primitives".IScrollController) callconv(.winapi) HRESULT {
         return self.vtable.get_ScrollController(self, result);
     }
-    pub fn get_Labels(self: *const IAnnotatedScrollBar, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_Labels(self: *const IAnnotatedScrollBar, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_AnnotatedScrollBarLabel) callconv(.winapi) HRESULT {
         return self.vtable.get_Labels(self, result);
     }
-    pub fn put_Labels(self: *const IAnnotatedScrollBar, p0: *anyopaque) callconv(.winapi) HRESULT {
+    pub fn put_Labels(self: *const IAnnotatedScrollBar, p0: *@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_AnnotatedScrollBarLabel) callconv(.winapi) HRESULT {
         return self.vtable.put_Labels(self, p0);
     }
     pub fn get_LabelTemplate(self: *const IAnnotatedScrollBar, result: **@"Microsoft.UI.Xaml".IElementFactory) callconv(.winapi) HRESULT {
@@ -5874,13 +5874,13 @@ pub const IAnnotatedScrollBar = extern struct {
     pub fn put_SmallChange(self: *const IAnnotatedScrollBar, p0: f64) callconv(.winapi) HRESULT {
         return self.vtable.put_SmallChange(self, p0);
     }
-    pub fn add_Scrolling(self: *const IAnnotatedScrollBar, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_Scrolling(self: *const IAnnotatedScrollBar, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_AnnotatedScrollBar__Microsoft_UI_Xaml_Controls_AnnotatedScrollBarScrollingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_Scrolling(self, p0, result);
     }
     pub fn remove_Scrolling(self: *const IAnnotatedScrollBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_Scrolling(self, p0);
     }
-    pub fn add_DetailLabelRequested(self: *const IAnnotatedScrollBar, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_DetailLabelRequested(self: *const IAnnotatedScrollBar, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_AnnotatedScrollBar__Microsoft_UI_Xaml_Controls_AnnotatedScrollBarDetailLabelRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_DetailLabelRequested(self, p0, result);
     }
     pub fn remove_DetailLabelRequested(self: *const IAnnotatedScrollBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -6810,19 +6810,19 @@ pub const IAutoSuggestBox = extern struct {
     pub fn put_Description(self: *const IAutoSuggestBox, p0: ?*const anyopaque) callconv(.winapi) HRESULT {
         return self.vtable.put_Description(self, p0);
     }
-    pub fn add_SuggestionChosen(self: *const IAutoSuggestBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_SuggestionChosen(self: *const IAutoSuggestBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_AutoSuggestBox__Microsoft_UI_Xaml_Controls_AutoSuggestBoxSuggestionChosenEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_SuggestionChosen(self, p0, result);
     }
     pub fn remove_SuggestionChosen(self: *const IAutoSuggestBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_SuggestionChosen(self, p0);
     }
-    pub fn add_TextChanged(self: *const IAutoSuggestBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_TextChanged(self: *const IAutoSuggestBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_AutoSuggestBox__Microsoft_UI_Xaml_Controls_AutoSuggestBoxTextChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_TextChanged(self, p0, result);
     }
     pub fn remove_TextChanged(self: *const IAutoSuggestBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_TextChanged(self, p0);
     }
-    pub fn add_QuerySubmitted(self: *const IAutoSuggestBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_QuerySubmitted(self: *const IAutoSuggestBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_AutoSuggestBox__Microsoft_UI_Xaml_Controls_AutoSuggestBoxQuerySubmittedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_QuerySubmitted(self, p0, result);
     }
     pub fn remove_QuerySubmitted(self: *const IAutoSuggestBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -7333,7 +7333,7 @@ pub const IBreadcrumbBar = extern struct {
     pub fn put_ItemTemplate(self: *const IBreadcrumbBar, p0: ?*const anyopaque) callconv(.winapi) HRESULT {
         return self.vtable.put_ItemTemplate(self, p0);
     }
-    pub fn add_ItemClicked(self: *const IBreadcrumbBar, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ItemClicked(self: *const IBreadcrumbBar, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_BreadcrumbBar__Microsoft_UI_Xaml_Controls_BreadcrumbBarItemClickedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ItemClicked(self, p0, result);
     }
     pub fn remove_ItemClicked(self: *const IBreadcrumbBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -7556,10 +7556,10 @@ pub const ICalendarDatePicker = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn get_Date(self: *const ICalendarDatePicker, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_Date(self: *const ICalendarDatePicker, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT {
         return self.vtable.get_Date(self, result);
     }
-    pub fn put_Date(self: *const ICalendarDatePicker, p0: *anyopaque) callconv(.winapi) HRESULT {
+    pub fn put_Date(self: *const ICalendarDatePicker, p0: *@"Windows.Foundation".IReference__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT {
         return self.vtable.put_Date(self, p0);
     }
     pub fn get_IsCalendarOpen(self: *const ICalendarDatePicker, result: *BOOL) callconv(.winapi) HRESULT {
@@ -7710,7 +7710,7 @@ pub const ICalendarDatePicker = extern struct {
     pub fn remove_CalendarViewDayItemChanging(self: *const ICalendarDatePicker, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_CalendarViewDayItemChanging(self, p0);
     }
-    pub fn add_DateChanged(self: *const ICalendarDatePicker, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_DateChanged(self: *const ICalendarDatePicker, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_CalendarDatePicker__Microsoft_UI_Xaml_Controls_CalendarDatePickerDateChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_DateChanged(self, p0, result);
     }
     pub fn remove_DateChanged(self: *const ICalendarDatePicker, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -7801,10 +7801,10 @@ pub const ICalendarDatePickerDateChangedEventArgs = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn get_NewDate(self: *const ICalendarDatePickerDateChangedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_NewDate(self: *const ICalendarDatePickerDateChangedEventArgs, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT {
         return self.vtable.get_NewDate(self, result);
     }
-    pub fn get_OldDate(self: *const ICalendarDatePickerDateChangedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_OldDate(self: *const ICalendarDatePickerDateChangedEventArgs, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT {
         return self.vtable.get_OldDate(self, result);
     }
 };
@@ -8001,7 +8001,7 @@ pub const ICalendarView = extern struct {
     pub fn put_NumberOfWeeksInView(self: *const ICalendarView, p0: i32) callconv(.winapi) HRESULT {
         return self.vtable.put_NumberOfWeeksInView(self, p0);
     }
-    pub fn get_SelectedDates(self: *const ICalendarView, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_SelectedDates(self: *const ICalendarView, result: **@"Windows.Foundation.Collections".IVector__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT {
         return self.vtable.get_SelectedDates(self, result);
     }
     pub fn get_SelectionMode(self: *const ICalendarView, result: *CalendarViewSelectionMode) callconv(.winapi) HRESULT {
@@ -8385,13 +8385,13 @@ pub const ICalendarView = extern struct {
     pub fn put_CalendarItemCornerRadius(self: *const ICalendarView, p0: @"Microsoft.UI.Xaml".CornerRadius) callconv(.winapi) HRESULT {
         return self.vtable.put_CalendarItemCornerRadius(self, p0);
     }
-    pub fn add_CalendarViewDayItemChanging(self: *const ICalendarView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_CalendarViewDayItemChanging(self: *const ICalendarView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_CalendarView__Microsoft_UI_Xaml_Controls_CalendarViewDayItemChangingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_CalendarViewDayItemChanging(self, p0, result);
     }
     pub fn remove_CalendarViewDayItemChanging(self: *const ICalendarView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_CalendarViewDayItemChanging(self, p0);
     }
-    pub fn add_SelectedDatesChanged(self: *const ICalendarView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_SelectedDatesChanged(self: *const ICalendarView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_CalendarView__Microsoft_UI_Xaml_Controls_CalendarViewSelectedDatesChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_SelectedDatesChanged(self, p0, result);
     }
     pub fn remove_SelectedDatesChanged(self: *const ICalendarView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -8463,7 +8463,7 @@ pub const ICalendarViewDayItem = extern struct {
     pub fn get_Date(self: *const ICalendarViewDayItem, result: *@"Windows.Foundation".DateTime) callconv(.winapi) HRESULT {
         return self.vtable.get_Date(self, result);
     }
-    pub fn SetDensityColors(self: *const ICalendarViewDayItem, p0: *anyopaque) callconv(.winapi) HRESULT {
+    pub fn SetDensityColors(self: *const ICalendarViewDayItem, p0: *@"Windows.Foundation.Collections".IIterable__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
         return self.vtable.SetDensityColors(self, p0);
     }
 };
@@ -8494,10 +8494,10 @@ pub const ICalendarViewDayItemChangingEventArgs = extern struct {
     pub fn get_Phase(self: *const ICalendarViewDayItemChangingEventArgs, result: *u32) callconv(.winapi) HRESULT {
         return self.vtable.get_Phase(self, result);
     }
-    pub fn RegisterUpdateCallback(self: *const ICalendarViewDayItemChangingEventArgs, p0: *anyopaque) callconv(.winapi) HRESULT {
+    pub fn RegisterUpdateCallback(self: *const ICalendarViewDayItemChangingEventArgs, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_CalendarView__Microsoft_UI_Xaml_Controls_CalendarViewDayItemChangingEventArgs) callconv(.winapi) HRESULT {
         return self.vtable.RegisterUpdateCallback(self, p0);
     }
-    pub fn RegisterUpdateCallback_2(self: *const ICalendarViewDayItemChangingEventArgs, p0: u32, p1: *anyopaque) callconv(.winapi) HRESULT {
+    pub fn RegisterUpdateCallback_2(self: *const ICalendarViewDayItemChangingEventArgs, p0: u32, p1: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_CalendarView__Microsoft_UI_Xaml_Controls_CalendarViewDayItemChangingEventArgs) callconv(.winapi) HRESULT {
         return self.vtable.RegisterUpdateCallback_2(self, p0, p1);
     }
 };
@@ -8588,10 +8588,10 @@ pub const ICalendarViewSelectedDatesChangedEventArgs = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn get_AddedDates(self: *const ICalendarViewSelectedDatesChangedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_AddedDates(self: *const ICalendarViewSelectedDatesChangedEventArgs, result: **@"Windows.Foundation.Collections".IVectorView__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT {
         return self.vtable.get_AddedDates(self, result);
     }
-    pub fn get_RemovedDates(self: *const ICalendarViewSelectedDatesChangedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_RemovedDates(self: *const ICalendarViewSelectedDatesChangedEventArgs, result: **@"Windows.Foundation.Collections".IVectorView__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT {
         return self.vtable.get_RemovedDates(self, result);
     }
 };
@@ -9137,10 +9137,10 @@ pub const IColorPicker = extern struct {
     pub fn put_Color(self: *const IColorPicker, p0: @"Windows.UI".Color) callconv(.winapi) HRESULT {
         return self.vtable.put_Color(self, p0);
     }
-    pub fn get_PreviousColor(self: *const IColorPicker, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_PreviousColor(self: *const IColorPicker, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
         return self.vtable.get_PreviousColor(self, result);
     }
-    pub fn put_PreviousColor(self: *const IColorPicker, p0: *anyopaque) callconv(.winapi) HRESULT {
+    pub fn put_PreviousColor(self: *const IColorPicker, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT {
         return self.vtable.put_PreviousColor(self, p0);
     }
     pub fn get_IsAlphaEnabled(self: *const IColorPicker, result: *BOOL) callconv(.winapi) HRESULT {
@@ -9245,7 +9245,7 @@ pub const IColorPicker = extern struct {
     pub fn put_ColorSpectrumComponents(self: *const IColorPicker, p0: ColorSpectrumComponents) callconv(.winapi) HRESULT {
         return self.vtable.put_ColorSpectrumComponents(self, p0);
     }
-    pub fn add_ColorChanged(self: *const IColorPicker, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ColorChanged(self: *const IColorPicker, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ColorPicker__Microsoft_UI_Xaml_Controls_ColorChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ColorChanged(self, p0, result);
     }
     pub fn remove_ColorChanged(self: *const IColorPicker, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -9621,7 +9621,7 @@ pub const IComboBox = extern struct {
     pub fn remove_DropDownOpened(self: *const IComboBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_DropDownOpened(self, p0);
     }
-    pub fn add_TextSubmitted(self: *const IComboBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_TextSubmitted(self: *const IComboBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ComboBox__Microsoft_UI_Xaml_Controls_ComboBoxTextSubmittedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_TextSubmitted(self, p0, result);
     }
     pub fn remove_TextSubmitted(self: *const IComboBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -9873,10 +9873,10 @@ pub const ICommandBar = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn get_PrimaryCommands(self: *const ICommandBar, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_PrimaryCommands(self: *const ICommandBar, result: **@"Windows.Foundation.Collections".IObservableVector__G1__Microsoft_UI_Xaml_Controls_ICommandBarElement) callconv(.winapi) HRESULT {
         return self.vtable.get_PrimaryCommands(self, result);
     }
-    pub fn get_SecondaryCommands(self: *const ICommandBar, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_SecondaryCommands(self: *const ICommandBar, result: **@"Windows.Foundation.Collections".IObservableVector__G1__Microsoft_UI_Xaml_Controls_ICommandBarElement) callconv(.winapi) HRESULT {
         return self.vtable.get_SecondaryCommands(self, result);
     }
     pub fn get_CommandBarOverflowPresenterStyle(self: *const ICommandBar, result: **@"Microsoft.UI.Xaml".Style) callconv(.winapi) HRESULT {
@@ -9906,7 +9906,7 @@ pub const ICommandBar = extern struct {
     pub fn put_IsDynamicOverflowEnabled(self: *const ICommandBar, p0: BOOL) callconv(.winapi) HRESULT {
         return self.vtable.put_IsDynamicOverflowEnabled(self, p0);
     }
-    pub fn add_DynamicOverflowItemsChanging(self: *const ICommandBar, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_DynamicOverflowItemsChanging(self: *const ICommandBar, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_CommandBar__Microsoft_UI_Xaml_Controls_DynamicOverflowItemsChangingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_DynamicOverflowItemsChanging(self, p0, result);
     }
     pub fn remove_DynamicOverflowItemsChanging(self: *const ICommandBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -10003,10 +10003,10 @@ pub const ICommandBarFlyout = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn get_PrimaryCommands(self: *const ICommandBarFlyout, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_PrimaryCommands(self: *const ICommandBarFlyout, result: **@"Windows.Foundation.Collections".IObservableVector__G1__Microsoft_UI_Xaml_Controls_ICommandBarElement) callconv(.winapi) HRESULT {
         return self.vtable.get_PrimaryCommands(self, result);
     }
-    pub fn get_SecondaryCommands(self: *const ICommandBarFlyout, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_SecondaryCommands(self: *const ICommandBarFlyout, result: **@"Windows.Foundation.Collections".IObservableVector__G1__Microsoft_UI_Xaml_Controls_ICommandBarElement) callconv(.winapi) HRESULT {
         return self.vtable.get_SecondaryCommands(self, result);
     }
 };
@@ -10174,10 +10174,10 @@ pub const IContainerContentChangingEventArgs = extern struct {
     pub fn put_Handled(self: *const IContainerContentChangingEventArgs, p0: BOOL) callconv(.winapi) HRESULT {
         return self.vtable.put_Handled(self, p0);
     }
-    pub fn RegisterUpdateCallback(self: *const IContainerContentChangingEventArgs, p0: *anyopaque) callconv(.winapi) HRESULT {
+    pub fn RegisterUpdateCallback(self: *const IContainerContentChangingEventArgs, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListViewBase__Microsoft_UI_Xaml_Controls_ContainerContentChangingEventArgs) callconv(.winapi) HRESULT {
         return self.vtable.RegisterUpdateCallback(self, p0);
     }
-    pub fn RegisterUpdateCallback_2(self: *const IContainerContentChangingEventArgs, p0: u32, p1: *anyopaque) callconv(.winapi) HRESULT {
+    pub fn RegisterUpdateCallback_2(self: *const IContainerContentChangingEventArgs, p0: u32, p1: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListViewBase__Microsoft_UI_Xaml_Controls_ContainerContentChangingEventArgs) callconv(.winapi) HRESULT {
         return self.vtable.RegisterUpdateCallback_2(self, p0, p1);
     }
 };
@@ -10464,37 +10464,37 @@ pub const IContentDialog = extern struct {
     pub fn put_DefaultButton(self: *const IContentDialog, p0: ContentDialogButton) callconv(.winapi) HRESULT {
         return self.vtable.put_DefaultButton(self, p0);
     }
-    pub fn add_Closing(self: *const IContentDialog, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_Closing(self: *const IContentDialog, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogClosingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_Closing(self, p0, result);
     }
     pub fn remove_Closing(self: *const IContentDialog, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_Closing(self, p0);
     }
-    pub fn add_Closed(self: *const IContentDialog, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_Closed(self: *const IContentDialog, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogClosedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_Closed(self, p0, result);
     }
     pub fn remove_Closed(self: *const IContentDialog, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_Closed(self, p0);
     }
-    pub fn add_Opened(self: *const IContentDialog, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_Opened(self: *const IContentDialog, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogOpenedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_Opened(self, p0, result);
     }
     pub fn remove_Opened(self: *const IContentDialog, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_Opened(self, p0);
     }
-    pub fn add_PrimaryButtonClick(self: *const IContentDialog, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_PrimaryButtonClick(self: *const IContentDialog, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogButtonClickEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_PrimaryButtonClick(self, p0, result);
     }
     pub fn remove_PrimaryButtonClick(self: *const IContentDialog, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_PrimaryButtonClick(self, p0);
     }
-    pub fn add_SecondaryButtonClick(self: *const IContentDialog, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_SecondaryButtonClick(self: *const IContentDialog, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogButtonClickEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_SecondaryButtonClick(self, p0, result);
     }
     pub fn remove_SecondaryButtonClick(self: *const IContentDialog, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_SecondaryButtonClick(self, p0);
     }
-    pub fn add_CloseButtonClick(self: *const IContentDialog, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_CloseButtonClick(self: *const IContentDialog, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogButtonClickEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_CloseButtonClick(self, p0, result);
     }
     pub fn remove_CloseButtonClick(self: *const IContentDialog, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -10503,10 +10503,10 @@ pub const IContentDialog = extern struct {
     pub fn Hide(self: *const IContentDialog) callconv(.winapi) HRESULT {
         return self.vtable.Hide(self);
     }
-    pub fn ShowAsync(self: *const IContentDialog, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn ShowAsync(self: *const IContentDialog, result: **@"Windows.Foundation".IAsyncOperation__G1__Microsoft_UI_Xaml_Controls_ContentDialogResult) callconv(.winapi) HRESULT {
         return self.vtable.ShowAsync(self, result);
     }
-    pub fn ShowAsync_2(self: *const IContentDialog, p0: ContentDialogPlacement, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn ShowAsync_2(self: *const IContentDialog, p0: ContentDialogPlacement, result: **@"Windows.Foundation".IAsyncOperation__G1__Microsoft_UI_Xaml_Controls_ContentDialogResult) callconv(.winapi) HRESULT {
         return self.vtable.ShowAsync_2(self, p0, result);
     }
     pub fn addPrimaryButtonClick(
@@ -11363,13 +11363,13 @@ pub const IControl = extern struct {
     pub fn put_CornerRadius(self: *const IControl, p0: @"Microsoft.UI.Xaml".CornerRadius) callconv(.winapi) HRESULT {
         return self.vtable.put_CornerRadius(self, p0);
     }
-    pub fn add_FocusEngaged(self: *const IControl, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_FocusEngaged(self: *const IControl, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Control__Microsoft_UI_Xaml_Controls_FocusEngagedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_FocusEngaged(self, p0, result);
     }
     pub fn remove_FocusEngaged(self: *const IControl, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_FocusEngaged(self, p0);
     }
-    pub fn add_FocusDisengaged(self: *const IControl, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_FocusDisengaged(self: *const IControl, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Control__Microsoft_UI_Xaml_Controls_FocusDisengagedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_FocusDisengaged(self, p0, result);
     }
     pub fn remove_FocusDisengaged(self: *const IControl, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -11976,19 +11976,19 @@ pub const IDatePicker = extern struct {
     pub fn put_LightDismissOverlayMode(self: *const IDatePicker, p0: LightDismissOverlayMode) callconv(.winapi) HRESULT {
         return self.vtable.put_LightDismissOverlayMode(self, p0);
     }
-    pub fn get_SelectedDate(self: *const IDatePicker, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_SelectedDate(self: *const IDatePicker, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT {
         return self.vtable.get_SelectedDate(self, result);
     }
-    pub fn put_SelectedDate(self: *const IDatePicker, p0: *anyopaque) callconv(.winapi) HRESULT {
+    pub fn put_SelectedDate(self: *const IDatePicker, p0: *@"Windows.Foundation".IReference__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT {
         return self.vtable.put_SelectedDate(self, p0);
     }
-    pub fn add_DateChanged(self: *const IDatePicker, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_DateChanged(self: *const IDatePicker, p0: *@"Windows.Foundation".EventHandler__G1__Microsoft_UI_Xaml_Controls_DatePickerValueChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_DateChanged(self, p0, result);
     }
     pub fn remove_DateChanged(self: *const IDatePicker, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_DateChanged(self, p0);
     }
-    pub fn add_SelectedDateChanged(self: *const IDatePicker, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_SelectedDateChanged(self: *const IDatePicker, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_DatePicker__Microsoft_UI_Xaml_Controls_DatePickerSelectedValueChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_SelectedDateChanged(self, p0, result);
     }
     pub fn remove_SelectedDateChanged(self: *const IDatePicker, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -12167,13 +12167,13 @@ pub const IDatePickerFlyout = extern struct {
         defer h0.deinit();
         return self.vtable.put_YearFormat(self, h0.raw);
     }
-    pub fn add_DatePicked(self: *const IDatePickerFlyout, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_DatePicked(self: *const IDatePickerFlyout, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_DatePickerFlyout__Microsoft_UI_Xaml_Controls_DatePickedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_DatePicked(self, p0, result);
     }
     pub fn remove_DatePicked(self: *const IDatePickerFlyout, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_DatePicked(self, p0);
     }
-    pub fn ShowAtAsync(self: *const IDatePickerFlyout, p0: *@"Microsoft.UI.Xaml".FrameworkElement, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn ShowAtAsync(self: *const IDatePickerFlyout, p0: *@"Microsoft.UI.Xaml".FrameworkElement, result: **@"Windows.Foundation".IAsyncOperation__G1__Windows_Foundation_IReference__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT {
         return self.vtable.ShowAtAsync(self, p0, result);
     }
     pub fn addDatePicked(
@@ -12383,10 +12383,10 @@ pub const IDatePickerSelectedValueChangedEventArgs = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn get_OldDate(self: *const IDatePickerSelectedValueChangedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_OldDate(self: *const IDatePickerSelectedValueChangedEventArgs, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT {
         return self.vtable.get_OldDate(self, result);
     }
-    pub fn get_NewDate(self: *const IDatePickerSelectedValueChangedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_NewDate(self: *const IDatePickerSelectedValueChangedEventArgs, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT {
         return self.vtable.get_NewDate(self, result);
     }
 };
@@ -12594,7 +12594,7 @@ pub const IDynamicAnimatedVisualSource = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn add_AnimatedVisualInvalidated(self: *const IDynamicAnimatedVisualSource, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_AnimatedVisualInvalidated(self: *const IDynamicAnimatedVisualSource, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_IDynamicAnimatedVisualSource__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_AnimatedVisualInvalidated(self, p0, result);
     }
     pub fn remove_AnimatedVisualInvalidated(self: *const IDynamicAnimatedVisualSource, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -12687,13 +12687,13 @@ pub const IExpander = extern struct {
     pub fn put_ExpandDirection(self: *const IExpander, p0: ExpandDirection) callconv(.winapi) HRESULT {
         return self.vtable.put_ExpandDirection(self, p0);
     }
-    pub fn add_Expanding(self: *const IExpander, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_Expanding(self: *const IExpander, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Expander__Microsoft_UI_Xaml_Controls_ExpanderExpandingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_Expanding(self, p0, result);
     }
     pub fn remove_Expanding(self: *const IExpander, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_Expanding(self, p0);
     }
-    pub fn add_Collapsed(self: *const IExpander, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_Collapsed(self: *const IExpander, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Expander__Microsoft_UI_Xaml_Controls_ExpanderCollapsedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_Collapsed(self, p0, result);
     }
     pub fn remove_Collapsed(self: *const IExpander, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -13463,10 +13463,10 @@ pub const IFrame = extern struct {
     pub fn get_BackStackDepth(self: *const IFrame, result: *i32) callconv(.winapi) HRESULT {
         return self.vtable.get_BackStackDepth(self, result);
     }
-    pub fn get_BackStack(self: *const IFrame, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_BackStack(self: *const IFrame, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Navigation_PageStackEntry) callconv(.winapi) HRESULT {
         return self.vtable.get_BackStack(self, result);
     }
-    pub fn get_ForwardStack(self: *const IFrame, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_ForwardStack(self: *const IFrame, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Navigation_PageStackEntry) callconv(.winapi) HRESULT {
         return self.vtable.get_ForwardStack(self, result);
     }
     pub fn get_IsNavigationStackEnabled(self: *const IFrame, result: *BOOL) callconv(.winapi) HRESULT {
@@ -14155,10 +14155,10 @@ pub const IHub = extern struct {
     pub fn put_DefaultSectionIndex(self: *const IHub, p0: i32) callconv(.winapi) HRESULT {
         return self.vtable.put_DefaultSectionIndex(self, p0);
     }
-    pub fn get_Sections(self: *const IHub, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_Sections(self: *const IHub, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_HubSection) callconv(.winapi) HRESULT {
         return self.vtable.get_Sections(self, result);
     }
-    pub fn get_SectionsInView(self: *const IHub, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_SectionsInView(self: *const IHub, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_HubSection) callconv(.winapi) HRESULT {
         return self.vtable.get_SectionsInView(self, result);
     }
     pub fn get_SectionHeaders(self: *const IHub, result: **@"Windows.Foundation.Collections".IObservableVector__G1__object) callconv(.winapi) HRESULT {
@@ -15160,19 +15160,19 @@ pub const IInfoBar = extern struct {
     pub fn get_TemplateSettings(self: *const IInfoBar, result: **InfoBarTemplateSettings) callconv(.winapi) HRESULT {
         return self.vtable.get_TemplateSettings(self, result);
     }
-    pub fn add_CloseButtonClick(self: *const IInfoBar, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_CloseButtonClick(self: *const IInfoBar, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_InfoBar__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_CloseButtonClick(self, p0, result);
     }
     pub fn remove_CloseButtonClick(self: *const IInfoBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_CloseButtonClick(self, p0);
     }
-    pub fn add_Closing(self: *const IInfoBar, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_Closing(self: *const IInfoBar, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_InfoBar__Microsoft_UI_Xaml_Controls_InfoBarClosingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_Closing(self, p0, result);
     }
     pub fn remove_Closing(self: *const IInfoBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_Closing(self, p0);
     }
-    pub fn add_Closed(self: *const IInfoBar, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_Closed(self: *const IInfoBar, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_InfoBar__Microsoft_UI_Xaml_Controls_InfoBarClosedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_Closed(self, p0, result);
     }
     pub fn remove_Closed(self: *const IInfoBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -15644,7 +15644,7 @@ pub const IItemCollectionTransitionProvider = extern struct {
     pub fn QueueTransition(self: *const IItemCollectionTransitionProvider, p0: *ItemCollectionTransition) callconv(.winapi) HRESULT {
         return self.vtable.QueueTransition(self, p0);
     }
-    pub fn add_TransitionCompleted(self: *const IItemCollectionTransitionProvider, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_TransitionCompleted(self: *const IItemCollectionTransitionProvider, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemCollectionTransitionProvider__Microsoft_UI_Xaml_Controls_ItemCollectionTransitionCompletedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_TransitionCompleted(self, p0, result);
     }
     pub fn remove_TransitionCompleted(self: *const IItemCollectionTransitionProvider, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -15710,7 +15710,7 @@ pub const IItemCollectionTransitionProviderOverrides = extern struct {
     pub fn ShouldAnimateCore(self: *const IItemCollectionTransitionProviderOverrides, p0: *ItemCollectionTransition, result: *BOOL) callconv(.winapi) HRESULT {
         return self.vtable.ShouldAnimateCore(self, p0, result);
     }
-    pub fn StartTransitions(self: *const IItemCollectionTransitionProviderOverrides, p0: *anyopaque) callconv(.winapi) HRESULT {
+    pub fn StartTransitions(self: *const IItemCollectionTransitionProviderOverrides, p0: *@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_ItemCollectionTransition) callconv(.winapi) HRESULT {
         return self.vtable.StartTransitions(self, p0);
     }
 };
@@ -15975,7 +15975,7 @@ pub const IItemsControl = extern struct {
     pub fn put_ItemContainerTransitions(self: *const IItemsControl, p0: *@"Microsoft.UI.Xaml.Media.Animation".TransitionCollection) callconv(.winapi) HRESULT {
         return self.vtable.put_ItemContainerTransitions(self, p0);
     }
-    pub fn get_GroupStyle(self: *const IItemsControl, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_GroupStyle(self: *const IItemsControl, result: **@"Windows.Foundation.Collections".IObservableVector__G1__Microsoft_UI_Xaml_Controls_GroupStyle) callconv(.winapi) HRESULT {
         return self.vtable.get_GroupStyle(self, result);
     }
     pub fn get_GroupStyleSelector(self: *const IItemsControl, result: **GroupStyleSelector) callconv(.winapi) HRESULT {
@@ -16328,19 +16328,19 @@ pub const IItemsRepeater = extern struct {
     pub fn GetOrCreateElement(self: *const IItemsRepeater, p0: i32, result: **@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT {
         return self.vtable.GetOrCreateElement(self, p0, result);
     }
-    pub fn add_ElementPrepared(self: *const IItemsRepeater, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ElementPrepared(self: *const IItemsRepeater, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemsRepeater__Microsoft_UI_Xaml_Controls_ItemsRepeaterElementPreparedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ElementPrepared(self, p0, result);
     }
     pub fn remove_ElementPrepared(self: *const IItemsRepeater, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ElementPrepared(self, p0);
     }
-    pub fn add_ElementClearing(self: *const IItemsRepeater, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ElementClearing(self: *const IItemsRepeater, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemsRepeater__Microsoft_UI_Xaml_Controls_ItemsRepeaterElementClearingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ElementClearing(self, p0, result);
     }
     pub fn remove_ElementClearing(self: *const IItemsRepeater, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ElementClearing(self, p0);
     }
-    pub fn add_ElementIndexChanged(self: *const IItemsRepeater, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ElementIndexChanged(self: *const IItemsRepeater, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemsRepeater__Microsoft_UI_Xaml_Controls_ItemsRepeaterElementIndexChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ElementIndexChanged(self, p0, result);
     }
     pub fn remove_ElementIndexChanged(self: *const IItemsRepeater, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -16885,13 +16885,13 @@ pub const IItemsView = extern struct {
     pub fn InvertSelection(self: *const IItemsView) callconv(.winapi) HRESULT {
         return self.vtable.InvertSelection(self);
     }
-    pub fn add_ItemInvoked(self: *const IItemsView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ItemInvoked(self: *const IItemsView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemsView__Microsoft_UI_Xaml_Controls_ItemsViewItemInvokedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ItemInvoked(self, p0, result);
     }
     pub fn remove_ItemInvoked(self: *const IItemsView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ItemInvoked(self, p0);
     }
-    pub fn add_SelectionChanged(self: *const IItemsView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_SelectionChanged(self: *const IItemsView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemsView__Microsoft_UI_Xaml_Controls_ItemsViewSelectionChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_SelectionChanged(self, p0, result);
     }
     pub fn remove_SelectionChanged(self: *const IItemsView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -17254,13 +17254,13 @@ pub const ILayout = extern struct {
     pub fn Arrange(self: *const ILayout, p0: *LayoutContext, p1: @"Windows.Foundation".Size, result: *@"Windows.Foundation".Size) callconv(.winapi) HRESULT {
         return self.vtable.Arrange(self, p0, p1, result);
     }
-    pub fn add_MeasureInvalidated(self: *const ILayout, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_MeasureInvalidated(self: *const ILayout, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Layout__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_MeasureInvalidated(self, p0, result);
     }
     pub fn remove_MeasureInvalidated(self: *const ILayout, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_MeasureInvalidated(self, p0);
     }
-    pub fn add_ArrangeInvalidated(self: *const ILayout, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ArrangeInvalidated(self: *const ILayout, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Layout__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ArrangeInvalidated(self, p0, result);
     }
     pub fn remove_ArrangeInvalidated(self: *const ILayout, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -17496,13 +17496,13 @@ pub const ILinedFlowLayout = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn add_ItemsInfoRequested(self: *const ILinedFlowLayout, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ItemsInfoRequested(self: *const ILinedFlowLayout, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_LinedFlowLayout__Microsoft_UI_Xaml_Controls_LinedFlowLayoutItemsInfoRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ItemsInfoRequested(self, p0, result);
     }
     pub fn remove_ItemsInfoRequested(self: *const ILinedFlowLayout, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ItemsInfoRequested(self, p0);
     }
-    pub fn add_ItemsUnlocked(self: *const ILinedFlowLayout, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ItemsUnlocked(self: *const ILinedFlowLayout, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_LinedFlowLayout__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ItemsUnlocked(self, p0, result);
     }
     pub fn remove_ItemsUnlocked(self: *const ILinedFlowLayout, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -17952,13 +17952,13 @@ pub const IListPickerFlyout = extern struct {
     pub fn get_SelectedItems(self: *const IListPickerFlyout, result: **@"Windows.Foundation.Collections".IVector__G1__object) callconv(.winapi) HRESULT {
         return self.vtable.get_SelectedItems(self, result);
     }
-    pub fn add_ItemsPicked(self: *const IListPickerFlyout, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ItemsPicked(self: *const IListPickerFlyout, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListPickerFlyout__Microsoft_UI_Xaml_Controls_ItemsPickedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ItemsPicked(self, p0, result);
     }
     pub fn remove_ItemsPicked(self: *const IListPickerFlyout, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ItemsPicked(self, p0);
     }
-    pub fn ShowAtAsync(self: *const IListPickerFlyout, p0: *@"Microsoft.UI.Xaml".FrameworkElement, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn ShowAtAsync(self: *const IListPickerFlyout, p0: *@"Microsoft.UI.Xaml".FrameworkElement, result: **@"Windows.Foundation".IAsyncOperation__G1__Windows_Foundation_Collections_IVectorView__G1__object) callconv(.winapi) HRESULT {
         return self.vtable.ShowAtAsync(self, p0, result);
     }
     pub fn addItemsPicked(
@@ -18140,7 +18140,7 @@ pub const IListViewBase = extern struct {
     pub fn put_ReorderMode(self: *const IListViewBase, p0: ListViewReorderMode) callconv(.winapi) HRESULT {
         return self.vtable.put_ReorderMode(self, p0);
     }
-    pub fn get_SelectedRanges(self: *const IListViewBase, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_SelectedRanges(self: *const IListViewBase, result: **@"Windows.Foundation.Collections".IVectorView__G1__Microsoft_UI_Xaml_Data_ItemIndexRange) callconv(.winapi) HRESULT {
         return self.vtable.get_SelectedRanges(self, result);
     }
     pub fn get_IsMultiSelectCheckBoxEnabled(self: *const IListViewBase, result: *BOOL) callconv(.winapi) HRESULT {
@@ -18167,25 +18167,25 @@ pub const IListViewBase = extern struct {
     pub fn remove_DragItemsStarting(self: *const IListViewBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_DragItemsStarting(self, p0);
     }
-    pub fn add_DragItemsCompleted(self: *const IListViewBase, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_DragItemsCompleted(self: *const IListViewBase, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListViewBase__Microsoft_UI_Xaml_Controls_DragItemsCompletedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_DragItemsCompleted(self, p0, result);
     }
     pub fn remove_DragItemsCompleted(self: *const IListViewBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_DragItemsCompleted(self, p0);
     }
-    pub fn add_ContainerContentChanging(self: *const IListViewBase, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ContainerContentChanging(self: *const IListViewBase, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListViewBase__Microsoft_UI_Xaml_Controls_ContainerContentChangingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ContainerContentChanging(self, p0, result);
     }
     pub fn remove_ContainerContentChanging(self: *const IListViewBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ContainerContentChanging(self, p0);
     }
-    pub fn add_ChoosingItemContainer(self: *const IListViewBase, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ChoosingItemContainer(self: *const IListViewBase, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListViewBase__Microsoft_UI_Xaml_Controls_ChoosingItemContainerEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ChoosingItemContainer(self, p0, result);
     }
     pub fn remove_ChoosingItemContainer(self: *const IListViewBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ChoosingItemContainer(self, p0);
     }
-    pub fn add_ChoosingGroupHeaderContainer(self: *const IListViewBase, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ChoosingGroupHeaderContainer(self: *const IListViewBase, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListViewBase__Microsoft_UI_Xaml_Controls_ChoosingGroupHeaderContainerEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ChoosingGroupHeaderContainer(self, p0, result);
     }
     pub fn remove_ChoosingGroupHeaderContainer(self: *const IListViewBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -18197,7 +18197,7 @@ pub const IListViewBase = extern struct {
     pub fn SelectAll(self: *const IListViewBase) callconv(.winapi) HRESULT {
         return self.vtable.SelectAll(self);
     }
-    pub fn LoadMoreItemsAsync(self: *const IListViewBase, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn LoadMoreItemsAsync(self: *const IListViewBase, result: **@"Windows.Foundation".IAsyncOperation__G1__Microsoft_UI_Xaml_Data_LoadMoreItemsResult) callconv(.winapi) HRESULT {
         return self.vtable.LoadMoreItemsAsync(self, result);
     }
     pub fn ScrollIntoView_2(self: *const IListViewBase, p0: ?*const anyopaque, p1: ScrollIntoViewAlignment) callconv(.winapi) HRESULT {
@@ -18677,10 +18677,10 @@ pub const IMapControl = extern struct {
     pub fn put_Center(self: *const IMapControl, p0: *@"Windows.Devices.Geolocation".Geopoint) callconv(.winapi) HRESULT {
         return self.vtable.put_Center(self, p0);
     }
-    pub fn get_Layers(self: *const IMapControl, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_Layers(self: *const IMapControl, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_MapLayer) callconv(.winapi) HRESULT {
         return self.vtable.get_Layers(self, result);
     }
-    pub fn put_Layers(self: *const IMapControl, p0: *anyopaque) callconv(.winapi) HRESULT {
+    pub fn put_Layers(self: *const IMapControl, p0: *@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_MapLayer) callconv(.winapi) HRESULT {
         return self.vtable.put_Layers(self, p0);
     }
     pub fn get_ZoomLevel(self: *const IMapControl, result: *f64) callconv(.winapi) HRESULT {
@@ -18695,13 +18695,13 @@ pub const IMapControl = extern struct {
     pub fn put_InteractiveControlsVisible(self: *const IMapControl, p0: BOOL) callconv(.winapi) HRESULT {
         return self.vtable.put_InteractiveControlsVisible(self, p0);
     }
-    pub fn add_MapElementClick(self: *const IMapControl, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_MapElementClick(self: *const IMapControl, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_MapControl__Microsoft_UI_Xaml_Controls_MapElementClickEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_MapElementClick(self, p0, result);
     }
     pub fn remove_MapElementClick(self: *const IMapControl, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_MapElementClick(self, p0);
     }
-    pub fn add_MapServiceErrorOccurred(self: *const IMapControl, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_MapServiceErrorOccurred(self: *const IMapControl, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_MapControl__Microsoft_UI_Xaml_Controls_MapControlMapServiceErrorOccurredEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_MapServiceErrorOccurred(self, p0, result);
     }
     pub fn remove_MapServiceErrorOccurred(self: *const IMapControl, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -18904,13 +18904,13 @@ pub const IMapElementsLayer = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn get_MapElements(self: *const IMapElementsLayer, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_MapElements(self: *const IMapElementsLayer, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_MapElement) callconv(.winapi) HRESULT {
         return self.vtable.get_MapElements(self, result);
     }
-    pub fn put_MapElements(self: *const IMapElementsLayer, p0: *anyopaque) callconv(.winapi) HRESULT {
+    pub fn put_MapElements(self: *const IMapElementsLayer, p0: *@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_MapElement) callconv(.winapi) HRESULT {
         return self.vtable.put_MapElements(self, p0);
     }
-    pub fn add_MapElementClick(self: *const IMapElementsLayer, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_MapElementClick(self: *const IMapElementsLayer, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_MapElementsLayer__Microsoft_UI_Xaml_Controls_MapElementClickEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_MapElementClick(self, p0, result);
     }
     pub fn remove_MapElementClick(self: *const IMapElementsLayer, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -19468,7 +19468,7 @@ pub const IMediaTransportControls = extern struct {
     pub fn put_IsRepeatButtonVisible(self: *const IMediaTransportControls, p0: BOOL) callconv(.winapi) HRESULT {
         return self.vtable.put_IsRepeatButtonVisible(self, p0);
     }
-    pub fn add_ThumbnailRequested(self: *const IMediaTransportControls, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ThumbnailRequested(self: *const IMediaTransportControls, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_MediaTransportControls__Microsoft_UI_Xaml_Media_MediaTransportControlsThumbnailRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ThumbnailRequested(self, p0, result);
     }
     pub fn remove_ThumbnailRequested(self: *const IMediaTransportControls, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -19678,7 +19678,7 @@ pub const IMenuBar = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn get_Items(self: *const IMenuBar, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_Items(self: *const IMenuBar, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_MenuBarItem) callconv(.winapi) HRESULT {
         return self.vtable.get_Items(self, result);
     }
 };
@@ -19738,7 +19738,7 @@ pub const IMenuBarItem = extern struct {
         defer h0.deinit();
         return self.vtable.put_Title(self, h0.raw);
     }
-    pub fn get_Items(self: *const IMenuBarItem, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_Items(self: *const IMenuBarItem, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_MenuFlyoutItemBase) callconv(.winapi) HRESULT {
         return self.vtable.get_Items(self, result);
     }
 };
@@ -19870,7 +19870,7 @@ pub const IMenuFlyout = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn get_Items(self: *const IMenuFlyout, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_Items(self: *const IMenuFlyout, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_MenuFlyoutItemBase) callconv(.winapi) HRESULT {
         return self.vtable.get_Items(self, result);
     }
     pub fn get_MenuFlyoutPresenterStyle(self: *const IMenuFlyout, result: **@"Microsoft.UI.Xaml".Style) callconv(.winapi) HRESULT {
@@ -20277,7 +20277,7 @@ pub const IMenuFlyoutSubItem = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn get_Items(self: *const IMenuFlyoutSubItem, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_Items(self: *const IMenuFlyoutSubItem, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_MenuFlyoutItemBase) callconv(.winapi) HRESULT {
         return self.vtable.get_Items(self, result);
     }
     pub fn get_Text(self: *const IMenuFlyoutSubItem, result: *HSTRING) callconv(.winapi) HRESULT {
@@ -20506,19 +20506,19 @@ pub const INavigationView = extern struct {
     pub fn ContainerFromMenuItem(self: *const INavigationView, p0: ?*const anyopaque, result: **@"Microsoft.UI.Xaml".DependencyObject) callconv(.winapi) HRESULT {
         return self.vtable.ContainerFromMenuItem(self, p0, result);
     }
-    pub fn add_SelectionChanged(self: *const INavigationView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_SelectionChanged(self: *const INavigationView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewSelectionChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_SelectionChanged(self, p0, result);
     }
     pub fn remove_SelectionChanged(self: *const INavigationView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_SelectionChanged(self, p0);
     }
-    pub fn add_ItemInvoked(self: *const INavigationView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ItemInvoked(self: *const INavigationView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewItemInvokedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ItemInvoked(self, p0, result);
     }
     pub fn remove_ItemInvoked(self: *const INavigationView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ItemInvoked(self, p0);
     }
-    pub fn add_DisplayModeChanged(self: *const INavigationView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_DisplayModeChanged(self: *const INavigationView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewDisplayModeChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_DisplayModeChanged(self, p0, result);
     }
     pub fn remove_DisplayModeChanged(self: *const INavigationView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -20625,31 +20625,31 @@ pub const INavigationView2 = extern struct {
         defer h0.deinit();
         return self.vtable.put_PaneTitle(self, h0.raw);
     }
-    pub fn add_BackRequested(self: *const INavigationView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_BackRequested(self: *const INavigationView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewBackRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_BackRequested(self, p0, result);
     }
     pub fn remove_BackRequested(self: *const INavigationView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_BackRequested(self, p0);
     }
-    pub fn add_PaneClosed(self: *const INavigationView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_PaneClosed(self: *const INavigationView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_PaneClosed(self, p0, result);
     }
     pub fn remove_PaneClosed(self: *const INavigationView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_PaneClosed(self, p0);
     }
-    pub fn add_PaneClosing(self: *const INavigationView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_PaneClosing(self: *const INavigationView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewPaneClosingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_PaneClosing(self, p0, result);
     }
     pub fn remove_PaneClosing(self: *const INavigationView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_PaneClosing(self, p0);
     }
-    pub fn add_PaneOpened(self: *const INavigationView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_PaneOpened(self: *const INavigationView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_PaneOpened(self, p0, result);
     }
     pub fn remove_PaneOpened(self: *const INavigationView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_PaneOpened(self, p0);
     }
-    pub fn add_PaneOpening(self: *const INavigationView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_PaneOpening(self: *const INavigationView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_PaneOpening(self, p0, result);
     }
     pub fn remove_PaneOpening(self: *const INavigationView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -20706,13 +20706,13 @@ pub const INavigationView2 = extern struct {
     pub fn put_OverflowLabelMode(self: *const INavigationView2, p0: NavigationViewOverflowLabelMode) callconv(.winapi) HRESULT {
         return self.vtable.put_OverflowLabelMode(self, p0);
     }
-    pub fn add_Expanding(self: *const INavigationView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_Expanding(self: *const INavigationView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewItemExpandingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_Expanding(self, p0, result);
     }
     pub fn remove_Expanding(self: *const INavigationView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_Expanding(self, p0);
     }
-    pub fn add_Collapsed(self: *const INavigationView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_Collapsed(self: *const INavigationView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewItemCollapsedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_Collapsed(self, p0, result);
     }
     pub fn remove_Collapsed(self: *const INavigationView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -21797,7 +21797,7 @@ pub const INonVirtualizingLayoutContext = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn get_Children(self: *const INonVirtualizingLayoutContext, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_Children(self: *const INonVirtualizingLayoutContext, result: **@"Windows.Foundation.Collections".IVectorView__G1__Microsoft_UI_Xaml_UIElement) callconv(.winapi) HRESULT {
         return self.vtable.get_Children(self, result);
     }
 };
@@ -21841,7 +21841,7 @@ pub const INonVirtualizingLayoutContextOverrides = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn get_ChildrenCore(self: *const INonVirtualizingLayoutContextOverrides, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_ChildrenCore(self: *const INonVirtualizingLayoutContextOverrides, result: **@"Windows.Foundation.Collections".IVectorView__G1__Microsoft_UI_Xaml_UIElement) callconv(.winapi) HRESULT {
         return self.vtable.get_ChildrenCore(self, result);
     }
 };
@@ -22050,7 +22050,7 @@ pub const INumberBox = extern struct {
     pub fn put_NumberFormatter(self: *const INumberBox, p0: *@"Windows.Globalization.NumberFormatting".INumberFormatter2) callconv(.winapi) HRESULT {
         return self.vtable.put_NumberFormatter(self, p0);
     }
-    pub fn add_ValueChanged(self: *const INumberBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ValueChanged(self: *const INumberBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NumberBox__Microsoft_UI_Xaml_Controls_NumberBoxValueChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ValueChanged(self, p0, result);
     }
     pub fn remove_ValueChanged(self: *const INumberBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -22752,7 +22752,7 @@ pub const IPasswordBox = extern struct {
     pub fn remove_Paste(self: *const IPasswordBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_Paste(self, p0);
     }
-    pub fn add_PasswordChanging(self: *const IPasswordBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_PasswordChanging(self: *const IPasswordBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_PasswordBox__Microsoft_UI_Xaml_Controls_PasswordBoxPasswordChangingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_PasswordChanging(self, p0, result);
     }
     pub fn remove_PasswordChanging(self: *const IPasswordBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -23277,7 +23277,7 @@ pub const IPickerFlyout = extern struct {
     pub fn put_ConfirmationButtonsVisible(self: *const IPickerFlyout, p0: BOOL) callconv(.winapi) HRESULT {
         return self.vtable.put_ConfirmationButtonsVisible(self, p0);
     }
-    pub fn add_Confirmed(self: *const IPickerFlyout, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_Confirmed(self: *const IPickerFlyout, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_PickerFlyout__Microsoft_UI_Xaml_Controls_PickerConfirmedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_Confirmed(self, p0, result);
     }
     pub fn remove_Confirmed(self: *const IPickerFlyout, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -23425,7 +23425,7 @@ pub const IPipsPager = extern struct {
     pub fn put_NormalPipStyle(self: *const IPipsPager, p0: *@"Microsoft.UI.Xaml".Style) callconv(.winapi) HRESULT {
         return self.vtable.put_NormalPipStyle(self, p0);
     }
-    pub fn add_SelectedIndexChanged(self: *const IPipsPager, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_SelectedIndexChanged(self: *const IPipsPager, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_PipsPager__Microsoft_UI_Xaml_Controls_PipsPagerSelectedIndexChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_SelectedIndexChanged(self, p0, result);
     }
     pub fn remove_SelectedIndexChanged(self: *const IPipsPager, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -23706,25 +23706,25 @@ pub const IPivot = extern struct {
     pub fn remove_SelectionChanged(self: *const IPivot, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_SelectionChanged(self, p0);
     }
-    pub fn add_PivotItemLoading(self: *const IPivot, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_PivotItemLoading(self: *const IPivot, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Pivot__Microsoft_UI_Xaml_Controls_PivotItemEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_PivotItemLoading(self, p0, result);
     }
     pub fn remove_PivotItemLoading(self: *const IPivot, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_PivotItemLoading(self, p0);
     }
-    pub fn add_PivotItemLoaded(self: *const IPivot, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_PivotItemLoaded(self: *const IPivot, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Pivot__Microsoft_UI_Xaml_Controls_PivotItemEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_PivotItemLoaded(self, p0, result);
     }
     pub fn remove_PivotItemLoaded(self: *const IPivot, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_PivotItemLoaded(self, p0);
     }
-    pub fn add_PivotItemUnloading(self: *const IPivot, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_PivotItemUnloading(self: *const IPivot, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Pivot__Microsoft_UI_Xaml_Controls_PivotItemEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_PivotItemUnloading(self, p0, result);
     }
     pub fn remove_PivotItemUnloading(self: *const IPivot, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_PivotItemUnloading(self, p0);
     }
-    pub fn add_PivotItemUnloaded(self: *const IPivot, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_PivotItemUnloaded(self: *const IPivot, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Pivot__Microsoft_UI_Xaml_Controls_PivotItemEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_PivotItemUnloaded(self, p0, result);
     }
     pub fn remove_PivotItemUnloaded(self: *const IPivot, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -24662,7 +24662,7 @@ pub const IRatingControl = extern struct {
     pub fn put_Value(self: *const IRatingControl, p0: f64) callconv(.winapi) HRESULT {
         return self.vtable.put_Value(self, p0);
     }
-    pub fn add_ValueChanged(self: *const IRatingControl, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ValueChanged(self: *const IRatingControl, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RatingControl__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ValueChanged(self, p0, result);
     }
     pub fn remove_ValueChanged(self: *const IRatingControl, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -25109,7 +25109,7 @@ pub const IRefreshContainer = extern struct {
     pub fn put_PullDirection(self: *const IRefreshContainer, p0: RefreshPullDirection) callconv(.winapi) HRESULT {
         return self.vtable.put_PullDirection(self, p0);
     }
-    pub fn add_RefreshRequested(self: *const IRefreshContainer, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_RefreshRequested(self: *const IRefreshContainer, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RefreshContainer__Microsoft_UI_Xaml_Controls_RefreshRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_RefreshRequested(self, p0, result);
     }
     pub fn remove_RefreshRequested(self: *const IRefreshContainer, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -25287,13 +25287,13 @@ pub const IRefreshVisualizer = extern struct {
     pub fn get_State(self: *const IRefreshVisualizer, result: *RefreshVisualizerState) callconv(.winapi) HRESULT {
         return self.vtable.get_State(self, result);
     }
-    pub fn add_RefreshRequested(self: *const IRefreshVisualizer, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_RefreshRequested(self: *const IRefreshVisualizer, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RefreshVisualizer__Microsoft_UI_Xaml_Controls_RefreshRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_RefreshRequested(self, p0, result);
     }
     pub fn remove_RefreshRequested(self: *const IRefreshVisualizer, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_RefreshRequested(self, p0);
     }
-    pub fn add_RefreshStateChanged(self: *const IRefreshVisualizer, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_RefreshStateChanged(self: *const IRefreshVisualizer, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RefreshVisualizer__Microsoft_UI_Xaml_Controls_RefreshStateChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_RefreshStateChanged(self, p0, result);
     }
     pub fn remove_RefreshStateChanged(self: *const IRefreshVisualizer, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -25856,43 +25856,43 @@ pub const IRichEditBox = extern struct {
     pub fn remove_Paste(self: *const IRichEditBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_Paste(self, p0);
     }
-    pub fn add_TextCompositionStarted(self: *const IRichEditBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_TextCompositionStarted(self: *const IRichEditBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_TextCompositionStartedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_TextCompositionStarted(self, p0, result);
     }
     pub fn remove_TextCompositionStarted(self: *const IRichEditBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_TextCompositionStarted(self, p0);
     }
-    pub fn add_TextCompositionChanged(self: *const IRichEditBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_TextCompositionChanged(self: *const IRichEditBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_TextCompositionChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_TextCompositionChanged(self, p0, result);
     }
     pub fn remove_TextCompositionChanged(self: *const IRichEditBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_TextCompositionChanged(self, p0);
     }
-    pub fn add_TextCompositionEnded(self: *const IRichEditBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_TextCompositionEnded(self: *const IRichEditBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_TextCompositionEndedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_TextCompositionEnded(self, p0, result);
     }
     pub fn remove_TextCompositionEnded(self: *const IRichEditBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_TextCompositionEnded(self, p0);
     }
-    pub fn add_CopyingToClipboard(self: *const IRichEditBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_CopyingToClipboard(self: *const IRichEditBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_TextControlCopyingToClipboardEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_CopyingToClipboard(self, p0, result);
     }
     pub fn remove_CopyingToClipboard(self: *const IRichEditBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_CopyingToClipboard(self, p0);
     }
-    pub fn add_CuttingToClipboard(self: *const IRichEditBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_CuttingToClipboard(self: *const IRichEditBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_TextControlCuttingToClipboardEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_CuttingToClipboard(self, p0, result);
     }
     pub fn remove_CuttingToClipboard(self: *const IRichEditBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_CuttingToClipboard(self, p0);
     }
-    pub fn add_SelectionChanging(self: *const IRichEditBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_SelectionChanging(self: *const IRichEditBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_RichEditBoxSelectionChangingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_SelectionChanging(self, p0, result);
     }
     pub fn remove_SelectionChanging(self: *const IRichEditBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_SelectionChanging(self, p0);
     }
-    pub fn GetLinguisticAlternativesAsync(self: *const IRichEditBox, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn GetLinguisticAlternativesAsync(self: *const IRichEditBox, result: **@"Windows.Foundation".IAsyncOperation__G1__Windows_Foundation_Collections_IVectorView__G1__HSTRING) callconv(.winapi) HRESULT {
         return self.vtable.GetLinguisticAlternativesAsync(self, result);
     }
     pub fn get_TextReadingOrder(self: *const IRichEditBox, result: *@"Microsoft.UI.Xaml".TextReadingOrder) callconv(.winapi) HRESULT {
@@ -25913,13 +25913,13 @@ pub const IRichEditBox = extern struct {
     pub fn put_DesiredCandidateWindowAlignment(self: *const IRichEditBox, p0: CandidateWindowAlignment) callconv(.winapi) HRESULT {
         return self.vtable.put_DesiredCandidateWindowAlignment(self, p0);
     }
-    pub fn add_CandidateWindowBoundsChanged(self: *const IRichEditBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_CandidateWindowBoundsChanged(self: *const IRichEditBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_CandidateWindowBoundsChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_CandidateWindowBoundsChanged(self, p0, result);
     }
     pub fn remove_CandidateWindowBoundsChanged(self: *const IRichEditBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_CandidateWindowBoundsChanged(self, p0);
     }
-    pub fn add_TextChanging(self: *const IRichEditBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_TextChanging(self: *const IRichEditBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_RichEditBoxTextChangingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_TextChanging(self, p0, result);
     }
     pub fn remove_TextChanging(self: *const IRichEditBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -26414,7 +26414,7 @@ pub const IRichTextBlock = extern struct {
     pub fn put_HorizontalTextAlignment(self: *const IRichTextBlock, p0: @"Microsoft.UI.Xaml".TextAlignment) callconv(.winapi) HRESULT {
         return self.vtable.put_HorizontalTextAlignment(self, p0);
     }
-    pub fn get_TextHighlighters(self: *const IRichTextBlock, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_TextHighlighters(self: *const IRichTextBlock, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Documents_TextHighlighter) callconv(.winapi) HRESULT {
         return self.vtable.get_TextHighlighters(self, result);
     }
     pub fn get_SelectionFlyout(self: *const IRichTextBlock, result: **@"Microsoft.UI.Xaml.Controls.Primitives".FlyoutBase) callconv(.winapi) HRESULT {
@@ -26435,7 +26435,7 @@ pub const IRichTextBlock = extern struct {
     pub fn remove_ContextMenuOpening(self: *const IRichTextBlock, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ContextMenuOpening(self, p0);
     }
-    pub fn add_IsTextTrimmedChanged(self: *const IRichTextBlock, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_IsTextTrimmedChanged(self: *const IRichTextBlock, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichTextBlock__Microsoft_UI_Xaml_Controls_IsTextTrimmedChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_IsTextTrimmedChanged(self, p0, result);
     }
     pub fn remove_IsTextTrimmedChanged(self: *const IRichTextBlock, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -26530,7 +26530,7 @@ pub const IRichTextBlockOverflow = extern struct {
     pub fn get_IsTextTrimmed(self: *const IRichTextBlockOverflow, result: *BOOL) callconv(.winapi) HRESULT {
         return self.vtable.get_IsTextTrimmed(self, result);
     }
-    pub fn add_IsTextTrimmedChanged(self: *const IRichTextBlockOverflow, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_IsTextTrimmedChanged(self: *const IRichTextBlockOverflow, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichTextBlockOverflow__Microsoft_UI_Xaml_Controls_IsTextTrimmedChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_IsTextTrimmedChanged(self, p0, result);
     }
     pub fn remove_IsTextTrimmedChanged(self: *const IRichTextBlockOverflow, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -27118,73 +27118,73 @@ pub const IScrollView = extern struct {
     pub fn ScrollBy_2(self: *const IScrollView, p0: f64, p1: f64, p2: *ScrollingScrollOptions, result: *i32) callconv(.winapi) HRESULT {
         return self.vtable.ScrollBy_2(self, p0, p1, p2, result);
     }
-    pub fn AddScrollVelocity(self: *const IScrollView, p0: @"Windows.Foundation.Numerics".Vector2, p1: *anyopaque, result: *i32) callconv(.winapi) HRESULT {
+    pub fn AddScrollVelocity(self: *const IScrollView, p0: @"Windows.Foundation.Numerics".Vector2, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, result: *i32) callconv(.winapi) HRESULT {
         return self.vtable.AddScrollVelocity(self, p0, p1, result);
     }
-    pub fn ZoomTo(self: *const IScrollView, p0: f32, p1: *anyopaque, result: *i32) callconv(.winapi) HRESULT {
+    pub fn ZoomTo(self: *const IScrollView, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, result: *i32) callconv(.winapi) HRESULT {
         return self.vtable.ZoomTo(self, p0, p1, result);
     }
-    pub fn ZoomTo_2(self: *const IScrollView, p0: f32, p1: *anyopaque, p2: *ScrollingZoomOptions, result: *i32) callconv(.winapi) HRESULT {
+    pub fn ZoomTo_2(self: *const IScrollView, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, p2: *ScrollingZoomOptions, result: *i32) callconv(.winapi) HRESULT {
         return self.vtable.ZoomTo_2(self, p0, p1, p2, result);
     }
-    pub fn ZoomBy(self: *const IScrollView, p0: f32, p1: *anyopaque, result: *i32) callconv(.winapi) HRESULT {
+    pub fn ZoomBy(self: *const IScrollView, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, result: *i32) callconv(.winapi) HRESULT {
         return self.vtable.ZoomBy(self, p0, p1, result);
     }
-    pub fn ZoomBy_2(self: *const IScrollView, p0: f32, p1: *anyopaque, p2: *ScrollingZoomOptions, result: *i32) callconv(.winapi) HRESULT {
+    pub fn ZoomBy_2(self: *const IScrollView, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, p2: *ScrollingZoomOptions, result: *i32) callconv(.winapi) HRESULT {
         return self.vtable.ZoomBy_2(self, p0, p1, p2, result);
     }
-    pub fn AddZoomVelocity(self: *const IScrollView, p0: f32, p1: *anyopaque, p2: *@"Windows.Foundation".IReference__G1__f32, result: *i32) callconv(.winapi) HRESULT {
+    pub fn AddZoomVelocity(self: *const IScrollView, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, p2: *@"Windows.Foundation".IReference__G1__f32, result: *i32) callconv(.winapi) HRESULT {
         return self.vtable.AddZoomVelocity(self, p0, p1, p2, result);
     }
-    pub fn add_ExtentChanged(self: *const IScrollView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ExtentChanged(self: *const IScrollView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ExtentChanged(self, p0, result);
     }
     pub fn remove_ExtentChanged(self: *const IScrollView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ExtentChanged(self, p0);
     }
-    pub fn add_StateChanged(self: *const IScrollView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_StateChanged(self: *const IScrollView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_StateChanged(self, p0, result);
     }
     pub fn remove_StateChanged(self: *const IScrollView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_StateChanged(self, p0);
     }
-    pub fn add_ViewChanged(self: *const IScrollView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ViewChanged(self: *const IScrollView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ViewChanged(self, p0, result);
     }
     pub fn remove_ViewChanged(self: *const IScrollView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ViewChanged(self, p0);
     }
-    pub fn add_ScrollAnimationStarting(self: *const IScrollView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ScrollAnimationStarting(self: *const IScrollView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingScrollAnimationStartingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ScrollAnimationStarting(self, p0, result);
     }
     pub fn remove_ScrollAnimationStarting(self: *const IScrollView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ScrollAnimationStarting(self, p0);
     }
-    pub fn add_ZoomAnimationStarting(self: *const IScrollView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ZoomAnimationStarting(self: *const IScrollView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingZoomAnimationStartingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ZoomAnimationStarting(self, p0, result);
     }
     pub fn remove_ZoomAnimationStarting(self: *const IScrollView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ZoomAnimationStarting(self, p0);
     }
-    pub fn add_ScrollCompleted(self: *const IScrollView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ScrollCompleted(self: *const IScrollView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingScrollCompletedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ScrollCompleted(self, p0, result);
     }
     pub fn remove_ScrollCompleted(self: *const IScrollView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ScrollCompleted(self, p0);
     }
-    pub fn add_ZoomCompleted(self: *const IScrollView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ZoomCompleted(self: *const IScrollView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingZoomCompletedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ZoomCompleted(self, p0, result);
     }
     pub fn remove_ZoomCompleted(self: *const IScrollView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ZoomCompleted(self, p0);
     }
-    pub fn add_BringingIntoView(self: *const IScrollView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_BringingIntoView(self: *const IScrollView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingBringingIntoViewEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_BringingIntoView(self, p0, result);
     }
     pub fn remove_BringingIntoView(self: *const IScrollView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_BringingIntoView(self, p0);
     }
-    pub fn add_AnchorRequested(self: *const IScrollView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_AnchorRequested(self: *const IScrollView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingAnchorRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_AnchorRequested(self, p0, result);
     }
     pub fn remove_AnchorRequested(self: *const IScrollView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -27652,19 +27652,19 @@ pub const IScrollViewer = extern struct {
     pub fn put_CanContentRenderOutsideBounds(self: *const IScrollViewer, p0: BOOL) callconv(.winapi) HRESULT {
         return self.vtable.put_CanContentRenderOutsideBounds(self, p0);
     }
-    pub fn add_AnchorRequested(self: *const IScrollViewer, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_AnchorRequested(self: *const IScrollViewer, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollViewer__Microsoft_UI_Xaml_Controls_AnchorRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_AnchorRequested(self, p0, result);
     }
     pub fn remove_AnchorRequested(self: *const IScrollViewer, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_AnchorRequested(self, p0);
     }
-    pub fn add_ViewChanging(self: *const IScrollViewer, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ViewChanging(self: *const IScrollViewer, p0: *@"Windows.Foundation".EventHandler__G1__Microsoft_UI_Xaml_Controls_ScrollViewerViewChangingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ViewChanging(self, p0, result);
     }
     pub fn remove_ViewChanging(self: *const IScrollViewer, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ViewChanging(self, p0);
     }
-    pub fn add_ViewChanged(self: *const IScrollViewer, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ViewChanged(self: *const IScrollViewer, p0: *@"Windows.Foundation".EventHandler__G1__Microsoft_UI_Xaml_Controls_ScrollViewerViewChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ViewChanged(self, p0, result);
     }
     pub fn remove_ViewChanged(self: *const IScrollViewer, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -28118,7 +28118,7 @@ pub const IScrollingAnchorRequestedEventArgs = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn get_AnchorCandidates(self: *const IScrollingAnchorRequestedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_AnchorCandidates(self: *const IScrollingAnchorRequestedEventArgs, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_UIElement) callconv(.winapi) HRESULT {
         return self.vtable.get_AnchorCandidates(self, result);
     }
     pub fn get_AnchorElement(self: *const IScrollingAnchorRequestedEventArgs, result: **@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT {
@@ -28416,10 +28416,10 @@ pub const ISectionsInViewChangedEventArgs = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn get_AddedSections(self: *const ISectionsInViewChangedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_AddedSections(self: *const ISectionsInViewChangedEventArgs, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_HubSection) callconv(.winapi) HRESULT {
         return self.vtable.get_AddedSections(self, result);
     }
-    pub fn get_RemovedSections(self: *const ISectionsInViewChangedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_RemovedSections(self: *const ISectionsInViewChangedEventArgs, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_HubSection) callconv(.winapi) HRESULT {
         return self.vtable.get_RemovedSections(self, result);
     }
 };
@@ -28507,7 +28507,7 @@ pub const ISelectorBar = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn get_Items(self: *const ISelectorBar, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_Items(self: *const ISelectorBar, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_SelectorBarItem) callconv(.winapi) HRESULT {
         return self.vtable.get_Items(self, result);
     }
     pub fn get_SelectedItem(self: *const ISelectorBar, result: **SelectorBarItem) callconv(.winapi) HRESULT {
@@ -28516,7 +28516,7 @@ pub const ISelectorBar = extern struct {
     pub fn put_SelectedItem(self: *const ISelectorBar, p0: *SelectorBarItem) callconv(.winapi) HRESULT {
         return self.vtable.put_SelectedItem(self, p0);
     }
-    pub fn add_SelectionChanged(self: *const ISelectorBar, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_SelectionChanged(self: *const ISelectorBar, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SelectorBar__Microsoft_UI_Xaml_Controls_SelectorBarSelectionChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_SelectionChanged(self, p0, result);
     }
     pub fn remove_SelectionChanged(self: *const ISelectorBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -29112,7 +29112,7 @@ pub const ISplitButton = extern struct {
     pub fn put_CommandParameter(self: *const ISplitButton, p0: ?*const anyopaque) callconv(.winapi) HRESULT {
         return self.vtable.put_CommandParameter(self, p0);
     }
-    pub fn add_Click(self: *const ISplitButton, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_Click(self: *const ISplitButton, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SplitButton__Microsoft_UI_Xaml_Controls_SplitButtonClickEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_Click(self, p0, result);
     }
     pub fn remove_Click(self: *const ISplitButton, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -29222,7 +29222,7 @@ pub const ISplitMenuFlyoutItem = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn get_Items(self: *const ISplitMenuFlyoutItem, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_Items(self: *const ISplitMenuFlyoutItem, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_MenuFlyoutItemBase) callconv(.winapi) HRESULT {
         return self.vtable.get_Items(self, result);
     }
     pub fn get_SubMenuPresenterStyle(self: *const ISplitMenuFlyoutItem, result: **@"Microsoft.UI.Xaml".Style) callconv(.winapi) HRESULT {
@@ -29360,25 +29360,25 @@ pub const ISplitView = extern struct {
     pub fn put_LightDismissOverlayMode(self: *const ISplitView, p0: LightDismissOverlayMode) callconv(.winapi) HRESULT {
         return self.vtable.put_LightDismissOverlayMode(self, p0);
     }
-    pub fn add_PaneClosing(self: *const ISplitView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_PaneClosing(self: *const ISplitView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SplitView__Microsoft_UI_Xaml_Controls_SplitViewPaneClosingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_PaneClosing(self, p0, result);
     }
     pub fn remove_PaneClosing(self: *const ISplitView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_PaneClosing(self, p0);
     }
-    pub fn add_PaneClosed(self: *const ISplitView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_PaneClosed(self: *const ISplitView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SplitView__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_PaneClosed(self, p0, result);
     }
     pub fn remove_PaneClosed(self: *const ISplitView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_PaneClosed(self, p0);
     }
-    pub fn add_PaneOpening(self: *const ISplitView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_PaneOpening(self: *const ISplitView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SplitView__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_PaneOpening(self, p0, result);
     }
     pub fn remove_PaneOpening(self: *const ISplitView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_PaneOpening(self, p0);
     }
-    pub fn add_PaneOpened(self: *const ISplitView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_PaneOpened(self: *const ISplitView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SplitView__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_PaneOpened(self, p0, result);
     }
     pub fn remove_PaneOpened(self: *const ISplitView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -29886,7 +29886,7 @@ pub const ISwapChainPanel = extern struct {
     pub fn get_CompositionScaleY(self: *const ISwapChainPanel, result: *f32) callconv(.winapi) HRESULT {
         return self.vtable.get_CompositionScaleY(self, result);
     }
-    pub fn add_CompositionScaleChanged(self: *const ISwapChainPanel, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_CompositionScaleChanged(self: *const ISwapChainPanel, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SwapChainPanel__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_CompositionScaleChanged(self, p0, result);
     }
     pub fn remove_CompositionScaleChanged(self: *const ISwapChainPanel, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -30128,7 +30128,7 @@ pub const ISwipeItem = extern struct {
     pub fn put_BehaviorOnInvoked(self: *const ISwipeItem, p0: SwipeBehaviorOnInvoked) callconv(.winapi) HRESULT {
         return self.vtable.put_BehaviorOnInvoked(self, p0);
     }
-    pub fn add_Invoked(self: *const ISwipeItem, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_Invoked(self: *const ISwipeItem, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SwipeItem__Microsoft_UI_Xaml_Controls_SwipeItemInvokedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_Invoked(self, p0, result);
     }
     pub fn remove_Invoked(self: *const ISwipeItem, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -30592,25 +30592,25 @@ pub const ITabView = extern struct {
     pub fn put_AddTabButtonCommandParameter(self: *const ITabView, p0: ?*const anyopaque) callconv(.winapi) HRESULT {
         return self.vtable.put_AddTabButtonCommandParameter(self, p0);
     }
-    pub fn add_TabCloseRequested(self: *const ITabView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_TabCloseRequested(self: *const ITabView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabCloseRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_TabCloseRequested(self, p0, result);
     }
     pub fn remove_TabCloseRequested(self: *const ITabView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_TabCloseRequested(self, p0);
     }
-    pub fn add_TabDroppedOutside(self: *const ITabView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_TabDroppedOutside(self: *const ITabView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabDroppedOutsideEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_TabDroppedOutside(self, p0, result);
     }
     pub fn remove_TabDroppedOutside(self: *const ITabView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_TabDroppedOutside(self, p0);
     }
-    pub fn add_AddTabButtonClick(self: *const ITabView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_AddTabButtonClick(self: *const ITabView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_AddTabButtonClick(self, p0, result);
     }
     pub fn remove_AddTabButtonClick(self: *const ITabView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_AddTabButtonClick(self, p0);
     }
-    pub fn add_TabItemsChanged(self: *const ITabView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_TabItemsChanged(self: *const ITabView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Windows_Foundation_Collections_IVectorChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_TabItemsChanged(self, p0, result);
     }
     pub fn remove_TabItemsChanged(self: *const ITabView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -30679,13 +30679,13 @@ pub const ITabView = extern struct {
     pub fn remove_SelectionChanged(self: *const ITabView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_SelectionChanged(self, p0);
     }
-    pub fn add_TabDragStarting(self: *const ITabView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_TabDragStarting(self: *const ITabView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabDragStartingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_TabDragStarting(self, p0, result);
     }
     pub fn remove_TabDragStarting(self: *const ITabView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_TabDragStarting(self, p0);
     }
-    pub fn add_TabDragCompleted(self: *const ITabView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_TabDragCompleted(self: *const ITabView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabDragCompletedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_TabDragCompleted(self, p0, result);
     }
     pub fn remove_TabDragCompleted(self: *const ITabView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -30824,25 +30824,25 @@ pub const ITabView2 = extern struct {
     pub fn put_CanTearOutTabs(self: *const ITabView2, p0: BOOL) callconv(.winapi) HRESULT {
         return self.vtable.put_CanTearOutTabs(self, p0);
     }
-    pub fn add_TabTearOutWindowRequested(self: *const ITabView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_TabTearOutWindowRequested(self: *const ITabView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabTearOutWindowRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_TabTearOutWindowRequested(self, p0, result);
     }
     pub fn remove_TabTearOutWindowRequested(self: *const ITabView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_TabTearOutWindowRequested(self, p0);
     }
-    pub fn add_TabTearOutRequested(self: *const ITabView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_TabTearOutRequested(self: *const ITabView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabTearOutRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_TabTearOutRequested(self, p0, result);
     }
     pub fn remove_TabTearOutRequested(self: *const ITabView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_TabTearOutRequested(self, p0);
     }
-    pub fn add_ExternalTornOutTabsDropping(self: *const ITabView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ExternalTornOutTabsDropping(self: *const ITabView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewExternalTornOutTabsDroppingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ExternalTornOutTabsDropping(self, p0, result);
     }
     pub fn remove_ExternalTornOutTabsDropping(self: *const ITabView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ExternalTornOutTabsDropping(self, p0);
     }
-    pub fn add_ExternalTornOutTabsDropped(self: *const ITabView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ExternalTornOutTabsDropped(self: *const ITabView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewExternalTornOutTabsDroppedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ExternalTornOutTabsDropped(self, p0, result);
     }
     pub fn remove_ExternalTornOutTabsDropped(self: *const ITabView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -31042,7 +31042,7 @@ pub const ITabViewItem = extern struct {
     pub fn get_TabViewTemplateSettings(self: *const ITabViewItem, result: **TabViewItemTemplateSettings) callconv(.winapi) HRESULT {
         return self.vtable.get_TabViewTemplateSettings(self, result);
     }
-    pub fn add_CloseRequested(self: *const ITabViewItem, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_CloseRequested(self: *const ITabViewItem, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabViewItem__Microsoft_UI_Xaml_Controls_TabViewTabCloseRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_CloseRequested(self, p0, result);
     }
     pub fn remove_CloseRequested(self: *const ITabViewItem, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -31664,25 +31664,25 @@ pub const ITeachingTip = extern struct {
     pub fn get_TemplateSettings(self: *const ITeachingTip, result: **TeachingTipTemplateSettings) callconv(.winapi) HRESULT {
         return self.vtable.get_TemplateSettings(self, result);
     }
-    pub fn add_ActionButtonClick(self: *const ITeachingTip, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ActionButtonClick(self: *const ITeachingTip, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TeachingTip__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ActionButtonClick(self, p0, result);
     }
     pub fn remove_ActionButtonClick(self: *const ITeachingTip, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ActionButtonClick(self, p0);
     }
-    pub fn add_CloseButtonClick(self: *const ITeachingTip, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_CloseButtonClick(self: *const ITeachingTip, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TeachingTip__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_CloseButtonClick(self, p0, result);
     }
     pub fn remove_CloseButtonClick(self: *const ITeachingTip, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_CloseButtonClick(self, p0);
     }
-    pub fn add_Closing(self: *const ITeachingTip, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_Closing(self: *const ITeachingTip, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TeachingTip__Microsoft_UI_Xaml_Controls_TeachingTipClosingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_Closing(self, p0, result);
     }
     pub fn remove_Closing(self: *const ITeachingTip, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_Closing(self, p0);
     }
-    pub fn add_Closed(self: *const ITeachingTip, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_Closed(self: *const ITeachingTip, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TeachingTip__Microsoft_UI_Xaml_Controls_TeachingTipClosedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_Closed(self, p0, result);
     }
     pub fn remove_Closed(self: *const ITeachingTip, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -32198,7 +32198,7 @@ pub const ITextBlock = extern struct {
     pub fn put_HorizontalTextAlignment(self: *const ITextBlock, p0: @"Microsoft.UI.Xaml".TextAlignment) callconv(.winapi) HRESULT {
         return self.vtable.put_HorizontalTextAlignment(self, p0);
     }
-    pub fn get_TextHighlighters(self: *const ITextBlock, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_TextHighlighters(self: *const ITextBlock, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Documents_TextHighlighter) callconv(.winapi) HRESULT {
         return self.vtable.get_TextHighlighters(self, result);
     }
     pub fn get_SelectionFlyout(self: *const ITextBlock, result: **@"Microsoft.UI.Xaml.Controls.Primitives".FlyoutBase) callconv(.winapi) HRESULT {
@@ -32219,7 +32219,7 @@ pub const ITextBlock = extern struct {
     pub fn remove_ContextMenuOpening(self: *const ITextBlock, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ContextMenuOpening(self, p0);
     }
-    pub fn add_IsTextTrimmedChanged(self: *const ITextBlock, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_IsTextTrimmedChanged(self: *const ITextBlock, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBlock__Microsoft_UI_Xaml_Controls_IsTextTrimmedChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_IsTextTrimmedChanged(self, p0, result);
     }
     pub fn remove_IsTextTrimmedChanged(self: *const ITextBlock, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -32582,43 +32582,43 @@ pub const ITextBox = extern struct {
     pub fn remove_Paste(self: *const ITextBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_Paste(self, p0);
     }
-    pub fn add_TextCompositionStarted(self: *const ITextBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_TextCompositionStarted(self: *const ITextBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextCompositionStartedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_TextCompositionStarted(self, p0, result);
     }
     pub fn remove_TextCompositionStarted(self: *const ITextBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_TextCompositionStarted(self, p0);
     }
-    pub fn add_TextCompositionChanged(self: *const ITextBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_TextCompositionChanged(self: *const ITextBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextCompositionChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_TextCompositionChanged(self, p0, result);
     }
     pub fn remove_TextCompositionChanged(self: *const ITextBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_TextCompositionChanged(self, p0);
     }
-    pub fn add_TextCompositionEnded(self: *const ITextBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_TextCompositionEnded(self: *const ITextBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextCompositionEndedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_TextCompositionEnded(self, p0, result);
     }
     pub fn remove_TextCompositionEnded(self: *const ITextBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_TextCompositionEnded(self, p0);
     }
-    pub fn add_CopyingToClipboard(self: *const ITextBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_CopyingToClipboard(self: *const ITextBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextControlCopyingToClipboardEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_CopyingToClipboard(self, p0, result);
     }
     pub fn remove_CopyingToClipboard(self: *const ITextBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_CopyingToClipboard(self, p0);
     }
-    pub fn add_CuttingToClipboard(self: *const ITextBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_CuttingToClipboard(self: *const ITextBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextControlCuttingToClipboardEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_CuttingToClipboard(self, p0, result);
     }
     pub fn remove_CuttingToClipboard(self: *const ITextBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_CuttingToClipboard(self, p0);
     }
-    pub fn add_BeforeTextChanging(self: *const ITextBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_BeforeTextChanging(self: *const ITextBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextBoxBeforeTextChangingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_BeforeTextChanging(self, p0, result);
     }
     pub fn remove_BeforeTextChanging(self: *const ITextBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_BeforeTextChanging(self, p0);
     }
-    pub fn add_SelectionChanging(self: *const ITextBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_SelectionChanging(self: *const ITextBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextBoxSelectionChangingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_SelectionChanging(self, p0, result);
     }
     pub fn remove_SelectionChanging(self: *const ITextBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -32633,7 +32633,7 @@ pub const ITextBox = extern struct {
     pub fn GetRectFromCharacterIndex(self: *const ITextBox, p0: i32, p1: BOOL, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT {
         return self.vtable.GetRectFromCharacterIndex(self, p0, p1, result);
     }
-    pub fn GetLinguisticAlternativesAsync(self: *const ITextBox, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn GetLinguisticAlternativesAsync(self: *const ITextBox, result: **@"Windows.Foundation".IAsyncOperation__G1__Windows_Foundation_Collections_IVectorView__G1__HSTRING) callconv(.winapi) HRESULT {
         return self.vtable.GetLinguisticAlternativesAsync(self, result);
     }
     pub fn Undo(self: *const ITextBox) callconv(.winapi) HRESULT {
@@ -32666,13 +32666,13 @@ pub const ITextBox = extern struct {
     pub fn put_DesiredCandidateWindowAlignment(self: *const ITextBox, p0: CandidateWindowAlignment) callconv(.winapi) HRESULT {
         return self.vtable.put_DesiredCandidateWindowAlignment(self, p0);
     }
-    pub fn add_CandidateWindowBoundsChanged(self: *const ITextBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_CandidateWindowBoundsChanged(self: *const ITextBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_CandidateWindowBoundsChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_CandidateWindowBoundsChanged(self, p0, result);
     }
     pub fn remove_CandidateWindowBoundsChanged(self: *const ITextBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_CandidateWindowBoundsChanged(self, p0);
     }
-    pub fn add_TextChanging(self: *const ITextBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_TextChanging(self: *const ITextBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextBoxTextChangingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_TextChanging(self, p0, result);
     }
     pub fn remove_TextChanging(self: *const ITextBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -33330,19 +33330,19 @@ pub const ITimePicker = extern struct {
     pub fn put_LightDismissOverlayMode(self: *const ITimePicker, p0: LightDismissOverlayMode) callconv(.winapi) HRESULT {
         return self.vtable.put_LightDismissOverlayMode(self, p0);
     }
-    pub fn get_SelectedTime(self: *const ITimePicker, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_SelectedTime(self: *const ITimePicker, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_TimeSpan) callconv(.winapi) HRESULT {
         return self.vtable.get_SelectedTime(self, result);
     }
-    pub fn put_SelectedTime(self: *const ITimePicker, p0: *anyopaque) callconv(.winapi) HRESULT {
+    pub fn put_SelectedTime(self: *const ITimePicker, p0: *@"Windows.Foundation".IReference__G1__Windows_Foundation_TimeSpan) callconv(.winapi) HRESULT {
         return self.vtable.put_SelectedTime(self, p0);
     }
-    pub fn add_TimeChanged(self: *const ITimePicker, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_TimeChanged(self: *const ITimePicker, p0: *@"Windows.Foundation".EventHandler__G1__Microsoft_UI_Xaml_Controls_TimePickerValueChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_TimeChanged(self, p0, result);
     }
     pub fn remove_TimeChanged(self: *const ITimePicker, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_TimeChanged(self, p0);
     }
-    pub fn add_SelectedTimeChanged(self: *const ITimePicker, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_SelectedTimeChanged(self: *const ITimePicker, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TimePicker__Microsoft_UI_Xaml_Controls_TimePickerSelectedValueChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_SelectedTimeChanged(self, p0, result);
     }
     pub fn remove_SelectedTimeChanged(self: *const ITimePicker, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -33449,13 +33449,13 @@ pub const ITimePickerFlyout = extern struct {
     pub fn put_MinuteIncrement(self: *const ITimePickerFlyout, p0: i32) callconv(.winapi) HRESULT {
         return self.vtable.put_MinuteIncrement(self, p0);
     }
-    pub fn add_TimePicked(self: *const ITimePickerFlyout, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_TimePicked(self: *const ITimePickerFlyout, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TimePickerFlyout__Microsoft_UI_Xaml_Controls_TimePickedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_TimePicked(self, p0, result);
     }
     pub fn remove_TimePicked(self: *const ITimePickerFlyout, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_TimePicked(self, p0);
     }
-    pub fn ShowAtAsync(self: *const ITimePickerFlyout, p0: *@"Microsoft.UI.Xaml".FrameworkElement, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn ShowAtAsync(self: *const ITimePickerFlyout, p0: *@"Microsoft.UI.Xaml".FrameworkElement, result: **@"Windows.Foundation".IAsyncOperation__G1__Windows_Foundation_IReference__G1__Windows_Foundation_TimeSpan) callconv(.winapi) HRESULT {
         return self.vtable.ShowAtAsync(self, p0, result);
     }
     pub fn addTimePicked(
@@ -33568,10 +33568,10 @@ pub const ITimePickerSelectedValueChangedEventArgs = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn get_OldTime(self: *const ITimePickerSelectedValueChangedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_OldTime(self: *const ITimePickerSelectedValueChangedEventArgs, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_TimeSpan) callconv(.winapi) HRESULT {
         return self.vtable.get_OldTime(self, result);
     }
-    pub fn get_NewTime(self: *const ITimePickerSelectedValueChangedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_NewTime(self: *const ITimePickerSelectedValueChangedEventArgs, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_TimeSpan) callconv(.winapi) HRESULT {
         return self.vtable.get_NewTime(self, result);
     }
 };
@@ -33735,13 +33735,13 @@ pub const ITitleBar = extern struct {
     pub fn get_TemplateSettings(self: *const ITitleBar, result: **TitleBarTemplateSettings) callconv(.winapi) HRESULT {
         return self.vtable.get_TemplateSettings(self, result);
     }
-    pub fn add_BackRequested(self: *const ITitleBar, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_BackRequested(self: *const ITitleBar, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TitleBar__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_BackRequested(self, p0, result);
     }
     pub fn remove_BackRequested(self: *const ITitleBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_BackRequested(self, p0);
     }
-    pub fn add_PaneToggleRequested(self: *const ITitleBar, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_PaneToggleRequested(self: *const ITitleBar, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TitleBar__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_PaneToggleRequested(self, p0, result);
     }
     pub fn remove_PaneToggleRequested(self: *const ITitleBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -34113,7 +34113,7 @@ pub const IToggleSplitButton = extern struct {
     pub fn put_IsChecked(self: *const IToggleSplitButton, p0: BOOL) callconv(.winapi) HRESULT {
         return self.vtable.put_IsChecked(self, p0);
     }
-    pub fn add_IsCheckedChanged(self: *const IToggleSplitButton, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_IsCheckedChanged(self: *const IToggleSplitButton, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ToggleSplitButton__Microsoft_UI_Xaml_Controls_ToggleSplitButtonIsCheckedChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_IsCheckedChanged(self, p0, result);
     }
     pub fn remove_IsCheckedChanged(self: *const IToggleSplitButton, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -34382,10 +34382,10 @@ pub const IToolTip = extern struct {
     pub fn put_PlacementTarget(self: *const IToolTip, p0: *@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT {
         return self.vtable.put_PlacementTarget(self, p0);
     }
-    pub fn get_PlacementRect(self: *const IToolTip, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_PlacementRect(self: *const IToolTip, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_Rect) callconv(.winapi) HRESULT {
         return self.vtable.get_PlacementRect(self, result);
     }
-    pub fn put_PlacementRect(self: *const IToolTip, p0: *anyopaque) callconv(.winapi) HRESULT {
+    pub fn put_PlacementRect(self: *const IToolTip, p0: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Rect) callconv(.winapi) HRESULT {
         return self.vtable.put_PlacementRect(self, p0);
     }
     pub fn get_VerticalOffset(self: *const IToolTip, result: *f64) callconv(.winapi) HRESULT {
@@ -34552,7 +34552,7 @@ pub const ITreeView = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn get_RootNodes(self: *const ITreeView, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_RootNodes(self: *const ITreeView, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_TreeViewNode) callconv(.winapi) HRESULT {
         return self.vtable.get_RootNodes(self, result);
     }
     pub fn get_SelectionMode(self: *const ITreeView, result: *TreeViewSelectionMode) callconv(.winapi) HRESULT {
@@ -34561,7 +34561,7 @@ pub const ITreeView = extern struct {
     pub fn put_SelectionMode(self: *const ITreeView, p0: TreeViewSelectionMode) callconv(.winapi) HRESULT {
         return self.vtable.put_SelectionMode(self, p0);
     }
-    pub fn get_SelectedNodes(self: *const ITreeView, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_SelectedNodes(self: *const ITreeView, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_TreeViewNode) callconv(.winapi) HRESULT {
         return self.vtable.get_SelectedNodes(self, result);
     }
     pub fn Expand(self: *const ITreeView, p0: *TreeViewNode) callconv(.winapi) HRESULT {
@@ -34573,19 +34573,19 @@ pub const ITreeView = extern struct {
     pub fn SelectAll(self: *const ITreeView) callconv(.winapi) HRESULT {
         return self.vtable.SelectAll(self);
     }
-    pub fn add_ItemInvoked(self: *const ITreeView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ItemInvoked(self: *const ITreeView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewItemInvokedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ItemInvoked(self, p0, result);
     }
     pub fn remove_ItemInvoked(self: *const ITreeView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ItemInvoked(self, p0);
     }
-    pub fn add_Expanding(self: *const ITreeView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_Expanding(self: *const ITreeView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewExpandingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_Expanding(self, p0, result);
     }
     pub fn remove_Expanding(self: *const ITreeView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_Expanding(self, p0);
     }
-    pub fn add_Collapsed(self: *const ITreeView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_Collapsed(self: *const ITreeView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewCollapsedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_Collapsed(self, p0, result);
     }
     pub fn remove_Collapsed(self: *const ITreeView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -34718,13 +34718,13 @@ pub const ITreeView2 = extern struct {
     pub fn put_ItemsSource(self: *const ITreeView2, p0: ?*const anyopaque) callconv(.winapi) HRESULT {
         return self.vtable.put_ItemsSource(self, p0);
     }
-    pub fn add_DragItemsStarting(self: *const ITreeView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_DragItemsStarting(self: *const ITreeView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewDragItemsStartingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_DragItemsStarting(self, p0, result);
     }
     pub fn remove_DragItemsStarting(self: *const ITreeView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_DragItemsStarting(self, p0);
     }
-    pub fn add_DragItemsCompleted(self: *const ITreeView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_DragItemsCompleted(self: *const ITreeView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewDragItemsCompletedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_DragItemsCompleted(self, p0, result);
     }
     pub fn remove_DragItemsCompleted(self: *const ITreeView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -34796,7 +34796,7 @@ pub const ITreeView3 = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn add_SelectionChanged(self: *const ITreeView3, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_SelectionChanged(self: *const ITreeView3, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewSelectionChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_SelectionChanged(self, p0, result);
     }
     pub fn remove_SelectionChanged(self: *const ITreeView3, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -35401,7 +35401,7 @@ pub const ITreeViewNode = extern struct {
     pub fn put_HasUnrealizedChildren(self: *const ITreeViewNode, p0: BOOL) callconv(.winapi) HRESULT {
         return self.vtable.put_HasUnrealizedChildren(self, p0);
     }
-    pub fn get_Children(self: *const ITreeViewNode, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_Children(self: *const ITreeViewNode, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_TreeViewNode) callconv(.winapi) HRESULT {
         return self.vtable.get_Children(self, result);
     }
 };
@@ -35626,7 +35626,7 @@ pub const ITwoPaneView = extern struct {
     pub fn put_MinTallModeHeight(self: *const ITwoPaneView, p0: f64) callconv(.winapi) HRESULT {
         return self.vtable.put_MinTallModeHeight(self, p0);
     }
-    pub fn add_ModeChanged(self: *const ITwoPaneView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ModeChanged(self: *const ITwoPaneView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TwoPaneView__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ModeChanged(self, p0, result);
     }
     pub fn remove_ModeChanged(self: *const ITwoPaneView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -36617,31 +36617,31 @@ pub const IWebView2 = extern struct {
     pub fn Close(self: *const IWebView2) callconv(.winapi) HRESULT {
         return self.vtable.Close(self);
     }
-    pub fn add_NavigationCompleted(self: *const IWebView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_NavigationCompleted(self: *const IWebView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_WebView2__Microsoft_Web_WebView2_Core_CoreWebView2NavigationCompletedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_NavigationCompleted(self, p0, result);
     }
     pub fn remove_NavigationCompleted(self: *const IWebView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_NavigationCompleted(self, p0);
     }
-    pub fn add_WebMessageReceived(self: *const IWebView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_WebMessageReceived(self: *const IWebView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_WebView2__Microsoft_Web_WebView2_Core_CoreWebView2WebMessageReceivedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_WebMessageReceived(self, p0, result);
     }
     pub fn remove_WebMessageReceived(self: *const IWebView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_WebMessageReceived(self, p0);
     }
-    pub fn add_NavigationStarting(self: *const IWebView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_NavigationStarting(self: *const IWebView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_WebView2__Microsoft_Web_WebView2_Core_CoreWebView2NavigationStartingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_NavigationStarting(self, p0, result);
     }
     pub fn remove_NavigationStarting(self: *const IWebView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_NavigationStarting(self, p0);
     }
-    pub fn add_CoreProcessFailed(self: *const IWebView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_CoreProcessFailed(self: *const IWebView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_WebView2__Microsoft_Web_WebView2_Core_CoreWebView2ProcessFailedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_CoreProcessFailed(self, p0, result);
     }
     pub fn remove_CoreProcessFailed(self: *const IWebView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_CoreProcessFailed(self, p0);
     }
-    pub fn add_CoreWebView2Initialized(self: *const IWebView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_CoreWebView2Initialized(self: *const IWebView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_WebView2__Microsoft_UI_Xaml_Controls_CoreWebView2InitializedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_CoreWebView2Initialized(self, p0, result);
     }
     pub fn remove_CoreWebView2Initialized(self: *const IWebView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -40233,7 +40233,7 @@ pub const IAnchorRequestedEventArgs_Vtbl = extern struct {
     base: IInspectable_Vtbl,
     get_Anchor: *const fn (this: *const IAnchorRequestedEventArgs, result: **@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT,
     put_Anchor: *const fn (this: *const IAnchorRequestedEventArgs, p0: *@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT,
-    get_AnchorCandidates: *const fn (this: *const IAnchorRequestedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_AnchorCandidates: *const fn (this: *const IAnchorRequestedEventArgs, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_UIElement) callconv(.winapi) HRESULT,
 };
 pub const IAnimatedIcon_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -40351,17 +40351,17 @@ pub const IAnimatedVisualSource3_Vtbl = extern struct {
 pub const IAnnotatedScrollBar_Vtbl = extern struct {
     base: IInspectable_Vtbl,
     get_ScrollController: *const fn (this: *const IAnnotatedScrollBar, result: **@"Microsoft.UI.Xaml.Controls.Primitives".IScrollController) callconv(.winapi) HRESULT,
-    get_Labels: *const fn (this: *const IAnnotatedScrollBar, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_Labels: *const fn (this: *const IAnnotatedScrollBar, p0: *anyopaque) callconv(.winapi) HRESULT,
+    get_Labels: *const fn (this: *const IAnnotatedScrollBar, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_AnnotatedScrollBarLabel) callconv(.winapi) HRESULT,
+    put_Labels: *const fn (this: *const IAnnotatedScrollBar, p0: *@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_AnnotatedScrollBarLabel) callconv(.winapi) HRESULT,
     get_LabelTemplate: *const fn (this: *const IAnnotatedScrollBar, result: **@"Microsoft.UI.Xaml".IElementFactory) callconv(.winapi) HRESULT,
     put_LabelTemplate: *const fn (this: *const IAnnotatedScrollBar, p0: *@"Microsoft.UI.Xaml".IElementFactory) callconv(.winapi) HRESULT,
     get_DetailLabelTemplate: *const fn (this: *const IAnnotatedScrollBar, result: **@"Microsoft.UI.Xaml".IElementFactory) callconv(.winapi) HRESULT,
     put_DetailLabelTemplate: *const fn (this: *const IAnnotatedScrollBar, p0: *@"Microsoft.UI.Xaml".IElementFactory) callconv(.winapi) HRESULT,
     get_SmallChange: *const fn (this: *const IAnnotatedScrollBar, result: *f64) callconv(.winapi) HRESULT,
     put_SmallChange: *const fn (this: *const IAnnotatedScrollBar, p0: f64) callconv(.winapi) HRESULT,
-    add_Scrolling: *const fn (this: *const IAnnotatedScrollBar, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Scrolling: *const fn (this: *const IAnnotatedScrollBar, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_AnnotatedScrollBar__Microsoft_UI_Xaml_Controls_AnnotatedScrollBarScrollingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Scrolling: *const fn (this: *const IAnnotatedScrollBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_DetailLabelRequested: *const fn (this: *const IAnnotatedScrollBar, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_DetailLabelRequested: *const fn (this: *const IAnnotatedScrollBar, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_AnnotatedScrollBar__Microsoft_UI_Xaml_Controls_AnnotatedScrollBarDetailLabelRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_DetailLabelRequested: *const fn (this: *const IAnnotatedScrollBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IAnnotatedScrollBarDetailLabelRequestedEventArgs_Vtbl = extern struct {
@@ -40539,11 +40539,11 @@ pub const IAutoSuggestBox_Vtbl = extern struct {
     put_LightDismissOverlayMode: *const fn (this: *const IAutoSuggestBox, p0: LightDismissOverlayMode) callconv(.winapi) HRESULT,
     get_Description: *const fn (this: *const IAutoSuggestBox, result: *?*const anyopaque) callconv(.winapi) HRESULT,
     put_Description: *const fn (this: *const IAutoSuggestBox, p0: ?*const anyopaque) callconv(.winapi) HRESULT,
-    add_SuggestionChosen: *const fn (this: *const IAutoSuggestBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_SuggestionChosen: *const fn (this: *const IAutoSuggestBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_AutoSuggestBox__Microsoft_UI_Xaml_Controls_AutoSuggestBoxSuggestionChosenEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_SuggestionChosen: *const fn (this: *const IAutoSuggestBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_TextChanged: *const fn (this: *const IAutoSuggestBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_TextChanged: *const fn (this: *const IAutoSuggestBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_AutoSuggestBox__Microsoft_UI_Xaml_Controls_AutoSuggestBoxTextChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_TextChanged: *const fn (this: *const IAutoSuggestBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_QuerySubmitted: *const fn (this: *const IAutoSuggestBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_QuerySubmitted: *const fn (this: *const IAutoSuggestBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_AutoSuggestBox__Microsoft_UI_Xaml_Controls_AutoSuggestBoxQuerySubmittedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_QuerySubmitted: *const fn (this: *const IAutoSuggestBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IAutoSuggestBoxQuerySubmittedEventArgs_Vtbl = extern struct {
@@ -40649,7 +40649,7 @@ pub const IBreadcrumbBar_Vtbl = extern struct {
     put_ItemsSource: *const fn (this: *const IBreadcrumbBar, p0: ?*const anyopaque) callconv(.winapi) HRESULT,
     get_ItemTemplate: *const fn (this: *const IBreadcrumbBar, result: *?*const anyopaque) callconv(.winapi) HRESULT,
     put_ItemTemplate: *const fn (this: *const IBreadcrumbBar, p0: ?*const anyopaque) callconv(.winapi) HRESULT,
-    add_ItemClicked: *const fn (this: *const IBreadcrumbBar, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ItemClicked: *const fn (this: *const IBreadcrumbBar, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_BreadcrumbBar__Microsoft_UI_Xaml_Controls_BreadcrumbBarItemClickedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ItemClicked: *const fn (this: *const IBreadcrumbBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IBreadcrumbBarFactory_Vtbl = extern struct {
@@ -40688,8 +40688,8 @@ pub const IButtonStatics_Vtbl = extern struct {
 };
 pub const ICalendarDatePicker_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    get_Date: *const fn (this: *const ICalendarDatePicker, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_Date: *const fn (this: *const ICalendarDatePicker, p0: *anyopaque) callconv(.winapi) HRESULT,
+    get_Date: *const fn (this: *const ICalendarDatePicker, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT,
+    put_Date: *const fn (this: *const ICalendarDatePicker, p0: *@"Windows.Foundation".IReference__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT,
     get_IsCalendarOpen: *const fn (this: *const ICalendarDatePicker, result: *BOOL) callconv(.winapi) HRESULT,
     put_IsCalendarOpen: *const fn (this: *const ICalendarDatePicker, p0: BOOL) callconv(.winapi) HRESULT,
     get_DateFormat: *const fn (this: *const ICalendarDatePicker, result: *HSTRING) callconv(.winapi) HRESULT,
@@ -40726,7 +40726,7 @@ pub const ICalendarDatePicker_Vtbl = extern struct {
     put_IsGroupLabelVisible: *const fn (this: *const ICalendarDatePicker, p0: BOOL) callconv(.winapi) HRESULT,
     add_CalendarViewDayItemChanging: *const fn (this: *const ICalendarDatePicker, p0: *CalendarViewDayItemChangingEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_CalendarViewDayItemChanging: *const fn (this: *const ICalendarDatePicker, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_DateChanged: *const fn (this: *const ICalendarDatePicker, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_DateChanged: *const fn (this: *const ICalendarDatePicker, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_CalendarDatePicker__Microsoft_UI_Xaml_Controls_CalendarDatePickerDateChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_DateChanged: *const fn (this: *const ICalendarDatePicker, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     add_Opened: *const fn (this: *const ICalendarDatePicker, p0: *@"Windows.Foundation".EventHandler__G1__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Opened: *const fn (this: *const ICalendarDatePicker, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
@@ -40737,8 +40737,8 @@ pub const ICalendarDatePicker_Vtbl = extern struct {
 };
 pub const ICalendarDatePickerDateChangedEventArgs_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    get_NewDate: *const fn (this: *const ICalendarDatePickerDateChangedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT,
-    get_OldDate: *const fn (this: *const ICalendarDatePickerDateChangedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_NewDate: *const fn (this: *const ICalendarDatePickerDateChangedEventArgs, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT,
+    get_OldDate: *const fn (this: *const ICalendarDatePickerDateChangedEventArgs, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT,
 };
 pub const ICalendarDatePickerFactory_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -40787,7 +40787,7 @@ pub const ICalendarView_Vtbl = extern struct {
     put_MinDate: *const fn (this: *const ICalendarView, p0: @"Windows.Foundation".DateTime) callconv(.winapi) HRESULT,
     get_NumberOfWeeksInView: *const fn (this: *const ICalendarView, result: *i32) callconv(.winapi) HRESULT,
     put_NumberOfWeeksInView: *const fn (this: *const ICalendarView, p0: i32) callconv(.winapi) HRESULT,
-    get_SelectedDates: *const fn (this: *const ICalendarView, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_SelectedDates: *const fn (this: *const ICalendarView, result: **@"Windows.Foundation.Collections".IVector__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT,
     get_SelectionMode: *const fn (this: *const ICalendarView, result: *CalendarViewSelectionMode) callconv(.winapi) HRESULT,
     put_SelectionMode: *const fn (this: *const ICalendarView, p0: CalendarViewSelectionMode) callconv(.winapi) HRESULT,
     get_TemplateSettings: *const fn (this: *const ICalendarView, result: **@"Microsoft.UI.Xaml.Controls.Primitives".CalendarViewTemplateSettings) callconv(.winapi) HRESULT,
@@ -40915,9 +40915,9 @@ pub const ICalendarView_Vtbl = extern struct {
     put_CalendarViewDayItemStyle: *const fn (this: *const ICalendarView, p0: *@"Microsoft.UI.Xaml".Style) callconv(.winapi) HRESULT,
     get_CalendarItemCornerRadius: *const fn (this: *const ICalendarView, result: *@"Microsoft.UI.Xaml".CornerRadius) callconv(.winapi) HRESULT,
     put_CalendarItemCornerRadius: *const fn (this: *const ICalendarView, p0: @"Microsoft.UI.Xaml".CornerRadius) callconv(.winapi) HRESULT,
-    add_CalendarViewDayItemChanging: *const fn (this: *const ICalendarView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_CalendarViewDayItemChanging: *const fn (this: *const ICalendarView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_CalendarView__Microsoft_UI_Xaml_Controls_CalendarViewDayItemChangingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_CalendarViewDayItemChanging: *const fn (this: *const ICalendarView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_SelectedDatesChanged: *const fn (this: *const ICalendarView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_SelectedDatesChanged: *const fn (this: *const ICalendarView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_CalendarView__Microsoft_UI_Xaml_Controls_CalendarViewSelectedDatesChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_SelectedDatesChanged: *const fn (this: *const ICalendarView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     SetDisplayDate: *const fn (this: *const ICalendarView, p0: @"Windows.Foundation".DateTime) callconv(.winapi) HRESULT,
     SetYearDecadeDisplayDimensions: *const fn (this: *const ICalendarView, p0: i32, p1: i32) callconv(.winapi) HRESULT,
@@ -40927,15 +40927,15 @@ pub const ICalendarViewDayItem_Vtbl = extern struct {
     get_IsBlackout: *const fn (this: *const ICalendarViewDayItem, result: *BOOL) callconv(.winapi) HRESULT,
     put_IsBlackout: *const fn (this: *const ICalendarViewDayItem, p0: BOOL) callconv(.winapi) HRESULT,
     get_Date: *const fn (this: *const ICalendarViewDayItem, result: *@"Windows.Foundation".DateTime) callconv(.winapi) HRESULT,
-    SetDensityColors: *const fn (this: *const ICalendarViewDayItem, p0: *anyopaque) callconv(.winapi) HRESULT,
+    SetDensityColors: *const fn (this: *const ICalendarViewDayItem, p0: *@"Windows.Foundation.Collections".IIterable__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
 };
 pub const ICalendarViewDayItemChangingEventArgs_Vtbl = extern struct {
     base: IInspectable_Vtbl,
     get_InRecycleQueue: *const fn (this: *const ICalendarViewDayItemChangingEventArgs, result: *BOOL) callconv(.winapi) HRESULT,
     get_Item: *const fn (this: *const ICalendarViewDayItemChangingEventArgs, result: **CalendarViewDayItem) callconv(.winapi) HRESULT,
     get_Phase: *const fn (this: *const ICalendarViewDayItemChangingEventArgs, result: *u32) callconv(.winapi) HRESULT,
-    RegisterUpdateCallback: *const fn (this: *const ICalendarViewDayItemChangingEventArgs, p0: *anyopaque) callconv(.winapi) HRESULT,
-    RegisterUpdateCallback_2: *const fn (this: *const ICalendarViewDayItemChangingEventArgs, p0: u32, p1: *anyopaque) callconv(.winapi) HRESULT,
+    RegisterUpdateCallback: *const fn (this: *const ICalendarViewDayItemChangingEventArgs, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_CalendarView__Microsoft_UI_Xaml_Controls_CalendarViewDayItemChangingEventArgs) callconv(.winapi) HRESULT,
+    RegisterUpdateCallback_2: *const fn (this: *const ICalendarViewDayItemChangingEventArgs, p0: u32, p1: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_CalendarView__Microsoft_UI_Xaml_Controls_CalendarViewDayItemChangingEventArgs) callconv(.winapi) HRESULT,
 };
 pub const ICalendarViewDayItemFactory_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -40952,8 +40952,8 @@ pub const ICalendarViewFactory_Vtbl = extern struct {
 };
 pub const ICalendarViewSelectedDatesChangedEventArgs_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    get_AddedDates: *const fn (this: *const ICalendarViewSelectedDatesChangedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT,
-    get_RemovedDates: *const fn (this: *const ICalendarViewSelectedDatesChangedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_AddedDates: *const fn (this: *const ICalendarViewSelectedDatesChangedEventArgs, result: **@"Windows.Foundation.Collections".IVectorView__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT,
+    get_RemovedDates: *const fn (this: *const ICalendarViewSelectedDatesChangedEventArgs, result: **@"Windows.Foundation.Collections".IVectorView__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT,
 };
 pub const ICalendarViewStatics_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -41095,8 +41095,8 @@ pub const IColorPicker_Vtbl = extern struct {
     base: IInspectable_Vtbl,
     get_Color: *const fn (this: *const IColorPicker, result: *@"Windows.UI".Color) callconv(.winapi) HRESULT,
     put_Color: *const fn (this: *const IColorPicker, p0: @"Windows.UI".Color) callconv(.winapi) HRESULT,
-    get_PreviousColor: *const fn (this: *const IColorPicker, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_PreviousColor: *const fn (this: *const IColorPicker, p0: *anyopaque) callconv(.winapi) HRESULT,
+    get_PreviousColor: *const fn (this: *const IColorPicker, result: **@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
+    put_PreviousColor: *const fn (this: *const IColorPicker, p0: *@"Windows.Foundation".IReference__G1__Windows_UI_Color) callconv(.winapi) HRESULT,
     get_IsAlphaEnabled: *const fn (this: *const IColorPicker, result: *BOOL) callconv(.winapi) HRESULT,
     put_IsAlphaEnabled: *const fn (this: *const IColorPicker, p0: BOOL) callconv(.winapi) HRESULT,
     get_IsColorSpectrumVisible: *const fn (this: *const IColorPicker, result: *BOOL) callconv(.winapi) HRESULT,
@@ -41131,7 +41131,7 @@ pub const IColorPicker_Vtbl = extern struct {
     put_ColorSpectrumShape: *const fn (this: *const IColorPicker, p0: ColorSpectrumShape) callconv(.winapi) HRESULT,
     get_ColorSpectrumComponents: *const fn (this: *const IColorPicker, result: *ColorSpectrumComponents) callconv(.winapi) HRESULT,
     put_ColorSpectrumComponents: *const fn (this: *const IColorPicker, p0: ColorSpectrumComponents) callconv(.winapi) HRESULT,
-    add_ColorChanged: *const fn (this: *const IColorPicker, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ColorChanged: *const fn (this: *const IColorPicker, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ColorPicker__Microsoft_UI_Xaml_Controls_ColorChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ColorChanged: *const fn (this: *const IColorPicker, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IColorPicker2_Vtbl = extern struct {
@@ -41221,7 +41221,7 @@ pub const IComboBox_Vtbl = extern struct {
     remove_DropDownClosed: *const fn (this: *const IComboBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     add_DropDownOpened: *const fn (this: *const IComboBox, p0: *@"Windows.Foundation".EventHandler__G1__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_DropDownOpened: *const fn (this: *const IComboBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_TextSubmitted: *const fn (this: *const IComboBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_TextSubmitted: *const fn (this: *const IComboBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ComboBox__Microsoft_UI_Xaml_Controls_ComboBoxTextSubmittedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_TextSubmitted: *const fn (this: *const IComboBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IComboBoxFactory_Vtbl = extern struct {
@@ -41264,8 +41264,8 @@ pub const IComboBoxTextSubmittedEventArgs_Vtbl = extern struct {
 };
 pub const ICommandBar_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    get_PrimaryCommands: *const fn (this: *const ICommandBar, result: **anyopaque) callconv(.winapi) HRESULT,
-    get_SecondaryCommands: *const fn (this: *const ICommandBar, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_PrimaryCommands: *const fn (this: *const ICommandBar, result: **@"Windows.Foundation.Collections".IObservableVector__G1__Microsoft_UI_Xaml_Controls_ICommandBarElement) callconv(.winapi) HRESULT,
+    get_SecondaryCommands: *const fn (this: *const ICommandBar, result: **@"Windows.Foundation.Collections".IObservableVector__G1__Microsoft_UI_Xaml_Controls_ICommandBarElement) callconv(.winapi) HRESULT,
     get_CommandBarOverflowPresenterStyle: *const fn (this: *const ICommandBar, result: **@"Microsoft.UI.Xaml".Style) callconv(.winapi) HRESULT,
     put_CommandBarOverflowPresenterStyle: *const fn (this: *const ICommandBar, p0: *@"Microsoft.UI.Xaml".Style) callconv(.winapi) HRESULT,
     get_CommandBarTemplateSettings: *const fn (this: *const ICommandBar, result: **@"Microsoft.UI.Xaml.Controls.Primitives".CommandBarTemplateSettings) callconv(.winapi) HRESULT,
@@ -41275,7 +41275,7 @@ pub const ICommandBar_Vtbl = extern struct {
     put_OverflowButtonVisibility: *const fn (this: *const ICommandBar, p0: CommandBarOverflowButtonVisibility) callconv(.winapi) HRESULT,
     get_IsDynamicOverflowEnabled: *const fn (this: *const ICommandBar, result: *BOOL) callconv(.winapi) HRESULT,
     put_IsDynamicOverflowEnabled: *const fn (this: *const ICommandBar, p0: BOOL) callconv(.winapi) HRESULT,
-    add_DynamicOverflowItemsChanging: *const fn (this: *const ICommandBar, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_DynamicOverflowItemsChanging: *const fn (this: *const ICommandBar, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_CommandBar__Microsoft_UI_Xaml_Controls_DynamicOverflowItemsChangingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_DynamicOverflowItemsChanging: *const fn (this: *const ICommandBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const ICommandBarElement_Vtbl = extern struct {
@@ -41292,8 +41292,8 @@ pub const ICommandBarFactory_Vtbl = extern struct {
 };
 pub const ICommandBarFlyout_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    get_PrimaryCommands: *const fn (this: *const ICommandBarFlyout, result: **anyopaque) callconv(.winapi) HRESULT,
-    get_SecondaryCommands: *const fn (this: *const ICommandBarFlyout, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_PrimaryCommands: *const fn (this: *const ICommandBarFlyout, result: **@"Windows.Foundation.Collections".IObservableVector__G1__Microsoft_UI_Xaml_Controls_ICommandBarElement) callconv(.winapi) HRESULT,
+    get_SecondaryCommands: *const fn (this: *const ICommandBarFlyout, result: **@"Windows.Foundation.Collections".IObservableVector__G1__Microsoft_UI_Xaml_Controls_ICommandBarElement) callconv(.winapi) HRESULT,
 };
 pub const ICommandBarFlyout2_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -41329,8 +41329,8 @@ pub const IContainerContentChangingEventArgs_Vtbl = extern struct {
     get_Phase: *const fn (this: *const IContainerContentChangingEventArgs, result: *u32) callconv(.winapi) HRESULT,
     get_Handled: *const fn (this: *const IContainerContentChangingEventArgs, result: *BOOL) callconv(.winapi) HRESULT,
     put_Handled: *const fn (this: *const IContainerContentChangingEventArgs, p0: BOOL) callconv(.winapi) HRESULT,
-    RegisterUpdateCallback: *const fn (this: *const IContainerContentChangingEventArgs, p0: *anyopaque) callconv(.winapi) HRESULT,
-    RegisterUpdateCallback_2: *const fn (this: *const IContainerContentChangingEventArgs, p0: u32, p1: *anyopaque) callconv(.winapi) HRESULT,
+    RegisterUpdateCallback: *const fn (this: *const IContainerContentChangingEventArgs, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListViewBase__Microsoft_UI_Xaml_Controls_ContainerContentChangingEventArgs) callconv(.winapi) HRESULT,
+    RegisterUpdateCallback_2: *const fn (this: *const IContainerContentChangingEventArgs, p0: u32, p1: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListViewBase__Microsoft_UI_Xaml_Controls_ContainerContentChangingEventArgs) callconv(.winapi) HRESULT,
 };
 pub const IContentControl_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -41399,21 +41399,21 @@ pub const IContentDialog_Vtbl = extern struct {
     put_CloseButtonStyle: *const fn (this: *const IContentDialog, p0: *@"Microsoft.UI.Xaml".Style) callconv(.winapi) HRESULT,
     get_DefaultButton: *const fn (this: *const IContentDialog, result: *ContentDialogButton) callconv(.winapi) HRESULT,
     put_DefaultButton: *const fn (this: *const IContentDialog, p0: ContentDialogButton) callconv(.winapi) HRESULT,
-    add_Closing: *const fn (this: *const IContentDialog, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Closing: *const fn (this: *const IContentDialog, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogClosingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Closing: *const fn (this: *const IContentDialog, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_Closed: *const fn (this: *const IContentDialog, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Closed: *const fn (this: *const IContentDialog, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogClosedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Closed: *const fn (this: *const IContentDialog, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_Opened: *const fn (this: *const IContentDialog, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Opened: *const fn (this: *const IContentDialog, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogOpenedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Opened: *const fn (this: *const IContentDialog, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_PrimaryButtonClick: *const fn (this: *const IContentDialog, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_PrimaryButtonClick: *const fn (this: *const IContentDialog, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogButtonClickEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_PrimaryButtonClick: *const fn (this: *const IContentDialog, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_SecondaryButtonClick: *const fn (this: *const IContentDialog, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_SecondaryButtonClick: *const fn (this: *const IContentDialog, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogButtonClickEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_SecondaryButtonClick: *const fn (this: *const IContentDialog, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_CloseButtonClick: *const fn (this: *const IContentDialog, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_CloseButtonClick: *const fn (this: *const IContentDialog, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ContentDialog__Microsoft_UI_Xaml_Controls_ContentDialogButtonClickEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_CloseButtonClick: *const fn (this: *const IContentDialog, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     Hide: *const fn (this: *const IContentDialog) callconv(.winapi) HRESULT,
-    ShowAsync: *const fn (this: *const IContentDialog, result: **anyopaque) callconv(.winapi) HRESULT,
-    ShowAsync_2: *const fn (this: *const IContentDialog, p0: ContentDialogPlacement, result: **anyopaque) callconv(.winapi) HRESULT,
+    ShowAsync: *const fn (this: *const IContentDialog, result: **@"Windows.Foundation".IAsyncOperation__G1__Microsoft_UI_Xaml_Controls_ContentDialogResult) callconv(.winapi) HRESULT,
+    ShowAsync_2: *const fn (this: *const IContentDialog, p0: ContentDialogPlacement, result: **@"Windows.Foundation".IAsyncOperation__G1__Microsoft_UI_Xaml_Controls_ContentDialogResult) callconv(.winapi) HRESULT,
 };
 pub const IContentDialogButtonClickDeferral_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -41620,9 +41620,9 @@ pub const IControl_Vtbl = extern struct {
     put_ElementSoundMode: *const fn (this: *const IControl, p0: @"Microsoft.UI.Xaml".ElementSoundMode) callconv(.winapi) HRESULT,
     get_CornerRadius: *const fn (this: *const IControl, result: *@"Microsoft.UI.Xaml".CornerRadius) callconv(.winapi) HRESULT,
     put_CornerRadius: *const fn (this: *const IControl, p0: @"Microsoft.UI.Xaml".CornerRadius) callconv(.winapi) HRESULT,
-    add_FocusEngaged: *const fn (this: *const IControl, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_FocusEngaged: *const fn (this: *const IControl, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Control__Microsoft_UI_Xaml_Controls_FocusEngagedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_FocusEngaged: *const fn (this: *const IControl, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_FocusDisengaged: *const fn (this: *const IControl, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_FocusDisengaged: *const fn (this: *const IControl, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Control__Microsoft_UI_Xaml_Controls_FocusDisengagedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_FocusDisengaged: *const fn (this: *const IControl, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     add_IsEnabledChanged: *const fn (this: *const IControl, p0: *@"Microsoft.UI.Xaml".DependencyPropertyChangedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_IsEnabledChanged: *const fn (this: *const IControl, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
@@ -41762,11 +41762,11 @@ pub const IDatePicker_Vtbl = extern struct {
     put_Orientation: *const fn (this: *const IDatePicker, p0: Orientation) callconv(.winapi) HRESULT,
     get_LightDismissOverlayMode: *const fn (this: *const IDatePicker, result: *LightDismissOverlayMode) callconv(.winapi) HRESULT,
     put_LightDismissOverlayMode: *const fn (this: *const IDatePicker, p0: LightDismissOverlayMode) callconv(.winapi) HRESULT,
-    get_SelectedDate: *const fn (this: *const IDatePicker, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_SelectedDate: *const fn (this: *const IDatePicker, p0: *anyopaque) callconv(.winapi) HRESULT,
-    add_DateChanged: *const fn (this: *const IDatePicker, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    get_SelectedDate: *const fn (this: *const IDatePicker, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT,
+    put_SelectedDate: *const fn (this: *const IDatePicker, p0: *@"Windows.Foundation".IReference__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT,
+    add_DateChanged: *const fn (this: *const IDatePicker, p0: *@"Windows.Foundation".EventHandler__G1__Microsoft_UI_Xaml_Controls_DatePickerValueChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_DateChanged: *const fn (this: *const IDatePicker, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_SelectedDateChanged: *const fn (this: *const IDatePicker, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_SelectedDateChanged: *const fn (this: *const IDatePicker, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_DatePicker__Microsoft_UI_Xaml_Controls_DatePickerSelectedValueChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_SelectedDateChanged: *const fn (this: *const IDatePicker, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IDatePickerFactory_Vtbl = extern struct {
@@ -41795,9 +41795,9 @@ pub const IDatePickerFlyout_Vtbl = extern struct {
     put_MonthFormat: *const fn (this: *const IDatePickerFlyout, p0: HSTRING) callconv(.winapi) HRESULT,
     get_YearFormat: *const fn (this: *const IDatePickerFlyout, result: *HSTRING) callconv(.winapi) HRESULT,
     put_YearFormat: *const fn (this: *const IDatePickerFlyout, p0: HSTRING) callconv(.winapi) HRESULT,
-    add_DatePicked: *const fn (this: *const IDatePickerFlyout, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_DatePicked: *const fn (this: *const IDatePickerFlyout, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_DatePickerFlyout__Microsoft_UI_Xaml_Controls_DatePickedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_DatePicked: *const fn (this: *const IDatePickerFlyout, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    ShowAtAsync: *const fn (this: *const IDatePickerFlyout, p0: *@"Microsoft.UI.Xaml".FrameworkElement, result: **anyopaque) callconv(.winapi) HRESULT,
+    ShowAtAsync: *const fn (this: *const IDatePickerFlyout, p0: *@"Microsoft.UI.Xaml".FrameworkElement, result: **@"Windows.Foundation".IAsyncOperation__G1__Windows_Foundation_IReference__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT,
 };
 pub const IDatePickerFlyoutItem_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -41835,8 +41835,8 @@ pub const IDatePickerFlyoutStatics_Vtbl = extern struct {
 };
 pub const IDatePickerSelectedValueChangedEventArgs_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    get_OldDate: *const fn (this: *const IDatePickerSelectedValueChangedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT,
-    get_NewDate: *const fn (this: *const IDatePickerSelectedValueChangedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_OldDate: *const fn (this: *const IDatePickerSelectedValueChangedEventArgs, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT,
+    get_NewDate: *const fn (this: *const IDatePickerSelectedValueChangedEventArgs, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_DateTime) callconv(.winapi) HRESULT,
 };
 pub const IDatePickerStatics_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -41882,7 +41882,7 @@ pub const IDropDownButtonFactory_Vtbl = extern struct {
 };
 pub const IDynamicAnimatedVisualSource_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    add_AnimatedVisualInvalidated: *const fn (this: *const IDynamicAnimatedVisualSource, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_AnimatedVisualInvalidated: *const fn (this: *const IDynamicAnimatedVisualSource, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_IDynamicAnimatedVisualSource__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_AnimatedVisualInvalidated: *const fn (this: *const IDynamicAnimatedVisualSource, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IDynamicOverflowItemsChangingEventArgs_Vtbl = extern struct {
@@ -41901,9 +41901,9 @@ pub const IExpander_Vtbl = extern struct {
     put_IsExpanded: *const fn (this: *const IExpander, p0: BOOL) callconv(.winapi) HRESULT,
     get_ExpandDirection: *const fn (this: *const IExpander, result: *ExpandDirection) callconv(.winapi) HRESULT,
     put_ExpandDirection: *const fn (this: *const IExpander, p0: ExpandDirection) callconv(.winapi) HRESULT,
-    add_Expanding: *const fn (this: *const IExpander, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Expanding: *const fn (this: *const IExpander, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Expander__Microsoft_UI_Xaml_Controls_ExpanderExpandingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Expanding: *const fn (this: *const IExpander, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_Collapsed: *const fn (this: *const IExpander, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Collapsed: *const fn (this: *const IExpander, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Expander__Microsoft_UI_Xaml_Controls_ExpanderCollapsedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Collapsed: *const fn (this: *const IExpander, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     get_TemplateSettings: *const fn (this: *const IExpander, result: **ExpanderTemplateSettings) callconv(.winapi) HRESULT,
 };
@@ -42059,8 +42059,8 @@ pub const IFrame_Vtbl = extern struct {
     get_SourcePageType: *const fn (this: *const IFrame, result: *@"Windows.UI.Xaml.Interop".TypeName) callconv(.winapi) HRESULT,
     put_SourcePageType: *const fn (this: *const IFrame, p0: @"Windows.UI.Xaml.Interop".TypeName) callconv(.winapi) HRESULT,
     get_BackStackDepth: *const fn (this: *const IFrame, result: *i32) callconv(.winapi) HRESULT,
-    get_BackStack: *const fn (this: *const IFrame, result: **anyopaque) callconv(.winapi) HRESULT,
-    get_ForwardStack: *const fn (this: *const IFrame, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_BackStack: *const fn (this: *const IFrame, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Navigation_PageStackEntry) callconv(.winapi) HRESULT,
+    get_ForwardStack: *const fn (this: *const IFrame, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Navigation_PageStackEntry) callconv(.winapi) HRESULT,
     get_IsNavigationStackEnabled: *const fn (this: *const IFrame, result: *BOOL) callconv(.winapi) HRESULT,
     put_IsNavigationStackEnabled: *const fn (this: *const IFrame, p0: BOOL) callconv(.winapi) HRESULT,
     add_Navigated: *const fn (this: *const IFrame, p0: *@"Microsoft.UI.Xaml.Navigation".NavigatedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
@@ -42218,8 +42218,8 @@ pub const IHub_Vtbl = extern struct {
     put_Orientation: *const fn (this: *const IHub, p0: Orientation) callconv(.winapi) HRESULT,
     get_DefaultSectionIndex: *const fn (this: *const IHub, result: *i32) callconv(.winapi) HRESULT,
     put_DefaultSectionIndex: *const fn (this: *const IHub, p0: i32) callconv(.winapi) HRESULT,
-    get_Sections: *const fn (this: *const IHub, result: **anyopaque) callconv(.winapi) HRESULT,
-    get_SectionsInView: *const fn (this: *const IHub, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_Sections: *const fn (this: *const IHub, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_HubSection) callconv(.winapi) HRESULT,
+    get_SectionsInView: *const fn (this: *const IHub, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_HubSection) callconv(.winapi) HRESULT,
     get_SectionHeaders: *const fn (this: *const IHub, result: **@"Windows.Foundation.Collections".IObservableVector__G1__object) callconv(.winapi) HRESULT,
     add_SectionHeaderClick: *const fn (this: *const IHub, p0: *HubSectionHeaderClickEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_SectionHeaderClick: *const fn (this: *const IHub, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
@@ -42433,11 +42433,11 @@ pub const IInfoBar_Vtbl = extern struct {
     get_ContentTemplate: *const fn (this: *const IInfoBar, result: **@"Microsoft.UI.Xaml".DataTemplate) callconv(.winapi) HRESULT,
     put_ContentTemplate: *const fn (this: *const IInfoBar, p0: *@"Microsoft.UI.Xaml".DataTemplate) callconv(.winapi) HRESULT,
     get_TemplateSettings: *const fn (this: *const IInfoBar, result: **InfoBarTemplateSettings) callconv(.winapi) HRESULT,
-    add_CloseButtonClick: *const fn (this: *const IInfoBar, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_CloseButtonClick: *const fn (this: *const IInfoBar, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_InfoBar__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_CloseButtonClick: *const fn (this: *const IInfoBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_Closing: *const fn (this: *const IInfoBar, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Closing: *const fn (this: *const IInfoBar, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_InfoBar__Microsoft_UI_Xaml_Controls_InfoBarClosingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Closing: *const fn (this: *const IInfoBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_Closed: *const fn (this: *const IInfoBar, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Closed: *const fn (this: *const IInfoBar, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_InfoBar__Microsoft_UI_Xaml_Controls_InfoBarClosedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Closed: *const fn (this: *const IInfoBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IInfoBarClosedEventArgs_Vtbl = extern struct {
@@ -42525,7 +42525,7 @@ pub const IItemCollectionTransitionProvider_Vtbl = extern struct {
     base: IInspectable_Vtbl,
     ShouldAnimate: *const fn (this: *const IItemCollectionTransitionProvider, p0: *ItemCollectionTransition, result: *BOOL) callconv(.winapi) HRESULT,
     QueueTransition: *const fn (this: *const IItemCollectionTransitionProvider, p0: *ItemCollectionTransition) callconv(.winapi) HRESULT,
-    add_TransitionCompleted: *const fn (this: *const IItemCollectionTransitionProvider, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_TransitionCompleted: *const fn (this: *const IItemCollectionTransitionProvider, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemCollectionTransitionProvider__Microsoft_UI_Xaml_Controls_ItemCollectionTransitionCompletedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_TransitionCompleted: *const fn (this: *const IItemCollectionTransitionProvider, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IItemCollectionTransitionProviderFactory_Vtbl = extern struct {
@@ -42535,7 +42535,7 @@ pub const IItemCollectionTransitionProviderFactory_Vtbl = extern struct {
 pub const IItemCollectionTransitionProviderOverrides_Vtbl = extern struct {
     base: IInspectable_Vtbl,
     ShouldAnimateCore: *const fn (this: *const IItemCollectionTransitionProviderOverrides, p0: *ItemCollectionTransition, result: *BOOL) callconv(.winapi) HRESULT,
-    StartTransitions: *const fn (this: *const IItemCollectionTransitionProviderOverrides, p0: *anyopaque) callconv(.winapi) HRESULT,
+    StartTransitions: *const fn (this: *const IItemCollectionTransitionProviderOverrides, p0: *@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_ItemCollectionTransition) callconv(.winapi) HRESULT,
 };
 pub const IItemContainer_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -42600,7 +42600,7 @@ pub const IItemsControl_Vtbl = extern struct {
     get_ItemContainerGenerator: *const fn (this: *const IItemsControl, result: **ItemContainerGenerator) callconv(.winapi) HRESULT,
     get_ItemContainerTransitions: *const fn (this: *const IItemsControl, result: **@"Microsoft.UI.Xaml.Media.Animation".TransitionCollection) callconv(.winapi) HRESULT,
     put_ItemContainerTransitions: *const fn (this: *const IItemsControl, p0: *@"Microsoft.UI.Xaml.Media.Animation".TransitionCollection) callconv(.winapi) HRESULT,
-    get_GroupStyle: *const fn (this: *const IItemsControl, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_GroupStyle: *const fn (this: *const IItemsControl, result: **@"Windows.Foundation.Collections".IObservableVector__G1__Microsoft_UI_Xaml_Controls_GroupStyle) callconv(.winapi) HRESULT,
     get_GroupStyleSelector: *const fn (this: *const IItemsControl, result: **GroupStyleSelector) callconv(.winapi) HRESULT,
     put_GroupStyleSelector: *const fn (this: *const IItemsControl, p0: *GroupStyleSelector) callconv(.winapi) HRESULT,
     get_IsGrouping: *const fn (this: *const IItemsControl, result: *BOOL) callconv(.winapi) HRESULT,
@@ -42691,11 +42691,11 @@ pub const IItemsRepeater_Vtbl = extern struct {
     GetElementIndex: *const fn (this: *const IItemsRepeater, p0: *@"Microsoft.UI.Xaml".UIElement, result: *i32) callconv(.winapi) HRESULT,
     TryGetElement: *const fn (this: *const IItemsRepeater, p0: i32, result: **@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT,
     GetOrCreateElement: *const fn (this: *const IItemsRepeater, p0: i32, result: **@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT,
-    add_ElementPrepared: *const fn (this: *const IItemsRepeater, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ElementPrepared: *const fn (this: *const IItemsRepeater, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemsRepeater__Microsoft_UI_Xaml_Controls_ItemsRepeaterElementPreparedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ElementPrepared: *const fn (this: *const IItemsRepeater, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ElementClearing: *const fn (this: *const IItemsRepeater, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ElementClearing: *const fn (this: *const IItemsRepeater, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemsRepeater__Microsoft_UI_Xaml_Controls_ItemsRepeaterElementClearingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ElementClearing: *const fn (this: *const IItemsRepeater, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ElementIndexChanged: *const fn (this: *const IItemsRepeater, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ElementIndexChanged: *const fn (this: *const IItemsRepeater, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemsRepeater__Microsoft_UI_Xaml_Controls_ItemsRepeaterElementIndexChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ElementIndexChanged: *const fn (this: *const IItemsRepeater, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IItemsRepeater2_Vtbl = extern struct {
@@ -42814,9 +42814,9 @@ pub const IItemsView_Vtbl = extern struct {
     SelectAll: *const fn (this: *const IItemsView) callconv(.winapi) HRESULT,
     DeselectAll: *const fn (this: *const IItemsView) callconv(.winapi) HRESULT,
     InvertSelection: *const fn (this: *const IItemsView) callconv(.winapi) HRESULT,
-    add_ItemInvoked: *const fn (this: *const IItemsView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ItemInvoked: *const fn (this: *const IItemsView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemsView__Microsoft_UI_Xaml_Controls_ItemsViewItemInvokedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ItemInvoked: *const fn (this: *const IItemsView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_SelectionChanged: *const fn (this: *const IItemsView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_SelectionChanged: *const fn (this: *const IItemsView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ItemsView__Microsoft_UI_Xaml_Controls_ItemsViewSelectionChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_SelectionChanged: *const fn (this: *const IItemsView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IItemsViewFactory_Vtbl = extern struct {
@@ -42893,9 +42893,9 @@ pub const ILayout_Vtbl = extern struct {
     UninitializeForContext: *const fn (this: *const ILayout, p0: *LayoutContext) callconv(.winapi) HRESULT,
     Measure: *const fn (this: *const ILayout, p0: *LayoutContext, p1: @"Windows.Foundation".Size, result: *@"Windows.Foundation".Size) callconv(.winapi) HRESULT,
     Arrange: *const fn (this: *const ILayout, p0: *LayoutContext, p1: @"Windows.Foundation".Size, result: *@"Windows.Foundation".Size) callconv(.winapi) HRESULT,
-    add_MeasureInvalidated: *const fn (this: *const ILayout, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_MeasureInvalidated: *const fn (this: *const ILayout, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Layout__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_MeasureInvalidated: *const fn (this: *const ILayout, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ArrangeInvalidated: *const fn (this: *const ILayout, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ArrangeInvalidated: *const fn (this: *const ILayout, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Layout__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ArrangeInvalidated: *const fn (this: *const ILayout, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const ILayout2_Vtbl = extern struct {
@@ -42933,9 +42933,9 @@ pub const ILayoutProtected2_Vtbl = extern struct {
 };
 pub const ILinedFlowLayout_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    add_ItemsInfoRequested: *const fn (this: *const ILinedFlowLayout, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ItemsInfoRequested: *const fn (this: *const ILinedFlowLayout, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_LinedFlowLayout__Microsoft_UI_Xaml_Controls_LinedFlowLayoutItemsInfoRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ItemsInfoRequested: *const fn (this: *const ILinedFlowLayout, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ItemsUnlocked: *const fn (this: *const ILinedFlowLayout, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ItemsUnlocked: *const fn (this: *const ILinedFlowLayout, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_LinedFlowLayout__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ItemsUnlocked: *const fn (this: *const ILinedFlowLayout, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     get_ItemsJustification: *const fn (this: *const ILinedFlowLayout, result: *LinedFlowLayoutItemsJustification) callconv(.winapi) HRESULT,
     put_ItemsJustification: *const fn (this: *const ILinedFlowLayout, p0: LinedFlowLayoutItemsJustification) callconv(.winapi) HRESULT,
@@ -43031,9 +43031,9 @@ pub const IListPickerFlyout_Vtbl = extern struct {
     get_SelectedValuePath: *const fn (this: *const IListPickerFlyout, result: *HSTRING) callconv(.winapi) HRESULT,
     put_SelectedValuePath: *const fn (this: *const IListPickerFlyout, p0: HSTRING) callconv(.winapi) HRESULT,
     get_SelectedItems: *const fn (this: *const IListPickerFlyout, result: **@"Windows.Foundation.Collections".IVector__G1__object) callconv(.winapi) HRESULT,
-    add_ItemsPicked: *const fn (this: *const IListPickerFlyout, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ItemsPicked: *const fn (this: *const IListPickerFlyout, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListPickerFlyout__Microsoft_UI_Xaml_Controls_ItemsPickedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ItemsPicked: *const fn (this: *const IListPickerFlyout, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    ShowAtAsync: *const fn (this: *const IListPickerFlyout, p0: *@"Microsoft.UI.Xaml".FrameworkElement, result: **anyopaque) callconv(.winapi) HRESULT,
+    ShowAtAsync: *const fn (this: *const IListPickerFlyout, p0: *@"Microsoft.UI.Xaml".FrameworkElement, result: **@"Windows.Foundation".IAsyncOperation__G1__Windows_Foundation_Collections_IVectorView__G1__object) callconv(.winapi) HRESULT,
 };
 pub const IListPickerFlyoutPresenter_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -43075,7 +43075,7 @@ pub const IListViewBase_Vtbl = extern struct {
     put_ShowsScrollingPlaceholders: *const fn (this: *const IListViewBase, p0: BOOL) callconv(.winapi) HRESULT,
     get_ReorderMode: *const fn (this: *const IListViewBase, result: *ListViewReorderMode) callconv(.winapi) HRESULT,
     put_ReorderMode: *const fn (this: *const IListViewBase, p0: ListViewReorderMode) callconv(.winapi) HRESULT,
-    get_SelectedRanges: *const fn (this: *const IListViewBase, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_SelectedRanges: *const fn (this: *const IListViewBase, result: **@"Windows.Foundation.Collections".IVectorView__G1__Microsoft_UI_Xaml_Data_ItemIndexRange) callconv(.winapi) HRESULT,
     get_IsMultiSelectCheckBoxEnabled: *const fn (this: *const IListViewBase, result: *BOOL) callconv(.winapi) HRESULT,
     put_IsMultiSelectCheckBoxEnabled: *const fn (this: *const IListViewBase, p0: BOOL) callconv(.winapi) HRESULT,
     get_SingleSelectionFollowsFocus: *const fn (this: *const IListViewBase, result: *BOOL) callconv(.winapi) HRESULT,
@@ -43084,17 +43084,17 @@ pub const IListViewBase_Vtbl = extern struct {
     remove_ItemClick: *const fn (this: *const IListViewBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     add_DragItemsStarting: *const fn (this: *const IListViewBase, p0: *DragItemsStartingEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_DragItemsStarting: *const fn (this: *const IListViewBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_DragItemsCompleted: *const fn (this: *const IListViewBase, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_DragItemsCompleted: *const fn (this: *const IListViewBase, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListViewBase__Microsoft_UI_Xaml_Controls_DragItemsCompletedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_DragItemsCompleted: *const fn (this: *const IListViewBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ContainerContentChanging: *const fn (this: *const IListViewBase, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ContainerContentChanging: *const fn (this: *const IListViewBase, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListViewBase__Microsoft_UI_Xaml_Controls_ContainerContentChangingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ContainerContentChanging: *const fn (this: *const IListViewBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ChoosingItemContainer: *const fn (this: *const IListViewBase, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ChoosingItemContainer: *const fn (this: *const IListViewBase, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListViewBase__Microsoft_UI_Xaml_Controls_ChoosingItemContainerEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ChoosingItemContainer: *const fn (this: *const IListViewBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ChoosingGroupHeaderContainer: *const fn (this: *const IListViewBase, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ChoosingGroupHeaderContainer: *const fn (this: *const IListViewBase, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ListViewBase__Microsoft_UI_Xaml_Controls_ChoosingGroupHeaderContainerEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ChoosingGroupHeaderContainer: *const fn (this: *const IListViewBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     ScrollIntoView: *const fn (this: *const IListViewBase, p0: ?*const anyopaque) callconv(.winapi) HRESULT,
     SelectAll: *const fn (this: *const IListViewBase) callconv(.winapi) HRESULT,
-    LoadMoreItemsAsync: *const fn (this: *const IListViewBase, result: **anyopaque) callconv(.winapi) HRESULT,
+    LoadMoreItemsAsync: *const fn (this: *const IListViewBase, result: **@"Windows.Foundation".IAsyncOperation__G1__Microsoft_UI_Xaml_Data_LoadMoreItemsResult) callconv(.winapi) HRESULT,
     ScrollIntoView_2: *const fn (this: *const IListViewBase, p0: ?*const anyopaque, p1: ScrollIntoViewAlignment) callconv(.winapi) HRESULT,
     SetDesiredContainerUpdateDuration: *const fn (this: *const IListViewBase, p0: @"Windows.Foundation".TimeSpan) callconv(.winapi) HRESULT,
     SelectRange: *const fn (this: *const IListViewBase, p0: *@"Microsoft.UI.Xaml.Data".ItemIndexRange) callconv(.winapi) HRESULT,
@@ -43182,15 +43182,15 @@ pub const IMapControl_Vtbl = extern struct {
     put_MapServiceToken: *const fn (this: *const IMapControl, p0: HSTRING) callconv(.winapi) HRESULT,
     get_Center: *const fn (this: *const IMapControl, result: **@"Windows.Devices.Geolocation".Geopoint) callconv(.winapi) HRESULT,
     put_Center: *const fn (this: *const IMapControl, p0: *@"Windows.Devices.Geolocation".Geopoint) callconv(.winapi) HRESULT,
-    get_Layers: *const fn (this: *const IMapControl, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_Layers: *const fn (this: *const IMapControl, p0: *anyopaque) callconv(.winapi) HRESULT,
+    get_Layers: *const fn (this: *const IMapControl, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_MapLayer) callconv(.winapi) HRESULT,
+    put_Layers: *const fn (this: *const IMapControl, p0: *@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_MapLayer) callconv(.winapi) HRESULT,
     get_ZoomLevel: *const fn (this: *const IMapControl, result: *f64) callconv(.winapi) HRESULT,
     put_ZoomLevel: *const fn (this: *const IMapControl, p0: f64) callconv(.winapi) HRESULT,
     get_InteractiveControlsVisible: *const fn (this: *const IMapControl, result: *BOOL) callconv(.winapi) HRESULT,
     put_InteractiveControlsVisible: *const fn (this: *const IMapControl, p0: BOOL) callconv(.winapi) HRESULT,
-    add_MapElementClick: *const fn (this: *const IMapControl, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_MapElementClick: *const fn (this: *const IMapControl, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_MapControl__Microsoft_UI_Xaml_Controls_MapElementClickEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_MapElementClick: *const fn (this: *const IMapControl, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_MapServiceErrorOccurred: *const fn (this: *const IMapControl, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_MapServiceErrorOccurred: *const fn (this: *const IMapControl, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_MapControl__Microsoft_UI_Xaml_Controls_MapControlMapServiceErrorOccurredEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_MapServiceErrorOccurred: *const fn (this: *const IMapControl, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IMapControlFactory_Vtbl = extern struct {
@@ -43222,9 +43222,9 @@ pub const IMapElementFactory_Vtbl = extern struct {
 };
 pub const IMapElementsLayer_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    get_MapElements: *const fn (this: *const IMapElementsLayer, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_MapElements: *const fn (this: *const IMapElementsLayer, p0: *anyopaque) callconv(.winapi) HRESULT,
-    add_MapElementClick: *const fn (this: *const IMapElementsLayer, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    get_MapElements: *const fn (this: *const IMapElementsLayer, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_MapElement) callconv(.winapi) HRESULT,
+    put_MapElements: *const fn (this: *const IMapElementsLayer, p0: *@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_MapElement) callconv(.winapi) HRESULT,
+    add_MapElementClick: *const fn (this: *const IMapElementsLayer, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_MapElementsLayer__Microsoft_UI_Xaml_Controls_MapElementClickEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_MapElementClick: *const fn (this: *const IMapElementsLayer, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IMapElementsLayerFactory_Vtbl = extern struct {
@@ -43358,7 +43358,7 @@ pub const IMediaTransportControls_Vtbl = extern struct {
     put_IsRepeatEnabled: *const fn (this: *const IMediaTransportControls, p0: BOOL) callconv(.winapi) HRESULT,
     get_IsRepeatButtonVisible: *const fn (this: *const IMediaTransportControls, result: *BOOL) callconv(.winapi) HRESULT,
     put_IsRepeatButtonVisible: *const fn (this: *const IMediaTransportControls, p0: BOOL) callconv(.winapi) HRESULT,
-    add_ThumbnailRequested: *const fn (this: *const IMediaTransportControls, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ThumbnailRequested: *const fn (this: *const IMediaTransportControls, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_MediaTransportControls__Microsoft_UI_Xaml_Media_MediaTransportControlsThumbnailRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ThumbnailRequested: *const fn (this: *const IMediaTransportControls, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     Show: *const fn (this: *const IMediaTransportControls) callconv(.winapi) HRESULT,
     Hide: *const fn (this: *const IMediaTransportControls) callconv(.winapi) HRESULT,
@@ -43406,7 +43406,7 @@ pub const IMediaTransportControlsStatics_Vtbl = extern struct {
 };
 pub const IMenuBar_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    get_Items: *const fn (this: *const IMenuBar, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_Items: *const fn (this: *const IMenuBar, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_MenuBarItem) callconv(.winapi) HRESULT,
 };
 pub const IMenuBarFactory_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -43416,7 +43416,7 @@ pub const IMenuBarItem_Vtbl = extern struct {
     base: IInspectable_Vtbl,
     get_Title: *const fn (this: *const IMenuBarItem, result: *HSTRING) callconv(.winapi) HRESULT,
     put_Title: *const fn (this: *const IMenuBarItem, p0: HSTRING) callconv(.winapi) HRESULT,
-    get_Items: *const fn (this: *const IMenuBarItem, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_Items: *const fn (this: *const IMenuBarItem, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_MenuFlyoutItemBase) callconv(.winapi) HRESULT,
 };
 pub const IMenuBarItemFactory_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -43440,7 +43440,7 @@ pub const IMenuBarStatics_Vtbl = extern struct {
 };
 pub const IMenuFlyout_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    get_Items: *const fn (this: *const IMenuFlyout, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_Items: *const fn (this: *const IMenuFlyout, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_MenuFlyoutItemBase) callconv(.winapi) HRESULT,
     get_MenuFlyoutPresenterStyle: *const fn (this: *const IMenuFlyout, result: **@"Microsoft.UI.Xaml".Style) callconv(.winapi) HRESULT,
     put_MenuFlyoutPresenterStyle: *const fn (this: *const IMenuFlyout, p0: *@"Microsoft.UI.Xaml".Style) callconv(.winapi) HRESULT,
     ShowAt: *const fn (this: *const IMenuFlyout, p0: *@"Microsoft.UI.Xaml".UIElement, p1: @"Windows.Foundation".Point) callconv(.winapi) HRESULT,
@@ -43519,7 +43519,7 @@ pub const IMenuFlyoutStatics_Vtbl = extern struct {
 };
 pub const IMenuFlyoutSubItem_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    get_Items: *const fn (this: *const IMenuFlyoutSubItem, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_Items: *const fn (this: *const IMenuFlyoutSubItem, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_MenuFlyoutItemBase) callconv(.winapi) HRESULT,
     get_Text: *const fn (this: *const IMenuFlyoutSubItem, result: *HSTRING) callconv(.winapi) HRESULT,
     put_Text: *const fn (this: *const IMenuFlyoutSubItem, p0: HSTRING) callconv(.winapi) HRESULT,
     get_Icon: *const fn (this: *const IMenuFlyoutSubItem, result: **IconElement) callconv(.winapi) HRESULT,
@@ -43582,11 +43582,11 @@ pub const INavigationView_Vtbl = extern struct {
     put_MenuItemContainerStyleSelector: *const fn (this: *const INavigationView, p0: *StyleSelector) callconv(.winapi) HRESULT,
     MenuItemFromContainer: *const fn (this: *const INavigationView, p0: *@"Microsoft.UI.Xaml".DependencyObject, result: *?*const anyopaque) callconv(.winapi) HRESULT,
     ContainerFromMenuItem: *const fn (this: *const INavigationView, p0: ?*const anyopaque, result: **@"Microsoft.UI.Xaml".DependencyObject) callconv(.winapi) HRESULT,
-    add_SelectionChanged: *const fn (this: *const INavigationView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_SelectionChanged: *const fn (this: *const INavigationView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewSelectionChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_SelectionChanged: *const fn (this: *const INavigationView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ItemInvoked: *const fn (this: *const INavigationView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ItemInvoked: *const fn (this: *const INavigationView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewItemInvokedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ItemInvoked: *const fn (this: *const INavigationView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_DisplayModeChanged: *const fn (this: *const INavigationView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_DisplayModeChanged: *const fn (this: *const INavigationView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewDisplayModeChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_DisplayModeChanged: *const fn (this: *const INavigationView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     get_IsTitleBarAutoPaddingEnabled: *const fn (this: *const INavigationView, result: *BOOL) callconv(.winapi) HRESULT,
     put_IsTitleBarAutoPaddingEnabled: *const fn (this: *const INavigationView, p0: BOOL) callconv(.winapi) HRESULT,
@@ -43599,15 +43599,15 @@ pub const INavigationView2_Vtbl = extern struct {
     put_IsBackEnabled: *const fn (this: *const INavigationView2, p0: BOOL) callconv(.winapi) HRESULT,
     get_PaneTitle: *const fn (this: *const INavigationView2, result: *HSTRING) callconv(.winapi) HRESULT,
     put_PaneTitle: *const fn (this: *const INavigationView2, p0: HSTRING) callconv(.winapi) HRESULT,
-    add_BackRequested: *const fn (this: *const INavigationView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_BackRequested: *const fn (this: *const INavigationView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewBackRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_BackRequested: *const fn (this: *const INavigationView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_PaneClosed: *const fn (this: *const INavigationView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_PaneClosed: *const fn (this: *const INavigationView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_PaneClosed: *const fn (this: *const INavigationView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_PaneClosing: *const fn (this: *const INavigationView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_PaneClosing: *const fn (this: *const INavigationView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewPaneClosingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_PaneClosing: *const fn (this: *const INavigationView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_PaneOpened: *const fn (this: *const INavigationView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_PaneOpened: *const fn (this: *const INavigationView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_PaneOpened: *const fn (this: *const INavigationView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_PaneOpening: *const fn (this: *const INavigationView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_PaneOpening: *const fn (this: *const INavigationView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_PaneOpening: *const fn (this: *const INavigationView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     get_PaneDisplayMode: *const fn (this: *const INavigationView2, result: *NavigationViewPaneDisplayMode) callconv(.winapi) HRESULT,
     put_PaneDisplayMode: *const fn (this: *const INavigationView2, p0: NavigationViewPaneDisplayMode) callconv(.winapi) HRESULT,
@@ -43626,9 +43626,9 @@ pub const INavigationView2_Vtbl = extern struct {
     put_ShoulderNavigationEnabled: *const fn (this: *const INavigationView2, p0: NavigationViewShoulderNavigationEnabled) callconv(.winapi) HRESULT,
     get_OverflowLabelMode: *const fn (this: *const INavigationView2, result: *NavigationViewOverflowLabelMode) callconv(.winapi) HRESULT,
     put_OverflowLabelMode: *const fn (this: *const INavigationView2, p0: NavigationViewOverflowLabelMode) callconv(.winapi) HRESULT,
-    add_Expanding: *const fn (this: *const INavigationView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Expanding: *const fn (this: *const INavigationView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewItemExpandingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Expanding: *const fn (this: *const INavigationView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_Collapsed: *const fn (this: *const INavigationView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Collapsed: *const fn (this: *const INavigationView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NavigationView__Microsoft_UI_Xaml_Controls_NavigationViewItemCollapsedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Collapsed: *const fn (this: *const INavigationView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     Expand: *const fn (this: *const INavigationView2, p0: *NavigationViewItem) callconv(.winapi) HRESULT,
     Collapse: *const fn (this: *const INavigationView2, p0: *NavigationViewItem) callconv(.winapi) HRESULT,
@@ -43839,7 +43839,7 @@ pub const INonVirtualizingLayout_Vtbl = extern struct {
 };
 pub const INonVirtualizingLayoutContext_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    get_Children: *const fn (this: *const INonVirtualizingLayoutContext, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_Children: *const fn (this: *const INonVirtualizingLayoutContext, result: **@"Windows.Foundation.Collections".IVectorView__G1__Microsoft_UI_Xaml_UIElement) callconv(.winapi) HRESULT,
 };
 pub const INonVirtualizingLayoutContextFactory_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -43847,7 +43847,7 @@ pub const INonVirtualizingLayoutContextFactory_Vtbl = extern struct {
 };
 pub const INonVirtualizingLayoutContextOverrides_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    get_ChildrenCore: *const fn (this: *const INonVirtualizingLayoutContextOverrides, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_ChildrenCore: *const fn (this: *const INonVirtualizingLayoutContextOverrides, result: **@"Windows.Foundation.Collections".IVectorView__G1__Microsoft_UI_Xaml_UIElement) callconv(.winapi) HRESULT,
 };
 pub const INonVirtualizingLayoutFactory_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -43900,7 +43900,7 @@ pub const INumberBox_Vtbl = extern struct {
     put_AcceptsExpression: *const fn (this: *const INumberBox, p0: BOOL) callconv(.winapi) HRESULT,
     get_NumberFormatter: *const fn (this: *const INumberBox, result: **@"Windows.Globalization.NumberFormatting".INumberFormatter2) callconv(.winapi) HRESULT,
     put_NumberFormatter: *const fn (this: *const INumberBox, p0: *@"Windows.Globalization.NumberFormatting".INumberFormatter2) callconv(.winapi) HRESULT,
-    add_ValueChanged: *const fn (this: *const INumberBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ValueChanged: *const fn (this: *const INumberBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_NumberBox__Microsoft_UI_Xaml_Controls_NumberBoxValueChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ValueChanged: *const fn (this: *const INumberBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const INumberBoxFactory_Vtbl = extern struct {
@@ -44072,7 +44072,7 @@ pub const IPasswordBox_Vtbl = extern struct {
     remove_ContextMenuOpening: *const fn (this: *const IPasswordBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     add_Paste: *const fn (this: *const IPasswordBox, p0: *TextControlPasteEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Paste: *const fn (this: *const IPasswordBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_PasswordChanging: *const fn (this: *const IPasswordBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_PasswordChanging: *const fn (this: *const IPasswordBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_PasswordBox__Microsoft_UI_Xaml_Controls_PasswordBoxPasswordChangingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_PasswordChanging: *const fn (this: *const IPasswordBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     SelectAll: *const fn (this: *const IPasswordBox) callconv(.winapi) HRESULT,
     PasteFromClipboard: *const fn (this: *const IPasswordBox) callconv(.winapi) HRESULT,
@@ -44180,7 +44180,7 @@ pub const IPickerFlyout_Vtbl = extern struct {
     put_Content: *const fn (this: *const IPickerFlyout, p0: *@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT,
     get_ConfirmationButtonsVisible: *const fn (this: *const IPickerFlyout, result: *BOOL) callconv(.winapi) HRESULT,
     put_ConfirmationButtonsVisible: *const fn (this: *const IPickerFlyout, p0: BOOL) callconv(.winapi) HRESULT,
-    add_Confirmed: *const fn (this: *const IPickerFlyout, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Confirmed: *const fn (this: *const IPickerFlyout, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_PickerFlyout__Microsoft_UI_Xaml_Controls_PickerConfirmedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Confirmed: *const fn (this: *const IPickerFlyout, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     ShowAtAsync: *const fn (this: *const IPickerFlyout, p0: *@"Microsoft.UI.Xaml".FrameworkElement, result: **@"Windows.Foundation".IAsyncOperation__G1__BOOL) callconv(.winapi) HRESULT,
 };
@@ -44214,7 +44214,7 @@ pub const IPipsPager_Vtbl = extern struct {
     put_SelectedPipStyle: *const fn (this: *const IPipsPager, p0: *@"Microsoft.UI.Xaml".Style) callconv(.winapi) HRESULT,
     get_NormalPipStyle: *const fn (this: *const IPipsPager, result: **@"Microsoft.UI.Xaml".Style) callconv(.winapi) HRESULT,
     put_NormalPipStyle: *const fn (this: *const IPipsPager, p0: *@"Microsoft.UI.Xaml".Style) callconv(.winapi) HRESULT,
-    add_SelectedIndexChanged: *const fn (this: *const IPipsPager, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_SelectedIndexChanged: *const fn (this: *const IPipsPager, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_PipsPager__Microsoft_UI_Xaml_Controls_PipsPagerSelectedIndexChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_SelectedIndexChanged: *const fn (this: *const IPipsPager, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     get_TemplateSettings: *const fn (this: *const IPipsPager, result: **PipsPagerTemplateSettings) callconv(.winapi) HRESULT,
 };
@@ -44279,13 +44279,13 @@ pub const IPivot_Vtbl = extern struct {
     put_IsHeaderItemsCarouselEnabled: *const fn (this: *const IPivot, p0: BOOL) callconv(.winapi) HRESULT,
     add_SelectionChanged: *const fn (this: *const IPivot, p0: *SelectionChangedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_SelectionChanged: *const fn (this: *const IPivot, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_PivotItemLoading: *const fn (this: *const IPivot, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_PivotItemLoading: *const fn (this: *const IPivot, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Pivot__Microsoft_UI_Xaml_Controls_PivotItemEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_PivotItemLoading: *const fn (this: *const IPivot, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_PivotItemLoaded: *const fn (this: *const IPivot, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_PivotItemLoaded: *const fn (this: *const IPivot, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Pivot__Microsoft_UI_Xaml_Controls_PivotItemEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_PivotItemLoaded: *const fn (this: *const IPivot, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_PivotItemUnloading: *const fn (this: *const IPivot, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_PivotItemUnloading: *const fn (this: *const IPivot, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Pivot__Microsoft_UI_Xaml_Controls_PivotItemEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_PivotItemUnloading: *const fn (this: *const IPivot, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_PivotItemUnloaded: *const fn (this: *const IPivot, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_PivotItemUnloaded: *const fn (this: *const IPivot, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Pivot__Microsoft_UI_Xaml_Controls_PivotItemEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_PivotItemUnloaded: *const fn (this: *const IPivot, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IPivotFactory_Vtbl = extern struct {
@@ -44483,7 +44483,7 @@ pub const IRatingControl_Vtbl = extern struct {
     put_ItemInfo: *const fn (this: *const IRatingControl, p0: *RatingItemInfo) callconv(.winapi) HRESULT,
     get_Value: *const fn (this: *const IRatingControl, result: *f64) callconv(.winapi) HRESULT,
     put_Value: *const fn (this: *const IRatingControl, p0: f64) callconv(.winapi) HRESULT,
-    add_ValueChanged: *const fn (this: *const IRatingControl, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ValueChanged: *const fn (this: *const IRatingControl, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RatingControl__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ValueChanged: *const fn (this: *const IRatingControl, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IRatingControlFactory_Vtbl = extern struct {
@@ -44570,7 +44570,7 @@ pub const IRefreshContainer_Vtbl = extern struct {
     put_Visualizer: *const fn (this: *const IRefreshContainer, p0: *RefreshVisualizer) callconv(.winapi) HRESULT,
     get_PullDirection: *const fn (this: *const IRefreshContainer, result: *RefreshPullDirection) callconv(.winapi) HRESULT,
     put_PullDirection: *const fn (this: *const IRefreshContainer, p0: RefreshPullDirection) callconv(.winapi) HRESULT,
-    add_RefreshRequested: *const fn (this: *const IRefreshContainer, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_RefreshRequested: *const fn (this: *const IRefreshContainer, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RefreshContainer__Microsoft_UI_Xaml_Controls_RefreshRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_RefreshRequested: *const fn (this: *const IRefreshContainer, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     RequestRefresh: *const fn (this: *const IRefreshContainer) callconv(.winapi) HRESULT,
 };
@@ -44604,9 +44604,9 @@ pub const IRefreshVisualizer_Vtbl = extern struct {
     get_Content: *const fn (this: *const IRefreshVisualizer, result: **@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT,
     put_Content: *const fn (this: *const IRefreshVisualizer, p0: *@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT,
     get_State: *const fn (this: *const IRefreshVisualizer, result: *RefreshVisualizerState) callconv(.winapi) HRESULT,
-    add_RefreshRequested: *const fn (this: *const IRefreshVisualizer, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_RefreshRequested: *const fn (this: *const IRefreshVisualizer, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RefreshVisualizer__Microsoft_UI_Xaml_Controls_RefreshRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_RefreshRequested: *const fn (this: *const IRefreshVisualizer, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_RefreshStateChanged: *const fn (this: *const IRefreshVisualizer, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_RefreshStateChanged: *const fn (this: *const IRefreshVisualizer, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RefreshVisualizer__Microsoft_UI_Xaml_Controls_RefreshStateChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_RefreshStateChanged: *const fn (this: *const IRefreshVisualizer, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IRefreshVisualizerFactory_Vtbl = extern struct {
@@ -44753,28 +44753,28 @@ pub const IRichEditBox_Vtbl = extern struct {
     remove_ContextMenuOpening: *const fn (this: *const IRichEditBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     add_Paste: *const fn (this: *const IRichEditBox, p0: *TextControlPasteEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Paste: *const fn (this: *const IRichEditBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_TextCompositionStarted: *const fn (this: *const IRichEditBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_TextCompositionStarted: *const fn (this: *const IRichEditBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_TextCompositionStartedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_TextCompositionStarted: *const fn (this: *const IRichEditBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_TextCompositionChanged: *const fn (this: *const IRichEditBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_TextCompositionChanged: *const fn (this: *const IRichEditBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_TextCompositionChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_TextCompositionChanged: *const fn (this: *const IRichEditBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_TextCompositionEnded: *const fn (this: *const IRichEditBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_TextCompositionEnded: *const fn (this: *const IRichEditBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_TextCompositionEndedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_TextCompositionEnded: *const fn (this: *const IRichEditBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_CopyingToClipboard: *const fn (this: *const IRichEditBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_CopyingToClipboard: *const fn (this: *const IRichEditBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_TextControlCopyingToClipboardEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_CopyingToClipboard: *const fn (this: *const IRichEditBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_CuttingToClipboard: *const fn (this: *const IRichEditBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_CuttingToClipboard: *const fn (this: *const IRichEditBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_TextControlCuttingToClipboardEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_CuttingToClipboard: *const fn (this: *const IRichEditBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_SelectionChanging: *const fn (this: *const IRichEditBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_SelectionChanging: *const fn (this: *const IRichEditBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_RichEditBoxSelectionChangingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_SelectionChanging: *const fn (this: *const IRichEditBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    GetLinguisticAlternativesAsync: *const fn (this: *const IRichEditBox, result: **anyopaque) callconv(.winapi) HRESULT,
+    GetLinguisticAlternativesAsync: *const fn (this: *const IRichEditBox, result: **@"Windows.Foundation".IAsyncOperation__G1__Windows_Foundation_Collections_IVectorView__G1__HSTRING) callconv(.winapi) HRESULT,
     get_TextReadingOrder: *const fn (this: *const IRichEditBox, result: *@"Microsoft.UI.Xaml".TextReadingOrder) callconv(.winapi) HRESULT,
     put_TextReadingOrder: *const fn (this: *const IRichEditBox, p0: @"Microsoft.UI.Xaml".TextReadingOrder) callconv(.winapi) HRESULT,
     get_ClipboardCopyFormat: *const fn (this: *const IRichEditBox, result: *RichEditClipboardFormat) callconv(.winapi) HRESULT,
     put_ClipboardCopyFormat: *const fn (this: *const IRichEditBox, p0: RichEditClipboardFormat) callconv(.winapi) HRESULT,
     get_DesiredCandidateWindowAlignment: *const fn (this: *const IRichEditBox, result: *CandidateWindowAlignment) callconv(.winapi) HRESULT,
     put_DesiredCandidateWindowAlignment: *const fn (this: *const IRichEditBox, p0: CandidateWindowAlignment) callconv(.winapi) HRESULT,
-    add_CandidateWindowBoundsChanged: *const fn (this: *const IRichEditBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_CandidateWindowBoundsChanged: *const fn (this: *const IRichEditBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_CandidateWindowBoundsChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_CandidateWindowBoundsChanged: *const fn (this: *const IRichEditBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_TextChanging: *const fn (this: *const IRichEditBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_TextChanging: *const fn (this: *const IRichEditBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichEditBox__Microsoft_UI_Xaml_Controls_RichEditBoxTextChangingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_TextChanging: *const fn (this: *const IRichEditBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IRichEditBoxFactory_Vtbl = extern struct {
@@ -44878,14 +44878,14 @@ pub const IRichTextBlock_Vtbl = extern struct {
     get_IsTextTrimmed: *const fn (this: *const IRichTextBlock, result: *BOOL) callconv(.winapi) HRESULT,
     get_HorizontalTextAlignment: *const fn (this: *const IRichTextBlock, result: *@"Microsoft.UI.Xaml".TextAlignment) callconv(.winapi) HRESULT,
     put_HorizontalTextAlignment: *const fn (this: *const IRichTextBlock, p0: @"Microsoft.UI.Xaml".TextAlignment) callconv(.winapi) HRESULT,
-    get_TextHighlighters: *const fn (this: *const IRichTextBlock, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_TextHighlighters: *const fn (this: *const IRichTextBlock, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Documents_TextHighlighter) callconv(.winapi) HRESULT,
     get_SelectionFlyout: *const fn (this: *const IRichTextBlock, result: **@"Microsoft.UI.Xaml.Controls.Primitives".FlyoutBase) callconv(.winapi) HRESULT,
     put_SelectionFlyout: *const fn (this: *const IRichTextBlock, p0: *@"Microsoft.UI.Xaml.Controls.Primitives".FlyoutBase) callconv(.winapi) HRESULT,
     add_SelectionChanged: *const fn (this: *const IRichTextBlock, p0: *@"Microsoft.UI.Xaml".RoutedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_SelectionChanged: *const fn (this: *const IRichTextBlock, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     add_ContextMenuOpening: *const fn (this: *const IRichTextBlock, p0: *ContextMenuOpeningEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ContextMenuOpening: *const fn (this: *const IRichTextBlock, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_IsTextTrimmedChanged: *const fn (this: *const IRichTextBlock, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_IsTextTrimmedChanged: *const fn (this: *const IRichTextBlock, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichTextBlock__Microsoft_UI_Xaml_Controls_IsTextTrimmedChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_IsTextTrimmedChanged: *const fn (this: *const IRichTextBlock, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     SelectAll: *const fn (this: *const IRichTextBlock) callconv(.winapi) HRESULT,
     Select: *const fn (this: *const IRichTextBlock, p0: *@"Microsoft.UI.Xaml.Documents".TextPointer, p1: *@"Microsoft.UI.Xaml.Documents".TextPointer) callconv(.winapi) HRESULT,
@@ -44908,7 +44908,7 @@ pub const IRichTextBlockOverflow_Vtbl = extern struct {
     get_MaxLines: *const fn (this: *const IRichTextBlockOverflow, result: *i32) callconv(.winapi) HRESULT,
     put_MaxLines: *const fn (this: *const IRichTextBlockOverflow, p0: i32) callconv(.winapi) HRESULT,
     get_IsTextTrimmed: *const fn (this: *const IRichTextBlockOverflow, result: *BOOL) callconv(.winapi) HRESULT,
-    add_IsTextTrimmedChanged: *const fn (this: *const IRichTextBlockOverflow, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_IsTextTrimmedChanged: *const fn (this: *const IRichTextBlockOverflow, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_RichTextBlockOverflow__Microsoft_UI_Xaml_Controls_IsTextTrimmedChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_IsTextTrimmedChanged: *const fn (this: *const IRichTextBlockOverflow, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     GetPositionFromPoint: *const fn (this: *const IRichTextBlockOverflow, p0: @"Windows.Foundation".Point, result: **@"Microsoft.UI.Xaml.Documents".TextPointer) callconv(.winapi) HRESULT,
 };
@@ -45072,29 +45072,29 @@ pub const IScrollView_Vtbl = extern struct {
     ScrollTo_2: *const fn (this: *const IScrollView, p0: f64, p1: f64, p2: *ScrollingScrollOptions, result: *i32) callconv(.winapi) HRESULT,
     ScrollBy: *const fn (this: *const IScrollView, p0: f64, p1: f64, result: *i32) callconv(.winapi) HRESULT,
     ScrollBy_2: *const fn (this: *const IScrollView, p0: f64, p1: f64, p2: *ScrollingScrollOptions, result: *i32) callconv(.winapi) HRESULT,
-    AddScrollVelocity: *const fn (this: *const IScrollView, p0: @"Windows.Foundation.Numerics".Vector2, p1: *anyopaque, result: *i32) callconv(.winapi) HRESULT,
-    ZoomTo: *const fn (this: *const IScrollView, p0: f32, p1: *anyopaque, result: *i32) callconv(.winapi) HRESULT,
-    ZoomTo_2: *const fn (this: *const IScrollView, p0: f32, p1: *anyopaque, p2: *ScrollingZoomOptions, result: *i32) callconv(.winapi) HRESULT,
-    ZoomBy: *const fn (this: *const IScrollView, p0: f32, p1: *anyopaque, result: *i32) callconv(.winapi) HRESULT,
-    ZoomBy_2: *const fn (this: *const IScrollView, p0: f32, p1: *anyopaque, p2: *ScrollingZoomOptions, result: *i32) callconv(.winapi) HRESULT,
-    AddZoomVelocity: *const fn (this: *const IScrollView, p0: f32, p1: *anyopaque, p2: *@"Windows.Foundation".IReference__G1__f32, result: *i32) callconv(.winapi) HRESULT,
-    add_ExtentChanged: *const fn (this: *const IScrollView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    AddScrollVelocity: *const fn (this: *const IScrollView, p0: @"Windows.Foundation.Numerics".Vector2, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, result: *i32) callconv(.winapi) HRESULT,
+    ZoomTo: *const fn (this: *const IScrollView, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, result: *i32) callconv(.winapi) HRESULT,
+    ZoomTo_2: *const fn (this: *const IScrollView, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, p2: *ScrollingZoomOptions, result: *i32) callconv(.winapi) HRESULT,
+    ZoomBy: *const fn (this: *const IScrollView, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, result: *i32) callconv(.winapi) HRESULT,
+    ZoomBy_2: *const fn (this: *const IScrollView, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, p2: *ScrollingZoomOptions, result: *i32) callconv(.winapi) HRESULT,
+    AddZoomVelocity: *const fn (this: *const IScrollView, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, p2: *@"Windows.Foundation".IReference__G1__f32, result: *i32) callconv(.winapi) HRESULT,
+    add_ExtentChanged: *const fn (this: *const IScrollView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ExtentChanged: *const fn (this: *const IScrollView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_StateChanged: *const fn (this: *const IScrollView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_StateChanged: *const fn (this: *const IScrollView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_StateChanged: *const fn (this: *const IScrollView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ViewChanged: *const fn (this: *const IScrollView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ViewChanged: *const fn (this: *const IScrollView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ViewChanged: *const fn (this: *const IScrollView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ScrollAnimationStarting: *const fn (this: *const IScrollView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ScrollAnimationStarting: *const fn (this: *const IScrollView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingScrollAnimationStartingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ScrollAnimationStarting: *const fn (this: *const IScrollView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ZoomAnimationStarting: *const fn (this: *const IScrollView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ZoomAnimationStarting: *const fn (this: *const IScrollView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingZoomAnimationStartingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ZoomAnimationStarting: *const fn (this: *const IScrollView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ScrollCompleted: *const fn (this: *const IScrollView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ScrollCompleted: *const fn (this: *const IScrollView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingScrollCompletedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ScrollCompleted: *const fn (this: *const IScrollView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ZoomCompleted: *const fn (this: *const IScrollView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ZoomCompleted: *const fn (this: *const IScrollView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingZoomCompletedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ZoomCompleted: *const fn (this: *const IScrollView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_BringingIntoView: *const fn (this: *const IScrollView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_BringingIntoView: *const fn (this: *const IScrollView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingBringingIntoViewEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_BringingIntoView: *const fn (this: *const IScrollView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_AnchorRequested: *const fn (this: *const IScrollView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_AnchorRequested: *const fn (this: *const IScrollView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollView__Microsoft_UI_Xaml_Controls_ScrollingAnchorRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_AnchorRequested: *const fn (this: *const IScrollView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IScrollViewFactory_Vtbl = extern struct {
@@ -45192,11 +45192,11 @@ pub const IScrollViewer_Vtbl = extern struct {
     put_VerticalAnchorRatio: *const fn (this: *const IScrollViewer, p0: f64) callconv(.winapi) HRESULT,
     get_CanContentRenderOutsideBounds: *const fn (this: *const IScrollViewer, result: *BOOL) callconv(.winapi) HRESULT,
     put_CanContentRenderOutsideBounds: *const fn (this: *const IScrollViewer, p0: BOOL) callconv(.winapi) HRESULT,
-    add_AnchorRequested: *const fn (this: *const IScrollViewer, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_AnchorRequested: *const fn (this: *const IScrollViewer, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ScrollViewer__Microsoft_UI_Xaml_Controls_AnchorRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_AnchorRequested: *const fn (this: *const IScrollViewer, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ViewChanging: *const fn (this: *const IScrollViewer, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ViewChanging: *const fn (this: *const IScrollViewer, p0: *@"Windows.Foundation".EventHandler__G1__Microsoft_UI_Xaml_Controls_ScrollViewerViewChangingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ViewChanging: *const fn (this: *const IScrollViewer, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ViewChanged: *const fn (this: *const IScrollViewer, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ViewChanged: *const fn (this: *const IScrollViewer, p0: *@"Windows.Foundation".EventHandler__G1__Microsoft_UI_Xaml_Controls_ScrollViewerViewChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ViewChanged: *const fn (this: *const IScrollViewer, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     add_DirectManipulationStarted: *const fn (this: *const IScrollViewer, p0: *@"Windows.Foundation".EventHandler__G1__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_DirectManipulationStarted: *const fn (this: *const IScrollViewer, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
@@ -45304,7 +45304,7 @@ pub const IScrollViewerViewChangingEventArgs_Vtbl = extern struct {
 };
 pub const IScrollingAnchorRequestedEventArgs_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    get_AnchorCandidates: *const fn (this: *const IScrollingAnchorRequestedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_AnchorCandidates: *const fn (this: *const IScrollingAnchorRequestedEventArgs, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_UIElement) callconv(.winapi) HRESULT,
     get_AnchorElement: *const fn (this: *const IScrollingAnchorRequestedEventArgs, result: **@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT,
     put_AnchorElement: *const fn (this: *const IScrollingAnchorRequestedEventArgs, p0: *@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT,
 };
@@ -45370,8 +45370,8 @@ pub const IScrollingZoomOptionsFactory_Vtbl = extern struct {
 };
 pub const ISectionsInViewChangedEventArgs_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    get_AddedSections: *const fn (this: *const ISectionsInViewChangedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT,
-    get_RemovedSections: *const fn (this: *const ISectionsInViewChangedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_AddedSections: *const fn (this: *const ISectionsInViewChangedEventArgs, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_HubSection) callconv(.winapi) HRESULT,
+    get_RemovedSections: *const fn (this: *const ISectionsInViewChangedEventArgs, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_HubSection) callconv(.winapi) HRESULT,
 };
 pub const ISectionsInViewChangedEventArgsFactory_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -45387,10 +45387,10 @@ pub const ISelectionChangedEventArgsFactory_Vtbl = extern struct {
 };
 pub const ISelectorBar_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    get_Items: *const fn (this: *const ISelectorBar, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_Items: *const fn (this: *const ISelectorBar, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_SelectorBarItem) callconv(.winapi) HRESULT,
     get_SelectedItem: *const fn (this: *const ISelectorBar, result: **SelectorBarItem) callconv(.winapi) HRESULT,
     put_SelectedItem: *const fn (this: *const ISelectorBar, p0: *SelectorBarItem) callconv(.winapi) HRESULT,
-    add_SelectionChanged: *const fn (this: *const ISelectorBar, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_SelectionChanged: *const fn (this: *const ISelectorBar, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SelectorBar__Microsoft_UI_Xaml_Controls_SelectorBarSelectionChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_SelectionChanged: *const fn (this: *const ISelectorBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const ISelectorBarFactory_Vtbl = extern struct {
@@ -45530,7 +45530,7 @@ pub const ISplitButton_Vtbl = extern struct {
     put_Command: *const fn (this: *const ISplitButton, p0: *@"Microsoft.UI.Xaml.Input".ICommand) callconv(.winapi) HRESULT,
     get_CommandParameter: *const fn (this: *const ISplitButton, result: *?*const anyopaque) callconv(.winapi) HRESULT,
     put_CommandParameter: *const fn (this: *const ISplitButton, p0: ?*const anyopaque) callconv(.winapi) HRESULT,
-    add_Click: *const fn (this: *const ISplitButton, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Click: *const fn (this: *const ISplitButton, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SplitButton__Microsoft_UI_Xaml_Controls_SplitButtonClickEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Click: *const fn (this: *const ISplitButton, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const ISplitButtonClickEventArgs_Vtbl = extern struct {
@@ -45548,7 +45548,7 @@ pub const ISplitButtonStatics_Vtbl = extern struct {
 };
 pub const ISplitMenuFlyoutItem_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    get_Items: *const fn (this: *const ISplitMenuFlyoutItem, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_Items: *const fn (this: *const ISplitMenuFlyoutItem, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_MenuFlyoutItemBase) callconv(.winapi) HRESULT,
     get_SubMenuPresenterStyle: *const fn (this: *const ISplitMenuFlyoutItem, result: **@"Microsoft.UI.Xaml".Style) callconv(.winapi) HRESULT,
     put_SubMenuPresenterStyle: *const fn (this: *const ISplitMenuFlyoutItem, p0: *@"Microsoft.UI.Xaml".Style) callconv(.winapi) HRESULT,
     get_SubMenuItemStyle: *const fn (this: *const ISplitMenuFlyoutItem, result: **@"Microsoft.UI.Xaml".Style) callconv(.winapi) HRESULT,
@@ -45584,13 +45584,13 @@ pub const ISplitView_Vtbl = extern struct {
     put_PaneBackground: *const fn (this: *const ISplitView, p0: *@"Microsoft.UI.Xaml.Media".Brush) callconv(.winapi) HRESULT,
     get_LightDismissOverlayMode: *const fn (this: *const ISplitView, result: *LightDismissOverlayMode) callconv(.winapi) HRESULT,
     put_LightDismissOverlayMode: *const fn (this: *const ISplitView, p0: LightDismissOverlayMode) callconv(.winapi) HRESULT,
-    add_PaneClosing: *const fn (this: *const ISplitView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_PaneClosing: *const fn (this: *const ISplitView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SplitView__Microsoft_UI_Xaml_Controls_SplitViewPaneClosingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_PaneClosing: *const fn (this: *const ISplitView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_PaneClosed: *const fn (this: *const ISplitView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_PaneClosed: *const fn (this: *const ISplitView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SplitView__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_PaneClosed: *const fn (this: *const ISplitView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_PaneOpening: *const fn (this: *const ISplitView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_PaneOpening: *const fn (this: *const ISplitView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SplitView__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_PaneOpening: *const fn (this: *const ISplitView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_PaneOpened: *const fn (this: *const ISplitView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_PaneOpened: *const fn (this: *const ISplitView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SplitView__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_PaneOpened: *const fn (this: *const ISplitView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const ISplitViewFactory_Vtbl = extern struct {
@@ -45688,7 +45688,7 @@ pub const ISwapChainPanel_Vtbl = extern struct {
     base: IInspectable_Vtbl,
     get_CompositionScaleX: *const fn (this: *const ISwapChainPanel, result: *f32) callconv(.winapi) HRESULT,
     get_CompositionScaleY: *const fn (this: *const ISwapChainPanel, result: *f32) callconv(.winapi) HRESULT,
-    add_CompositionScaleChanged: *const fn (this: *const ISwapChainPanel, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_CompositionScaleChanged: *const fn (this: *const ISwapChainPanel, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SwapChainPanel__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_CompositionScaleChanged: *const fn (this: *const ISwapChainPanel, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     CreateCoreIndependentInputSource: *const fn (this: *const ISwapChainPanel, p0: @"Microsoft.UI.Input".InputPointerSourceDeviceKinds, result: **@"Microsoft.UI.Input".InputPointerSource) callconv(.winapi) HRESULT,
 };
@@ -45740,7 +45740,7 @@ pub const ISwipeItem_Vtbl = extern struct {
     put_CommandParameter: *const fn (this: *const ISwipeItem, p0: ?*const anyopaque) callconv(.winapi) HRESULT,
     get_BehaviorOnInvoked: *const fn (this: *const ISwipeItem, result: *SwipeBehaviorOnInvoked) callconv(.winapi) HRESULT,
     put_BehaviorOnInvoked: *const fn (this: *const ISwipeItem, p0: SwipeBehaviorOnInvoked) callconv(.winapi) HRESULT,
-    add_Invoked: *const fn (this: *const ISwipeItem, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Invoked: *const fn (this: *const ISwipeItem, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_SwipeItem__Microsoft_UI_Xaml_Controls_SwipeItemInvokedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Invoked: *const fn (this: *const ISwipeItem, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const ISwipeItemFactory_Vtbl = extern struct {
@@ -45836,13 +45836,13 @@ pub const ITabView_Vtbl = extern struct {
     put_AddTabButtonCommand: *const fn (this: *const ITabView, p0: *@"Microsoft.UI.Xaml.Input".ICommand) callconv(.winapi) HRESULT,
     get_AddTabButtonCommandParameter: *const fn (this: *const ITabView, result: *?*const anyopaque) callconv(.winapi) HRESULT,
     put_AddTabButtonCommandParameter: *const fn (this: *const ITabView, p0: ?*const anyopaque) callconv(.winapi) HRESULT,
-    add_TabCloseRequested: *const fn (this: *const ITabView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_TabCloseRequested: *const fn (this: *const ITabView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabCloseRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_TabCloseRequested: *const fn (this: *const ITabView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_TabDroppedOutside: *const fn (this: *const ITabView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_TabDroppedOutside: *const fn (this: *const ITabView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabDroppedOutsideEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_TabDroppedOutside: *const fn (this: *const ITabView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_AddTabButtonClick: *const fn (this: *const ITabView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_AddTabButtonClick: *const fn (this: *const ITabView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_AddTabButtonClick: *const fn (this: *const ITabView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_TabItemsChanged: *const fn (this: *const ITabView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_TabItemsChanged: *const fn (this: *const ITabView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Windows_Foundation_Collections_IVectorChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_TabItemsChanged: *const fn (this: *const ITabView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     get_TabItemsSource: *const fn (this: *const ITabView, result: *?*const anyopaque) callconv(.winapi) HRESULT,
     put_TabItemsSource: *const fn (this: *const ITabView, p0: ?*const anyopaque) callconv(.winapi) HRESULT,
@@ -45865,9 +45865,9 @@ pub const ITabView_Vtbl = extern struct {
     ContainerFromIndex: *const fn (this: *const ITabView, p0: i32, result: **@"Microsoft.UI.Xaml".DependencyObject) callconv(.winapi) HRESULT,
     add_SelectionChanged: *const fn (this: *const ITabView, p0: *SelectionChangedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_SelectionChanged: *const fn (this: *const ITabView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_TabDragStarting: *const fn (this: *const ITabView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_TabDragStarting: *const fn (this: *const ITabView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabDragStartingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_TabDragStarting: *const fn (this: *const ITabView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_TabDragCompleted: *const fn (this: *const ITabView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_TabDragCompleted: *const fn (this: *const ITabView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabDragCompletedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_TabDragCompleted: *const fn (this: *const ITabView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     add_TabStripDragOver: *const fn (this: *const ITabView, p0: *@"Microsoft.UI.Xaml".DragEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_TabStripDragOver: *const fn (this: *const ITabView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
@@ -45878,13 +45878,13 @@ pub const ITabView2_Vtbl = extern struct {
     base: IInspectable_Vtbl,
     get_CanTearOutTabs: *const fn (this: *const ITabView2, result: *BOOL) callconv(.winapi) HRESULT,
     put_CanTearOutTabs: *const fn (this: *const ITabView2, p0: BOOL) callconv(.winapi) HRESULT,
-    add_TabTearOutWindowRequested: *const fn (this: *const ITabView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_TabTearOutWindowRequested: *const fn (this: *const ITabView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabTearOutWindowRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_TabTearOutWindowRequested: *const fn (this: *const ITabView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_TabTearOutRequested: *const fn (this: *const ITabView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_TabTearOutRequested: *const fn (this: *const ITabView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewTabTearOutRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_TabTearOutRequested: *const fn (this: *const ITabView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ExternalTornOutTabsDropping: *const fn (this: *const ITabView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ExternalTornOutTabsDropping: *const fn (this: *const ITabView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewExternalTornOutTabsDroppingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ExternalTornOutTabsDropping: *const fn (this: *const ITabView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ExternalTornOutTabsDropped: *const fn (this: *const ITabView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ExternalTornOutTabsDropped: *const fn (this: *const ITabView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabView__Microsoft_UI_Xaml_Controls_TabViewExternalTornOutTabsDroppedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ExternalTornOutTabsDropped: *const fn (this: *const ITabView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const ITabViewExternalTornOutTabsDroppedEventArgs_Vtbl = extern struct {
@@ -45916,7 +45916,7 @@ pub const ITabViewItem_Vtbl = extern struct {
     get_IsClosable: *const fn (this: *const ITabViewItem, result: *BOOL) callconv(.winapi) HRESULT,
     put_IsClosable: *const fn (this: *const ITabViewItem, p0: BOOL) callconv(.winapi) HRESULT,
     get_TabViewTemplateSettings: *const fn (this: *const ITabViewItem, result: **TabViewItemTemplateSettings) callconv(.winapi) HRESULT,
-    add_CloseRequested: *const fn (this: *const ITabViewItem, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_CloseRequested: *const fn (this: *const ITabViewItem, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TabViewItem__Microsoft_UI_Xaml_Controls_TabViewTabCloseRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_CloseRequested: *const fn (this: *const ITabViewItem, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const ITabViewItemFactory_Vtbl = extern struct {
@@ -46058,13 +46058,13 @@ pub const ITeachingTip_Vtbl = extern struct {
     get_IconSource: *const fn (this: *const ITeachingTip, result: **IconSource) callconv(.winapi) HRESULT,
     put_IconSource: *const fn (this: *const ITeachingTip, p0: *IconSource) callconv(.winapi) HRESULT,
     get_TemplateSettings: *const fn (this: *const ITeachingTip, result: **TeachingTipTemplateSettings) callconv(.winapi) HRESULT,
-    add_ActionButtonClick: *const fn (this: *const ITeachingTip, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ActionButtonClick: *const fn (this: *const ITeachingTip, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TeachingTip__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ActionButtonClick: *const fn (this: *const ITeachingTip, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_CloseButtonClick: *const fn (this: *const ITeachingTip, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_CloseButtonClick: *const fn (this: *const ITeachingTip, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TeachingTip__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_CloseButtonClick: *const fn (this: *const ITeachingTip, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_Closing: *const fn (this: *const ITeachingTip, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Closing: *const fn (this: *const ITeachingTip, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TeachingTip__Microsoft_UI_Xaml_Controls_TeachingTipClosingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Closing: *const fn (this: *const ITeachingTip, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_Closed: *const fn (this: *const ITeachingTip, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Closed: *const fn (this: *const ITeachingTip, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TeachingTip__Microsoft_UI_Xaml_Controls_TeachingTipClosedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Closed: *const fn (this: *const ITeachingTip, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const ITeachingTipClosedEventArgs_Vtbl = extern struct {
@@ -46183,14 +46183,14 @@ pub const ITextBlock_Vtbl = extern struct {
     get_IsTextTrimmed: *const fn (this: *const ITextBlock, result: *BOOL) callconv(.winapi) HRESULT,
     get_HorizontalTextAlignment: *const fn (this: *const ITextBlock, result: *@"Microsoft.UI.Xaml".TextAlignment) callconv(.winapi) HRESULT,
     put_HorizontalTextAlignment: *const fn (this: *const ITextBlock, p0: @"Microsoft.UI.Xaml".TextAlignment) callconv(.winapi) HRESULT,
-    get_TextHighlighters: *const fn (this: *const ITextBlock, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_TextHighlighters: *const fn (this: *const ITextBlock, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Documents_TextHighlighter) callconv(.winapi) HRESULT,
     get_SelectionFlyout: *const fn (this: *const ITextBlock, result: **@"Microsoft.UI.Xaml.Controls.Primitives".FlyoutBase) callconv(.winapi) HRESULT,
     put_SelectionFlyout: *const fn (this: *const ITextBlock, p0: *@"Microsoft.UI.Xaml.Controls.Primitives".FlyoutBase) callconv(.winapi) HRESULT,
     add_SelectionChanged: *const fn (this: *const ITextBlock, p0: *@"Microsoft.UI.Xaml".RoutedEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_SelectionChanged: *const fn (this: *const ITextBlock, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     add_ContextMenuOpening: *const fn (this: *const ITextBlock, p0: *ContextMenuOpeningEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ContextMenuOpening: *const fn (this: *const ITextBlock, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_IsTextTrimmedChanged: *const fn (this: *const ITextBlock, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_IsTextTrimmedChanged: *const fn (this: *const ITextBlock, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBlock__Microsoft_UI_Xaml_Controls_IsTextTrimmedChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_IsTextTrimmedChanged: *const fn (this: *const ITextBlock, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     SelectAll: *const fn (this: *const ITextBlock) callconv(.winapi) HRESULT,
     Select: *const fn (this: *const ITextBlock, p0: *@"Microsoft.UI.Xaml.Documents".TextPointer, p1: *@"Microsoft.UI.Xaml.Documents".TextPointer) callconv(.winapi) HRESULT,
@@ -46289,24 +46289,24 @@ pub const ITextBox_Vtbl = extern struct {
     remove_ContextMenuOpening: *const fn (this: *const ITextBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     add_Paste: *const fn (this: *const ITextBox, p0: *TextControlPasteEventHandler, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Paste: *const fn (this: *const ITextBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_TextCompositionStarted: *const fn (this: *const ITextBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_TextCompositionStarted: *const fn (this: *const ITextBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextCompositionStartedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_TextCompositionStarted: *const fn (this: *const ITextBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_TextCompositionChanged: *const fn (this: *const ITextBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_TextCompositionChanged: *const fn (this: *const ITextBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextCompositionChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_TextCompositionChanged: *const fn (this: *const ITextBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_TextCompositionEnded: *const fn (this: *const ITextBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_TextCompositionEnded: *const fn (this: *const ITextBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextCompositionEndedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_TextCompositionEnded: *const fn (this: *const ITextBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_CopyingToClipboard: *const fn (this: *const ITextBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_CopyingToClipboard: *const fn (this: *const ITextBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextControlCopyingToClipboardEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_CopyingToClipboard: *const fn (this: *const ITextBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_CuttingToClipboard: *const fn (this: *const ITextBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_CuttingToClipboard: *const fn (this: *const ITextBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextControlCuttingToClipboardEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_CuttingToClipboard: *const fn (this: *const ITextBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_BeforeTextChanging: *const fn (this: *const ITextBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_BeforeTextChanging: *const fn (this: *const ITextBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextBoxBeforeTextChangingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_BeforeTextChanging: *const fn (this: *const ITextBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_SelectionChanging: *const fn (this: *const ITextBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_SelectionChanging: *const fn (this: *const ITextBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextBoxSelectionChangingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_SelectionChanging: *const fn (this: *const ITextBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     Select: *const fn (this: *const ITextBox, p0: i32, p1: i32) callconv(.winapi) HRESULT,
     SelectAll: *const fn (this: *const ITextBox) callconv(.winapi) HRESULT,
     GetRectFromCharacterIndex: *const fn (this: *const ITextBox, p0: i32, p1: BOOL, result: *@"Windows.Foundation".Rect) callconv(.winapi) HRESULT,
-    GetLinguisticAlternativesAsync: *const fn (this: *const ITextBox, result: **anyopaque) callconv(.winapi) HRESULT,
+    GetLinguisticAlternativesAsync: *const fn (this: *const ITextBox, result: **@"Windows.Foundation".IAsyncOperation__G1__Windows_Foundation_Collections_IVectorView__G1__HSTRING) callconv(.winapi) HRESULT,
     Undo: *const fn (this: *const ITextBox) callconv(.winapi) HRESULT,
     Redo: *const fn (this: *const ITextBox) callconv(.winapi) HRESULT,
     PasteFromClipboard: *const fn (this: *const ITextBox) callconv(.winapi) HRESULT,
@@ -46317,9 +46317,9 @@ pub const ITextBox_Vtbl = extern struct {
     put_TextReadingOrder: *const fn (this: *const ITextBox, p0: @"Microsoft.UI.Xaml".TextReadingOrder) callconv(.winapi) HRESULT,
     get_DesiredCandidateWindowAlignment: *const fn (this: *const ITextBox, result: *CandidateWindowAlignment) callconv(.winapi) HRESULT,
     put_DesiredCandidateWindowAlignment: *const fn (this: *const ITextBox, p0: CandidateWindowAlignment) callconv(.winapi) HRESULT,
-    add_CandidateWindowBoundsChanged: *const fn (this: *const ITextBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_CandidateWindowBoundsChanged: *const fn (this: *const ITextBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_CandidateWindowBoundsChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_CandidateWindowBoundsChanged: *const fn (this: *const ITextBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_TextChanging: *const fn (this: *const ITextBox, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_TextChanging: *const fn (this: *const ITextBox, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TextBox__Microsoft_UI_Xaml_Controls_TextBoxTextChangingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_TextChanging: *const fn (this: *const ITextBox, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const ITextBoxBeforeTextChangingEventArgs_Vtbl = extern struct {
@@ -46432,11 +46432,11 @@ pub const ITimePicker_Vtbl = extern struct {
     put_Time: *const fn (this: *const ITimePicker, p0: @"Windows.Foundation".TimeSpan) callconv(.winapi) HRESULT,
     get_LightDismissOverlayMode: *const fn (this: *const ITimePicker, result: *LightDismissOverlayMode) callconv(.winapi) HRESULT,
     put_LightDismissOverlayMode: *const fn (this: *const ITimePicker, p0: LightDismissOverlayMode) callconv(.winapi) HRESULT,
-    get_SelectedTime: *const fn (this: *const ITimePicker, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_SelectedTime: *const fn (this: *const ITimePicker, p0: *anyopaque) callconv(.winapi) HRESULT,
-    add_TimeChanged: *const fn (this: *const ITimePicker, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    get_SelectedTime: *const fn (this: *const ITimePicker, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_TimeSpan) callconv(.winapi) HRESULT,
+    put_SelectedTime: *const fn (this: *const ITimePicker, p0: *@"Windows.Foundation".IReference__G1__Windows_Foundation_TimeSpan) callconv(.winapi) HRESULT,
+    add_TimeChanged: *const fn (this: *const ITimePicker, p0: *@"Windows.Foundation".EventHandler__G1__Microsoft_UI_Xaml_Controls_TimePickerValueChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_TimeChanged: *const fn (this: *const ITimePicker, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_SelectedTimeChanged: *const fn (this: *const ITimePicker, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_SelectedTimeChanged: *const fn (this: *const ITimePicker, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TimePicker__Microsoft_UI_Xaml_Controls_TimePickerSelectedValueChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_SelectedTimeChanged: *const fn (this: *const ITimePicker, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const ITimePickerFactory_Vtbl = extern struct {
@@ -46451,9 +46451,9 @@ pub const ITimePickerFlyout_Vtbl = extern struct {
     put_Time: *const fn (this: *const ITimePickerFlyout, p0: @"Windows.Foundation".TimeSpan) callconv(.winapi) HRESULT,
     get_MinuteIncrement: *const fn (this: *const ITimePickerFlyout, result: *i32) callconv(.winapi) HRESULT,
     put_MinuteIncrement: *const fn (this: *const ITimePickerFlyout, p0: i32) callconv(.winapi) HRESULT,
-    add_TimePicked: *const fn (this: *const ITimePickerFlyout, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_TimePicked: *const fn (this: *const ITimePickerFlyout, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TimePickerFlyout__Microsoft_UI_Xaml_Controls_TimePickedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_TimePicked: *const fn (this: *const ITimePickerFlyout, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    ShowAtAsync: *const fn (this: *const ITimePickerFlyout, p0: *@"Microsoft.UI.Xaml".FrameworkElement, result: **anyopaque) callconv(.winapi) HRESULT,
+    ShowAtAsync: *const fn (this: *const ITimePickerFlyout, p0: *@"Microsoft.UI.Xaml".FrameworkElement, result: **@"Windows.Foundation".IAsyncOperation__G1__Windows_Foundation_IReference__G1__Windows_Foundation_TimeSpan) callconv(.winapi) HRESULT,
 };
 pub const ITimePickerFlyoutPresenter_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -46472,8 +46472,8 @@ pub const ITimePickerFlyoutStatics_Vtbl = extern struct {
 };
 pub const ITimePickerSelectedValueChangedEventArgs_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    get_OldTime: *const fn (this: *const ITimePickerSelectedValueChangedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT,
-    get_NewTime: *const fn (this: *const ITimePickerSelectedValueChangedEventArgs, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_OldTime: *const fn (this: *const ITimePickerSelectedValueChangedEventArgs, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_TimeSpan) callconv(.winapi) HRESULT,
+    get_NewTime: *const fn (this: *const ITimePickerSelectedValueChangedEventArgs, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_TimeSpan) callconv(.winapi) HRESULT,
 };
 pub const ITimePickerStatics_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -46511,9 +46511,9 @@ pub const ITitleBar_Vtbl = extern struct {
     get_IsPaneToggleButtonVisible: *const fn (this: *const ITitleBar, result: *BOOL) callconv(.winapi) HRESULT,
     put_IsPaneToggleButtonVisible: *const fn (this: *const ITitleBar, p0: BOOL) callconv(.winapi) HRESULT,
     get_TemplateSettings: *const fn (this: *const ITitleBar, result: **TitleBarTemplateSettings) callconv(.winapi) HRESULT,
-    add_BackRequested: *const fn (this: *const ITitleBar, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_BackRequested: *const fn (this: *const ITitleBar, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TitleBar__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_BackRequested: *const fn (this: *const ITitleBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_PaneToggleRequested: *const fn (this: *const ITitleBar, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_PaneToggleRequested: *const fn (this: *const ITitleBar, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TitleBar__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_PaneToggleRequested: *const fn (this: *const ITitleBar, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const ITitleBar2_Vtbl = extern struct {
@@ -46583,7 +46583,7 @@ pub const IToggleSplitButton_Vtbl = extern struct {
     base: IInspectable_Vtbl,
     get_IsChecked: *const fn (this: *const IToggleSplitButton, result: *BOOL) callconv(.winapi) HRESULT,
     put_IsChecked: *const fn (this: *const IToggleSplitButton, p0: BOOL) callconv(.winapi) HRESULT,
-    add_IsCheckedChanged: *const fn (this: *const IToggleSplitButton, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_IsCheckedChanged: *const fn (this: *const IToggleSplitButton, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_ToggleSplitButton__Microsoft_UI_Xaml_Controls_ToggleSplitButtonIsCheckedChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_IsCheckedChanged: *const fn (this: *const IToggleSplitButton, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IToggleSplitButtonFactory_Vtbl = extern struct {
@@ -46644,8 +46644,8 @@ pub const IToolTip_Vtbl = extern struct {
     put_Placement: *const fn (this: *const IToolTip, p0: @"Microsoft.UI.Xaml.Controls.Primitives".PlacementMode) callconv(.winapi) HRESULT,
     get_PlacementTarget: *const fn (this: *const IToolTip, result: **@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT,
     put_PlacementTarget: *const fn (this: *const IToolTip, p0: *@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT,
-    get_PlacementRect: *const fn (this: *const IToolTip, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_PlacementRect: *const fn (this: *const IToolTip, p0: *anyopaque) callconv(.winapi) HRESULT,
+    get_PlacementRect: *const fn (this: *const IToolTip, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_Rect) callconv(.winapi) HRESULT,
+    put_PlacementRect: *const fn (this: *const IToolTip, p0: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Rect) callconv(.winapi) HRESULT,
     get_VerticalOffset: *const fn (this: *const IToolTip, result: *f64) callconv(.winapi) HRESULT,
     put_VerticalOffset: *const fn (this: *const IToolTip, p0: f64) callconv(.winapi) HRESULT,
     get_TemplateSettings: *const fn (this: *const IToolTip, result: **@"Microsoft.UI.Xaml.Controls.Primitives".ToolTipTemplateSettings) callconv(.winapi) HRESULT,
@@ -46684,18 +46684,18 @@ pub const IToolTipStatics_Vtbl = extern struct {
 };
 pub const ITreeView_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    get_RootNodes: *const fn (this: *const ITreeView, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_RootNodes: *const fn (this: *const ITreeView, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_TreeViewNode) callconv(.winapi) HRESULT,
     get_SelectionMode: *const fn (this: *const ITreeView, result: *TreeViewSelectionMode) callconv(.winapi) HRESULT,
     put_SelectionMode: *const fn (this: *const ITreeView, p0: TreeViewSelectionMode) callconv(.winapi) HRESULT,
-    get_SelectedNodes: *const fn (this: *const ITreeView, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_SelectedNodes: *const fn (this: *const ITreeView, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_TreeViewNode) callconv(.winapi) HRESULT,
     Expand: *const fn (this: *const ITreeView, p0: *TreeViewNode) callconv(.winapi) HRESULT,
     Collapse: *const fn (this: *const ITreeView, p0: *TreeViewNode) callconv(.winapi) HRESULT,
     SelectAll: *const fn (this: *const ITreeView) callconv(.winapi) HRESULT,
-    add_ItemInvoked: *const fn (this: *const ITreeView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ItemInvoked: *const fn (this: *const ITreeView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewItemInvokedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ItemInvoked: *const fn (this: *const ITreeView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_Expanding: *const fn (this: *const ITreeView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Expanding: *const fn (this: *const ITreeView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewExpandingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Expanding: *const fn (this: *const ITreeView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_Collapsed: *const fn (this: *const ITreeView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Collapsed: *const fn (this: *const ITreeView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewCollapsedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Collapsed: *const fn (this: *const ITreeView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const ITreeView2_Vtbl = extern struct {
@@ -46720,9 +46720,9 @@ pub const ITreeView2_Vtbl = extern struct {
     put_ItemContainerTransitions: *const fn (this: *const ITreeView2, p0: *@"Microsoft.UI.Xaml.Media.Animation".TransitionCollection) callconv(.winapi) HRESULT,
     get_ItemsSource: *const fn (this: *const ITreeView2, result: *?*const anyopaque) callconv(.winapi) HRESULT,
     put_ItemsSource: *const fn (this: *const ITreeView2, p0: ?*const anyopaque) callconv(.winapi) HRESULT,
-    add_DragItemsStarting: *const fn (this: *const ITreeView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_DragItemsStarting: *const fn (this: *const ITreeView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewDragItemsStartingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_DragItemsStarting: *const fn (this: *const ITreeView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_DragItemsCompleted: *const fn (this: *const ITreeView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_DragItemsCompleted: *const fn (this: *const ITreeView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewDragItemsCompletedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_DragItemsCompleted: *const fn (this: *const ITreeView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     get_SelectedNode: *const fn (this: *const ITreeView2, result: **TreeViewNode) callconv(.winapi) HRESULT,
     put_SelectedNode: *const fn (this: *const ITreeView2, p0: *TreeViewNode) callconv(.winapi) HRESULT,
@@ -46732,7 +46732,7 @@ pub const ITreeView2_Vtbl = extern struct {
 };
 pub const ITreeView3_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    add_SelectionChanged: *const fn (this: *const ITreeView3, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_SelectionChanged: *const fn (this: *const ITreeView3, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TreeView__Microsoft_UI_Xaml_Controls_TreeViewSelectionChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_SelectionChanged: *const fn (this: *const ITreeView3, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const ITreeViewCollapsedEventArgs_Vtbl = extern struct {
@@ -46855,7 +46855,7 @@ pub const ITreeViewNode_Vtbl = extern struct {
     get_Depth: *const fn (this: *const ITreeViewNode, result: *i32) callconv(.winapi) HRESULT,
     get_HasUnrealizedChildren: *const fn (this: *const ITreeViewNode, result: *BOOL) callconv(.winapi) HRESULT,
     put_HasUnrealizedChildren: *const fn (this: *const ITreeViewNode, p0: BOOL) callconv(.winapi) HRESULT,
-    get_Children: *const fn (this: *const ITreeViewNode, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_Children: *const fn (this: *const ITreeViewNode, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_TreeViewNode) callconv(.winapi) HRESULT,
 };
 pub const ITreeViewNodeFactory_Vtbl = extern struct {
     base: IInspectable_Vtbl,
@@ -46910,7 +46910,7 @@ pub const ITwoPaneView_Vtbl = extern struct {
     put_MinWideModeWidth: *const fn (this: *const ITwoPaneView, p0: f64) callconv(.winapi) HRESULT,
     get_MinTallModeHeight: *const fn (this: *const ITwoPaneView, result: *f64) callconv(.winapi) HRESULT,
     put_MinTallModeHeight: *const fn (this: *const ITwoPaneView, p0: f64) callconv(.winapi) HRESULT,
-    add_ModeChanged: *const fn (this: *const ITwoPaneView, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ModeChanged: *const fn (this: *const ITwoPaneView, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_TwoPaneView__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ModeChanged: *const fn (this: *const ITwoPaneView, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const ITwoPaneViewFactory_Vtbl = extern struct {
@@ -47135,15 +47135,15 @@ pub const IWebView2_Vtbl = extern struct {
     GoBack: *const fn (this: *const IWebView2) callconv(.winapi) HRESULT,
     NavigateToString: *const fn (this: *const IWebView2, p0: HSTRING) callconv(.winapi) HRESULT,
     Close: *const fn (this: *const IWebView2) callconv(.winapi) HRESULT,
-    add_NavigationCompleted: *const fn (this: *const IWebView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_NavigationCompleted: *const fn (this: *const IWebView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_WebView2__Microsoft_Web_WebView2_Core_CoreWebView2NavigationCompletedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_NavigationCompleted: *const fn (this: *const IWebView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_WebMessageReceived: *const fn (this: *const IWebView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_WebMessageReceived: *const fn (this: *const IWebView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_WebView2__Microsoft_Web_WebView2_Core_CoreWebView2WebMessageReceivedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_WebMessageReceived: *const fn (this: *const IWebView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_NavigationStarting: *const fn (this: *const IWebView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_NavigationStarting: *const fn (this: *const IWebView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_WebView2__Microsoft_Web_WebView2_Core_CoreWebView2NavigationStartingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_NavigationStarting: *const fn (this: *const IWebView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_CoreProcessFailed: *const fn (this: *const IWebView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_CoreProcessFailed: *const fn (this: *const IWebView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_WebView2__Microsoft_Web_WebView2_Core_CoreWebView2ProcessFailedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_CoreProcessFailed: *const fn (this: *const IWebView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_CoreWebView2Initialized: *const fn (this: *const IWebView2, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_CoreWebView2Initialized: *const fn (this: *const IWebView2, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_WebView2__Microsoft_UI_Xaml_Controls_CoreWebView2InitializedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_CoreWebView2Initialized: *const fn (this: *const IWebView2, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IWebView22_Vtbl = extern struct {

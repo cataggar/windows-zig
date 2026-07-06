@@ -1780,7 +1780,7 @@ pub const IColorSpectrum = extern struct {
     pub fn put_Components(self: *const IColorSpectrum, p0: @"Microsoft.UI.Xaml.Controls".ColorSpectrumComponents) callconv(.winapi) HRESULT {
         return self.vtable.put_Components(self, p0);
     }
-    pub fn add_ColorChanged(self: *const IColorSpectrum, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ColorChanged(self: *const IColorSpectrum, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ColorSpectrum__Microsoft_UI_Xaml_Controls_ColorChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ColorChanged(self, p0, result);
     }
     pub fn remove_ColorChanged(self: *const IColorSpectrum, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -2659,7 +2659,7 @@ pub const IFlyoutBase = extern struct {
     pub fn remove_Opening(self: *const IFlyoutBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_Opening(self, p0);
     }
-    pub fn add_Closing(self: *const IFlyoutBase, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_Closing(self: *const IFlyoutBase, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_FlyoutBase__Microsoft_UI_Xaml_Controls_Primitives_FlyoutBaseClosingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_Closing(self, p0, result);
     }
     pub fn remove_Closing(self: *const IFlyoutBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -2946,16 +2946,16 @@ pub const IFlyoutShowOptions = extern struct {
         if (self.QueryInterface(&T.IID, &out) < 0) return null;
         return @ptrCast(@alignCast(out));
     }
-    pub fn get_Position(self: *const IFlyoutShowOptions, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_Position(self: *const IFlyoutShowOptions, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_Point) callconv(.winapi) HRESULT {
         return self.vtable.get_Position(self, result);
     }
-    pub fn put_Position(self: *const IFlyoutShowOptions, p0: *anyopaque) callconv(.winapi) HRESULT {
+    pub fn put_Position(self: *const IFlyoutShowOptions, p0: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Point) callconv(.winapi) HRESULT {
         return self.vtable.put_Position(self, p0);
     }
-    pub fn get_ExclusionRect(self: *const IFlyoutShowOptions, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_ExclusionRect(self: *const IFlyoutShowOptions, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_Rect) callconv(.winapi) HRESULT {
         return self.vtable.get_ExclusionRect(self, result);
     }
-    pub fn put_ExclusionRect(self: *const IFlyoutShowOptions, p0: *anyopaque) callconv(.winapi) HRESULT {
+    pub fn put_ExclusionRect(self: *const IFlyoutShowOptions, p0: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Rect) callconv(.winapi) HRESULT {
         return self.vtable.put_ExclusionRect(self, p0);
     }
     pub fn get_ShowMode(self: *const IFlyoutShowOptions, result: *FlyoutShowMode) callconv(.winapi) HRESULT {
@@ -5700,31 +5700,31 @@ pub const IScrollController = extern struct {
     pub fn NotifyRequestedScrollCompleted(self: *const IScrollController, p0: i32) callconv(.winapi) HRESULT {
         return self.vtable.NotifyRequestedScrollCompleted(self, p0);
     }
-    pub fn add_CanScrollChanged(self: *const IScrollController, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_CanScrollChanged(self: *const IScrollController, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_IScrollController__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_CanScrollChanged(self, p0, result);
     }
     pub fn remove_CanScrollChanged(self: *const IScrollController, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_CanScrollChanged(self, p0);
     }
-    pub fn add_IsScrollingWithMouseChanged(self: *const IScrollController, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_IsScrollingWithMouseChanged(self: *const IScrollController, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_IScrollController__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_IsScrollingWithMouseChanged(self, p0, result);
     }
     pub fn remove_IsScrollingWithMouseChanged(self: *const IScrollController, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_IsScrollingWithMouseChanged(self, p0);
     }
-    pub fn add_ScrollToRequested(self: *const IScrollController, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ScrollToRequested(self: *const IScrollController, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_IScrollController__Microsoft_UI_Xaml_Controls_Primitives_ScrollControllerScrollToRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ScrollToRequested(self, p0, result);
     }
     pub fn remove_ScrollToRequested(self: *const IScrollController, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ScrollToRequested(self, p0);
     }
-    pub fn add_ScrollByRequested(self: *const IScrollController, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ScrollByRequested(self: *const IScrollController, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_IScrollController__Microsoft_UI_Xaml_Controls_Primitives_ScrollControllerScrollByRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ScrollByRequested(self, p0, result);
     }
     pub fn remove_ScrollByRequested(self: *const IScrollController, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ScrollByRequested(self, p0);
     }
-    pub fn add_AddScrollVelocityRequested(self: *const IScrollController, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_AddScrollVelocityRequested(self: *const IScrollController, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_IScrollController__Microsoft_UI_Xaml_Controls_Primitives_ScrollControllerAddScrollVelocityRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_AddScrollVelocityRequested(self, p0, result);
     }
     pub fn remove_AddScrollVelocityRequested(self: *const IScrollController, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -5955,13 +5955,13 @@ pub const IScrollControllerPanningInfo = extern struct {
         defer h4.deinit();
         return self.vtable.SetPanningElementExpressionAnimationSources(self, p0, h1.raw, h2.raw, h3.raw, h4.raw);
     }
-    pub fn add_Changed(self: *const IScrollControllerPanningInfo, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_Changed(self: *const IScrollControllerPanningInfo, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_IScrollControllerPanningInfo__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_Changed(self, p0, result);
     }
     pub fn remove_Changed(self: *const IScrollControllerPanningInfo, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_Changed(self, p0);
     }
-    pub fn add_PanRequested(self: *const IScrollControllerPanningInfo, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_PanRequested(self: *const IScrollControllerPanningInfo, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_IScrollControllerPanningInfo__Microsoft_UI_Xaml_Controls_Primitives_ScrollControllerPanRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_PanRequested(self, p0, result);
     }
     pub fn remove_PanRequested(self: *const IScrollControllerPanningInfo, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -6296,13 +6296,13 @@ pub const IScrollPresenter = extern struct {
     pub fn put_VerticalAnchorRatio(self: *const IScrollPresenter, p0: f64) callconv(.winapi) HRESULT {
         return self.vtable.put_VerticalAnchorRatio(self, p0);
     }
-    pub fn get_HorizontalSnapPoints(self: *const IScrollPresenter, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_HorizontalSnapPoints(self: *const IScrollPresenter, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_Primitives_ScrollSnapPointBase) callconv(.winapi) HRESULT {
         return self.vtable.get_HorizontalSnapPoints(self, result);
     }
-    pub fn get_VerticalSnapPoints(self: *const IScrollPresenter, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_VerticalSnapPoints(self: *const IScrollPresenter, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_Primitives_ScrollSnapPointBase) callconv(.winapi) HRESULT {
         return self.vtable.get_VerticalSnapPoints(self, result);
     }
-    pub fn get_ZoomSnapPoints(self: *const IScrollPresenter, result: **anyopaque) callconv(.winapi) HRESULT {
+    pub fn get_ZoomSnapPoints(self: *const IScrollPresenter, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_Primitives_ZoomSnapPointBase) callconv(.winapi) HRESULT {
         return self.vtable.get_ZoomSnapPoints(self, result);
     }
     pub fn ScrollTo(self: *const IScrollPresenter, p0: f64, p1: f64, result: *i32) callconv(.winapi) HRESULT {
@@ -6317,73 +6317,73 @@ pub const IScrollPresenter = extern struct {
     pub fn ScrollBy_2(self: *const IScrollPresenter, p0: f64, p1: f64, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingScrollOptions, result: *i32) callconv(.winapi) HRESULT {
         return self.vtable.ScrollBy_2(self, p0, p1, p2, result);
     }
-    pub fn AddScrollVelocity(self: *const IScrollPresenter, p0: @"Windows.Foundation.Numerics".Vector2, p1: *anyopaque, result: *i32) callconv(.winapi) HRESULT {
+    pub fn AddScrollVelocity(self: *const IScrollPresenter, p0: @"Windows.Foundation.Numerics".Vector2, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, result: *i32) callconv(.winapi) HRESULT {
         return self.vtable.AddScrollVelocity(self, p0, p1, result);
     }
-    pub fn ZoomTo(self: *const IScrollPresenter, p0: f32, p1: *anyopaque, result: *i32) callconv(.winapi) HRESULT {
+    pub fn ZoomTo(self: *const IScrollPresenter, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, result: *i32) callconv(.winapi) HRESULT {
         return self.vtable.ZoomTo(self, p0, p1, result);
     }
-    pub fn ZoomTo_2(self: *const IScrollPresenter, p0: f32, p1: *anyopaque, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingZoomOptions, result: *i32) callconv(.winapi) HRESULT {
+    pub fn ZoomTo_2(self: *const IScrollPresenter, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingZoomOptions, result: *i32) callconv(.winapi) HRESULT {
         return self.vtable.ZoomTo_2(self, p0, p1, p2, result);
     }
-    pub fn ZoomBy(self: *const IScrollPresenter, p0: f32, p1: *anyopaque, result: *i32) callconv(.winapi) HRESULT {
+    pub fn ZoomBy(self: *const IScrollPresenter, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, result: *i32) callconv(.winapi) HRESULT {
         return self.vtable.ZoomBy(self, p0, p1, result);
     }
-    pub fn ZoomBy_2(self: *const IScrollPresenter, p0: f32, p1: *anyopaque, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingZoomOptions, result: *i32) callconv(.winapi) HRESULT {
+    pub fn ZoomBy_2(self: *const IScrollPresenter, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingZoomOptions, result: *i32) callconv(.winapi) HRESULT {
         return self.vtable.ZoomBy_2(self, p0, p1, p2, result);
     }
-    pub fn AddZoomVelocity(self: *const IScrollPresenter, p0: f32, p1: *anyopaque, p2: *@"Windows.Foundation".IReference__G1__f32, result: *i32) callconv(.winapi) HRESULT {
+    pub fn AddZoomVelocity(self: *const IScrollPresenter, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, p2: *@"Windows.Foundation".IReference__G1__f32, result: *i32) callconv(.winapi) HRESULT {
         return self.vtable.AddZoomVelocity(self, p0, p1, p2, result);
     }
-    pub fn add_ExtentChanged(self: *const IScrollPresenter, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ExtentChanged(self: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ExtentChanged(self, p0, result);
     }
     pub fn remove_ExtentChanged(self: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ExtentChanged(self, p0);
     }
-    pub fn add_StateChanged(self: *const IScrollPresenter, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_StateChanged(self: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_StateChanged(self, p0, result);
     }
     pub fn remove_StateChanged(self: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_StateChanged(self, p0);
     }
-    pub fn add_ViewChanged(self: *const IScrollPresenter, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ViewChanged(self: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ViewChanged(self, p0, result);
     }
     pub fn remove_ViewChanged(self: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ViewChanged(self, p0);
     }
-    pub fn add_ScrollAnimationStarting(self: *const IScrollPresenter, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ScrollAnimationStarting(self: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__Microsoft_UI_Xaml_Controls_ScrollingScrollAnimationStartingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ScrollAnimationStarting(self, p0, result);
     }
     pub fn remove_ScrollAnimationStarting(self: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ScrollAnimationStarting(self, p0);
     }
-    pub fn add_ZoomAnimationStarting(self: *const IScrollPresenter, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ZoomAnimationStarting(self: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__Microsoft_UI_Xaml_Controls_ScrollingZoomAnimationStartingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ZoomAnimationStarting(self, p0, result);
     }
     pub fn remove_ZoomAnimationStarting(self: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ZoomAnimationStarting(self, p0);
     }
-    pub fn add_ScrollCompleted(self: *const IScrollPresenter, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ScrollCompleted(self: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__Microsoft_UI_Xaml_Controls_ScrollingScrollCompletedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ScrollCompleted(self, p0, result);
     }
     pub fn remove_ScrollCompleted(self: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ScrollCompleted(self, p0);
     }
-    pub fn add_ZoomCompleted(self: *const IScrollPresenter, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_ZoomCompleted(self: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__Microsoft_UI_Xaml_Controls_ScrollingZoomCompletedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_ZoomCompleted(self, p0, result);
     }
     pub fn remove_ZoomCompleted(self: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_ZoomCompleted(self, p0);
     }
-    pub fn add_BringingIntoView(self: *const IScrollPresenter, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_BringingIntoView(self: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__Microsoft_UI_Xaml_Controls_ScrollingBringingIntoViewEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_BringingIntoView(self, p0, result);
     }
     pub fn remove_BringingIntoView(self: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.remove_BringingIntoView(self, p0);
     }
-    pub fn add_AnchorRequested(self: *const IScrollPresenter, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
+    pub fn add_AnchorRequested(self: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__Microsoft_UI_Xaml_Controls_ScrollingAnchorRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
         return self.vtable.add_AnchorRequested(self, p0, result);
     }
     pub fn remove_AnchorRequested(self: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT {
@@ -8349,7 +8349,7 @@ pub const IColorSpectrum_Vtbl = extern struct {
     put_Shape: *const fn (this: *const IColorSpectrum, p0: @"Microsoft.UI.Xaml.Controls".ColorSpectrumShape) callconv(.winapi) HRESULT,
     get_Components: *const fn (this: *const IColorSpectrum, result: *@"Microsoft.UI.Xaml.Controls".ColorSpectrumComponents) callconv(.winapi) HRESULT,
     put_Components: *const fn (this: *const IColorSpectrum, p0: @"Microsoft.UI.Xaml.Controls".ColorSpectrumComponents) callconv(.winapi) HRESULT,
-    add_ColorChanged: *const fn (this: *const IColorSpectrum, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ColorChanged: *const fn (this: *const IColorSpectrum, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ColorSpectrum__Microsoft_UI_Xaml_Controls_ColorChangedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ColorChanged: *const fn (this: *const IColorSpectrum, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IColorSpectrumFactory_Vtbl = extern struct {
@@ -8550,7 +8550,7 @@ pub const IFlyoutBase_Vtbl = extern struct {
     remove_Closed: *const fn (this: *const IFlyoutBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     add_Opening: *const fn (this: *const IFlyoutBase, p0: *@"Windows.Foundation".EventHandler__G1__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Opening: *const fn (this: *const IFlyoutBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_Closing: *const fn (this: *const IFlyoutBase, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Closing: *const fn (this: *const IFlyoutBase, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_FlyoutBase__Microsoft_UI_Xaml_Controls_Primitives_FlyoutBaseClosingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Closing: *const fn (this: *const IFlyoutBase, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     ShowAt: *const fn (this: *const IFlyoutBase, p0: *@"Microsoft.UI.Xaml".FrameworkElement) callconv(.winapi) HRESULT,
     ShowAt_2: *const fn (this: *const IFlyoutBase, p0: *@"Microsoft.UI.Xaml".DependencyObject, p1: *FlyoutShowOptions) callconv(.winapi) HRESULT,
@@ -8601,10 +8601,10 @@ pub const IFlyoutBaseStatics2_Vtbl = extern struct {
 };
 pub const IFlyoutShowOptions_Vtbl = extern struct {
     base: IInspectable_Vtbl,
-    get_Position: *const fn (this: *const IFlyoutShowOptions, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_Position: *const fn (this: *const IFlyoutShowOptions, p0: *anyopaque) callconv(.winapi) HRESULT,
-    get_ExclusionRect: *const fn (this: *const IFlyoutShowOptions, result: **anyopaque) callconv(.winapi) HRESULT,
-    put_ExclusionRect: *const fn (this: *const IFlyoutShowOptions, p0: *anyopaque) callconv(.winapi) HRESULT,
+    get_Position: *const fn (this: *const IFlyoutShowOptions, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_Point) callconv(.winapi) HRESULT,
+    put_Position: *const fn (this: *const IFlyoutShowOptions, p0: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Point) callconv(.winapi) HRESULT,
+    get_ExclusionRect: *const fn (this: *const IFlyoutShowOptions, result: **@"Windows.Foundation".IReference__G1__Windows_Foundation_Rect) callconv(.winapi) HRESULT,
+    put_ExclusionRect: *const fn (this: *const IFlyoutShowOptions, p0: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Rect) callconv(.winapi) HRESULT,
     get_ShowMode: *const fn (this: *const IFlyoutShowOptions, result: *FlyoutShowMode) callconv(.winapi) HRESULT,
     put_ShowMode: *const fn (this: *const IFlyoutShowOptions, p0: FlyoutShowMode) callconv(.winapi) HRESULT,
     get_Placement: *const fn (this: *const IFlyoutShowOptions, result: *FlyoutPlacementMode) callconv(.winapi) HRESULT,
@@ -9273,15 +9273,15 @@ pub const IScrollController_Vtbl = extern struct {
     SetValues: *const fn (this: *const IScrollController, p0: f64, p1: f64, p2: f64, p3: f64) callconv(.winapi) HRESULT,
     GetScrollAnimation: *const fn (this: *const IScrollController, p0: i32, p1: @"Windows.Foundation.Numerics".Vector2, p2: @"Windows.Foundation.Numerics".Vector2, p3: *@"Microsoft.UI.Composition".CompositionAnimation, result: **@"Microsoft.UI.Composition".CompositionAnimation) callconv(.winapi) HRESULT,
     NotifyRequestedScrollCompleted: *const fn (this: *const IScrollController, p0: i32) callconv(.winapi) HRESULT,
-    add_CanScrollChanged: *const fn (this: *const IScrollController, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_CanScrollChanged: *const fn (this: *const IScrollController, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_IScrollController__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_CanScrollChanged: *const fn (this: *const IScrollController, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_IsScrollingWithMouseChanged: *const fn (this: *const IScrollController, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_IsScrollingWithMouseChanged: *const fn (this: *const IScrollController, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_IScrollController__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_IsScrollingWithMouseChanged: *const fn (this: *const IScrollController, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ScrollToRequested: *const fn (this: *const IScrollController, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ScrollToRequested: *const fn (this: *const IScrollController, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_IScrollController__Microsoft_UI_Xaml_Controls_Primitives_ScrollControllerScrollToRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ScrollToRequested: *const fn (this: *const IScrollController, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ScrollByRequested: *const fn (this: *const IScrollController, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ScrollByRequested: *const fn (this: *const IScrollController, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_IScrollController__Microsoft_UI_Xaml_Controls_Primitives_ScrollControllerScrollByRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ScrollByRequested: *const fn (this: *const IScrollController, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_AddScrollVelocityRequested: *const fn (this: *const IScrollController, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_AddScrollVelocityRequested: *const fn (this: *const IScrollController, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_IScrollController__Microsoft_UI_Xaml_Controls_Primitives_ScrollControllerAddScrollVelocityRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_AddScrollVelocityRequested: *const fn (this: *const IScrollController, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IScrollControllerAddScrollVelocityRequestedEventArgs_Vtbl = extern struct {
@@ -9311,9 +9311,9 @@ pub const IScrollControllerPanningInfo_Vtbl = extern struct {
     get_PanOrientation: *const fn (this: *const IScrollControllerPanningInfo, result: *@"Microsoft.UI.Xaml.Controls".Orientation) callconv(.winapi) HRESULT,
     get_PanningElementAncestor: *const fn (this: *const IScrollControllerPanningInfo, result: **@"Microsoft.UI.Xaml".UIElement) callconv(.winapi) HRESULT,
     SetPanningElementExpressionAnimationSources: *const fn (this: *const IScrollControllerPanningInfo, p0: *@"Microsoft.UI.Composition".CompositionPropertySet, p1: HSTRING, p2: HSTRING, p3: HSTRING, p4: HSTRING) callconv(.winapi) HRESULT,
-    add_Changed: *const fn (this: *const IScrollControllerPanningInfo, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_Changed: *const fn (this: *const IScrollControllerPanningInfo, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_IScrollControllerPanningInfo__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_Changed: *const fn (this: *const IScrollControllerPanningInfo, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_PanRequested: *const fn (this: *const IScrollControllerPanningInfo, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_PanRequested: *const fn (this: *const IScrollControllerPanningInfo, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_IScrollControllerPanningInfo__Microsoft_UI_Xaml_Controls_Primitives_ScrollControllerPanRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_PanRequested: *const fn (this: *const IScrollControllerPanningInfo, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IScrollControllerScrollByRequestedEventArgs_Vtbl = extern struct {
@@ -9394,36 +9394,36 @@ pub const IScrollPresenter_Vtbl = extern struct {
     put_HorizontalAnchorRatio: *const fn (this: *const IScrollPresenter, p0: f64) callconv(.winapi) HRESULT,
     get_VerticalAnchorRatio: *const fn (this: *const IScrollPresenter, result: *f64) callconv(.winapi) HRESULT,
     put_VerticalAnchorRatio: *const fn (this: *const IScrollPresenter, p0: f64) callconv(.winapi) HRESULT,
-    get_HorizontalSnapPoints: *const fn (this: *const IScrollPresenter, result: **anyopaque) callconv(.winapi) HRESULT,
-    get_VerticalSnapPoints: *const fn (this: *const IScrollPresenter, result: **anyopaque) callconv(.winapi) HRESULT,
-    get_ZoomSnapPoints: *const fn (this: *const IScrollPresenter, result: **anyopaque) callconv(.winapi) HRESULT,
+    get_HorizontalSnapPoints: *const fn (this: *const IScrollPresenter, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_Primitives_ScrollSnapPointBase) callconv(.winapi) HRESULT,
+    get_VerticalSnapPoints: *const fn (this: *const IScrollPresenter, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_Primitives_ScrollSnapPointBase) callconv(.winapi) HRESULT,
+    get_ZoomSnapPoints: *const fn (this: *const IScrollPresenter, result: **@"Windows.Foundation.Collections".IVector__G1__Microsoft_UI_Xaml_Controls_Primitives_ZoomSnapPointBase) callconv(.winapi) HRESULT,
     ScrollTo: *const fn (this: *const IScrollPresenter, p0: f64, p1: f64, result: *i32) callconv(.winapi) HRESULT,
     ScrollTo_2: *const fn (this: *const IScrollPresenter, p0: f64, p1: f64, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingScrollOptions, result: *i32) callconv(.winapi) HRESULT,
     ScrollBy: *const fn (this: *const IScrollPresenter, p0: f64, p1: f64, result: *i32) callconv(.winapi) HRESULT,
     ScrollBy_2: *const fn (this: *const IScrollPresenter, p0: f64, p1: f64, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingScrollOptions, result: *i32) callconv(.winapi) HRESULT,
-    AddScrollVelocity: *const fn (this: *const IScrollPresenter, p0: @"Windows.Foundation.Numerics".Vector2, p1: *anyopaque, result: *i32) callconv(.winapi) HRESULT,
-    ZoomTo: *const fn (this: *const IScrollPresenter, p0: f32, p1: *anyopaque, result: *i32) callconv(.winapi) HRESULT,
-    ZoomTo_2: *const fn (this: *const IScrollPresenter, p0: f32, p1: *anyopaque, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingZoomOptions, result: *i32) callconv(.winapi) HRESULT,
-    ZoomBy: *const fn (this: *const IScrollPresenter, p0: f32, p1: *anyopaque, result: *i32) callconv(.winapi) HRESULT,
-    ZoomBy_2: *const fn (this: *const IScrollPresenter, p0: f32, p1: *anyopaque, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingZoomOptions, result: *i32) callconv(.winapi) HRESULT,
-    AddZoomVelocity: *const fn (this: *const IScrollPresenter, p0: f32, p1: *anyopaque, p2: *@"Windows.Foundation".IReference__G1__f32, result: *i32) callconv(.winapi) HRESULT,
-    add_ExtentChanged: *const fn (this: *const IScrollPresenter, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    AddScrollVelocity: *const fn (this: *const IScrollPresenter, p0: @"Windows.Foundation.Numerics".Vector2, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, result: *i32) callconv(.winapi) HRESULT,
+    ZoomTo: *const fn (this: *const IScrollPresenter, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, result: *i32) callconv(.winapi) HRESULT,
+    ZoomTo_2: *const fn (this: *const IScrollPresenter, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingZoomOptions, result: *i32) callconv(.winapi) HRESULT,
+    ZoomBy: *const fn (this: *const IScrollPresenter, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, result: *i32) callconv(.winapi) HRESULT,
+    ZoomBy_2: *const fn (this: *const IScrollPresenter, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, p2: *@"Microsoft.UI.Xaml.Controls".ScrollingZoomOptions, result: *i32) callconv(.winapi) HRESULT,
+    AddZoomVelocity: *const fn (this: *const IScrollPresenter, p0: f32, p1: *@"Windows.Foundation".IReference__G1__Windows_Foundation_Numerics_Vector2, p2: *@"Windows.Foundation".IReference__G1__f32, result: *i32) callconv(.winapi) HRESULT,
+    add_ExtentChanged: *const fn (this: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ExtentChanged: *const fn (this: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_StateChanged: *const fn (this: *const IScrollPresenter, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_StateChanged: *const fn (this: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_StateChanged: *const fn (this: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ViewChanged: *const fn (this: *const IScrollPresenter, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ViewChanged: *const fn (this: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__object, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ViewChanged: *const fn (this: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ScrollAnimationStarting: *const fn (this: *const IScrollPresenter, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ScrollAnimationStarting: *const fn (this: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__Microsoft_UI_Xaml_Controls_ScrollingScrollAnimationStartingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ScrollAnimationStarting: *const fn (this: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ZoomAnimationStarting: *const fn (this: *const IScrollPresenter, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ZoomAnimationStarting: *const fn (this: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__Microsoft_UI_Xaml_Controls_ScrollingZoomAnimationStartingEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ZoomAnimationStarting: *const fn (this: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ScrollCompleted: *const fn (this: *const IScrollPresenter, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ScrollCompleted: *const fn (this: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__Microsoft_UI_Xaml_Controls_ScrollingScrollCompletedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ScrollCompleted: *const fn (this: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_ZoomCompleted: *const fn (this: *const IScrollPresenter, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_ZoomCompleted: *const fn (this: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__Microsoft_UI_Xaml_Controls_ScrollingZoomCompletedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_ZoomCompleted: *const fn (this: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_BringingIntoView: *const fn (this: *const IScrollPresenter, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_BringingIntoView: *const fn (this: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__Microsoft_UI_Xaml_Controls_ScrollingBringingIntoViewEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_BringingIntoView: *const fn (this: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
-    add_AnchorRequested: *const fn (this: *const IScrollPresenter, p0: *anyopaque, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
+    add_AnchorRequested: *const fn (this: *const IScrollPresenter, p0: *@"Windows.Foundation".TypedEventHandler__G2__Microsoft_UI_Xaml_Controls_Primitives_ScrollPresenter__Microsoft_UI_Xaml_Controls_ScrollingAnchorRequestedEventArgs, result: *@"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
     remove_AnchorRequested: *const fn (this: *const IScrollPresenter, p0: @"Windows.Foundation".EventRegistrationToken) callconv(.winapi) HRESULT,
 };
 pub const IScrollPresenterFactory_Vtbl = extern struct {
