@@ -187,6 +187,33 @@ Add a reactor-usable COM aggregation primitive, use it to give a real `Applicati
 - Re-run the exact probes from the investigation (`Application.Resources`/`put_Resources`, `get_MergedDictionaries`, `XamlControlsResources` activation, `ResourceDictionary.Source = ms-appx://...`) at each of: immediately after aggregated construction, after `mountInitial()`, after `activateWindows()`, and on a later dispatcher callback — using `zig build run-reactor-hello -- --exit-after-ms 1500` as the throwaway harness, same as the original investigation.
 - Record results directly in this plan document (a new "Phase 1 results" subsection) once probes are complete.
 
+### Phase 1 progress — item 1 result (2026-07-07)
+
+`IXamlMetadataProvider` **is** present in the vendored metadata — confirmed by running `zig build run -- Microsoft.UI.Xaml.Markup` (the existing `winbindgen` CLI, see `packages/winbindgen/src/main.zig:14`) and grepping the emitted source. This is the standard WinRT interface itself, distinct from the compiler-generated concrete `XamlControlsXamlMetaDataProvider` class (which is genuinely absent, as the earlier investigation found — but this plan only needs to author a stub *implementation* of the interface, not obtain that generated class). Confirmed ABI:
+
+```zig
+pub const IID_IXamlMetadataProvider: GUID = .{
+    .data1 = 0xA96251F0, .data2 = 0x2214, .data3 = 0x5D53,
+    .data4 = .{ 0x87, 0x46, 0xCE, 0x99, 0xA2, 0x59, 0x3C, 0xD7 },
+};
+
+pub const IXamlMetadataProvider_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    GetXamlType: *const fn (this: *const IXamlMetadataProvider, p0: TypeName, result: **IXamlType) callconv(.winapi) HRESULT,
+    GetXamlType_2: *const fn (this: *const IXamlMetadataProvider, p0: HSTRING, result: **IXamlType) callconv(.winapi) HRESULT,
+    GetXmlnsDefinitions: *const fn (this: *const IXamlMetadataProvider, result_size: *u32, result_ptr: *[*]XmlnsDefinition) callconv(.winapi) HRESULT,
+};
+
+// from Windows.UI.Xaml.Interop (cross-referenced by the WinUI3 metadata)
+pub const TypeName = extern struct { Name: HSTRING, Kind: i32 };
+
+// from Microsoft.UI.Xaml.Markup
+pub const XmlnsDefinition = extern struct { XmlNamespace: HSTRING, Namespace: HSTRING };
+// IXamlType IID: d24219df-7ec9-57f1-a27b-6af251d9c5bc (only needed as an opaque out-pointer for the stub — never populated, since a stub returns "not found")
+```
+
+Stub contract (matches how compiler-generated `App::GetXamlType` behaves for unrecognized types): `GetXamlType`/`GetXamlType_2` set `result.* = null` and return `S_OK` (not an error — WinRT's metadata-provider chaining treats a null result as "this provider doesn't know this type, keep looking", not a hard failure). `GetXmlnsDefinitions` sets `result_size.* = 0` and `result_ptr.* = null`  (empty array) and returns `S_OK`.
+
 ### Success Criteria
 
 - The aggregation helper compiles and a real `Application` instance can be constructed through it without crashing or hanging.
@@ -194,7 +221,41 @@ Add a reactor-usable COM aggregation primitive, use it to give a real `Applicati
 - A definitive yes/no answer is recorded for: "does exposing `IXamlMetadataProvider` alone unblock `XamlControlsResources` activation / theme-resource loading?"
 - A definitive answer is recorded for: "what is the earliest point after aggregated `Application` construction that `Application.Resources`/`MergedDictionaries` are queryable, and is that early enough to run before the first `TextBox` widget would be constructed during `mountInitial()`?"
 
-**Implementation Note**: Pause here for manual confirmation of the probe results before proceeding — the answer determines whether Phase 2 or Phase 2-Fallback gets implemented.
+### Phase 1 results (2026-07-07) — DECISION: aggregation alone is insufficient, proceed to Phase 2-Fallback
+
+Implemented and ran the full Phase 1 spike:
+
+- `packages/win-reactor/src/com_aggregate.zig` — the COM aggregation helper (`createAggregated`), implementing the standard "controlling outer" pattern: builds an outer object exposing a stub `IXamlMetadataProvider` (ABI from the "item 1 result" above), passes it as `outer` to `IApplicationFactory.CreateInstance`, captures the returned non-delegating `inner` pointer, and re-derives the `*Application`-shaped identity via `QueryInterface(IID_IApplication)` on the outer (rather than trusting the factory's `result` out-param, which composable factories are free to leave non-aggregation-aware).
+- `packages/win-reactor/src/issue74_probe.zig` — throwaway probe harness with hand-authored minimal ABI for `IResourceDictionary.get_MergedDictionaries` and a `#54`-safe `XamlControlsResources.activate()` (calls `win_core.activateInstance(IXamlControlsResources, &NAME_W)` directly, sourcing the interface's IID from `packages/win/src/generated/Microsoft.UI.Xaml.Controls.zig:4499`).
+- `packages/win-reactor/src/app.zig` — temporary `issue74_use_aggregated_application = true` toggle swaps `createComposable` for `com_aggregate.createAggregated`, with `issue74_probe.runProbes(application, stage)` called at `"post-construct"`, `"post-mount"`, and `"post-activate"`.
+
+Ran via `zig build run-reactor-hello -- --exit-after-ms 2000`. Output (full):
+
+```
+issue74_probe: ---- stage: post-construct ----
+issue74_probe: QueryInterface(IID_IXamlMetadataProvider): S_OK (0x00000000)
+issue74_probe: get_Resources: FAILED 0x8000FFFF
+issue74_probe: XamlControlsResources.activate: FAILED error.Fail (hresult 0x80004005)
+issue74_probe: ---- stage: post-mount ----
+issue74_probe: QueryInterface(IID_IXamlMetadataProvider): S_OK (0x00000000)
+issue74_probe: get_Resources: S_OK (0x00000000)
+issue74_probe: get_MergedDictionaries: S_OK (0x00000000)
+issue74_probe: XamlControlsResources.activate: FAILED error.Fail (hresult 0x80004005)
+issue74_probe: ---- stage: post-activate ----
+issue74_probe: QueryInterface(IID_IXamlMetadataProvider): S_OK (0x00000000)
+issue74_probe: get_Resources: S_OK (0x00000000)
+issue74_probe: get_MergedDictionaries: S_OK (0x00000000)
+issue74_probe: XamlControlsResources.activate: FAILED error.Fail (hresult 0x80004005)
+```
+
+**Answers to the two questions this phase had to resolve:**
+
+1. **Does exposing `IXamlMetadataProvider` alone unblock `XamlControlsResources` activation? NO.** `QueryInterface(IID_IXamlMetadataProvider)` against the aggregated `Application` succeeds (`S_OK`) at every stage — proving the aggregation plumbing itself is correct, so this is a real negative result, not a broken-probe false negative. Despite that, `XamlControlsResources.activate()` fails with the exact same `0x80004005` (`E_FAIL`) at every stage, identical to the non-aggregated baseline from the original investigation. Whatever WinUI's theme-resource loader needs beyond `IXamlMetadataProvider` (a working `Application.Resources.MergedDictionaries` on the compiler-generated `App.xaml` path, package-identity-dependent `ms-appx://` resolution, or something else entirely) is not satisfied merely by the interface existing on the object.
+2. **Earliest safe point for `Resources`/`MergedDictionaries`?** Unchanged from the original investigation: still `E_UNEXPECTED` (`0x8000FFFF`) immediately post-construct, still `S_OK` post-mount onward. Aggregation did not change this timing either.
+
+**Decision: skip Phase 2, proceed directly to Phase 2-Fallback** (vendor `themeresources.xaml`, load via `XamlReader.Load`, bypass `ms-appx://` entirely). Phase 2 as originally scoped (merge `XamlControlsResources` after confirming aggregation unblocks it) is not applicable given this result.
+
+**Implementation Note**: Paused here for manual confirmation before proceeding to Phase 2-Fallback, per this phase's decision gate.
 
 ---
 
