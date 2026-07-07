@@ -15,6 +15,7 @@ const std = @import("std");
 const win = @import("win");
 const win_core = win.core;
 const xaml = @import("Microsoft.UI.Xaml");
+const controls = @import("Microsoft.UI.Xaml.Controls");
 
 const GUID = win_core.GUID;
 const HRESULT = win_core.HRESULT;
@@ -36,6 +37,26 @@ const IResourceDictionary_Vtbl = extern struct {
     put_Source: *const fn (this: *anyopaque, value: *anyopaque) callconv(.winapi) HRESULT,
     get_MergedDictionaries: *const fn (this: *anyopaque, result: *?*anyopaque) callconv(.winapi) HRESULT,
     get_ThemeDictionaries: *const fn (this: *anyopaque, result: *?*anyopaque) callconv(.winapi) HRESULT,
+};
+
+/// Narrow `IVector<ResourceDictionary>` consumer -- only `Append` is
+/// exercised here, but every slot must be declared in the real order
+/// (`packages/win-collections/src/interfaces.zig:298-312`) since vtable
+/// layout is offset-based, not name-based.
+const IVectorResourceDictionary_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    GetAt: *const fn (this: *anyopaque, index: u32, result: *?*anyopaque) callconv(.winapi) HRESULT,
+    get_Size: *const fn (this: *anyopaque, result: *u32) callconv(.winapi) HRESULT,
+    GetView: *const fn (this: *anyopaque, result: *?*anyopaque) callconv(.winapi) HRESULT,
+    IndexOf: *const fn (this: *anyopaque, value: ?*anyopaque, index: *u32, result: *BOOL) callconv(.winapi) HRESULT,
+    SetAt: *const fn (this: *anyopaque, index: u32, value: ?*anyopaque) callconv(.winapi) HRESULT,
+    InsertAt: *const fn (this: *anyopaque, index: u32, value: ?*anyopaque) callconv(.winapi) HRESULT,
+    RemoveAt: *const fn (this: *anyopaque, index: u32) callconv(.winapi) HRESULT,
+    Append: *const fn (this: *anyopaque, value: ?*anyopaque) callconv(.winapi) HRESULT,
+    RemoveAtEnd: *const fn (this: *anyopaque) callconv(.winapi) HRESULT,
+    Clear: *const fn (this: *anyopaque) callconv(.winapi) HRESULT,
+    GetMany: *const fn (this: *anyopaque, start_index: u32, items_size: u32, items_ptr: [*]?*anyopaque, result: *u32) callconv(.winapi) HRESULT,
+    ReplaceAll: *const fn (this: *anyopaque, items_size: u32, items_ptr: [*]const ?*anyopaque) callconv(.winapi) HRESULT,
 };
 
 const IID_IXamlControlsResources = GUID.parse("918CA043-F42C-5805-861B-62D6D1D0C162");
@@ -141,19 +162,64 @@ pub fn runProbes(application: *xaml.Application, stage: []const u8) void {
     var resources: *xaml.ResourceDictionary = undefined;
     const get_resources_hr = app_this.vtable.get_Resources(app_this, &resources);
     logHr("get_Resources", get_resources_hr);
+    if (!hresult.succeeded(get_resources_hr)) return;
 
-    if (hresult.succeeded(get_resources_hr)) {
-        const rd_this: *anyopaque = @ptrCast(resources);
-        const rd_vtbl: *const IResourceDictionary_Vtbl = @as(*const *const IResourceDictionary_Vtbl, @ptrCast(@alignCast(rd_this))).*;
-        var merged: ?*anyopaque = null;
-        const merged_hr = rd_vtbl.get_MergedDictionaries(rd_this, &merged);
-        logHr("get_MergedDictionaries", merged_hr);
-    }
+    const rd_this: *anyopaque = @ptrCast(resources);
+    const rd_vtbl: *const IResourceDictionary_Vtbl = @as(*const *const IResourceDictionary_Vtbl, @ptrCast(@alignCast(rd_this))).*;
+    var merged_raw: ?*anyopaque = null;
+    const merged_hr = rd_vtbl.get_MergedDictionaries(rd_this, &merged_raw);
+    logHr("get_MergedDictionaries", merged_hr);
+    if (!hresult.succeeded(merged_hr)) return;
 
-    if (activateXamlControlsResources()) |xcr| {
-        std.debug.print("issue74_probe: XamlControlsResources.activate: S_OK\n", .{});
-        _ = xcr.vtable.base.base.Release(@ptrCast(xcr));
-    } else |err| {
+    if (merged_dictionaries_populated) return; // only merge once, at the first stage Resources is available
+    merged_dictionaries_populated = true;
+
+    const xcr = activateXamlControlsResources() catch |err| {
         std.debug.print("issue74_probe: XamlControlsResources.activate: FAILED {} (hresult 0x{X:0>8})\n", .{ err, @as(u32, @bitCast(hresult.last_hresult)) });
+        return;
+    };
+    logHr("XamlControlsResources.activate", hresult.S_OK);
+
+    const merged_this = merged_raw.?;
+    const merged_vtbl: *const IVectorResourceDictionary_Vtbl = @as(*const *const IVectorResourceDictionary_Vtbl, @ptrCast(@alignCast(merged_this))).*;
+    const append_hr = merged_vtbl.Append(merged_this, @ptrCast(xcr));
+    logHr("MergedDictionaries.Append(XamlControlsResources)", append_hr);
+    // Append (per normal WinRT collection semantics) takes its own
+    // reference; release our own activation reference now that the vector
+    // holds one. This is the real Phase-2 usage pattern (activate once,
+    // merge once, then normal refcounting) rather than the earlier
+    // probe-only activate+immediately-release-without-merging pattern.
+    _ = xcr.vtable.base.base.Release(@ptrCast(xcr));
+
+    // The critical validation: does constructing a REAL TextBox now avoid
+    // the original issue #74 0xC000027B crash? Construct one directly
+    // (bypassing the full reactor element tree, which has its own
+    // mount-ordering problem the real Phase 2/3 work still needs to
+    // solve -- see the plan doc) and immediately tear it down.
+    const tb_factory = win_core.activationFactory(
+        controls.ITextBoxFactory.Vtbl,
+        &controls.ITextBoxFactory.IID,
+        &controls.TextBox.NAME_W,
+    ) catch |err| {
+        std.debug.print("issue74_probe: TextBox activationFactory: FAILED {} (hresult 0x{X:0>8})\n", .{ err, @as(u32, @bitCast(hresult.last_hresult)) });
+        return;
+    };
+    defer tb_factory.deinit();
+    const tb_factory_this: *const controls.ITextBoxFactory = @ptrCast(@alignCast(tb_factory.ptr));
+    var tb_inner: ?*const anyopaque = null;
+    var tb_instance: *controls.TextBox = undefined;
+    const tb_hr = tb_factory_this.CreateInstance(null, &tb_inner, &tb_instance);
+    logHr("TextBox CreateInstance (real construction, the original #74 repro)", tb_hr);
+    if (hresult.succeeded(tb_hr)) {
+        _ = tb_instance.vtable.base.base.Release(@ptrCast(tb_instance));
+        std.debug.print("issue74_probe: TextBox construction+release completed WITHOUT crashing.\n", .{});
     }
+    // Append (per normal WinRT collection semantics) takes its own
+    // reference; release our own activation reference now that the vector
+    // holds one. This is the real Phase-2 usage pattern (activate once,
+    // merge once, then normal refcounting) rather than the earlier
+    // probe-only activate+immediately-release-without-merging pattern.
+    _ = xcr.vtable.base.base.Release(@ptrCast(xcr));
 }
+
+var merged_dictionaries_populated = false;

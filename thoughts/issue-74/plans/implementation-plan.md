@@ -290,6 +290,31 @@ issue74_probe: XamlControlsResources.activate: S_OK
 
 **New wrinkle found**: with this change, the probe run now hits a *new*, different crash — a segfault inside `Microsoft.UI.Xaml.dll` during process teardown (after the `--exit-after-ms` timer closes the window, inside `RoUninitialize()`), not the original startup `0xC000027B`. The probe's repeated activate-then-immediately-release of a throwaway `XamlControlsResources` instance at all three stages (without ever merging it into `Application.Resources`) is a likely culprit and does not reflect how the real Phase 2 implementation will use it (merge once, keep it alive, same "leak until process exit" pattern `app.zig` already uses for `Application` itself). Next step: implement the real merge (single `XamlControlsResources` instance appended to `Application.Resources.MergedDictionaries`, never explicitly released) and re-check whether the shutdown crash persists.
 
+### Follow-up (same session): real merge implemented; core #74 bug confirmed fixed; separate shutdown-time issue found
+
+Changed `issue74_probe.zig` to do the real (not throwaway) usage pattern: activate exactly one `XamlControlsResources`, `Append` it into `MergedDictionaries` (only once, guarded by a `merged_dictionaries_populated` flag, at the first stage `Resources` is queryable), then release only *our* activation reference (the vector holds its own, per normal WinRT collection semantics) rather than leaking or repeatedly churning instances.
+
+**The core issue #74 bug is fixed.** With the real provider delegation (previous section) plus this real merge, added a direct validation to the probe: construct a real `Microsoft.UI.Xaml.Controls.TextBox` via plain `CreateInstance(null, ...)` (the exact construction path `winui_backend.zig`'s `.text_box` case uses) immediately after the merge, then release it. Output:
+
+```
+issue74_probe: MergedDictionaries.Append(XamlControlsResources): S_OK (0x00000000)
+issue74_probe: TextBox CreateInstance (real construction, the original #74 repro): S_OK (0x00000000)
+issue74_probe: TextBox construction+release completed WITHOUT crashing.
+```
+
+No `0xC000027B` crash. This is the exact repro from the issue body (`TextBox` construction crashing the process) and it no longer crashes.
+
+**A separate, new shutdown-time issue was found, and it is NOT specific to `TextBox`.** Once the real merge is in place (regardless of whether a `TextBox` is ever constructed — confirmed via bisection, see below), the process no longer exits cleanly with `--exit-after-ms`:
+
+- Before this session's fix (bare `Application`, no working theme resources): `zig build run-reactor-hello -- --exit-after-ms 2000` on **unmodified `main`** exits with code `0` (verified in a separate, unmodified worktree at `C:\Users\cataggar\ms\windows-zig`).
+- After the real merge lands (`Outer` delegating to `XamlControlsXamlMetaDataProvider`, `XamlControlsResources` appended to `MergedDictionaries`): the same command now exits with code `116`, with **no stack trace** and **no crash message** printed — a debug print placed directly around `IApplicationStatics.Start(callback)` in `app.zig` never fires, meaning execution never returns from `Start(...)` at all; something terminates the process from within the blocking WinUI message pump itself (possibly a fail-fast/telemetry-driven termination internal to `Microsoft.WindowsAppRuntime`/`Microsoft.UI.Xaml.dll`, not a normal Zig-catchable access violation).
+- **Bisected**: this reproduces identically whether or not the probe's `TextBox` construction+release test runs at all (removing it from the probe still produces the same exit code `116`). So this is triggered by **the resource merge itself** (or possibly the aggregation + real-provider-delegation it depends on), not by constructing a `TextBox`.
+- This is a distinct failure mode from the original bug: no crash dump, no `Microsoft.UI.Xaml.dll` stack frames, a different (and unexplained) exit code, and it happens at/after shutdown rather than at `TextBox` construction time. It is consistent with the *class* of problem the plan's own "What We're NOT Doing" section already excludes as out of scope — the pre-existing "shutdown leak/crash" tracked in issue #60 — but whether it is literally the same root cause as #60 has not been confirmed.
+
+**Current state of the worktree**: `packages/win-reactor/src/winui_backend.zig`'s `.text_box` case has been left as `error.NotYetSupported` (reverted after validating it works, since Phase 3's permanent re-enable should wait until the shutdown issue is understood/resolved or explicitly deferred). `packages/win-reactor/src/issue74_probe.zig` retains the working merge + the throwaway `TextBox` construction validation (both gated behind the temporary `issue74_use_aggregated_application` toggle in `app.zig`, unchanged). `zig build test --summary all`: 178/178 steps, 218/220 tests (2 skipped, expected) — the pre-existing package test suite doesn't exercise this runtime path, so it stays green regardless.
+
+**Recommendation for whoever continues:** the `IXamlMetadataProvider`-delegation approach is confirmed correct and should become the permanent Phase 2 implementation (wire `com_aggregate.zig` permanently into `app.zig`, backfill the small `IResourceDictionary`/`XamlControlsResources` ABI into the shared curated `winui/` surface instead of `issue74_probe.zig`'s ad-hoc copy, per the original Phase 2 changes-required list above). Before re-enabling `TextBox` permanently (Phase 3), the new shutdown-time exit-116 issue needs investigation: bisect further (does merging *any* `ResourceDictionary.MergedDictionaries` entry trigger it, or specifically `XamlControlsResources`? does it happen without the aggregation/real-provider delegation, e.g. by merging an empty custom `ResourceDictionary` instead? does `--exit-after-ms`'s `WM_CLOSE`-driven shutdown path matter, or does it reproduce on a normal user-initiated window close too?), and cross-reference against #60's own investigation notes once found.
+
 ---
 
 ## Phase 2: Wire aggregation permanently and merge theme resources (only if Phase 1 succeeds)
