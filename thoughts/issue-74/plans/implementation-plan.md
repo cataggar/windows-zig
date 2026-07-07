@@ -257,6 +257,39 @@ issue74_probe: XamlControlsResources.activate: FAILED error.Fail (hresult 0x8000
 
 **Implementation Note**: Paused here for manual confirmation before proceeding to Phase 2-Fallback, per this phase's decision gate.
 
+### MAJOR UPDATE (2026-07-07, same session) — the "Phase 2-Fallback" conclusion above was premature; real fix found
+
+Before starting Phase 2-Fallback's vendoring work, external research turned up [microsoft/microsoft-ui-xaml#7606](https://github.com/microsoft/microsoft-ui-xaml/issues/7606) ("XamlControlsResources causes crash when used from plain win32 desktop app") — the exact same failure, reported against a plain unpackaged C++/WinRT app. Key quote from a comment on that issue: instantiating `XamlControlsResources` requires an `IXamlMetadataProvider` implementation, and a hand-authored one is "good enough to just fall through to the WinUI provided provider" for a basic window/controls to show.
+
+That phrase ("fall through to the WinUI provided provider") prompted re-checking whether `Microsoft.UI.Xaml.XamlTypeInfo.XamlControlsXamlMetaDataProvider` is really absent from metadata, since the original investigation's check only searched the **emitted bundle** (`packages/win/src/generated/`) — not the full vendored `.winmd` via the `winbindgen` CLI directly. It is NOT absent:
+
+```
+zig build run -- Microsoft.UI.Xaml.XamlTypeInfo
+```
+
+emits a full `XamlControlsXamlMetaDataProvider` / `IXamlControlsXamlMetaDataProvider` / `IXamlControlsXamlMetaDataProviderStatics` definition. Empirically confirmed via the probe harness that it is a plain default-activatable WinRT class (`IActivationFactory.ActivateInstance` → `S_OK`) and that the resulting instance really implements `IID_IXamlMetadataProvider` (`QueryInterface` → `S_OK`).
+
+**Fix**: `com_aggregate.zig`'s `Outer` now activates one instance of this real framework provider (`activateRealProvider()`) and delegates every `IXamlMetadataProvider` method to it (`delegatingGetXamlType`/`delegatingGetXamlType2`/`delegatingGetXmlnsDefinitions`), falling back to the old "not found" stub only if activation fails for some reason. Re-ran the exact same probe:
+
+```
+issue74_probe: ---- stage: post-construct ----
+issue74_probe: XamlControlsXamlMetaDataProvider ActivateInstance: S_OK (0x00000000)
+issue74_probe: XamlControlsXamlMetaDataProvider -> QI(IID_IXamlMetadataProvider): S_OK (0x00000000)
+issue74_probe: QueryInterface(IID_IXamlMetadataProvider): S_OK (0x00000000)
+issue74_probe: get_Resources: FAILED 0x8000FFFF
+issue74_probe: XamlControlsResources.activate: S_OK
+issue74_probe: ---- stage: post-mount ----
+...
+issue74_probe: XamlControlsResources.activate: S_OK
+issue74_probe: ---- stage: post-activate ----
+...
+issue74_probe: XamlControlsResources.activate: S_OK
+```
+
+**`XamlControlsResources.activate()` now succeeds (`S_OK`) at every stage.** This confirms the real fix is "aggregate `Application` behind an `IXamlMetadataProvider` that delegates to the real, already-shipped `XamlControlsXamlMetaDataProvider` framework class" — no XAML vendoring needed at all. **Phase 2-Fallback is not needed; revert to (a corrected) Phase 2.**
+
+**New wrinkle found**: with this change, the probe run now hits a *new*, different crash — a segfault inside `Microsoft.UI.Xaml.dll` during process teardown (after the `--exit-after-ms` timer closes the window, inside `RoUninitialize()`), not the original startup `0xC000027B`. The probe's repeated activate-then-immediately-release of a throwaway `XamlControlsResources` instance at all three stages (without ever merging it into `Application.Resources`) is a likely culprit and does not reflect how the real Phase 2 implementation will use it (merge once, keep it alive, same "leak until process exit" pattern `app.zig` already uses for `Application` itself). Next step: implement the real merge (single `XamlControlsResources` instance appended to `Application.Resources.MergedDictionaries`, never explicitly released) and re-check whether the shutdown crash persists.
+
 ---
 
 ## Phase 2: Wire aggregation permanently and merge theme resources (only if Phase 1 succeeds)

@@ -63,6 +63,51 @@ fn activateXamlControlsResources() !*IXamlControlsResources {
 const IUnknown_Vtbl = win_core.IUnknown_Vtbl;
 const com_aggregate = @import("com_aggregate.zig");
 
+// ---- Speculative probe: is XamlControlsXamlMetaDataProvider directly
+// activatable, and does it expose the real IXamlMetadataProvider? -------
+// The original investigation claimed this compiler-generated-looking type
+// was absent from metadata, but that check only looked at the *emitted
+// bundle* (packages/win/src/generated/), not the full vendored .winmd via
+// `winbindgen --list` / `winbindgen <namespace>`. It IS present there. If
+// it's directly activatable and really implements IXamlMetadataProvider,
+// our stub could delegate to it instead of always returning "not found" --
+// which may be what real apps' compiler-generated providers actually do
+// under the hood (see microsoft/microsoft-ui-xaml#7606 comment thread: "it
+// is good enough to just fall through to the WinUI provided provider").
+
+const xaml_controls_metadata_provider_name_w = std.unicode.utf8ToUtf16LeStringLiteral("Microsoft.UI.Xaml.XamlTypeInfo.XamlControlsXamlMetaDataProvider").*;
+
+const IActivationFactory_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    ActivateInstance: *const fn (this: *anyopaque, instance: *?*anyopaque) callconv(.winapi) HRESULT,
+};
+
+fn probeXamlControlsXamlMetaDataProvider() void {
+    const factory = win_core.activationFactory(IActivationFactory_Vtbl, &win_core.IID_IActivationFactory, &xaml_controls_metadata_provider_name_w) catch |err| {
+        std.debug.print("issue74_probe: XamlControlsXamlMetaDataProvider activationFactory: FAILED {} (hresult 0x{X:0>8})\n", .{ err, @as(u32, @bitCast(hresult.last_hresult)) });
+        return;
+    };
+    defer factory.deinit();
+
+    var instance_raw: ?*anyopaque = null;
+    const activate_hr = factory.vtbl().ActivateInstance(factory.ptr, &instance_raw);
+    logHr("XamlControlsXamlMetaDataProvider ActivateInstance", activate_hr);
+    if (!hresult.succeeded(activate_hr)) return;
+    defer {
+        const unk: *const IUnknown_Vtbl = @as(*const *const IUnknown_Vtbl, @ptrCast(@alignCast(instance_raw.?))).*;
+        _ = unk.Release(instance_raw.?);
+    }
+
+    var xmp_raw: ?*anyopaque = null;
+    const inst_unk: *const IUnknown_Vtbl = @as(*const *const IUnknown_Vtbl, @ptrCast(@alignCast(instance_raw.?))).*;
+    const qi_hr = inst_unk.QueryInterface(instance_raw.?, &com_aggregate.IID_IXamlMetadataProvider, &xmp_raw);
+    logHr("XamlControlsXamlMetaDataProvider -> QI(IID_IXamlMetadataProvider)", qi_hr);
+    if (hresult.succeeded(qi_hr)) {
+        const xmp_unk: *const IUnknown_Vtbl = @as(*const *const IUnknown_Vtbl, @ptrCast(@alignCast(xmp_raw.?))).*;
+        _ = xmp_unk.Release(xmp_raw.?);
+    }
+}
+
 fn logHr(label: []const u8, hr: HRESULT) void {
     if (hresult.succeeded(hr)) {
         std.debug.print("issue74_probe: {s}: S_OK (0x{X:0>8})\n", .{ label, @as(u32, @bitCast(hr)) });
@@ -77,6 +122,7 @@ fn logHr(label: []const u8, hr: HRESULT) void {
 /// (non-aggregated) investigation used.
 pub fn runProbes(application: *xaml.Application, stage: []const u8) void {
     std.debug.print("issue74_probe: ---- stage: {s} ----\n", .{stage});
+    probeXamlControlsXamlMetaDataProvider();
 
     const app_this: *const xaml.IApplication = @ptrCast(@alignCast(application));
 

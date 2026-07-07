@@ -1,24 +1,22 @@
-//! Reactor-local COM aggregation helper (issue #74 Phase 1 spike).
+//! Reactor-local COM aggregation helper (issue #74 Phase 1/2 spike).
 //!
 //! Implements the standard WinRT/COM "controlling outer" aggregation
 //! pattern used internally by e.g. C++/WinRT's `winrt::implements<Derived,
 //! ApplicationT<Derived>>` CRTP base: a caller-owned "outer" object is
 //! passed as the `outer` parameter to a composable factory's
 //! `CreateInstance(outer, &inner, &instance)`. The outer answers
-//! `QueryInterface` first for its own authored extra interfaces (here, a
-//! single stub `IXamlMetadataProvider`), then delegates everything else to
-//! the aggregated inner object's private "non-delegating" `IUnknown`
-//! (captured via the `inner` out-parameter).
+//! `QueryInterface` first for its own authored extra interfaces (here, an
+//! `IXamlMetadataProvider` that delegates to the real framework provider,
+//! see below), then delegates everything else to the aggregated inner
+//! object's private "non-delegating" `IUnknown` (captured via the `inner`
+//! out-parameter).
 //!
 //! This is deliberately reactor-local rather than a generic `win-core`
 //! primitive (see `thoughts/issue-74/plans/implementation-plan.md`,
 //! "What We're NOT Doing"): it exists to give `Microsoft.UI.Xaml.Application`
-//! a stub `IXamlMetadataProvider`, which WinUI's theme-resource loader
-//! appears to require before `XamlControlsResources`/`ms-appx://` resource
-//! loads can succeed. It is a throwaway probe vehicle for Phase 1; if the
-//! probe confirms this unblocks resource loading, Phase 2 makes the wiring
-//! permanent (this file itself can stay, just without the temporary
-//! probe-only call sites in `app.zig`).
+//! a working `IXamlMetadataProvider`, which WinUI's theme-resource loader
+//! requires before `XamlControlsResources`/`ms-appx://` resource loads can
+//! succeed.
 
 const std = @import("std");
 const win = @import("win");
@@ -39,11 +37,7 @@ const IID_IInspectable = win_core.IID_IInspectable;
 // existing `winbindgen` CLI (`zig build run -- Microsoft.UI.Xaml.Markup`),
 // not guessed from public headers. See the Phase 1 findings in
 // `thoughts/issue-74/plans/implementation-plan.md` for the exact command
-// and emitted source this was cross-checked against. `IXamlMetadataProvider`
-// is a standard WinRT interface (present in metadata); it is the
-// compiler-generated *concrete implementation* class
-// (`XamlControlsXamlMetaDataProvider`) that is genuinely absent from
-// metadata — we don't need that class, only our own stub of the interface.
+// and emitted source this was cross-checked against.
 
 pub const IID_IXamlMetadataProvider = GUID.parse("A96251F0-2214-5D53-8746-CE99A2593CD7");
 
@@ -67,26 +61,91 @@ pub const IXamlMetadataProvider_Vtbl = extern struct {
     GetXmlnsDefinitions: *const fn (this: *anyopaque, result_size: *u32, result_ptr: *?[*]XmlnsDefinition) callconv(.winapi) HRESULT,
 };
 
-// ---- Stub IXamlMetadataProvider method bodies -------------------------
+// ---- Real XamlControlsXamlMetaDataProvider (framework-provided) --------
 //
-// Reactor has no XAML markup files (no `x:Bind`, no custom markup types),
-// so these never need to resolve anything real. Returning a null
-// `IXamlType`/empty definition list with `S_OK` matches how
-// compiler-generated `App::GetXamlType` behaves for a type it doesn't
-// recognize -- WinRT's metadata-provider chaining treats "not found" as
-// "keep looking", not a hard error.
+// The original issue #74 investigation assumed
+// `Microsoft.UI.Xaml.XamlTypeInfo.XamlControlsXamlMetaDataProvider` was
+// absent from metadata and therefore that a hand-authored stub was the
+// only option. That check only looked at the currently-*emitted bundle*
+// (`packages/win/src/generated/`), not the full vendored `.winmd` via the
+// `winbindgen` CLI directly. It is present, is a plain default-activatable
+// WinRT class, and really implements `IXamlMetadataProvider` -- confirmed
+// empirically via `zig build run-reactor-hello -- --exit-after-ms 2000`
+// (see the Phase 1 results in the plan doc). Rather than stubbing
+// "not found" for everything, `Outer` activates one instance of this real
+// provider once and delegates every `IXamlMetadataProvider` call to it,
+// matching how real (compiler-generated) app metadata providers are
+// documented to "fall through to the WinUI provided provider" for types
+// they don't own (see microsoft/microsoft-ui-xaml#7606).
 
-fn stubGetXamlType(_: *anyopaque, _: TypeName, result: *?*anyopaque) callconv(.winapi) HRESULT {
+const xaml_controls_metadata_provider_name_w = std.unicode.utf8ToUtf16LeStringLiteral(
+    "Microsoft.UI.Xaml.XamlTypeInfo.XamlControlsXamlMetaDataProvider",
+).*;
+
+const IActivationFactory_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    ActivateInstance: *const fn (this: *anyopaque, instance: *?*anyopaque) callconv(.winapi) HRESULT,
+};
+
+/// Activate the real framework provider and QI it for `IXamlMetadataProvider`.
+/// Returns `null` (rather than propagating the error) if anything about this
+/// fails, so `Outer` can gracefully fall back to its own "not found" stub
+/// instead of making aggregated `Application` construction itself fail.
+fn activateRealProvider() ?*anyopaque {
+    const factory = win_core.activationFactory(
+        IActivationFactory_Vtbl,
+        &win_core.IID_IActivationFactory,
+        &xaml_controls_metadata_provider_name_w,
+    ) catch return null;
+    defer factory.deinit();
+
+    var instance_raw: ?*anyopaque = null;
+    if (!hresult.succeeded(factory.vtbl().ActivateInstance(factory.ptr, &instance_raw))) return null;
+    const instance = instance_raw orelse return null;
+    const inst_unk: *const IUnknown_Vtbl = @as(*const *const IUnknown_Vtbl, @ptrCast(@alignCast(instance))).*;
+    defer _ = inst_unk.Release(instance);
+
+    var provider_raw: ?*anyopaque = null;
+    if (!hresult.succeeded(inst_unk.QueryInterface(instance, &IID_IXamlMetadataProvider, &provider_raw))) return null;
+    return provider_raw;
+}
+
+fn realProviderVtbl(provider: *anyopaque) *const IXamlMetadataProvider_Vtbl {
+    return @as(*const *const IXamlMetadataProvider_Vtbl, @ptrCast(@alignCast(provider))).*;
+}
+
+// ---- IXamlMetadataProvider method bodies -------------------------------
+//
+// Delegate to the real framework provider (`Outer.real_provider`) when one
+// was successfully activated; otherwise fall back to "not found" (`S_OK`
+// with a null/empty result -- matches how compiler-generated
+// `App::GetXamlType` behaves for a type it doesn't recognize, since WinRT's
+// metadata-provider chaining treats "not found" as "keep looking", not a
+// hard error).
+
+fn delegatingGetXamlType(this: *anyopaque, type_name: TypeName, result: *?*anyopaque) callconv(.winapi) HRESULT {
+    const self: *Outer = @ptrCast(@alignCast(this));
+    if (self.real_provider) |provider| {
+        return realProviderVtbl(provider).GetXamlType(provider, type_name, result);
+    }
     result.* = null;
     return hresult.S_OK;
 }
 
-fn stubGetXamlType2(_: *anyopaque, _: HSTRING, result: *?*anyopaque) callconv(.winapi) HRESULT {
+fn delegatingGetXamlType2(this: *anyopaque, full_name: HSTRING, result: *?*anyopaque) callconv(.winapi) HRESULT {
+    const self: *Outer = @ptrCast(@alignCast(this));
+    if (self.real_provider) |provider| {
+        return realProviderVtbl(provider).GetXamlType_2(provider, full_name, result);
+    }
     result.* = null;
     return hresult.S_OK;
 }
 
-fn stubGetXmlnsDefinitions(_: *anyopaque, result_size: *u32, result_ptr: *?[*]XmlnsDefinition) callconv(.winapi) HRESULT {
+fn delegatingGetXmlnsDefinitions(this: *anyopaque, result_size: *u32, result_ptr: *?[*]XmlnsDefinition) callconv(.winapi) HRESULT {
+    const self: *Outer = @ptrCast(@alignCast(this));
+    if (self.real_provider) |provider| {
+        return realProviderVtbl(provider).GetXmlnsDefinitions(provider, result_size, result_ptr);
+    }
     result_size.* = 0;
     result_ptr.* = null;
     return hresult.S_OK;
@@ -108,6 +167,9 @@ const Outer = extern struct {
     allocator_ptr: *anyopaque,
     allocator_vtable: *const std.mem.Allocator.VTable,
     inner: ?*const anyopaque,
+    /// The real framework `IXamlMetadataProvider`, if `activateRealProvider`
+    /// succeeded (see above); `null` means fall back to "not found" stubs.
+    real_provider: ?*anyopaque,
 };
 
 const outer_vtbl: IXamlMetadataProvider_Vtbl = .{
@@ -121,9 +183,9 @@ const outer_vtbl: IXamlMetadataProvider_Vtbl = .{
         .GetRuntimeClassName = outerGetRuntimeClassName,
         .GetTrustLevel = outerGetTrustLevel,
     },
-    .GetXamlType = stubGetXamlType,
-    .GetXamlType_2 = stubGetXamlType2,
-    .GetXmlnsDefinitions = stubGetXmlnsDefinitions,
+    .GetXamlType = delegatingGetXamlType,
+    .GetXamlType_2 = delegatingGetXamlType2,
+    .GetXmlnsDefinitions = delegatingGetXmlnsDefinitions,
 };
 
 fn innerUnknown(self: *Outer) *const IUnknown_Vtbl {
@@ -172,6 +234,10 @@ fn outerRelease(this: *anyopaque) callconv(.winapi) u32 {
     if (prev == 1) {
         if (self.inner) |inner_raw| {
             _ = innerUnknown(self).Release(@constCast(inner_raw));
+        }
+        if (self.real_provider) |provider| {
+            const provider_unk: *const IUnknown_Vtbl = @as(*const *const IUnknown_Vtbl, @ptrCast(@alignCast(provider))).*;
+            _ = provider_unk.Release(provider);
         }
         const allocator: std.mem.Allocator = .{
             .ptr = self.allocator_ptr,
@@ -234,6 +300,7 @@ pub fn createAggregated(
         .allocator_ptr = allocator.ptr,
         .allocator_vtable = allocator.vtable,
         .inner = null,
+        .real_provider = activateRealProvider(),
     };
 
     const factory = try win_core.activationFactory(Factory.Vtbl, &Factory.IID, &RuntimeClass.NAME_W);
