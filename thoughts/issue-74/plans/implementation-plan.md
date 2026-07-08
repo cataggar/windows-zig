@@ -317,6 +317,20 @@ No `0xC000027B` crash. This is the exact repro from the issue body (`TextBox` co
 
 ---
 
+### Further investigation (same session): the post-`activateWindows()` issue is a deterministic crash, not a shutdown-hygiene bug in the probe
+
+Fixed two real bugs found in `issue74_probe.zig` along the way (both worth noting since they could otherwise mislead whoever picks this up):
+1. A leftover **double-`Release`** on the `XamlControlsResources` instance (a stray duplicate release call survived a file-restore-from-backup during this session).
+2. **Reference leaks**: `get_Resources` and `get_MergedDictionaries` are WinRT property-getter-shaped calls that `AddRef` their result on every call; the probe was calling both at all three stages without ever releasing them. Fixed by only touching `Resources`/`MergedDictionaries` once (guarded by `merged_dictionaries_populated`) and releasing both references once done with them.
+
+Neither fix changed the outcome. With both fixed, and with real provider delegation working (`Outer` -> `XamlControlsXamlMetaDataProvider`), the same crash still reproduces, **deterministically at the same `Microsoft.UI.Xaml.dll` addresses across independent runs**, and it happens:
+
+- specifically at/after `self.backend_impl.activateWindows()` (the `"post-activate"` stage) — i.e. once the window actually becomes visible for the first time with the merged theme resources in place;
+- **before** any of the probe's own stage-3 logic even runs (the crash happens right after the stage-3 `QueryInterface(IID_IXamlMetadataProvider)` check, which is a harmless no-op by that point since `merged_dictionaries_populated` is already `true` and the function returns immediately after);
+- identically whether or not `IXamlControlsXamlMetaDataProviderStatics.Initialize()` is called first (tried this because real compiler-generated provider chains often call an `Initialize()`-shaped static method; it returns `S_OK` but doesn't change the crash).
+
+**Conclusion**: this is very likely a real, deterministic bug in how `Microsoft.UI.Xaml.dll` handles the **first real layout/render pass** once `XamlControlsResources` has actually been merged and a window is shown in this unpackaged/aggregated bootstrap model — not a reference-counting bug in reactor's own code, and not specific to `TextBox` (`reactor_hello`, which was used for all of this investigation, does not construct a `TextBox` at all). This is squarely the kind of runtime/lifetime problem the plan's "What We're NOT Doing" section already excludes as out of scope (the shutdown leak/crash tracked in issue #60) — though it manifests earlier in the lifecycle (at window activation, not just at final process teardown) than #60's description suggests, so it may be a related-but-distinct issue rather than literally the same one. Recommend opening a dedicated follow-up issue for this once #74's core fix lands, with a minimal repro (aggregated `Application` + real `XamlControlsXamlMetaDataProvider` delegation + `XamlControlsResources` merge + `activateWindows()`, no `TextBox` involved at all) extracted from this session's `com_aggregate.zig`/`issue74_probe.zig`.
+
 ## Phase 2: Wire aggregation permanently and merge theme resources (only if Phase 1 succeeds)
 
 ### Overview

@@ -87,11 +87,39 @@ const IActivationFactory_Vtbl = extern struct {
     ActivateInstance: *const fn (this: *anyopaque, instance: *?*anyopaque) callconv(.winapi) HRESULT,
 };
 
+// `IXamlControlsXamlMetaDataProviderStatics.Initialize()` -- real
+// compiler-generated provider chains typically call something like this
+// once at startup. IID confirmed via `zig build run --
+// Microsoft.UI.Xaml.XamlTypeInfo`.
+const IID_IXamlControlsXamlMetaDataProviderStatics = GUID.parse("2D7EB3FD-ECDB-5084-B7E0-12F9598381EF");
+
+const IXamlControlsXamlMetaDataProviderStatics_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    Initialize: *const fn (this: *anyopaque) callconv(.winapi) HRESULT,
+};
+
+fn initializeRealProviderStatics() void {
+    const factory = win_core.activationFactory(
+        IActivationFactory_Vtbl,
+        &IID_IXamlControlsXamlMetaDataProviderStatics,
+        &xaml_controls_metadata_provider_name_w,
+    ) catch |err| {
+        std.debug.print("com_aggregate: XamlControlsXamlMetaDataProviderStatics activationFactory FAILED {} (hresult 0x{X:0>8})\n", .{ err, @as(u32, @bitCast(hresult.last_hresult)) });
+        return;
+    };
+    defer factory.deinit();
+    const statics_this: *const IXamlControlsXamlMetaDataProviderStatics_Vtbl = @as(*const *const IXamlControlsXamlMetaDataProviderStatics_Vtbl, @ptrCast(@alignCast(factory.ptr))).*;
+    const hr = statics_this.Initialize(factory.ptr);
+    std.debug.print("com_aggregate: XamlControlsXamlMetaDataProviderStatics.Initialize hresult 0x{X:0>8}\n", .{@as(u32, @bitCast(hr))});
+}
+
 /// Activate the real framework provider and QI it for `IXamlMetadataProvider`.
 /// Returns `null` (rather than propagating the error) if anything about this
 /// fails, so `Outer` can gracefully fall back to its own "not found" stub
 /// instead of making aggregated `Application` construction itself fail.
 fn activateRealProvider() ?*anyopaque {
+    initializeRealProviderStatics();
+
     const factory = win_core.activationFactory(
         IActivationFactory_Vtbl,
         &win_core.IID_IActivationFactory,

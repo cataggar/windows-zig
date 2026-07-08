@@ -159,10 +159,19 @@ pub fn runProbes(application: *xaml.Application, stage: []const u8) void {
         _ = unk.Release(xmp_raw.?);
     }
 
+    // Only touch Resources/MergedDictionaries once, at the first stage it's
+    // available -- matches how the real (non-probe) implementation will
+    // behave, and avoids leaking a fresh `get_Resources`/
+    // `get_MergedDictionaries` reference every stage (both are WinRT
+    // property-getter-shaped calls that AddRef on every call).
+    if (merged_dictionaries_populated) return;
+
     var resources: *xaml.ResourceDictionary = undefined;
     const get_resources_hr = app_this.vtable.get_Resources(app_this, &resources);
     logHr("get_Resources", get_resources_hr);
     if (!hresult.succeeded(get_resources_hr)) return;
+    const resources_unk: *const IUnknown_Vtbl = @as(*const *const IUnknown_Vtbl, @ptrCast(@alignCast(resources))).*;
+    defer _ = resources_unk.Release(@ptrCast(resources));
 
     const rd_this: *anyopaque = @ptrCast(resources);
     const rd_vtbl: *const IResourceDictionary_Vtbl = @as(*const *const IResourceDictionary_Vtbl, @ptrCast(@alignCast(rd_this))).*;
@@ -170,8 +179,9 @@ pub fn runProbes(application: *xaml.Application, stage: []const u8) void {
     const merged_hr = rd_vtbl.get_MergedDictionaries(rd_this, &merged_raw);
     logHr("get_MergedDictionaries", merged_hr);
     if (!hresult.succeeded(merged_hr)) return;
+    const merged_unk: *const IUnknown_Vtbl = @as(*const *const IUnknown_Vtbl, @ptrCast(@alignCast(merged_raw.?))).*;
+    defer _ = merged_unk.Release(merged_raw.?);
 
-    if (merged_dictionaries_populated) return; // only merge once, at the first stage Resources is available
     merged_dictionaries_populated = true;
 
     const xcr = activateXamlControlsResources() catch |err| {
@@ -214,12 +224,6 @@ pub fn runProbes(application: *xaml.Application, stage: []const u8) void {
         _ = tb_instance.vtable.base.base.Release(@ptrCast(tb_instance));
         std.debug.print("issue74_probe: TextBox construction+release completed WITHOUT crashing.\n", .{});
     }
-    // Append (per normal WinRT collection semantics) takes its own
-    // reference; release our own activation reference now that the vector
-    // holds one. This is the real Phase-2 usage pattern (activate once,
-    // merge once, then normal refcounting) rather than the earlier
-    // probe-only activate+immediately-release-without-merging pattern.
-    _ = xcr.vtable.base.base.Release(@ptrCast(xcr));
 }
 
 var merged_dictionaries_populated = false;
