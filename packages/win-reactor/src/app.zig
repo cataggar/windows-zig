@@ -97,7 +97,16 @@ pub const App = struct {
 
     pub fn render(self: *const App, comptime root_render: RootRenderFn) !void {
         try initAppPlatform();
-        defer win_core.winrt.RoUninitialize();
+        // Deliberately no `RoUninitialize()` call here (issue #86). Calling it
+        // triggers `combase`'s COM class-cache DLL cleanup, which `FreeLibrary`s
+        // `Microsoft.UI.Xaml.dll` mid-process and runs its `DllMain`, which has
+        // a confirmed teardown bug in its `DynamicMetadataStorage` singleton
+        // once a real `IXamlMetadataProvider` has been used (see
+        // `thoughts/issue-86/plans/implementation-plan.md`). The reference
+        // `windows-rs` reactor (`crates/libs/reactor/src/app.rs`'s
+        // `init_app_platform`) never calls `RoUninitialize`/`CoUninitialize`
+        // either -- the process exits normally without it, and the OS reclaims
+        // everything on process exit regardless.
 
         var bootstrap = try BootstrapRuntime.init();
         defer bootstrap.deinit();
