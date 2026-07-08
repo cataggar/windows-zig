@@ -146,6 +146,38 @@ pub const TextBlock = extern struct {
     }
 };
 
+/// `Microsoft.UI.Xaml.Controls.XamlControlsResources` -- the theme
+/// `ResourceDictionary` required to construct several WinUI controls
+/// (including `TextBox`) in an unpackaged/aggregated `Application` (see
+/// `thoughts/issue-74/plans/implementation-plan.md`). `IID`/ABI confirmed
+/// via `packages/win/src/generated/Microsoft.UI.Xaml.Controls.zig`.
+/// `activate()` bypasses the generated emitter's #54 bug (which passes the
+/// `_Vtbl` type instead of the interface handle type to
+/// `win_core.activateInstance`) the same way `TextBlock.activate()` above
+/// does.
+pub const IXamlControlsResources_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    get_UseCompactResources: *const fn (this: *const IXamlControlsResources, result: *BOOL) callconv(.winapi) HRESULT,
+    put_UseCompactResources: *const fn (this: *const IXamlControlsResources, value: BOOL) callconv(.winapi) HRESULT,
+};
+
+pub const IXamlControlsResources = extern struct {
+    vtable: *const IXamlControlsResources_Vtbl,
+    pub const Vtbl = IXamlControlsResources_Vtbl;
+    pub const IID: GUID = GUID.parse("918CA043-F42C-5805-861B-62D6D1D0C162");
+};
+
+pub const XamlControlsResources = extern struct {
+    vtable: *const IXamlControlsResources_Vtbl,
+    pub const NAME: []const u8 = "Microsoft.UI.Xaml.Controls.XamlControlsResources";
+    pub const NAME_W = std.unicode.utf8ToUtf16LeStringLiteral(NAME).*;
+
+    pub fn activate() !*XamlControlsResources {
+        const raw = try win_core.activateInstance(IXamlControlsResources, &NAME_W);
+        return @ptrCast(raw);
+    }
+};
+
 pub const IContentControl_Vtbl = extern struct {
     base: IInspectable_Vtbl,
     get_Content: *const fn (this: *const IContentControl, result: *?*const anyopaque) callconv(.winapi) HRESULT,

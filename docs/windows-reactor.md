@@ -488,13 +488,29 @@ Helper types:
   Sets `Content`, `IsChecked`; optionally wires `Checked`.
 
 - `pub fn text_box(allocator: Allocator, text: []const u8, on_text_changed: ?EventCallback) ElementError!Element`  
-  Exported today, sets `Text`, and optionally wires `TextChanged` with a
-  `[]const u8` payload via `EventCallback.initTyped([]const u8, ...)`.
+  Sets `Text`, and optionally wires `TextChanged` with a `[]const u8` payload
+  via `EventCallback.initTyped([]const u8, ...)`. Constructs a real WinUI
+  `Microsoft.UI.Xaml.Controls.TextBox`. `samples/reactor_notepad` is the
+  canonical validation sample.
 
-  **Known gap:** real WinUI `TextBox` construction is still blocked by the
-  runtime crash tracked in issue #74, so `text_box` is not part of the stable
-  v1.0 surface yet. `samples/reactor_notepad` documents the intended API shape
-  but currently exits with `error.NotYetSupported`.
+  **History (issues #74/#86):** real `TextBox` construction previously
+  crashed (`0xC000027B`) in this unpackaged/aggregated `Application` model.
+  The fix required two parts: (1) aggregate `Application` behind an
+  `IXamlMetadataProvider` that delegates to the real framework
+  `XamlControlsXamlMetaDataProvider` (`packages/win-reactor/src/com_aggregate.zig`),
+  which unblocks `Controls.XamlControlsResources` activation, merged into
+  `Application.Resources.MergedDictionaries` the first time any window is
+  created (`WinUIBackend.ensureControlThemeResources`, before any children —
+  including a `TextBox` in the initial mount — are created); and (2) not
+  calling `RoUninitialize()`/`CoUninitialize()` at process exit
+  (`packages/win-reactor/src/app.zig`), since doing so triggers a confirmed
+  teardown bug in `Microsoft.UI.Xaml.dll`'s own `DynamicMetadataStorage`
+  singleton once a real `IXamlMetadataProvider` has been used — the
+  reference `windows-rs` reactor this package ports from never calls it
+  either. Full investigation in
+  [`thoughts/issue-74/plans/implementation-plan.md`](../thoughts/issue-74/plans/implementation-plan.md)
+  and
+  [`thoughts/issue-86/plans/implementation-plan.md`](../thoughts/issue-86/plans/implementation-plan.md).
 
 ### Collections
 
@@ -639,8 +655,7 @@ Shipped reactor samples are the best live references:
 - `samples/reactor_minesweeper` — `useReducerFn`
 - `samples/reactor_dotsweeper` — `useReducer` + `useEffectWithCleanup`
 - `samples/reactor_solitaire` — `canvas`, `Updater`, drag/drop
-- `samples/reactor_notepad` — intended `text_box` API shape; currently blocked
-  by issue #74
+- `samples/reactor_notepad` — real `text_box`/`TextBox` validation sample (issues #74/#86)
 
 ## Related docs
 

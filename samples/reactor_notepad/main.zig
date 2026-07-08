@@ -1,9 +1,7 @@
 //! Minimal notepad-style reactor sample.
 //!
-//! Builds successfully today, but real WinUI `TextBox` construction is still
-//! blocked by the runtime limitation tracked in issue #74.
-//!
-//! Run interactively (currently exits with `error.NotYetSupported`):
+//! Canonical validation sample for real WinUI `TextBox` construction
+//! (issues #74/#86). Run interactively:
 //!   zig build run-reactor-notepad
 
 const std = @import("std");

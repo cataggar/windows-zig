@@ -2037,7 +2037,9 @@ pub fn build(b: *std.Build) void {
             }
             sample_run_step.dependOn(&run_sample.step);
             if (native_windows_target and
-                (std.mem.eql(u8, s.name, "reactor-hello") or std.mem.eql(u8, s.name, "reactor-counter")))
+                (std.mem.eql(u8, s.name, "reactor-hello") or
+                    std.mem.eql(u8, s.name, "reactor-counter") or
+                    std.mem.eql(u8, s.name, "reactor-notepad")))
             {
                 const smoke_sample = b.addSystemCommand(&.{
                     installed_exe,

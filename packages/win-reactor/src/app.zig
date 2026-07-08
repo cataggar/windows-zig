@@ -11,6 +11,8 @@ const winui_dispatcher = @import("winui_dispatcher.zig");
 const widgets_navigation = @import("widgets_navigation.zig");
 const xaml = @import("Microsoft.UI.Xaml");
 
+const com_aggregate = @import("com_aggregate.zig");
+
 const win_core = win.core;
 
 const sys = win_sys.project(.{
@@ -88,7 +90,16 @@ pub const App = struct {
 
     pub fn render(self: *const App, comptime root_render: RootRenderFn) !void {
         try initAppPlatform();
-        defer win_core.winrt.RoUninitialize();
+        // Deliberately no `RoUninitialize()` call here (issue #86). Calling it
+        // triggers `combase`'s COM class-cache DLL cleanup, which `FreeLibrary`s
+        // `Microsoft.UI.Xaml.dll` mid-process and runs its `DllMain`, which has
+        // a confirmed teardown bug in its `DynamicMetadataStorage` singleton
+        // once a real `IXamlMetadataProvider` has been used (see
+        // `thoughts/issue-86/plans/implementation-plan.md`). The reference
+        // `windows-rs` reactor (`crates/libs/reactor/src/app.rs`'s
+        // `init_app_platform`) never calls `RoUninitialize`/`CoUninitialize`
+        // either -- the process exits normally without it, and the OS reclaims
+        // everything on process exit regardless.
 
         var bootstrap = try BootstrapRuntime.init();
         defer bootstrap.deinit();
@@ -185,7 +196,19 @@ fn ReactorHost(comptime root_render: RootRenderFn) type {
         render_scheduled: std.atomic.Value(bool) = std.atomic.Value(bool).init(false),
 
         fn start(allocator: std.mem.Allocator, exit_after_ms: ?u32) !void {
-            const application = try createComposable(xaml.Application, xaml.IApplicationFactory);
+            // Aggregate `Application` behind a stub `IXamlMetadataProvider`
+            // that delegates to the real framework
+            // `XamlControlsXamlMetaDataProvider`. This is required for
+            // `Controls.XamlControlsResources` (merged in
+            // `WinUIBackend.ensureControlThemeResources`) to activate
+            // successfully in this unpackaged app model -- see
+            // `thoughts/issue-74/plans/implementation-plan.md`.
+            const application = try com_aggregate.createAggregated(
+                allocator,
+                xaml.Application,
+                xaml.IApplicationFactory,
+                &xaml.IApplication.IID,
+            );
             const self = try allocator.create(@This());
             errdefer allocator.destroy(self);
 
@@ -316,15 +339,4 @@ fn onAutoCloseTimer(_: ?*anyopaque, _: u32, id: usize, _: u32) callconv(.winapi)
     if (g_main_hwnd) |hwnd| {
         _ = sys.PostMessageW(hwnd, WAM.WM_CLOSE, 0, 0);
     }
-}
-
-fn createComposable(comptime RuntimeClass: type, comptime Factory: type) !*RuntimeClass {
-    const factory = try win_core.activationFactory(Factory.Vtbl, &Factory.IID, &RuntimeClass.NAME_W);
-    defer factory.deinit();
-
-    const factory_this: *const Factory = @ptrCast(@alignCast(factory.ptr));
-    var inner: ?*const anyopaque = null;
-    var instance: *RuntimeClass = undefined;
-    try win_core.hresult.ok(factory_this.CreateInstance(null, &inner, &instance));
-    return instance;
 }
