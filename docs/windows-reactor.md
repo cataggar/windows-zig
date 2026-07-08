@@ -494,6 +494,23 @@ Helper types:
   v1.0 surface yet. `samples/reactor_notepad` documents the intended API shape
   but currently exits with `error.NotYetSupported`.
 
+  **Update (issue #86):** the fix investigated for #74 (aggregating
+  `Application` behind a real, delegating `IXamlMetadataProvider`) does
+  unblock real `TextBox` construction, but introduces a separate, confirmed
+  process-teardown crash inside `Microsoft.UI.Xaml.dll` itself (not specific
+  to `TextBox` — it reproduces with any activated window once that
+  aggregation is wired in, `XamlControlsResources`/theme merging included or
+  not). Investigation (see
+  [`thoughts/issue-86/plans/implementation-plan.md`](../thoughts/issue-86/plans/implementation-plan.md))
+  found this is a well-known, Microsoft-acknowledged limitation of
+  hand-authoring `IXamlMetadataProvider` delegation outside the full
+  XAML-compiler-generated app model, reproduced independently in Rust and
+  Swift WinRT projections, with an explicit "no internal interest in making
+  this work" response from a Windows App SDK-adjacent maintainer
+  ([microsoft/windows-app-rs#50](https://github.com/microsoft/windows-app-rs/issues/50)).
+  `text_box` therefore remains blocked pending either an accepted workaround
+  or a documented decision to ship it with this known teardown risk.
+
 ### Collections
 
 - `pub fn observable_items_source(allocator: Allocator, values: anytype) !*IObservableVector(T)`  
@@ -633,7 +650,7 @@ Shipped reactor samples are the best live references:
 - `samples/reactor_dotsweeper` — `useReducer` + `useEffectWithCleanup`
 - `samples/reactor_solitaire` — `canvas`, `Updater`, drag/drop
 - `samples/reactor_notepad` — intended `text_box` API shape; currently blocked
-  by issue #74
+  by issue #74 (and the follow-on shutdown crash tracked in #86)
 
 ## Related docs
 

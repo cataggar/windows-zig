@@ -203,6 +203,18 @@ No source changes. This is a research task with a recorded outcome.
 
 - A definitive answer is recorded: is this a previously-known, already-fixed bug (with a specific version where it's fixed), a previously-known-but-unfixed bug (with a tracking link), or apparently novel/unreported?
 
+### Phase 3 results (2026-07-08) — confirmed: this is a well-known, explicitly-unsupported limitation, not an unfixed bug Microsoft is tracking
+
+Searched via `gh search issues` (direct GitHub search, not just general web search — a first general web search surfaced two fabricated-looking "known issues" that turned out on direct verification via `gh api` to be completely unrelated closed issues; `gh search issues`/`gh api` against the real GitHub API was used for everything below instead) across `microsoft/microsoft-ui-xaml`, `microsoft/WindowsAppSDK`, and more broadly:
+
+- **[microsoft/microsoft-ui-xaml#8475](https://github.com/microsoft/microsoft-ui-xaml/issues/8475)** (open) — "Proposal: XamlApplication: Application implementing IXamlMetadataProvider interface", filed by a community member wanting exactly reactor's scenario ("I want to create WinUI 3 apps without XAML and use IXamlMetadataProvider only for instantiating XamlControlsResources"). A WinUI community member (`wjk`) replies that `IXamlMetadataProvider` "must be able to return full type information... If it doesn't, those types will not be usable from XAML" and that hand-authoring this "would actually cause widespread breakage... there is no documentation for any of this." Confirms: no first-class supported API exists for reactor's exact use case; still just a proposal.
+- **[microsoft/wil#327](https://github.com/microsoft/wil/issues/327)** — "WinUIApplication: Application loading WinUI 3 theme", a proposed reusable helper with a concrete C++ reference implementation. **Architecturally different from `com_aggregate.zig`**: it uses `winrt::implements` CRTP (`ApplicationT<XamlApplication, IXamlMetadataProvider>`) so `Application` and the `IXamlMetadataProvider` are a *single unified WinRT object identity* with one refcount, whereas `com_aggregate.zig` performs true COM aggregation between two independently-refcounted objects (the real `Application` instance and a separately heap-allocated `Outer`) — worth revisiting as an alternative architecture if a fix attempt is made later, though not verified to avoid this specific crash (no evidence the author ever stress-tested process teardown).
+- **[microsoft/windows-app-rs#50](https://github.com/microsoft/windows-app-rs/issues/50)** (closed) — **the most directly authoritative result.** Reports that in `windows-app-rs`'s own official "xamlapp" sample (Microsoft's Rust/WinRT projection, closely analogous to this repo's Zig bindings), replacing a working `Button` with a `TextBox`, `RatingControl`, or `ColorPicker` crashes, while `CalendarDatePicker`/`DatePicker`/`Slider` do not — and the *exact same* control-dependent crash pattern was independently confirmed in a Swift/WinRT projection (`ericsink/SwiftWinRT#3`) by the same reporter. `riverar` (a Microsoft/Windows-App-SDK-adjacent maintainer) responds definitively: *"These controls are not really designed to be used outside the very narrow context of a C#/C++ XAML app written in Visual Studio... You may want to consider using an alternative UI stack."* The issue was **closed with "no internal interest in making this work."** This is Microsoft's own explicit, current (the issue is recent) position: hand-authored `IXamlMetadataProvider` delegation outside the XAML-compiler-generated app model (`App.xaml`/`XamlTypeInfo.g.cs`/`.cpp`) is acknowledged, unsupported, cross-language-reproducible, and **will not be fixed**.
+- **[YuujiKamura/ghostty#30](https://github.com/YuujiKamura/ghostty/issues/30)** (closed) — a WinUI3 port of the Ghostty terminal (also appears to be a Zig-based reactor-style port, using near-identical architecture terms — `com_aggregation.zig`, `AppOuter`, `metadataGetXamlType2` delegating to `XamlControlsXamlMetaDataProvider`) hit a related crash: `STATUS_STOWED_EXCEPTION (0xc000027b)` inside `Microsoft.UI.Xaml.dll`, after dozens of successful (`hr=0x0`) `GetXamlType2` delegation calls during `TabView` style resolution, with **no shutdown/close event logged** — i.e. a crash *during* active rendering, not at process exit like #86, but attributed to the same suspected root cause class: *"Possible issue in the lifetime management of the `IXamlType` returned by `metadataGetXamlType2`... possibly released too early during TabView style resolution... COM refcount inconsistency."* This independently corroborates that hand-rolled `IXamlMetadataProvider`-delegation-to-`XamlControlsXamlMetaDataProvider` has systemic object-lifetime hazards beyond just the one shutdown-time crash #86 found — the same underlying fragility can manifest at different points (mid-render vs. process-exit) depending on which types/controls are resolved and when.
+- **No WindowsAppSDK changelog/release-notes entry** was found describing a fix for this class of problem between `2.2.1` (vendored) and later releases — consistent with Microsoft's stated position that this isn't considered a supported scenario worth fixing, rather than an overlooked bug awaiting a patch. A version bump is therefore **not** a plausible fix path.
+
+**Conclusion**: this is not a previously-unreported bug, and not one Microsoft is tracking for a fix. It is a well-corroborated (Rust, Swift, and at least one other independent Zig-based port), Microsoft-acknowledged limitation: hand-authoring `IXamlMetadataProvider` delegation to `XamlControlsXamlMetaDataProvider` to unlock `XamlControlsResources`/certain controls outside the full XAML-compiler-generated app model (`App.xaml` + `XamlTypeInfo.g.*`) is explicitly unsupported, and Microsoft has stated "no internal interest in making this work." This strongly points Phase 5 toward **Outcome B** (document the limitation; do not attempt an upstream-dependent fix).
+
 **Implementation Note**: Pause here for manual confirmation before proceeding to Phase 4.
 
 ---
@@ -217,13 +229,26 @@ Record a definitive same-root-cause-or-not finding against #60, using #60's alre
 
 No source changes.
 
-1. Compare the two failure shapes directly: #60 crashed only when explicit `Release`/`deinit()` calls on retained refs happened *after* `Application.Start` returned and bootstrap/WinRT teardown had already run; #86 crashes *during* `Application.Start`'s blocking pump (it never returns), with no explicit release anywhere in the repro and no dependency on shutdown ordering at all.
-2. Cross-check against Phase 1's symbolized stack (if obtained): does it show any frames related to teardown/shutdown/dispatcher-queue-shutdown machinery (which would suggest overlap with #60's fix area), or purely first-render/layout/style-resolution machinery (which would confirm they're unrelated)?
+1. Compare the two failure shapes directly: #60 crashed only when explicit `Release`/`deinit()` calls on retained refs happened *after* `Application.Start` returned and bootstrap/WinRT teardown had already run; #86's crash (per Phase 1/2) also happens after `Application.Start` returns, but with **no explicit reactor-side release involved at all** — it's `Microsoft.UI.Xaml.dll`'s own internal `DynamicMetadataStorage` singleton teardown inside its `DllMain(DLL_PROCESS_DETACH)`, triggered purely by having used a real `IXamlMetadataProvider` delegation during the run, independent of anything reactor itself releases or doesn't release.
+2. Cross-check against Phase 1's symbolized stack: it shows `combase!CoUninitialize`/`RoUninitialize` → COM class-cache DLL unload → `Microsoft.UI.Xaml.dll`'s own `DllMain` → `DynamicMetadataStorage` destructor — i.e. purely internal framework teardown machinery, not any reactor-authored release call (no `app.zig`/`com_aggregate.zig` `Release()` call appears anywhere in the faulting stack).
 3. Record a definitive statement: same root cause, related-but-distinct, or confirmed unrelated.
 
 ### Success Criteria
 
 - A definitive statement is recorded, replacing the current "likely related but not confirmed" hedge in the #86 issue body and in `thoughts/issue-74/plans/implementation-plan.md`.
+
+### Phase 4 results (2026-07-08) — confirmed: related-but-distinct from #60, not the same root cause
+
+Both #60 and #86 are teardown-time crashes that occur after `Application.Start` returns and involve `RoUninitialize()`/WinRT apartment shutdown — that surface-level similarity is real and explains why the original #74 investigation flagged them as "possibly related." However, comparing the actual mechanisms confirms they are **distinct bugs**:
+
+| | #60 | #86 |
+|---|---|---|
+| What crashes | Reactor's own explicit `Release()`/`deinit()` calls on retained `Application`/`Window`/`Button`/`TextBlock` refs (in `samples/hello_window/main.zig`) | `Microsoft.UI.Xaml.dll`'s **own internal** `DynamicMetadataStorage` singleton destructor, inside its `DllMain(DLL_PROCESS_DETACH)` |
+| Trigger | Releasing those refs *after* `bootstrap.deinit()`/`RoUninitialize()` had already run (ordering bug in reactor's own sample code) | Simply having used a real `IXamlMetadataProvider` delegation during the run — **no reactor-side release call appears anywhere in the faulting stack at all** |
+| Fix | Reorder reactor's own release calls to run before bootstrap/WinRT teardown (`thoughts/issue-60/plans/implementation-plan.md`) | No reactor-side ordering fix is possible — the fault is inside `Microsoft.UI.Xaml.dll`'s own code, not reactor's |
+| Does `reactor_hello`'s current (non-aggregated) `app.zig` hit it? | N/A (only affected `hello_window`'s explicit-release pattern, already fixed on `main`) | No — only reproduces with the #74 aggregation/real-provider-delegation spike code, never on unmodified `main` |
+
+**Conclusion**: #86 is **not** the same root cause as #60, and applying #60's fix (reordering reactor's own release calls) would not help here, since #86's crash involves no reactor-side release call at all. They are best understood as two independent teardown-time fragilities in this bootstrap model — #60 in reactor's own object-lifetime management, #86 inside `Microsoft.UI.Xaml.dll`'s own internal state — that happened to surface around the same investigation.
 
 **Implementation Note**: Pause here for manual confirmation before proceeding to Phase 5.
 
@@ -255,6 +280,22 @@ Synthesize Phases 1-4 into exactly one of this plan's two "Desired End State" ou
 
 - Exactly one outcome (A or B) is recorded with supporting evidence from Phases 1-4.
 - `thoughts/issue-74/plans/implementation-plan.md` accurately reflects whichever outcome was reached, so #74's own plan stays internally consistent with this issue's resolution.
+
+### Phase 5 decision (2026-07-08): Outcome B — documented as a confirmed, Microsoft-acknowledged blocking limitation
+
+Phases 1-4 converge unambiguously on Outcome B:
+- Phase 1: precise root cause identified (`Microsoft.UI.Xaml.dll`'s own `DynamicMetadataStorage` teardown, not a first-render bug).
+- Phase 2: proved the trigger is the real `IXamlMetadataProvider` delegation itself, completely independent of `XamlControlsResources`/any resource merge.
+- Phase 3: found this is a known, cross-language-reproduced (Rust, Swift), Microsoft-acknowledged limitation with an explicit "no internal interest in making this work" response from a Windows-App-SDK-adjacent maintainer — not a bug likely to be fixed upstream, and no WinAppSDK version bump is a plausible fix path.
+- Phase 4: confirmed distinct from #60 (no reactor-side release call is involved at all).
+
+Actions taken per the Outcome B checklist:
+1. **No production code path was modified.** `packages/win-reactor/src/winui_backend.zig`'s `.text_box => error.NotYetSupported` gate is untouched.
+2. **Blocking note added** to `thoughts/issue-74/plans/implementation-plan.md` (in this same branch, since `issue-86-plan` is based on top of `issue-74-plan`) — see the "#86 investigation complete" note inserted after the original "Tracked as issue #86" paragraph, and a `BLOCKED on #86` marker added directly under Phase 2's heading. The note explicitly corrects scope: Phase 1 (aggregation + real-provider-delegation) itself is blocked, not just Phase 2 (the resource merge).
+3. **`docs/windows-reactor.md` updated** (the plan's original text said `docs/windows-reactor-port.md`, which does not currently document the #74/#86 crash at all; the actual existing `text_box`/#74 documentation lives in `docs/windows-reactor.md`'s "Known gap" note and its samples list — both updated with an "Update (issue #86)" addendum citing this plan and the `windows-app-rs#50` precedent).
+4. **Spike code left as-is**: `issue74_use_aggregated_application`, `issue74_probe.zig` (now including the Phase 2 `MergeVariant` bisection scaffolding), and `com_aggregate.zig` remain exactly as documented, unchanged from their default (`xaml_controls_resources` variant, real provider active) state, still gated behind the same temporary flag on the `issue-74-plan` branch.
+
+**This plan (#86) is complete.** No further phases are pending. The GitHub issue should be updated with a summary pointing at this plan document and left open (or re-labeled as a documented/accepted limitation, per repo convention) until either a workaround is found or a decision is made to accept the shutdown risk and ship anyway.
 
 ## Testing Strategy
 
@@ -290,6 +331,12 @@ Not applicable; no persisted data or public API affected. If Phase 5 requires a 
 - `build.zig` (`reactor_selftest_step` / sample smoke-check wiring for `reactor-hello`/`reactor-counter`)
 - `vendor/winmd/README.md` (pinned WinAppSDK/`.winmd` version `2.2.1`)
 - `docs/windows-reactor-port.md:127-175` (existing sample bring-up/validation conventions)
+- `docs/windows-reactor.md` (updated with the #86 finding; "Known gap" note near the `text_box` API entry, and the `samples/reactor_notepad` list entry)
 - microsoft/microsoft-ui-xaml#7606 (prior art for the related #74 metadata-provider problem)
+- microsoft/microsoft-ui-xaml#8475 (open proposal: "XamlApplication: Application implementing IXamlMetadataProvider interface" — confirms no first-class supported API exists for this scenario)
+- microsoft/wil#327 (alternative CRTP-based `winrt::implements` reference architecture, untested against this specific crash)
+- microsoft/windows-app-rs#50 (closed; authoritative "no internal interest in making this work" from a Windows-App-SDK-adjacent maintainer; cross-language reproduction in Rust and Swift)
+- ericsink/SwiftWinRT#3 (independent Swift/WinRT reproduction of the same control-dependent crash pattern)
+- YuujiKamura/ghostty#30 (independent, architecturally similar Zig-based WinUI3 port hitting a related `IXamlType`-lifetime crash during active rendering, not just at shutdown)
 - Public Microsoft symbol server: `https://msdl.microsoft.com/download/symbols` (confirmed working for `Microsoft.UI.Xaml.dll` in this session)
 - `cdb.exe`/`windbg.exe` (classic console debuggers, Windows SDK "Debugging Tools for Windows" feature `OptionId.WindowsDesktopDebuggers`) — confirmed working for scripted, non-interactive symbolication in this session; the Store-distributed WinDbg Preview (`Microsoft.WinDbg.Slow`, `DbgX.Shell.exe`) was tried first but proved GUI-only/non-scriptable in this environment
