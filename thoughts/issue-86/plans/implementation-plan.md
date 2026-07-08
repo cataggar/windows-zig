@@ -2,14 +2,14 @@
 
 ## Overview
 
-Diagnose and resolve the deterministic crash inside `Microsoft.UI.Xaml.dll` that occurs the first time a window is activated (`activateWindows()` / `Window.Activate()`) once `Microsoft.UI.Xaml.Controls.XamlControlsResources` has been merged into an aggregated `Application`'s `Resources.MergedDictionaries` (the fix built for #74). The crash is deterministic, independent of `TextBox`, and happens *during* `Application.Start`'s blocking message pump — it never returns. Today the only evidence is an unsymbolized module+offset stack trace (`??? in Microsoft.UI.Xaml.dll`). This plan is a diagnostic spike with an explicit decision gate at the end: either a concrete fix/workaround is found and applied, or the limitation is documented and #74's permanent resource-merge work is explicitly held back until this resolves.
+Diagnose and resolve the deterministic crash inside `Microsoft.UI.Xaml.dll` that occurs once `Microsoft.UI.Xaml.Controls.XamlControlsResources` has been merged into an aggregated `Application`'s `Resources.MergedDictionaries` (the fix built for #74). The crash is deterministic and independent of `TextBox`. **Phase 1 of this plan (see "Phase 1 results" below) corrected the original diagnosis**: the crash is not a first-activation/first-render bug and does not happen "before `Application.Start`'s blocking message pump ever returns" as the issue title/body originally stated — it is a **process-teardown bug**, occurring inside `Microsoft.UI.Xaml.dll`'s own `DllMain(DLL_PROCESS_DETACH)` handler, well after `Application.Start` has already returned normally and the window ran/closed as expected. This plan is a diagnostic spike with an explicit decision gate at the end: either a concrete fix/workaround is found and applied, or the limitation is documented and #74's permanent resource-merge work is explicitly held back until this resolves.
 
 ## Current State Analysis
 
 - The crash only reproduces with the COM-aggregation + resource-merge spike code that currently lives on the still-open, unmerged `issue-74-plan` branch (PR #80, draft) — not on `main`. This plan's branch (`issue-86-plan`) is based directly on top of `issue-74-plan` (per user decision) so the existing working repro harness can be reused as-is instead of re-derived.
 - The repro harness is entirely in place already and gated behind one flag:
   - `packages/win-reactor/src/app.zig:21` — `const issue74_use_aggregated_application = true;` (already `true` in this worktree).
-  - `packages/win-reactor/src/app.zig:196-230` — `ReactorHost.start(...)` constructs an aggregated `Application` (`com_aggregate.createAggregated`, `app.zig:197-199`), mounts the initial tree (`app.zig:220`), then calls `self.backend_impl.activateWindows()` (`app.zig:228`, implemented at `packages/win-reactor/src/winui_backend.zig:186`) — this is the exact call after which the crash occurs — followed by a probe call (`app.zig:229`) that never gets to run its own logic because the crash happens first.
+  - `packages/win-reactor/src/app.zig:196-230` — `ReactorHost.start(...)` constructs an aggregated `Application` (`com_aggregate.createAggregated`, `app.zig:197-199`), mounts the initial tree (`app.zig:220`), then calls `self.backend_impl.activateWindows()` (`app.zig:228`, implemented at `packages/win-reactor/src/winui_backend.zig:186`) and the `"post-activate"` probe call (`app.zig:229`) — **update per Phase 1 results below: the crash does not actually occur here.** The window activates and runs normally for the full `--exit-after-ms` duration; the crash instead happens later, during `App.render(...)`'s own teardown (`app.zig:100`'s `defer win_core.winrt.RoUninitialize();`), after `app_statics_this.Start(callback)` (`app.zig:135`) has already returned.
   - `packages/win-reactor/src/com_aggregate.zig` — the COM aggregation helper (`createAggregated`, ABI for `IXamlMetadataProvider`, delegation to the real framework `XamlControlsXamlMetaDataProvider`).
   - `packages/win-reactor/src/issue74_probe.zig` — probe harness; activates `XamlControlsResources` once, merges it into `MergedDictionaries` exactly once (`merged_dictionaries_populated` guard), and can optionally construct+release a real `TextBox` (already proven NOT necessary to trigger this crash).
 - `samples/reactor_hello` is the correct minimal repro target: it mounts only a `Window` + basic content, no `TextBox`, and the crash still reproduces identically (`thoughts/issue-74/plans/implementation-plan.md`, "Further investigation" section).
@@ -18,7 +18,7 @@ Diagnose and resolve the deterministic crash inside `Microsoft.UI.Xaml.dll` that
 - `zig build test --summary all` does not exercise this runtime path at all (it stays green regardless of this bug), so this issue cannot be caught by the existing package test suite; validation is necessarily a manual runtime repro, same pattern already established for #60 and #74.
 - Confirmed available in this environment: WinDbg Preview is installed (`Microsoft.WinDbg.Slow` MSIX package, entry point `DbgX.Shell.exe` under `C:\Program Files\WindowsApps\Microsoft.WinDbg.Slow_<version>_x64__8wekyb3d8bbwe\`). Launching it with no command-line automation opens its GUI shell (confirmed by direct invocation in this session); it also accepts the classic `windbg.exe`-style automation switches (`-g -G -c "<commands>;q"`) for scripted, non-interactive symbol/stack extraction, but that scripted path has **not yet been verified to work end-to-end** against this specific package in this environment — Phase 1 must confirm it or fall back to interactive use.
 - Public research (general web search) indicates Microsoft publishes public PDBs for Windows App SDK / `Microsoft.UI.Xaml.dll` on the standard public symbol server (`https://msdl.microsoft.com/download/symbols`), but this has not been confirmed for the exact vendored WinAppSDK version (`2.2.1`, per `vendor/winmd/README.md`) in this repo. Phase 1 must confirm this directly rather than assume it.
-- Issue #60 ("hello_window crashes if final WinUI refs are released after `Application.Start` returns") is already resolved on `main` (PR #82, merged) and turned out to be an unrelated teardown-ordering bug in `samples/hello_window` — releasing retained refs too late (after `MddBootstrapShutdown()`/`RoUninitialize()`), fixed by releasing them earlier on the same thread (`thoughts/issue-60/plans/implementation-plan.md`). That root cause (explicit-release-after-`Start`-returns ordering) does not match #86's symptom (crash *during* `Application.Start`'s blocking pump, no explicit release anywhere in the repro, no `TextBox`), so they are very likely different bugs, but this has not been definitively confirmed against #86's actual crash frames — only inferred from the repro shapes.
+- Issue #60 ("hello_window crashes if final WinUI refs are released after `Application.Start` returns") is already resolved on `main` (PR #82, merged) and turned out to be an unrelated teardown-ordering bug in `samples/hello_window` — releasing retained refs too late (after `MddBootstrapShutdown()`/`RoUninitialize()`), fixed by releasing them earlier on the same thread (`thoughts/issue-60/plans/implementation-plan.md`). **Update per Phase 1 results below**: #86's crash is *also* a teardown-time bug (inside `RoUninitialize()`, after `Application.Start` returns) — much closer to #60's category than originally assumed — but the mechanism differs: #60 was reactor's own explicit `Release()` calls on retained refs happening too late; #86 is `Microsoft.UI.Xaml.dll`'s **own internal** `DllMain(DLL_PROCESS_DETACH)` teardown of its `DynamicMetadataStorage` singleton, which happens regardless of whether reactor explicitly releases anything (`app.zig` deliberately never releases `Application`/`Window` — see the "WinUI owns teardown..." comment at `app.zig:231-233`). Phase 4 below finalizes this comparison.
 
 ## Desired End State
 
@@ -31,9 +31,9 @@ In both outcomes, this plan itself produces a decision, not an open-ended invest
 
 ### Key Discoveries
 
-- The crash is triggered by the resource merge itself (or the aggregation/real-provider-delegation it depends on), not by `TextBox` construction — confirmed via bisection in the #74 investigation (removing the probe's `TextBox` test entirely does not change the outcome).
-- The crash happens specifically after `self.backend_impl.activateWindows()` (`packages/win-reactor/src/app.zig:228`), i.e. the first real layout/style-resolution pass that actually consumes `XamlControlsResources`'s contents — not at `XamlControlsResources.activate()` or the `Append` into `MergedDictionaries` itself (both succeed with `S_OK` at the earlier `"post-mount"` stage without incident).
-- `microsoft/microsoft-ui-xaml#7606` was already useful prior art for the related (but distinct) #74 metadata-provider problem; Phase 3 should check whether it, or a similar issue, also documents this specific post-activation crash.
+- **(Superseded by Phase 1 — kept for history)** The crash is triggered by the resource merge itself (or the aggregation/real-provider-delegation it depends on), not by `TextBox` construction — confirmed via bisection in the #74 investigation (removing the probe's `TextBox` test entirely does not change the outcome). This part still holds.
+- **(Superseded by Phase 1)** ~~The crash happens specifically after `self.backend_impl.activateWindows()`, i.e. the first real layout/style-resolution pass~~ — Phase 1 proved this wrong: the window activates and runs normally for the full run duration; the crash is in `Microsoft.UI.Xaml.dll`'s `DllMain(DLL_PROCESS_DETACH)` → `DirectUI::DynamicMetadataStorage::~DynamicMetadataStorage` → `ctl::ComPtr<DirectUI::DependencyPropertyHandle>::InternalRelease`, reached via `RoUninitialize()`/`CoUninitialize()`'s COM-server DLL cleanup, well after `Application.Start` returns. See "Phase 1 results" for the full symbolized stack and mechanism.
+- `microsoft/microsoft-ui-xaml#7606` was already useful prior art for the related (but distinct) #74 metadata-provider problem; Phase 3 should check whether it, or a similar issue, also documents `DynamicMetadataStorage`/`DependencyPropertyHandle` teardown crashes in unpackaged apps specifically (now that Phase 1 has concrete symbol names to search with).
 
 ## What We're NOT Doing
 
@@ -83,6 +83,63 @@ No permanent source changes. All work is running the existing repro under a debu
 - If yes: at least the immediately-faulting frame has a real function name (not just an address), suitable for direct use as a search term in Phase 3.
 - If no (symbols genuinely unavailable or scripting proves impractical even interactively): explicitly recorded as a dead end so Phase 3 knows to search using only the behavioral description (crash after first activation post-merge) rather than a function name.
 
+### Phase 1 results (2026-07-08) — DECISIVE: this is a process-teardown bug, not a first-activation bug
+
+**Tooling note**: the pre-installed WinDbg Preview (`Microsoft.WinDbg.Slow` MSIX, `DbgX.Shell.exe`) turned out to be GUI-only in this environment — invoking it with the classic `windbg.exe`/`cdb.exe`-style `-g -G -c "..."` automation switches opened its GUI shell but produced no capturable console output and never appeared to execute the supplied command script (no `.logopen`-produced log file, target process launched but sat idle). This environment already had a full Windows SDK installed (multiple versions registered in `HKLM\...\Uninstall`, matching `vendor/winmd/README.md`'s general "SDK tooling present" expectation) but only *some* of its "Debugging Tools" component DLLs (`dbghelp.dll`/`dbgcore.dll`/`srcsrv.dll`/`symsrv.dll` under `Windows Kits\10\Debuggers\x64`) — the actual `cdb.exe`/`windbg.exe`/`ntsd.exe` binaries were missing. Found the cached SDK bootstrapper (`C:\ProgramData\Package Cache\{c0b93b80-...}\winsdksetup.exe`, matching the newest already-installed `10.0.26100.7705` SDK) and added the missing feature in-place:
+```powershell
+& "C:\ProgramData\Package Cache\{c0b93b80-d0a4-47fc-a4d1-21a4008a63ca}\winsdksetup.exe" /features OptionId.WindowsDesktopDebuggers /q /norestart
+```
+This installed real `cdb.exe`/`windbg.exe`/`ntsd.exe` at `C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\`, which — unlike the Store MSIX — are plain console executables that automate perfectly via `-c "commands"` (with one caveat: `.sympath <path>; <other command>` in a single `-c` string gets misparsed because `.sympath`'s own argument grammar treats `;` as a same-command symbol-path separator, swallowing the rest of the string; use the separate `-y "<sympath>"` command-line flag for the symbol path instead of embedding `.sympath` in `-c`).
+
+Ran the exact repro under `cdb.exe`:
+```powershell
+$cdb = "C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\cdb.exe"
+$exe = "C:\Users\cataggar\ms\windows-zig-issue-86-xaml-activate-crash\zig-out\bin\reactor-hello.exe"
+& $cdb -g -G -y "srv*C:\symbols*https://msdl.microsoft.com/download/symbols" -c "kc;!analyze -v;q" $exe --exit-after-ms 2000
+```
+
+**Public Microsoft symbols resolved successfully for `Microsoft.UI.Xaml.dll` with no extra configuration needed** beyond the standard public symbol server URL — confirming that assumption from the Current State Analysis. The fully symbolized crash:
+
+```
+ExceptionAddress: 00007ff8e37955fa (Microsoft_UI_Xaml!ctl::ComPtr<DirectUI::DependencyPropertyHandle>::InternalRelease+0x16)
+ExceptionCode: c0000005 (Access violation), reading address 00007ff8f5c35d00
+
+STACK_TEXT:
+Microsoft_UI_Xaml!ctl::ComPtr<DirectUI::DependencyPropertyHandle>::InternalRelease+0x16
+Microsoft_UI_Xaml!DirectUI::DynamicMetadataStorage::~DynamicMetadataStorage+0x66
+Microsoft_UI_Xaml!DirectUI::DynamicMetadataStorage::`scalar deleting destructor'+0xe
+Microsoft_UI_Xaml!DirectUI::DynamicMetadataStorage::Destroy+0x20
+Microsoft_UI_Xaml!DeinitializeDll+0x63
+Microsoft_UI_Xaml!DllMain+0x3e
+Microsoft_UI_Xaml!dllmain_dispatch+0x8a
+ntdll!LdrpCallInitRoutineInternal+0x22
+ntdll!LdrpCallInitRoutine+0x93
+ntdll!LdrpProcessDetachNode+0x148
+ntdll!LdrpUnloadNode+0x3e
+ntdll!LdrpDecrementModuleLoadCountEx+0xb4
+ntdll!LdrUnloadDll+0x1f0
+KERNELBASE!FreeLibrary+0x19
+combase!CClassCache::CDllPathEntry::CFinishObject::Finish+0x2e
+combase!CClassCache::CFinishComposite::Finish+0x55
+combase!CClassCache::CleanUpDllsForProcess+0x12c
+combase!ProcessUninitialize+0x2b4
+combase!DecrementProcessInitializeCount+0x5a
+combase!wCoUninitialize+0x10a
+combase!CoUninitialize+0x19f
+reactor_hello!render__anon_58008+0x370        <- packages/win-reactor/src/app.zig:100 `defer win_core.winrt.RoUninitialize();`
+reactor_hello!main+0x18d                      <- samples/reactor_hello/main.zig:17 `try app.render(renderRoot);`
+reactor_hello!WinStartup+0x390
+KERNEL32!BaseThreadInitThunk+0x17
+ntdll!RtlUserThreadStart+0x2c
+```
+`!analyze -v`'s bucket: `INVALID_POINTER_READ_c0000005_Microsoft.UI.Xaml.dll!ctl::ComPtr<DirectUI::DependencyPropertyHandle>::InternalRelease`. Faulting source: `C:\__w\1\s\dxaml\xcp\components\com\inc\ComPtr.h:258` (the generic `ctl::ComPtr<T>::InternalRelease()` template, instantiated for `DirectUI::DependencyPropertyHandle`).
+
+**This completely overturns the original diagnosis.** The call chain is unambiguous: `reactor_hello!render__anon_58008` is `App.render(...)` in `app.zig`, and the crashing frame directly beneath it is `combase!RoUninitialize` — i.e. `packages/win-reactor/src/app.zig:100`'s `defer win_core.winrt.RoUninitialize();`, which by Zig's LIFO defer ordering only runs **after** `app_statics_this.Start(callback)` (`app.zig:135`) has already returned and after `bootstrap.deinit()` (`app.zig:99`, registered later, so it runs first) has already completed successfully. Independently timed the exact same repro without a debugger attached: `Measure-Command { & reactor-hello.exe --exit-after-ms 2000 }` took **2.38 seconds** — consistent with the window opening, `Application.Start`'s message pump running normally for the full `--exit-after-ms 2000` duration, `WM_CLOSE` closing the window, and `Start` returning normally, **not** an instant crash during first activation.
+
+**Root cause mechanism**: `RoUninitialize()` → `CoUninitialize()` walks COM's class-factory DLL cache (`combase!CClassCache::CleanUpDllsForProcess`) and calls `FreeLibrary` on any COM-server DLL whose lock count has reached zero — which includes `Microsoft.UI.Xaml.dll` once nothing else is holding it. That triggers `Microsoft.UI.Xaml.dll`'s own `DllMain(DLL_PROCESS_DETACH)`, which tears down its process-global `DirectUI::DynamicMetadataStorage` singleton (the cache backing `IXamlMetadataProvider`/`DependencyProperty` resolution for whatever XAML types were actually used this run). That singleton's destructor calls `Release()` on a cached `DependencyPropertyHandle` `ComPtr` whose target has already been freed/is invalid, causing the read-access-violation. This is plausible as a genuine upstream `Microsoft.UI.Xaml.dll` bug in that singleton's static-destruction-order handling for **unpackaged, DLL-loaded (non-MSIX-activated) apps specifically** — a scenario Microsoft's own desktop-app-model docs already flag as needing extra app-level wiring (see #74's investigation) and less heavily exercised than the packaged/MSIX activation path.
+- The prior (incorrect) "crash happens right after `activateWindows()`, before the pump even runs" conclusion in `thoughts/issue-74/plans/implementation-plan.md`'s "Further investigation" section was most likely an artifact of **unflushed stdout**: the probe's debug prints and any not-yet-flushed buffered output from later in the run (e.g., a final "app exiting cleanly" message, if one existed) would never reach the console once the process is killed by an unhandled AV, creating the illusion that execution stopped immediately after the last *visible* print line, when in fact the process kept running normally for the full exit-after-ms duration afterward.
+- **Does not require `TextBox`** — matches the existing #74 investigation's bisection finding (`reactor_hello` mounts no `TextBox` at all) — because `DynamicMetadataStorage` gets populated (and thus becomes non-trivial to tear down) as soon as the real `XamlControlsXamlMetaDataProvider` delegation resolves *any* XAML type/dependency-property lookups, which happens simply from `XamlControlsResources` activation and the first window's own default style/type resolution, not specifically from `TextBox`.
+
 **Implementation Note**: Pause here for manual confirmation before proceeding to Phase 2.
 
 ---
@@ -91,20 +148,21 @@ No permanent source changes. All work is running the existing repro under a debu
 
 ### Overview
 
-Determine whether the crash is specific to `XamlControlsResources`'s own contents/behavior, or whether merging *any* non-trivial `ResourceDictionary` into `Application.Resources.MergedDictionaries` before first activation triggers it. This directly answers one of the two "Suggested next steps" from the issue body and narrows whether the bug lives in XAML's generic merged-dictionary/style-resolution machinery or specifically in `XamlControlsResources`'s theme-dictionary content.
+Determine whether the crash is specific to `XamlControlsResources`'s own contents/behavior, or whether merging *any* non-trivial `ResourceDictionary` into `Application.Resources.MergedDictionaries` triggers `DynamicMetadataStorage`'s teardown-time corruption (per Phase 1's corrected mechanism — the trigger point is which types/dependency-properties get resolved into that singleton during the run, not "before first activation" as originally framed). This directly answers one of the two "Suggested next steps" from the issue body and narrows whether the bug lives in XAML's generic metadata-resolution machinery or specifically in `XamlControlsResources`'s theme-dictionary content/type set.
 
 ### Changes Required
 
 **File**: `packages/win-reactor/src/issue74_probe.zig` (temporary probe edits only — this file is already documented as throwaway spike code)
 
-1. Add a second, gated probe path alongside the existing `XamlControlsResources` merge that instead constructs a plain empty `Microsoft.UI.Xaml.ResourceDictionary` (via `win_core.createComposable`/equivalent default-activatable construction — no `XamlControlsResources` involved at all) and appends *that* into `MergedDictionaries` at the same point. Re-run `zig build run-reactor-hello -- --exit-after-ms 2000` and record whether `activateWindows()` still crashes.
+1. Add a second, gated probe path alongside the existing `XamlControlsResources` merge that instead constructs a plain empty `Microsoft.UI.Xaml.ResourceDictionary` (via `win_core.createComposable`/equivalent default-activatable construction — no `XamlControlsResources` involved at all) and appends *that* into `MergedDictionaries` at the same point. Re-run `zig build run-reactor-hello -- --exit-after-ms 2000` (let it run its full duration and exit normally) and record whether the `RoUninitialize()`-time crash still occurs.
 2. If the empty dictionary does **not** crash, add a minimal dictionary containing a single trivial resource (e.g. one `Style` targeting `Window` or a simple brush resource, whatever is cheapest to construct via the existing curated `winui/` surface or a hand-authored ABI snippet matching this probe file's existing pattern) and re-test, to find the simplest non-trivial dictionary that does reproduce the crash — if one exists short of the full `XamlControlsResources` theme dictionary.
-3. If the empty dictionary **does** crash: that's a strong, surprising result (implicates generic `MergedDictionaries`/style-invalidation machinery, not `XamlControlsResources` content) — record it clearly and prioritize it in Phase 3's search terms.
-4. Record each variant's result (crash / no crash, and exact repro command used) directly in a new "Phase 2 results" subsection of this plan.
+3. Also worth testing in isolation (given Phase 1's mechanism points at `IXamlMetadataProvider`/`DependencyProperty` resolution, not `MergedDictionaries` specifically): does the crash still occur with the COM aggregation + real `XamlControlsXamlMetaDataProvider` delegation in place, but **without** ever merging any `ResourceDictionary` at all? This isolates whether the metadata-provider delegation itself (rather than the resource merge) is what populates `DynamicMetadataStorage`.
+4. If the empty dictionary **does** crash: that's a strong, surprising result (implicates generic metadata-provider/type-resolution machinery, not `XamlControlsResources` content specifically) — record it clearly and prioritize it in Phase 3's search terms.
+5. Record each variant's result (crash / no crash, and exact repro command used) directly in a new "Phase 2 results" subsection of this plan, symbolizing each crash with the same `cdb.exe` command from Phase 1 to confirm it's the same `DynamicMetadataStorage`/`InternalRelease` failure and not a different bug.
 
 ### Success Criteria
 
-- A definitive answer is recorded: does merging *any* non-trivial `ResourceDictionary` trigger the crash, or is it specific to `XamlControlsResources`?
+- A definitive answer is recorded: does merging *any* non-trivial `ResourceDictionary` trigger the crash, does the aggregation/metadata-provider delegation alone (without any merge) trigger it, or is it specific to `XamlControlsResources`'s content?
 - If it's specific to `XamlControlsResources`, the simplest reproducing variant found is recorded (useful for a minimized public bug report if Phase 3 doesn't find an existing one).
 
 **Implementation Note**: Pause here for manual confirmation before proceeding to Phase 3.
@@ -115,15 +173,15 @@ Determine whether the crash is specific to `XamlControlsResources`'s own content
 
 ### Overview
 
-Search `microsoft/microsoft-ui-xaml` and `microsoft/WindowsAppSDK` issue trackers (and general web search) for existing reports matching this crash, using Phase 1's symbol names (if any) and Phase 2's bisection result as search terms, and check whether a newer Windows App SDK release than the vendored `2.2.1` has a documented fix for a matching symptom.
+Search `microsoft/microsoft-ui-xaml` and `microsoft/WindowsAppSDK` issue trackers (and general web search) for existing reports matching this crash, using Phase 1's concrete symbol names and Phase 2's bisection result as search terms, and check whether a newer Windows App SDK release than the vendored `2.2.1` has a documented fix for a matching symptom.
 
 ### Changes Required
 
 No source changes. This is a research task with a recorded outcome.
 
-1. Search using the exact scenario keywords: unpackaged/aggregated `Application`, `XamlControlsResources`, first window activation crash, `Microsoft.UI.Xaml.dll` access violation. Include Phase 1's resolved function name(s) as search terms if available.
-2. Specifically check `microsoft/microsoft-ui-xaml#7606` (already cited as relevant prior art for the related #74 metadata-provider problem) for any follow-on comments describing a *subsequent* crash after the metadata-provider fix is applied — this is a plausible place for someone to have already hit exactly this issue.
-3. Check the Windows App SDK release notes/changelog between `2.2.1` (the vendored version, per `vendor/winmd/README.md`) and the latest stable release for changelog entries mentioning unpackaged-app theme-resource loading, first-activation crashes, or `XamlControlsXamlMetaDataProvider`-adjacent fixes.
+1. Search using Phase 1's concrete symbol names as primary search terms: `DynamicMetadataStorage`, `DependencyPropertyHandle`, `ctl::ComPtr<...>::InternalRelease`, `XamlMetaDataProvider` + `unpackaged`/`DllMain`/`DLL_PROCESS_DETACH`/shutdown crash. These are far more specific and likely to surface exact prior art than the original behavioral description ("first window activation crash").
+2. Specifically check `microsoft/microsoft-ui-xaml#7606` (already cited as relevant prior art for the related #74 metadata-provider problem) for any follow-on comments describing a *subsequent* teardown/shutdown crash after the metadata-provider fix is applied — this is a plausible place for someone to have already hit exactly this issue.
+3. Check the Windows App SDK release notes/changelog between `2.2.1` (the vendored version, per `vendor/winmd/README.md`) and the latest stable release for changelog entries mentioning unpackaged-app shutdown crashes, `DynamicMetadataStorage`, or `XamlControlsXamlMetaDataProvider`-adjacent fixes.
 4. Record findings in a new "Phase 3 results" subsection: any matching issue(s) found (with links), whether they're marked fixed and in which WinAppSDK version, and whether upgrading the vendored `.winmd`/runtime version is a plausible fix path (noting that a version bump would itself be a nontrivial follow-up: it changes `vendor/winmd/README.md`'s pinned version and needs its own re-validation across every WinUI-dependent sample, not just this repro).
 
 ### Success Criteria
@@ -138,7 +196,7 @@ No source changes. This is a research task with a recorded outcome.
 
 ### Overview
 
-Record a definitive same-root-cause-or-not finding against #60, using #60's already-published, already-fixed root cause (a teardown-ordering bug: releasing retained WinUI refs too late, after `MddBootstrapShutdown()`/`RoUninitialize()` — `thoughts/issue-60/plans/implementation-plan.md`) as the comparison baseline.
+Record a definitive same-root-cause-or-not finding against #60, using #60's already-published, already-fixed root cause (a teardown-ordering bug: releasing retained WinUI refs too late, after `MddBootstrapShutdown()`/`RoUninitialize()` — `thoughts/issue-60/plans/implementation-plan.md`) as the comparison baseline. Phase 1 already established that #86 is *also* a teardown-time crash inside `RoUninitialize()`, so this phase's job is narrower than originally scoped: confirm whether it's the literal same fault (unlikely, given #60 was fixed by reordering reactor's own explicit releases, and `reactor_hello`'s `app.zig` path never explicitly releases `Application`/`Window` at all) or a distinct-but-adjacent teardown bug.
 
 ### Changes Required
 
@@ -218,5 +276,5 @@ Not applicable; no persisted data or public API affected. If Phase 5 requires a 
 - `vendor/winmd/README.md` (pinned WinAppSDK/`.winmd` version `2.2.1`)
 - `docs/windows-reactor-port.md:127-175` (existing sample bring-up/validation conventions)
 - microsoft/microsoft-ui-xaml#7606 (prior art for the related #74 metadata-provider problem)
-- Public Microsoft symbol server: `https://msdl.microsoft.com/download/symbols`
-- WinDbg Preview (`Microsoft.WinDbg.Slow` package, `DbgX.Shell.exe`), confirmed installed in this environment
+- Public Microsoft symbol server: `https://msdl.microsoft.com/download/symbols` (confirmed working for `Microsoft.UI.Xaml.dll` in this session)
+- `cdb.exe`/`windbg.exe` (classic console debuggers, Windows SDK "Debugging Tools for Windows" feature `OptionId.WindowsDesktopDebuggers`) — confirmed working for scripted, non-interactive symbolication in this session; the Store-distributed WinDbg Preview (`Microsoft.WinDbg.Slow`, `DbgX.Shell.exe`) was tried first but proved GUI-only/non-scriptable in this environment
