@@ -25,7 +25,7 @@ Diagnose and resolve the deterministic crash inside `Microsoft.UI.Xaml.dll` that
 One of two concrete outcomes, decided by Phase 5's gate:
 
 - **Outcome A (fix found)**: `zig build run-reactor-hello -- --exit-after-ms 2000` (and `run-reactor-counter`, run twice each) exit cleanly with code `0`, with `XamlControlsResources` merged into `Application.Resources.MergedDictionaries` and a real `TextBox` constructed and shown, with no `Microsoft.UI.Xaml.dll` crash and no new Application-log crash entries. The fix (initialization ordering change, WinAppSDK version bump, or another concrete workaround) is documented in `thoughts/issue-74/plans/implementation-plan.md` and this issue's follow-up is closed.
-- **Outcome B (no fix found)**: A symbolized (or best-effort partially symbolized) root-cause analysis is recorded in this plan document, cross-referenced against public issue trackers, with a definitive statement of what is and is not the same bug as #60. `docs/windows-reactor-port.md` and #74's plan document are updated to state plainly that permanently merging `XamlControlsResources` (and therefore permanently re-enabling `TextBox`) is blocked on this issue, so `reactor-selftest`'s existing `reactor-hello`/`reactor-counter` smoke checks are not put at risk by #74 landing.
+- **Outcome B (no fix found)**: A symbolized (or best-effort partially symbolized) root-cause analysis is recorded in this plan document, cross-referenced against public issue trackers, with a definitive statement of what is and is not the same bug as #60. `docs/windows-reactor-port.md` and #74's plan document are updated to state plainly that permanently wiring the COM aggregation + real `XamlControlsXamlMetaDataProvider` delegation (#74's Phase 1 — **not just the `XamlControlsResources` merge in Phase 2**, per Phase 2's results below) is blocked on this issue, so `reactor-selftest`'s existing `reactor-hello`/`reactor-counter` smoke checks are not put at risk by #74 landing.
 
 In both outcomes, this plan itself produces a decision, not an open-ended investigation — Phase 5 is a hard stop with a documented answer.
 
@@ -165,6 +165,21 @@ Determine whether the crash is specific to `XamlControlsResources`'s own content
 - A definitive answer is recorded: does merging *any* non-trivial `ResourceDictionary` trigger the crash, does the aggregation/metadata-provider delegation alone (without any merge) trigger it, or is it specific to `XamlControlsResources`'s content?
 - If it's specific to `XamlControlsResources`, the simplest reproducing variant found is recorded (useful for a minimized public bug report if Phase 3 doesn't find an existing one).
 
+### Phase 2 results (2026-07-08) — DECISIVE: the resource merge is irrelevant; the trigger is the real `IXamlMetadataProvider` delegation alone
+
+Added a `MergeVariant` enum to `packages/win-reactor/src/issue74_probe.zig` (`no_merge` / `empty_dict` / `xaml_controls_resources`) and an `activateEmptyResourceDictionary()` helper, and hand-toggled between variants, rebuilding and running `zig build run-reactor-hello -- --exit-after-ms 1500` for each (each crash re-symbolized with the Phase 1 `cdb.exe` command to confirm it's the identical fault, not a different one):
+
+| Variant | `com_aggregate.Outer.real_provider` | Merges a `ResourceDictionary`? | Result |
+|---|---|---|---|
+| `xaml_controls_resources` (original repro) | real (`activateRealProvider()`) | yes, `XamlControlsResources` | **Crash** (`DynamicMetadataStorage` teardown, as Phase 1) |
+| `empty_dict` | real | yes, plain empty `ResourceDictionary` | **Crash**, identical signature |
+| `no_merge` | real | **no merge at all** | **Crash**, identical signature — confirmed via `cdb.exe`, full stack: `ctl::ComPtr<DirectUI::DependencyPropertyHandle>::InternalRelease` ← `ctl::ComPtr<ABI::Microsoft::UI::Xaml::Markup::IXamlMember>::{dtor}` ← `DynamicMetadataStorage::DestroyCustomPropertiesAndDPs` ← `~DynamicMetadataStorage` ← `DeinitializeDll` ← `DllMain` |
+| `no_merge` + `real_provider` forced to `null` (stub-only "not found" `IXamlMetadataProvider`, temporary one-line edit to `com_aggregate.zig`'s `createAggregated`) | **stub only** | no merge at all | **Clean exit, code 0, no crash** |
+
+**This fully overturns the issue's premise a second time.** `XamlControlsResources` — the entire subject of the issue title and #74's Phase 2 — has **nothing to do with this crash**. The trigger is exposing a *real, functioning* `IXamlMetadataProvider` (one that actually delegates to the real `XamlControlsXamlMetaDataProvider` and can resolve real XAML types/dependency properties) on the aggregated `Application`. A no-op stub implementation (`GetXamlType`/`GetXamlType_2` always returning "not found", `GetXmlnsDefinitions` always empty — i.e. `com_aggregate.zig`'s original Phase 1 fallback behavor before the "real provider" delegation was added) does **not** crash. Once WinUI's runtime discovers `Application` answers `QueryInterface(IID_IXamlMetadataProvider)` and gets real answers back, it evidently registers custom-type/dependency-property entries into its process-global `DynamicMetadataStorage` singleton on behalf of that provider — and those entries are not safely torn down when the process exits, regardless of whether any theme `ResourceDictionary` was ever merged.
+
+**Practical implication for #74**: this means #74's own Phase 1 (permanently wiring the COM aggregation + real `XamlControlsXamlMetaDataProvider` delegation) is *already* sufficient to introduce this crash for every reactor app, even *before* #74's Phase 2 (the `XamlControlsResources` merge) is ever implemented. The blocking note that Phase 5 will add to `thoughts/issue-74/plans/implementation-plan.md` must therefore target #74's Phase 1 (the aggregation + real-provider-delegation work itself), not just Phase 2 as originally assumed in this plan's "Desired End State"/Phase 5 text below.
+
 **Implementation Note**: Pause here for manual confirmation before proceeding to Phase 3.
 
 ---
@@ -173,7 +188,7 @@ Determine whether the crash is specific to `XamlControlsResources`'s own content
 
 ### Overview
 
-Search `microsoft/microsoft-ui-xaml` and `microsoft/WindowsAppSDK` issue trackers (and general web search) for existing reports matching this crash, using Phase 1's concrete symbol names and Phase 2's bisection result as search terms, and check whether a newer Windows App SDK release than the vendored `2.2.1` has a documented fix for a matching symptom.
+Search `microsoft/microsoft-ui-xaml` and `microsoft/WindowsAppSDK` issue trackers (and general web search) for existing reports matching this crash, using Phase 1 and Phase 2's concrete findings as search terms: this is a shutdown-time crash in `Microsoft.UI.Xaml.dll`'s `DynamicMetadataStorage` teardown, triggered simply by an app-level `IXamlMetadataProvider` that delegates to the real `XamlControlsXamlMetaDataProvider` (independent of any `XamlControlsResources`/resource-dictionary merge), and check whether a newer Windows App SDK release than the vendored `2.2.1` has a documented fix for a matching symptom.
 
 ### Changes Required
 
@@ -232,7 +247,7 @@ Synthesize Phases 1-4 into exactly one of this plan's two "Desired End State" ou
 **If no concrete fix was found** (Outcome B):
 
 1. Do not modify any production code path. Do not change `packages/win-reactor/src/winui_backend.zig`'s `.text_box => error.NotYetSupported` gate.
-2. Add an explicit blocking note to `thoughts/issue-74/plans/implementation-plan.md`'s Phase 2 section stating that permanently wiring the aggregation + resource merge (`Phase 2: Wire aggregation permanently and merge theme resources`) is blocked on #86, because merging `XamlControlsResources` crashes **any** activated window (not just ones with a `TextBox`), which would break the existing `reactor-selftest` smoke checks for `reactor-hello`/`reactor-counter` the moment it landed.
+2. Add an explicit blocking note to `thoughts/issue-74/plans/implementation-plan.md`'s Phase 1/Phase 2 sections stating that permanently wiring the COM aggregation + real `XamlControlsXamlMetaDataProvider` delegation (`com_aggregate.zig`'s `activateRealProvider()`) is blocked on #86 **regardless of whether the `XamlControlsResources` merge in Phase 2 is ever implemented** — Phase 2 of this plan proved the merge itself is not the trigger; exposing a real (non-stub) `IXamlMetadataProvider` on `Application` is sufficient on its own to crash **any** activated window at shutdown, which would break the existing `reactor-selftest` smoke checks for `reactor-hello`/`reactor-counter` the moment it landed.
 3. Update `docs/windows-reactor-port.md` to describe the confirmed limitation plainly (mirroring how the existing #60-era leak workaround was documented before its fix), citing this plan's Phase 1-4 findings.
 4. Leave the throwaway `issue74_use_aggregated_application` / `issue74_probe.zig` / `com_aggregate.zig` spike code exactly as-is on the `issue-74-plan` branch (still useful as a live repro for whoever eventually picks this back up) — do not delete it as part of this plan, since deleting the only known repro harness while the bug is still unresolved would make future investigation strictly harder.
 

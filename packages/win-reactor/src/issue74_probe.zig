@@ -81,6 +81,42 @@ fn activateXamlControlsResources() !*IXamlControlsResources {
     return win_core.activateInstance(IXamlControlsResources, &xaml_controls_resources_name_w);
 }
 
+// ---- Issue #86 Phase 2 bisection: which merge (if any) actually triggers
+// the DynamicMetadataStorage/InternalRelease teardown crash found in
+// Phase 1? -------------------------------------------------------------
+// `IResourceDictionary` itself is a plain default-activatable WinRT class
+// (`Microsoft.UI.Xaml.ResourceDictionary`), so an empty instance can be
+// constructed the same way as `XamlControlsResources` above.
+
+const IResourceDictionary = extern struct {
+    vtable: *const IResourceDictionary_Vtbl,
+    pub const IID = IID_IResourceDictionary;
+};
+
+const resource_dictionary_name_w = std.unicode.utf8ToUtf16LeStringLiteral("Microsoft.UI.Xaml.ResourceDictionary").*;
+
+fn activateEmptyResourceDictionary() !*IResourceDictionary {
+    return win_core.activateInstance(IResourceDictionary, &resource_dictionary_name_w);
+}
+
+/// Which merge variant to exercise this run -- edited by hand between
+/// `zig build run-reactor-hello` invocations while bisecting issue #86.
+/// See `thoughts/issue-86/plans/implementation-plan.md` Phase 2.
+const MergeVariant = enum {
+    /// Merge the real `XamlControlsResources` (original #74/#86 repro).
+    xaml_controls_resources,
+    /// Merge a plain empty `ResourceDictionary` instead -- isolates
+    /// whether ANY non-trivial merge triggers the crash, or whether it's
+    /// specific to `XamlControlsResources`'s own theme-dictionary content.
+    empty_dict,
+    /// Don't merge anything at all -- isolates whether the COM
+    /// aggregation + real `XamlControlsXamlMetaDataProvider` delegation
+    /// alone (with no resource merge) is enough to populate
+    /// `DynamicMetadataStorage` and trigger the crash.
+    no_merge,
+};
+const merge_variant: MergeVariant = .xaml_controls_resources;
+
 const IUnknown_Vtbl = win_core.IUnknown_Vtbl;
 const com_aggregate = @import("com_aggregate.zig");
 
@@ -183,6 +219,28 @@ pub fn runProbes(application: *xaml.Application, stage: []const u8) void {
     defer _ = merged_unk.Release(merged_raw.?);
 
     merged_dictionaries_populated = true;
+
+    switch (merge_variant) {
+        .no_merge => {
+            std.debug.print("issue74_probe: merge_variant = no_merge -- skipping resource merge and TextBox construction entirely.\n", .{});
+            return;
+        },
+        .empty_dict => {
+            const dict = activateEmptyResourceDictionary() catch |err| {
+                std.debug.print("issue74_probe: ResourceDictionary.activate (empty): FAILED {} (hresult 0x{X:0>8})\n", .{ err, @as(u32, @bitCast(hresult.last_hresult)) });
+                return;
+            };
+            logHr("ResourceDictionary.activate (empty)", hresult.S_OK);
+            const merged_this = merged_raw.?;
+            const merged_vtbl: *const IVectorResourceDictionary_Vtbl = @as(*const *const IVectorResourceDictionary_Vtbl, @ptrCast(@alignCast(merged_this))).*;
+            const append_hr = merged_vtbl.Append(merged_this, @ptrCast(dict));
+            logHr("MergedDictionaries.Append(empty ResourceDictionary)", append_hr);
+            _ = dict.vtable.base.base.Release(@ptrCast(dict));
+            std.debug.print("issue74_probe: merge_variant = empty_dict -- skipping TextBox construction (isolating merge trigger only).\n", .{});
+            return;
+        },
+        .xaml_controls_resources => {},
+    }
 
     const xcr = activateXamlControlsResources() catch |err| {
         std.debug.print("issue74_probe: XamlControlsResources.activate: FAILED {} (hresult 0x{X:0>8})\n", .{ err, @as(u32, @bitCast(hresult.last_hresult)) });
