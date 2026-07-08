@@ -1,4 +1,4 @@
-//! Reactor-local COM aggregation helper (issue #74 Phase 1/2 spike).
+//! Reactor-local COM aggregation helper for `Microsoft.UI.Xaml.Application`.
 //!
 //! Implements the standard WinRT/COM "controlling outer" aggregation
 //! pattern used internally by e.g. C++/WinRT's `winrt::implements<Derived,
@@ -110,7 +110,9 @@ fn initializeRealProviderStatics() void {
     defer factory.deinit();
     const statics_this: *const IXamlControlsXamlMetaDataProviderStatics_Vtbl = @as(*const *const IXamlControlsXamlMetaDataProviderStatics_Vtbl, @ptrCast(@alignCast(factory.ptr))).*;
     const hr = statics_this.Initialize(factory.ptr);
-    std.debug.print("com_aggregate: XamlControlsXamlMetaDataProviderStatics.Initialize hresult 0x{X:0>8}\n", .{@as(u32, @bitCast(hr))});
+    if (!hresult.succeeded(hr)) {
+        std.debug.print("com_aggregate: XamlControlsXamlMetaDataProviderStatics.Initialize FAILED hresult 0x{X:0>8}\n", .{@as(u32, @bitCast(hr))});
+    }
 }
 
 /// Activate the real framework provider and QI it for `IXamlMetadataProvider`.

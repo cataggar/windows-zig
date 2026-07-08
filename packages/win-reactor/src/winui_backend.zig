@@ -32,6 +32,7 @@ pub const WinUIBackend = struct {
     next_id: WidgetId = 1,
     nodes: std.AutoHashMapUnmanaged(WidgetId, Node) = .empty,
     root_order: std.ArrayListUnmanaged(WidgetId) = .empty,
+    resources_ensured: bool = false,
 
     const ManagedItemsSource = struct {
         vector: *ObservableObjectVector,
@@ -579,7 +580,19 @@ pub const WinUIBackend = struct {
     fn createHandle(self: *WinUIBackend, kind: element.WidgetKind) !win_core.IInspectable {
         return switch (kind) {
             .application => self.application.clone(),
-            .window => ownInspectable(try createComposable(xaml.Window, xaml.IWindowFactory)),
+            .window => blk: {
+                const handle = try createComposable(xaml.Window, xaml.IWindowFactory);
+                // Merge the WinUI 3 theme resources into `Application.Resources`
+                // the first time any window is created -- this is the earliest
+                // point `Application.Resources` is reliably queryable (probed
+                // during #74's investigation), and it runs before any child
+                // widgets (e.g. a `TextBox` in the initial mount) are created,
+                // since a window's children are always mounted after the
+                // window itself. See
+                // `thoughts/issue-74/plans/implementation-plan.md` Phase 2.
+                try self.ensureControlThemeResources();
+                break :blk ownInspectable(handle);
+            },
             .button => ownInspectable(try createComposable(controls.Button, controls.IButtonFactory)),
             .canvas => ownInspectable(try createComposable(controls.Canvas, controls.ICanvasFactory)),
             .stack_panel => ownInspectable(try createComposable(controls.StackPanel, controls.IStackPanelFactory)),
@@ -587,7 +600,7 @@ pub const WinUIBackend = struct {
             .scroll_viewer => ownInspectable(try controls.ScrollViewer.activate()),
             .border => ownInspectable(try controls.Border.activate()),
             .text_block => ownInspectable(try controls.TextBlock.activate()),
-            .text_box => error.NotYetSupported,
+            .text_box => ownInspectable(try createComposable(controls.TextBox, controls.ITextBoxFactory)),
             .check_box => ownInspectable(try createComposable(controls.CheckBox, controls.ICheckBoxFactory)),
             .slider => ownInspectable(try createComposable(controls.Slider, controls.ISliderFactory)),
             .combo_box => ownInspectable(try createComposable(controls.ComboBox, controls.IComboBoxFactory)),
@@ -1136,6 +1149,35 @@ pub const WinUIBackend = struct {
 
     fn windowCom(_: *WinUIBackend, handle: win_core.IInspectable) !win_core.Com(xaml.IWindow_Vtbl) {
         return handle.cast(xaml.IWindow_Vtbl, &xaml.IWindow.IID);
+    }
+
+    /// Merge `Microsoft.UI.Xaml.Controls.XamlControlsResources` into
+    /// `Application.Resources.MergedDictionaries`, exactly once per process.
+    /// Required for several WinUI controls (notably `TextBox`) to construct
+    /// without crashing in this unpackaged/aggregated `Application` model --
+    /// see `thoughts/issue-74/plans/implementation-plan.md`. Called from
+    /// `createHandle`'s `.window` case, since `Application.Resources` is
+    /// only reliably queryable once at least one window has been created,
+    /// and a window's children (which may include a `TextBox`) are always
+    /// created after the window itself.
+    fn ensureControlThemeResources(self: *WinUIBackend) !void {
+        if (self.resources_ensured) return;
+
+        const app: *const xaml.IApplication = @ptrCast(@alignCast(self.application.ptr));
+        var resources: *xaml.ResourceDictionary = undefined;
+        try win_core.hresult.ok(app.get_Resources(&resources));
+        const rd: *const xaml.IResourceDictionary = @ptrCast(@alignCast(resources));
+        defer _ = rd.vtable.base.base.Release(@ptrCast(@constCast(rd)));
+
+        var merged: *xaml.IVectorResourceDictionary = undefined;
+        try win_core.hresult.ok(rd.get_MergedDictionaries(&merged));
+        defer _ = merged.vtable.base.base.Release(@ptrCast(@constCast(merged)));
+
+        const xcr = try controls.XamlControlsResources.activate();
+        defer _ = xcr.vtable.base.base.Release(@ptrCast(xcr));
+        try win_core.hresult.ok(merged.Append(@ptrCast(xcr)));
+
+        self.resources_ensured = true;
     }
 
     fn uiElementCom(_: *WinUIBackend, handle: win_core.IInspectable) !win_core.Com(xaml.IUIElement_Vtbl) {

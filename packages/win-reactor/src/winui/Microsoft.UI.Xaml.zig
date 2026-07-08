@@ -57,8 +57,62 @@ pub const GridLength = extern struct {
     GridUnitType: i32 = @intFromEnum(GridUnitType.Pixel),
 };
 
+/// `Microsoft.UI.Xaml.Markup.IXamlMetadataProvider`-adjacent ABI note: this
+/// interface's `get_MergedDictionaries`/`Append` path is what #74/#86 needed
+/// to permanently merge `Controls.XamlControlsResources` into
+/// `Application.Resources`. IID sourced from
+/// `packages/win/src/generated/Microsoft.UI.Xaml.zig` (cross-checked during
+/// the #74/#86 investigation, see `thoughts/issue-74/plans/implementation-plan.md`).
+pub const IResourceDictionary_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    get_Source: *const fn (this: *const IResourceDictionary, result: *?*anyopaque) callconv(.winapi) HRESULT,
+    put_Source: *const fn (this: *const IResourceDictionary, value: *anyopaque) callconv(.winapi) HRESULT,
+    get_MergedDictionaries: *const fn (this: *const IResourceDictionary, result: **IVectorResourceDictionary) callconv(.winapi) HRESULT,
+    get_ThemeDictionaries: *const fn (this: *const IResourceDictionary, result: *?*anyopaque) callconv(.winapi) HRESULT,
+};
+
+pub const IResourceDictionary = extern struct {
+    vtable: *const IResourceDictionary_Vtbl,
+    pub const Vtbl = IResourceDictionary_Vtbl;
+    pub const IID: GUID = GUID.parse("1B690975-A710-5783-A6E1-15836F6186C2");
+
+    pub fn get_MergedDictionaries(self: *const IResourceDictionary, result: **IVectorResourceDictionary) callconv(.winapi) HRESULT {
+        return self.vtable.get_MergedDictionaries(self, result);
+    }
+};
+
 pub const ResourceDictionary = extern struct {
-    vtable: *const anyopaque,
+    vtable: *const IResourceDictionary_Vtbl,
+};
+
+/// Narrow `IVector<ResourceDictionary>` consumer -- only `Append` is
+/// exercised (the reactor bootstrap only ever appends one entry), but every
+/// slot must be declared in the real order since vtable layout is
+/// offset-based, not name-based (mirrors the proven layout in
+/// `packages/win-collections/src/interfaces.zig`'s `IVector(T)`).
+pub const IVectorResourceDictionary_Vtbl = extern struct {
+    base: IInspectable_Vtbl,
+    GetAt: *const fn (this: *const IVectorResourceDictionary, index: u32, result: *?*ResourceDictionary) callconv(.winapi) HRESULT,
+    get_Size: *const fn (this: *const IVectorResourceDictionary, result: *u32) callconv(.winapi) HRESULT,
+    GetView: *const fn (this: *const IVectorResourceDictionary, result: *?*anyopaque) callconv(.winapi) HRESULT,
+    IndexOf: *const fn (this: *const IVectorResourceDictionary, value: ?*ResourceDictionary, index: *u32, result: *BOOL) callconv(.winapi) HRESULT,
+    SetAt: *const fn (this: *const IVectorResourceDictionary, index: u32, value: ?*ResourceDictionary) callconv(.winapi) HRESULT,
+    InsertAt: *const fn (this: *const IVectorResourceDictionary, index: u32, value: ?*ResourceDictionary) callconv(.winapi) HRESULT,
+    RemoveAt: *const fn (this: *const IVectorResourceDictionary, index: u32) callconv(.winapi) HRESULT,
+    Append: *const fn (this: *const IVectorResourceDictionary, value: ?*ResourceDictionary) callconv(.winapi) HRESULT,
+    RemoveAtEnd: *const fn (this: *const IVectorResourceDictionary) callconv(.winapi) HRESULT,
+    Clear: *const fn (this: *const IVectorResourceDictionary) callconv(.winapi) HRESULT,
+    GetMany: *const fn (this: *const IVectorResourceDictionary, start_index: u32, items_size: u32, items_ptr: [*]?*ResourceDictionary, result: *u32) callconv(.winapi) HRESULT,
+    ReplaceAll: *const fn (this: *const IVectorResourceDictionary, items_size: u32, items_ptr: [*]const ?*ResourceDictionary) callconv(.winapi) HRESULT,
+};
+
+pub const IVectorResourceDictionary = extern struct {
+    vtable: *const IVectorResourceDictionary_Vtbl,
+    pub const Vtbl = IVectorResourceDictionary_Vtbl;
+
+    pub fn Append(self: *const IVectorResourceDictionary, value: *ResourceDictionary) callconv(.winapi) HRESULT {
+        return self.vtable.Append(self, value);
+    }
 };
 
 pub const DataTemplate = extern struct {
@@ -188,6 +242,10 @@ pub const IApplication = extern struct {
 
     pub fn Release(self: *const IApplication) callconv(.winapi) u32 {
         return self.vtable.base.base.Release(@ptrCast(@constCast(self)));
+    }
+
+    pub fn get_Resources(self: *const IApplication, result: **ResourceDictionary) callconv(.winapi) HRESULT {
+        return self.vtable.get_Resources(self, result);
     }
 };
 

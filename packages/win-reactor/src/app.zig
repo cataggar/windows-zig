@@ -11,14 +11,7 @@ const winui_dispatcher = @import("winui_dispatcher.zig");
 const widgets_navigation = @import("widgets_navigation.zig");
 const xaml = @import("Microsoft.UI.Xaml");
 
-// THROWAWAY issue #74 Phase 1 spike -- see
-// thoughts/issue-74/plans/implementation-plan.md. `com_aggregate.zig` and
-// `issue74_probe.zig` are throwaway probe code; delete both, this import
-// block, and the `issue74_*` call sites below once Phase 1's decision gate
-// is resolved.
 const com_aggregate = @import("com_aggregate.zig");
-const issue74_probe = @import("issue74_probe.zig");
-const issue74_use_aggregated_application = true;
 
 const win_core = win.core;
 
@@ -203,11 +196,19 @@ fn ReactorHost(comptime root_render: RootRenderFn) type {
         render_scheduled: std.atomic.Value(bool) = std.atomic.Value(bool).init(false),
 
         fn start(allocator: std.mem.Allocator, exit_after_ms: ?u32) !void {
-            const application = if (issue74_use_aggregated_application)
-                try com_aggregate.createAggregated(allocator, xaml.Application, xaml.IApplicationFactory, &xaml.IApplication.IID)
-            else
-                try createComposable(xaml.Application, xaml.IApplicationFactory);
-            issue74_probe.runProbes(application, "post-construct");
+            // Aggregate `Application` behind a stub `IXamlMetadataProvider`
+            // that delegates to the real framework
+            // `XamlControlsXamlMetaDataProvider`. This is required for
+            // `Controls.XamlControlsResources` (merged in
+            // `WinUIBackend.ensureControlThemeResources`) to activate
+            // successfully in this unpackaged app model -- see
+            // `thoughts/issue-74/plans/implementation-plan.md`.
+            const application = try com_aggregate.createAggregated(
+                allocator,
+                xaml.Application,
+                xaml.IApplicationFactory,
+                &xaml.IApplication.IID,
+            );
             const self = try allocator.create(@This());
             errdefer allocator.destroy(self);
 
@@ -227,7 +228,6 @@ fn ReactorHost(comptime root_render: RootRenderFn) type {
             self.render_scheduled = std.atomic.Value(bool).init(false);
 
             try self.mountInitial();
-            issue74_probe.runProbes(application, "post-mount");
 
             self.dispatcher = try winui_dispatcher.WinUIDispatcher.forCurrentThread();
             if (self.pending_before_dispatcher.swap(false, .acq_rel)) {
@@ -235,7 +235,6 @@ fn ReactorHost(comptime root_render: RootRenderFn) type {
             }
 
             try self.backend_impl.activateWindows();
-            issue74_probe.runProbes(application, "post-activate");
             try configureAutoExit(&self.backend_impl, exit_after_ms);
 
             // WinUI owns teardown after Application.Start returns; explicitly
@@ -340,15 +339,4 @@ fn onAutoCloseTimer(_: ?*anyopaque, _: u32, id: usize, _: u32) callconv(.winapi)
     if (g_main_hwnd) |hwnd| {
         _ = sys.PostMessageW(hwnd, WAM.WM_CLOSE, 0, 0);
     }
-}
-
-fn createComposable(comptime RuntimeClass: type, comptime Factory: type) !*RuntimeClass {
-    const factory = try win_core.activationFactory(Factory.Vtbl, &Factory.IID, &RuntimeClass.NAME_W);
-    defer factory.deinit();
-
-    const factory_this: *const Factory = @ptrCast(@alignCast(factory.ptr));
-    var inner: ?*const anyopaque = null;
-    var instance: *RuntimeClass = undefined;
-    try win_core.hresult.ok(factory_this.CreateInstance(null, &inner, &instance));
-    return instance;
 }

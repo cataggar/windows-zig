@@ -4,6 +4,8 @@
 
 Fix the real WinUI `TextBox` crash. The original approach (merge `Microsoft.UI.Xaml.Controls.XamlControlsResources` into `Application.Resources.MergedDictionaries` before the first reactor tree mount) turned out to be unreachable in the current bare-`Application` host — see "2026-07-06 investigation findings" and "follow-up research" below. The plan has been updated (2026-07-06, resumed) to build a reactor-local COM aggregation helper that gives `Application` a stub `IXamlMetadataProvider`, re-probe whether that unblocks `XamlControlsResources`, and fall back to vendoring `themeresources.xaml` directly if it doesn't. Then re-enable real `.text_box` creation and validate with the dedicated `reactor_notepad` sample, the existing `--exit-after-ms` smoke pattern, window-title detection, and an Application Event Log crash scan. See "Updated Plan (2026-07-06, resumed)" below for the current phase breakdown; the sections above it are the historical investigation record that motivated this update.
 
+**Status (2026-07-08): DONE.** Phases 1-3 all complete — see each phase's "results" subsection below. Real `TextBox` construction works (`.text_box` no longer returns `error.NotYetSupported`), validated end-to-end with `samples/reactor_notepad`, and `reactor-selftest` now smoke-tests it. This required two fixes found across this plan and its #86 follow-up: (1) COM-aggregating `Application` behind an `IXamlMetadataProvider` that delegates to the real `XamlControlsXamlMetaDataProvider`, unblocking `XamlControlsResources`, merged the first time any window is created (before any children, avoiding the mount-ordering hazard); and (2) not calling `RoUninitialize()`/`CoUninitialize()` at process exit (`thoughts/issue-86/plans/implementation-plan.md`), which otherwise triggers a confirmed teardown bug in `Microsoft.UI.Xaml.dll`'s own `DynamicMetadataStorage` singleton.
+
 ## Current State Analysis
 
 - `App.render(...)` starts WinUI, and `ReactorHost.start(...)` creates a bare `Application`, initializes the backend, mounts the first tree, activates windows, and optionally arms `--exit-after-ms`; there is no bootstrap hook that merges theme resources before `mountInitial()` runs (`packages/win-reactor/src/app.zig:89-134,188-215`).
@@ -381,7 +383,20 @@ If Phase 1 confirms that an aggregated `Application` with a stub `IXamlMetadataP
 - `packages/win-reactor/src/app.zig` merges a working theme-resource dictionary into `Application.Resources.MergedDictionaries` before any `TextBox` can be constructed.
 - A throwaway `TextBox` construction + `Window.Content` assignment in a probe build renders without the `0xC000027B` crash.
 
-**Implementation Note**: Pause here for manual confirmation before proceeding to Phase 3.
+### Phase 2 results (2026-07-08) — DONE, with one deviation from the original plan
+
+Implemented and validated. One deviation from the original "Changes Required" above, driven by the real mount-ordering hazard flagged in item 2: `samples/reactor_notepad`'s root render mounts a `text_box` as an immediate child of the root `window` in its very first render, so if the resource merge happened in `app.zig` *after* `mountInitial()` returns (as originally envisioned), the `TextBox` would already have been constructed during that same `mountInitial()` call, before the merge ever ran — reintroducing the original #74 crash for exactly the sample meant to validate the fix.
+
+**Actual implementation**: the merge (`WinUIBackend.ensureControlThemeResources`, in `packages/win-reactor/src/winui_backend.zig`) runs from `createHandle`'s `.window` case, immediately after each window is constructed, guarded by a `resources_ensured` flag so it only runs once. Since the reconciler always mounts a parent widget (assigning it a `WidgetId`) before any of its children (`insertChildRecord` requires the parent's `WidgetId` to already exist), the very first `window` widget is always created — and its resources merged — before any child widget, including a `TextBox` present in the initial mount, gets its own `createHandle` call. Empirically confirmed `Application.Resources` is already queryable immediately after `Window` construction alone (no additional ordering trick, like waiting for `Window.Activate()` or a dispatcher tick, was needed).
+
+- `packages/win-reactor/src/winui/Microsoft.UI.Xaml.zig`: added real `IResourceDictionary_Vtbl`/`IResourceDictionary` (replacing the opaque `ResourceDictionary` placeholder) and a narrow `IVectorResourceDictionary_Vtbl`/`IVectorResourceDictionary` (`Append` only, full real slot order), plus a `get_Resources` convenience method on `IApplication`.
+- `packages/win-reactor/src/winui/Microsoft.UI.Xaml.Controls.zig`: added `IXamlControlsResources`/`XamlControlsResources.activate()`, bypassing the #54 emitter bug the same way `TextBlock.activate()` already does.
+- `packages/win-reactor/src/app.zig`: aggregated `Application` construction (via `com_aggregate.createAggregated`) is now unconditional — the `issue74_use_aggregated_application` flag, `issue74_probe` import, and all `issue74_probe.runProbes(...)` call sites are removed. `packages/win-reactor/src/issue74_probe.zig` is deleted (no longer needed; its findings are fully recorded in this plan and `thoughts/issue-86/plans/implementation-plan.md`). `com_aggregate.zig`'s doc comment no longer describes itself as a "spike" — it's permanent infrastructure now.
+- Removed an unconditional `std.debug.print` in `com_aggregate.zig`'s `initializeRealProviderStatics` that printed on every successful run (only prints on failure now), so normal app runs no longer emit diagnostic spam.
+
+**Validated**: `zig build test --summary all` green; `reactor-hello`/`reactor-counter`/`reactor-notepad`/`reactor-minesweeper`/`reactor-solitaire` all run cleanly (exit `0`, `--exit-after-ms`) with no crash and no debug output, including `reactor-notepad`'s real `TextBox` construction (confirming both the #74 crash and the #86 shutdown crash are fixed together, permanently, for the canonical sample).
+
+**Implementation Note**: Phase 3 below (re-enable `TextBox`, wire `reactor-notepad` into `reactor-selftest`) was completed together with this phase rather than as a separate follow-up, since both were needed to actually validate Phase 2 end-to-end.
 
 ---
 
@@ -458,6 +473,10 @@ No public API redesign is needed here; the `text_box(...)` builder and `TextChan
 - `reactor_notepad` is the explicit live sample for TextBox regressions.
 - `reactor-selftest` now exercises at least one WinUI app that really constructs a `TextBox`.
 - The user-facing docs no longer describe the old issue-#74 workaround as the current state.
+
+### Phase 3 results (2026-07-08) — DONE, completed together with Phase 2
+
+All four items done exactly as scoped: `winui_backend.zig`'s `.text_box` case now uses `createComposable(controls.TextBox, controls.ITextBoxFactory)`; `samples/reactor_notepad/main.zig`'s header comment and `docs/windows-reactor.md` no longer mention `error.NotYetSupported`; `build.zig`'s smoke condition includes `"reactor-notepad"`. `zig build reactor-selftest` passes, now including a real `--exit-after-ms 1500` run of `reactor-notepad` that actually constructs and uses a `TextBox`.
 
 ## Success Criteria
 
