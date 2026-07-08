@@ -4,6 +4,8 @@
 
 Diagnose and resolve the deterministic crash inside `Microsoft.UI.Xaml.dll` that occurs once `Microsoft.UI.Xaml.Controls.XamlControlsResources` has been merged into an aggregated `Application`'s `Resources.MergedDictionaries` (the fix built for #74). The crash is deterministic and independent of `TextBox`. **Phase 1 of this plan (see "Phase 1 results" below) corrected the original diagnosis**: the crash is not a first-activation/first-render bug and does not happen "before `Application.Start`'s blocking message pump ever returns" as the issue title/body originally stated — it is a **process-teardown bug**, occurring inside `Microsoft.UI.Xaml.dll`'s own `DllMain(DLL_PROCESS_DETACH)` handler, well after `Application.Start` has already returned normally and the window ran/closed as expected. This plan is a diagnostic spike with an explicit decision gate at the end: either a concrete fix/workaround is found and applied, or the limitation is documented and #74's permanent resource-merge work is explicitly held back until this resolves.
 
+**Resolved (see "SUPERSEDED" section after Phase 5 below): Outcome A.** A one-line fix was found by comparing against the reference `windows-rs` reactor implementation this repo ports from: don't call `RoUninitialize()` at process exit. `windows-rs`'s `crates/libs/reactor/src/app.rs` never calls it; this repo's Zig port had added it during the initial port. Removing it (`packages/win-reactor/src/app.zig`) fixes the crash completely — confirmed with the full aggregation + real `XamlControlsXamlMetaDataProvider` delegation + `XamlControlsResources` merge + real `TextBox` construction all active, 5/5 clean runs.
+
 ## Current State Analysis
 
 - The crash only reproduces with the COM-aggregation + resource-merge spike code that currently lives on the still-open, unmerged `issue-74-plan` branch (PR #80, draft) — not on `main`. This plan's branch (`issue-86-plan`) is based directly on top of `issue-74-plan` (per user decision) so the existing working repro harness can be reused as-is instead of re-derived.
@@ -296,6 +298,34 @@ Actions taken per the Outcome B checklist:
 4. **Spike code left as-is**: `issue74_use_aggregated_application`, `issue74_probe.zig` (now including the Phase 2 `MergeVariant` bisection scaffolding), and `com_aggregate.zig` remain exactly as documented, unchanged from their default (`xaml_controls_resources` variant, real provider active) state, still gated behind the same temporary flag on the `issue-74-plan` branch.
 
 **This plan (#86) is complete.** No further phases are pending. The GitHub issue should be updated with a summary pointing at this plan document and left open (or re-labeled as a documented/accepted limitation, per repo convention) until either a workaround is found or a decision is made to accept the shutdown risk and ship anyway.
+
+---
+
+## SUPERSEDED: Phase 5's "Outcome B" conclusion above was wrong — a real, one-line fix exists
+
+**Root cause found by direct comparison with the reference `windows-rs` reactor implementation (`../windows-rs` sibling checkout, `crates/libs/reactor/src/app.rs`).** After posting the Outcome B summary, a follow-up question ("How did windows-rs work around this?") prompted checking how the reference Rust reactor implementation — which this repo's `win-reactor` package is a direct Zig port of, and which supports real `text_box`/`TextBox` with no documented crash — handles this exact scenario. Its `app_shim.rs` uses the **same general approach** (a `ReactorApplicationOverrides` object implementing `IXamlMetadataProvider`, lazily wrapping a real `XamlControlsXamlMetaDataProvider`, composed onto `Application`, then `install_xaml_controls_resources` merges `XamlControlsResources` into `Application.Resources.MergedDictionaries` — functionally identical to `com_aggregate.zig` + `issue74_probe.zig`'s merge). **The one concrete difference**: `windows-rs`'s `init_app_platform` (`crates/libs/reactor/src/app.rs`) calls `CoInitializeEx` at startup but **never calls `CoUninitialize`/`RoUninitialize` anywhere in the whole crate** — the process simply exits normally without it. This repo's Zig port, by contrast, added `defer win_core.winrt.RoUninitialize();` (`packages/win-reactor/src/app.zig:100`, present since before this investigation) as part of the initial Rust→Zig port — an extra "for correctness" call the original Rust code never had.
+
+**Tested the hypothesis directly**: removed the `RoUninitialize()` defer in `app.zig` (kept everything else — aggregation, real provider delegation, `XamlControlsResources` merge, and real `TextBox` construction — exactly as-is) and re-ran the full repro:
+
+```powershell
+zig build run-reactor-hello -- --exit-after-ms 2000    # exit 0, clean, 5 consecutive runs
+zig build run-reactor-counter -- --exit-after-ms 1500  # exit 0, clean
+zig build test --summary all                           # full suite still green
+```
+
+**Confirmed fix, 5/5 clean runs.** The crash is completely gone — with `XamlControlsResources` merged, the real `XamlControlsXamlMetaDataProvider` delegation active, and a real `TextBox` constructed and released — simply by not calling `RoUninitialize()` at process exit. This makes complete mechanical sense given Phase 1's symbolized stack: the fault is reached via `combase!RoUninitialize` → `CoUninitialize` → `CClassCache::CleanUpDllsForProcess` → `FreeLibrary(Microsoft.UI.Xaml.dll)` → its buggy `DllMain(DLL_PROCESS_DETACH)`. That whole chain is *only* reached by explicitly calling `RoUninitialize()`/`CoUninitialize()` mid-process; skipping it means `Microsoft.UI.Xaml.dll` is never explicitly `FreeLibrary`'d before normal process exit, so its buggy detach path never runs. This matches standard, well-documented Windows guidance that an exiting process does not need to explicitly uninitialize COM/release everything before calling `ExitProcess` — the OS reclaims all process resources regardless — and is exactly the choice the reference `windows-rs` implementation already made.
+
+**Revised outcome: Outcome A (fix found and applied)**:
+1. **Fix applied**: `packages/win-reactor/src/app.zig`'s `App.render(...)` no longer calls `win_core.winrt.RoUninitialize()`; a comment explains why, citing this plan and the `windows-rs` reference implementation.
+2. **Re-validated**: `zig build run-reactor-hello -- --exit-after-ms 2000` and `zig build run-reactor-counter -- --exit-after-ms 1500` both exit `0` cleanly across multiple runs (5 consecutive on `reactor-hello` alone, with the aggregation + real provider + resource merge + real `TextBox` construction all active); `zig build test --summary all` remains green.
+3. **This changes the practical implication for #74 completely**: #74's Phase 1 (aggregation) and Phase 2 (resource merge) are **no longer blocked** on #86 — they can be wired in permanently, *provided* the app also drops its `RoUninitialize()` call the same way. The blocking notes added earlier to `thoughts/issue-74/plans/implementation-plan.md` and `docs/windows-reactor.md` (citing "no internal interest in making this work" from Microsoft) are **superseded** — see the follow-up edits to both files noted below. `TextBox` can plausibly be re-enabled in `winui_backend.zig` once #74's own Phase 3 sample/docs work accounts for this.
+4. **Caveat worth flagging explicitly**: this fix means `win-reactor` apps will never call `RoUninitialize()`/`CoUninitialize()`, for any app, whether or not it uses the aggregation/`TextBox` path — this is a broader behavior change than #86's narrow scope, so whoever implements this permanently in #74's own Phase 1/2 should double check it doesn't reintroduce or interact with #60's (already-fixed, unrelated) teardown ordering fix in `samples/hello_window` (a different sample, not affected by this `win-reactor` package change, but worth a explicit sanity check given both are shutdown-related).
+
+**Follow-up documentation corrections** (superseding the Outcome-B-era edits from earlier in this same session):
+- `thoughts/issue-74/plans/implementation-plan.md`: the "#86 investigation complete" note and Phase 2's `BLOCKED on #86` marker are updated to record the real fix and un-block both phases.
+- `docs/windows-reactor.md`: the "Known gap"/Outcome-B addendum is updated to reflect that a fix exists (still gated on #74's own remaining Phase 3 work to actually re-enable `TextBox` permanently, but no longer blocked on an upstream, unfixable limitation).
+
+---
 
 ## Testing Strategy
 

@@ -496,20 +496,24 @@ Helper types:
 
   **Update (issue #86):** the fix investigated for #74 (aggregating
   `Application` behind a real, delegating `IXamlMetadataProvider`) does
-  unblock real `TextBox` construction, but introduces a separate, confirmed
-  process-teardown crash inside `Microsoft.UI.Xaml.dll` itself (not specific
-  to `TextBox` — it reproduces with any activated window once that
+  unblock real `TextBox` construction, but was initially found to introduce a
+  separate process-teardown crash inside `Microsoft.UI.Xaml.dll` itself (not
+  specific to `TextBox` — reproduced with any activated window once that
   aggregation is wired in, `XamlControlsResources`/theme merging included or
-  not). Investigation (see
-  [`thoughts/issue-86/plans/implementation-plan.md`](../thoughts/issue-86/plans/implementation-plan.md))
-  found this is a well-known, Microsoft-acknowledged limitation of
-  hand-authoring `IXamlMetadataProvider` delegation outside the full
-  XAML-compiler-generated app model, reproduced independently in Rust and
-  Swift WinRT projections, with an explicit "no internal interest in making
-  this work" response from a Windows App SDK-adjacent maintainer
-  ([microsoft/windows-app-rs#50](https://github.com/microsoft/windows-app-rs/issues/50)).
-  `text_box` therefore remains blocked pending either an accepted workaround
-  or a documented decision to ship it with this known teardown risk.
+  not). **A fix was found**: comparing against the reference `windows-rs`
+  reactor implementation this package ports from showed it never calls
+  `RoUninitialize()`/`CoUninitialize()` at process exit at all; this Zig
+  port's `packages/win-reactor/src/app.zig` had added that call during the
+  initial port, and it is what triggers the crash (`Microsoft.UI.Xaml.dll`'s
+  own `DllMain(DLL_PROCESS_DETACH)` has a confirmed teardown bug in its
+  internal `DynamicMetadataStorage` singleton once a real `IXamlMetadataProvider`
+  has been used). Removing that call fixes it completely, validated 5/5
+  clean runs with the full aggregation + real provider + resource merge +
+  real `TextBox` construction all active. Full investigation, evidence, and
+  the fix in
+  [`thoughts/issue-86/plans/implementation-plan.md`](../thoughts/issue-86/plans/implementation-plan.md).
+  `text_box` can be re-enabled once #74's own remaining Phase 3 (permanent
+  wiring + sample/docs updates) carries this fix forward.
 
 ### Collections
 
@@ -650,7 +654,8 @@ Shipped reactor samples are the best live references:
 - `samples/reactor_dotsweeper` — `useReducer` + `useEffectWithCleanup`
 - `samples/reactor_solitaire` — `canvas`, `Updater`, drag/drop
 - `samples/reactor_notepad` — intended `text_box` API shape; currently blocked
-  by issue #74 (and the follow-on shutdown crash tracked in #86)
+  by issue #74 (the shutdown crash found while fixing it, tracked in #86, has
+  a confirmed fix — see `thoughts/issue-86/plans/implementation-plan.md`)
 
 ## Related docs
 
